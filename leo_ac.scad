@@ -122,11 +122,11 @@ chg_comp_h = 2;                // parts on the top side
 chg_sink = [8.8, 8.8, 5, 6];   // two stick-on aluminium heatsinks: y, z, height, gap between them
 chg_z = 110;                   // centre height on the partition, near the fan rim where the intake air converges
 chg_gap = 2.5;                 // air gap between board and partition
-chg_y0 = 38.5;                 // front end of the board, end stop in front of it, behind the fan
-chg_rail_t = 1.2;              // lip in front of the board edges
-chg_rail_w = 2.4;              // rail wall beyond the board edge
-chg_grip = 1;                  // lip overlap on the board edges
-chg_cl = 0.3;                  // groove clearance
+chg_y0 = 38.5;                 // front end of the board, behind the fan
+// solder pads (IN, B, O) and parts reach the long edges: no grooves. The board back sits on two pads with heat-resistant
+// double-sided tape, its lower edge on a ledge that stays behind the part side.
+chg_pads = [[5.5, 4], [21.5, 6]];  // pads behind the board, clear of the through-hole solder pads: start from the front end, length
+chg_ledge = [2, 0.3];          // ledge under the lower board edge: height, set back from the part side
 
 /* [Handle, top] */
 handle_len = 170;      // along x
@@ -253,7 +253,7 @@ assert(fan_cx - open_r - shroud_t > wall + inner_c && fan_cx + open_r + shroud_t
        && fan_cz - open_r - shroud_t > wall + inner_c && fan_cz + open_r + shroud_t < body_h - wall - inner_c,
        "Air duct hits the walls or the partition");
 assert(shelf_z + shelf_t < body_h - wall, "Shelf above the top wall");
-assert(part_x - chg_gap - chg_pcb[2] - chg_cl - chg_rail_t > fan_cx + fan_size / 2 + 0.3 && chg_y0 - 1.5 > fan_y + fan_t + 0.3
+assert(part_x - chg_gap - chg_pcb[2] + chg_ledge[1] > fan_cx + fan_size / 2 + 0.3 && chg_y0 - 1.5 > fan_y + fan_t + 0.3
        && chg_y0 + chg_pcb[0] < body_d - back_t - 1, "Charge module rails in the fan removal path or module beyond the back");
 assert(bat_cx - bat_d / 2 - bat_bms[1] - bat_clear > bay_x0 + 1, "BMS board of the battery hits the partition");
 assert(mount_top < fan_cz - fan_size / 2 - 2 && (mount_boss_d - mount_insert[0]) / 2 >= mount_insert[2] + 1.5 && mount_floor >= 2,
@@ -387,19 +387,18 @@ module body() difference() {
         // two ribs on the shelf carry the PWM board; they start at the front plate (printable)
         for (x = [body_w - wall - pwm_wall_gap - pwm_pcb[0] + 1, body_w - wall - pwm_wall_gap - 5])
             translate([x, front_t - eps, shelf_z + shelf_t - eps]) cube([3, pot_yz[0] + pwm_pcb[1] / 2 - front_t, pwm_standoff + eps]);
-        // rails on the partition for the charge/boost module in the air stream: board slides in from the back onto an end stop,
-        // 45 degree cone below each rail towards the front (printable)
-        let (xb = part_x - chg_gap - chg_pcb[2], xf = xb - chg_cl - chg_rail_t, ys = chg_y0 - 1.5, reach = part_x - xf)
-        for (s = [-1, 1]) let (ze = chg_z + s * chg_pcb[1] / 2,
-                               za = min(ze - s * chg_grip, ze + s * (chg_cl + chg_rail_w)), zb = max(ze - s * chg_grip, ze + s * (chg_cl + chg_rail_w)),
-                               ga = min(ze - s * (chg_grip + 1), ze + s * chg_cl), gb = max(ze - s * (chg_grip + 1), ze + s * chg_cl))
-            difference() {
-                hull() {
-                    translate([xf, ys, za]) cube([reach + eps, part_y1 - ys, zb - za]);
-                    translate([part_x, ys - reach, za]) cube([1, eps, zb - za]);
-                }
-                translate([xb - chg_cl, chg_y0, ga]) cube([chg_pcb[2] + 2 * chg_cl, part_y1 - chg_y0 + 1, gb - ga]);
+        // charge/boost module: board back on two pads (tape), lower edge on a ledge behind the part side;
+        // 45 degree cones towards the front (printable)
+        let (xb = part_x - chg_gap - chg_pcb[2], zb = chg_z - chg_pcb[1] / 2) {
+            for (pd = chg_pads) hull() {
+                translate([xb + chg_pcb[2], chg_y0 + pd[0], zb + 1]) cube([chg_gap + eps, pd[1], chg_pcb[1] - 2]);
+                translate([part_x, chg_y0 + pd[0] - chg_gap, zb + 1]) cube([1, eps, chg_pcb[1] - 2]);
             }
+            let (x0 = xb + chg_ledge[1], reach = part_x - x0) hull() {
+                translate([x0, chg_y0 - 1, zb - chg_ledge[0]]) cube([reach + eps, chg_pcb[0] + 1, chg_ledge[0]]);
+                translate([part_x, chg_y0 - 1 - reach, zb - chg_ledge[0]]) cube([1, eps, chg_ledge[0]]);
+            }
+        }
         // electronics shelf, also stops the battery upwards
         translate([bay_x0 - eps, front_t - eps, shelf_z]) cube([bay_x1 - bay_x0 + 2 * eps, shelf_d + eps, shelf_t]);
     }
@@ -593,7 +592,7 @@ module pot_nut_env() translate([body_w, pot_yz[0], pot_yz[1]]) orient([1, 0, 0])
 module chg_module_env() {            // board parallel to the partition, parts and heatsinks towards the fan section
     x0 = part_x - chg_gap - chg_pcb[2];
     translate([x0, chg_y0, chg_z - chg_pcb[1] / 2]) cube([chg_pcb[2], chg_pcb[0], chg_pcb[1]]);
-    translate([x0 - chg_comp_h, chg_y0, chg_z - chg_pcb[1] / 2 + chg_grip + 0.3]) cube([chg_comp_h + eps, chg_pcb[0], chg_pcb[1] - 2 * (chg_grip + 0.3)]);
+    translate([x0 - chg_comp_h, chg_y0, chg_z - chg_pcb[1] / 2]) cube([chg_comp_h + eps, chg_pcb[0], chg_pcb[1]]);   // parts up to the edges
     for (i = [0, 1]) translate([x0 - chg_comp_h - chg_sink[2], chg_y0 + (chg_pcb[0] - 2 * chg_sink[0] - chg_sink[3]) / 2 + i * (chg_sink[0] + chg_sink[3]), chg_z - chg_sink[1] / 2])
         cube([chg_sink[2] + eps, chg_sink[0], chg_sink[1]]);
 }
