@@ -147,15 +147,18 @@ handle_rib = [3.2, 12];      // three ribs per foot from the front plate to the 
 handle_key = [1.2, 0.2];     // key under each foot in a recess of the top wall, takes shear off the screws: height, clearance
 handle_ins_depth = 8.5;      // insert pockets in the feet, from the key face (Ruthex: >= L + 1)
 
-/* [Feet: TPU strips in dovetail grooves, slid in from behind, locked by the back cover] */
-foot_w = 16;          // width below the housing (x)
-foot_lift = 3.8;      // housing above the ground
-foot_c = 1;           // 45 degree chamfer at the ground
-foot_neck = 12;       // dovetail width at the bottom face of the housing
-foot_dt = [1.2, 0.8]; // dovetail: depth into the bottom wall, undercut per side (flank flatter than 45 degrees)
-foot_cl = 0.2;        // slide clearance of the TPU in the PETG groove, all around
-foot_inset = 18;      // foot axis from the side faces
+/* [Feet: TPU strips, each screwed with two M3 x 8 from below into Ruthex inserts] */
+foot_w = 16;          // width (x)
+foot_len = 62;        // length (y), ends before the back lip
 foot_y0 = 8;          // front end of the feet
+foot_lift = 4.5;      // housing above the ground
+foot_key = 1;         // the foot top sits this deep in a pocket of the bottom wall and takes the shear
+foot_c = 1;           // 45 degree chamfers: ground edges all around, top ends (match the pocket ends)
+foot_cl = 0.2;        // clearance of the TPU in the pocket, per side
+foot_inset = 17;      // foot axis from the side faces
+foot_screw_dy = 22;   // screw axes from the foot centre along y
+foot_head_recess = 1.2;   // screw heads below the ground face
+foot_boss_d = 9;      // bosses inside the bottom wall for the inserts, pressed in from outside
 
 /* [Mount insert in the underside, like a camera thread] */
 mount_xy = [121, 36];      // near the centre of mass (fan left, battery right)
@@ -181,6 +184,7 @@ len_fan = 30;        // M3 x 30, from behind the fan (not in the nas-case set)
 len_back = 8;        // M3 x 8, from the back, head on the surface
 len_cover = 16;      // M3 x 16, from outside through the service cover, head recessed
 len_handle = 12;     // M3 x 12, from inside the body through top wall and doubler
+len_foot = 8;        // M3 x 8, from below through the TPU feet
 
 /* [Decor] */
 inlay_t = 0.6;       // multicolour inlay depth: the first three 0.2 mm layers
@@ -256,12 +260,10 @@ function handle_key_u() = [handle_open[0] / 2 + 3, handle_len / 2 - 3];   // key
 handle_key_w = handle_d - 2 * handle_c - 1;           // key width along y, inside the flat foot face
 handle_screw_skin = wall + handle_pad[0] - handle_key[0];   // head face to insert mouth
 function foot_x() = [foot_inset, body_w - foot_inset];
-foot_len = body_d - back_t - foot_cl - foot_y0;       // up to the back cover, which stops the feet
-foot_doubler_hw = foot_neck / 2 + foot_dt[1] + foot_cl + 1.6;   // half width of the floor doubler over a groove
-// foot cross-section (x, z): strip under the housing, dovetail in the groove; neck extended below z = 0 for the groove
-function foot_neck_pts() = let (n = foot_neck / 2, d = foot_dt[0], u = foot_dt[1]) [[-n, -1], [n, -1], [n, 0], [n + u, d], [-n - u, d], [-n, 0]];
-function foot_pts() = let (w = foot_w / 2, c = foot_c, z = -foot_lift, n = foot_neck / 2, d = foot_dt[0], u = foot_dt[1])
-    [[-w + c, z], [w - c, z], [w, z + c], [w, 0], [n, 0], [n + u, d], [-n - u, d], [-n, 0], [-w, 0], [-w, z + c]];
+function foot_screws() = [for (fx = foot_x(), dy = [-1, 1]) [fx, foot_y0 + foot_len / 2 + dy * foot_screw_dy]];
+foot_doubler_hw = foot_w / 2 + foot_cl + 1.2;        // half width of the floor doubler over a foot pocket
+foot_boss_top = foot_key + insert_depth + 1.5;       // closed boss top above the insert pocket
+foot_screw_skin = foot_key + foot_lift - foot_head_recess - screw_head_h;   // TPU under the head: head face to insert mouth
 // thread engagement in the insert and margin of the screw tip to the pocket end
 screw_table = [
     // name, length, engagement, tip margin
@@ -273,7 +275,8 @@ screw_table = [
      (body_d - head_pocket[1] - len_back) - (body_d - back_t - insert_depth)],
     ["cover", len_cover, body_w - max(body_w + cover_out - head_pocket[1] - len_cover, body_w - insert_len),
      (body_w + cover_out - head_pocket[1] - len_cover) - (body_w - cover_ins_depth)],
-    ["handle", len_handle, min(len_handle - handle_screw_skin, insert_len), handle_ins_depth - (len_handle - handle_screw_skin)]];
+    ["handle", len_handle, min(len_handle - handle_screw_skin, insert_len), handle_ins_depth - (len_handle - handle_screw_skin)],
+    ["feet", len_foot, min(len_foot - foot_screw_skin, insert_len), insert_depth - (len_foot - foot_screw_skin)]];
 
 assert(wall >= 3.2 && front_t >= 3.2 && back_t >= 3 && corner_r >= 5, "Drop resistance: walls >= 3.2 mm (back 3 mm), corner radius >= 5 mm");
 // heat-set inserts need material between pocket and visible face, otherwise the face deforms when pressing
@@ -301,10 +304,11 @@ assert(mount_top < fan_cz - fan_size / 2 - 2 && (mount_boss_d - mount_insert[0])
        "Mount boss hits the fan, is thinner than the datasheet wall + 1.5 mm, or its floor is too thin");
 assert(mount_xy[0] + mount_doubler[0] / 2 >= part_x - 1, "Mount doubler does not reach the partition");
 assert(back_t - head_pocket[1] >= 2, "Back cover too thin under the recessed screw heads");
-assert(foot_dt[0] + foot_cl < wall && foot_dt[1] <= foot_dt[0] && foot_neck + 2 * foot_dt[1] < foot_w - 2,
-       "Foot dovetail deeper than the bottom wall, flank steeper than 45 degrees, or wider than the foot");
-assert(body_w - foot_inset - foot_doubler_hw > bat_cx + bat_d / 2 + 1 && foot_inset - foot_w / 2 > corner_r && foot_y0 > edge_c + 3,
-       "Feet: floor doubler reaches the battery, or foot in the corner radius or the front chamfer");
+assert(foot_key <= wall - 2 && foot_screw_skin >= 2.5 && (foot_boss_d - insert_hole_d) / 2 >= insert_w_min + 0.5,
+       "Feet: pocket too deep, too little TPU under the screw heads, or boss wall below the Ruthex minimum");
+assert(body_w - foot_inset - max(foot_doubler_hw, foot_boss_d / 2) > bat_cx + bat_d / 2 + 1 && foot_inset - foot_w / 2 > corner_r
+       && foot_y0 > edge_c + 3 && foot_y0 + foot_len < part_y1 && foot_boss_top < min(fan_cz - fan_size / 2 - 2, cradle_z[0] - 1),
+       "Feet: doubler or boss reaches the battery, the fan or the cradle, or foot in the corner radius or beyond the body");
 assert((back_boss_d - insert_hole_d) / 2 >= 3 && back_boss_len >= insert_depth + 6 && boss_inset + back_boss_d / 2 + 1 < 14,
        "Back bosses: wall around the insert, column length, or reaching the back cover slots");
 // hand under the grip: child hand breadth about 55-70 mm, adult 80-90 mm; comfortable finger clearance 30-35 mm
@@ -466,9 +470,14 @@ module body() difference() {
                 translate([part_x, chg_y0 - 1 - reach, zb - chg_ledge[0]]) cube([1, eps, chg_ledge[0]]);
             }
         }
-        // floor doublers over the foot grooves: the bottom wall keeps 3.2 mm; they start at the front plate (printable)
+        // floor doublers over the foot pockets keep the bottom wall at 3.2 mm; bosses for the foot inserts with 45 degree
+        // cones towards the front; all start at the front plate or on the floor (printable)
         for (fx = foot_x()) translate([fx - foot_doubler_hw, front_t - eps, wall - eps])
-            cube([2 * foot_doubler_hw, part_y1 - front_t + eps, foot_dt[0] + foot_cl + eps]);
+            cube([2 * foot_doubler_hw, part_y1 - front_t + eps, foot_key + eps]);
+        for (p = foot_screws()) let (zf = wall + foot_key) hull() {
+            translate([p[0], p[1], wall - eps]) cylinder(d = foot_boss_d, h = foot_boss_top - wall + eps);
+            translate([p[0] - foot_boss_d / 2, p[1] - foot_boss_d / 2 - (foot_boss_top - zf), zf - 1]) cube([foot_boss_d, eps, 1]);
+        }
         // electronics shelf, also stops the battery upwards
         translate([bay_x0 - eps, front_t - eps, shelf_z]) cube([bay_x1 - bay_x0 + 2 * eps, shelf_d + eps, shelf_t]);
         along_y(front_t - eps, front_t + shelf_d) {
@@ -479,8 +488,12 @@ module body() difference() {
         }
     }
     cyl_y([fan_cx, fan_cz], -1, front_t + 1, open_r);
-    // dovetail grooves for the TPU feet, open towards the back
-    for (fx = foot_x()) translate([fx, 0, 0]) along_y(foot_y0 - foot_cl, body_d + 1) offset(delta = foot_cl) polygon(foot_neck_pts());
+    // pockets for the tops of the TPU feet, 45 degree ends; inserts pressed in from below
+    for (fx = foot_x()) translate([fx, foot_y0, 0]) hull() {
+        translate([-foot_w / 2 - foot_cl, -foot_cl - 1, -1]) cube([foot_w + 2 * foot_cl, foot_len + 2 * foot_cl + 2, eps]);
+        translate([-foot_w / 2 - foot_cl, foot_key - foot_cl, foot_key - eps]) cube([foot_w + 2 * foot_cl, foot_len + 2 * foot_cl - 2 * foot_key, eps]);
+    }
+    for (p = foot_screws()) translate([p[0], p[1], foot_key - eps]) cylinder(d = insert_hole_d, h = insert_depth + eps);
     cyl_y(led_xz, led_skin, led_boss[1] + 1, (led_d + 0.2) / 2);   // LED pocket, blind towards the front
     for (i = [0:groove_count - 1]) let (z = groove_z0 + i * groove_pitch)
         along_y(-1, groove_depth) slot2d([groove_x[0] + groove_w, z], [groove_x[1] - groove_w, z], groove_w);
@@ -777,7 +790,17 @@ module battery_env() translate([bat_cx, bat_cy, wall]) {
 
 // Local +z = screw direction, z = 0 at the surface under the head. socket = hex key recess for the viewer,
 // the checks use the plain envelope.
-module foot() along_y(0, foot_len) polygon(foot_pts());   // local: x centred, y from the front end, z = 0 at the housing bottom
+module foot() difference() {   // local: x centred, y from the front end, z = 0 at the housing bottom
+    hull() {
+        translate([-foot_w / 2 + foot_c, foot_c, -foot_lift]) cube([foot_w - 2 * foot_c, foot_len - 2 * foot_c, eps]);
+        translate([-foot_w / 2, 0, -foot_lift + foot_c]) cube([foot_w, foot_len, foot_lift - foot_c]);
+        translate([-foot_w / 2, foot_key, foot_key - eps]) cube([foot_w, foot_len - 2 * foot_key, eps]);
+    }
+    for (dy = [-1, 1]) translate([0, foot_len / 2 + dy * foot_screw_dy, -foot_lift - 1]) {
+        cylinder(d = screw_clear_d, h = foot_lift + foot_key + 2);
+        cylinder(d = head_pocket[0], h = 1 + foot_head_recess + screw_head_h);
+    }
+}
 module place_feet() for (fx = foot_x()) translate([fx, foot_y0, 0]) foot();
 module foot_print_pose() translate([0, 0, foot_lift]) children();   // ground face on the bed
 
@@ -792,6 +815,7 @@ module screws_grille(socket = false) for (p = grille_screws()) translate([p[0], 
 module screws_fan(socket = false) for (p = fan_holes()) translate([p[0], fan_y + fan_t + fan_pad, p[1]]) orient([0, -1, 0]) screw(len_fan, socket);
 module screws_back(socket = false) for (b = back_bosses()) translate([b[0][0], body_d - head_pocket[1], b[0][1]]) orient([0, -1, 0]) screw(len_back, socket);
 module screws_cover(socket = false) for (p = cover_screws()) translate([body_w + cover_out - head_pocket[1], p[0], p[1]]) orient([-1, 0, 0]) screw(len_cover, socket);
+module screws_feet(socket = false) for (p = foot_screws()) translate([p[0], p[1], -foot_lift + foot_head_recess + screw_head_h]) orient([0, 0, 1]) screw(len_foot, socket);
 module screws_handle(socket = false) for (p = handle_screws()) translate([p[0], p[1], body_h - wall - handle_pad[0]]) orient([0, 0, 1]) screw(len_handle, socket);
 
 module assembly(explode = 0) {
@@ -804,7 +828,8 @@ module assembly(explode = 0) {
     color("#f2f2ee") translate([0, 2 * explode, 0]) back();
     color("#8f9396") translate([explode, 0, 0]) cover();
     color("#8f9396") translate([0, 0, explode]) handle();
-    color("#222326") translate([0, 2 * explode, -explode / 2]) place_feet();
+    color("#222326") translate([0, 0, -explode / 2]) place_feet();
+    color("#26282b") translate([0, 0, -explode]) screws_feet(true);
     color("#8f9396") translate([2 * explode, 0, 0]) knob();
     color("#3a3d41") translate([explode, 0, 0]) pot_env();
     color("#2e6b3f") translate([explode, 0, 0]) pwm_board_env();
@@ -831,6 +856,7 @@ else if (part == "metrics") echo("PROJECT_METRICS", [
         [for (b = back_bosses()) ["body", [b[0][0], body_d - back_t, b[0][1]], [0, -1, 0], insert_depth, insert_hole_d, insert_w_min]],
         [for (p = cover_screws()) ["body", [body_w, p[0], p[1]], [-1, 0, 0], cover_ins_depth, insert_hole_d, insert_w_min]],
         [for (p = handle_screws()) ["handle", [p[0], p[1], body_h - handle_key[0]], [0, 0, 1], handle_ins_depth, insert_hole_d, insert_w_min]],
+        [for (p = foot_screws()) ["body", [p[0], p[1], foot_key], [0, 0, 1], insert_depth, insert_hole_d, insert_w_min]],
         [["body", [mount_xy[0], mount_xy[1], 0], [0, 0, 1], mount_insert[1] + 1, mount_insert[0], mount_insert[2]]])]]);
 else if (part == "none") {}
 else if (part == "body") body_print_pose() body();

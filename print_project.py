@@ -45,6 +45,7 @@ ASSEMBLY = {
     "screws_back": "screws_back();",
     "screws_cover": "screws_cover();",
     "screws_handle": "screws_handle();",
+    "screws_feet": "screws_feet();",
 }
 ALLOWED_OVERLAPS = [("fan", "screws_fan")]   # the fan is a solid envelope, its screws run through the frame holes
 
@@ -98,7 +99,7 @@ def checks(ctx):
     assert m["knob_shaft_engagement"] >= 8 and m["knob_top_skin"] >= 2 and m["knob_protrusion"] <= 8, "Knob: on the shaft, at most 8 mm in front of the cover"
     assert m["handle_clearance"] >= 30 and m["handle_open_top"] >= 90, "Handle: 30 mm finger clearance, 90 mm hand breadth"
     assert m["handle_mount_wall"] >= 6, "Handle mount: top wall with doubler at least 6 mm under the feet"
-    assert m["foot_clearance"] >= 0.2 and m["foot_lift"] >= 3, "TPU feet: slide clearance 0.2 mm, housing at least 3 mm above the ground"
+    assert m["foot_clearance"] >= 0.2 and m["foot_lift"] >= 3, "TPU feet: clearance 0.2 mm in the pockets, housing at least 3 mm above the ground"
     screws = {name: dict(length=length, engagement_mm=round(eng, 2), tip_margin_mm=round(margin, 2))
               for name, length, eng, margin in m["screws"]}
     for name, info in screws.items():
@@ -118,9 +119,7 @@ def checks(ctx):
     stops = []
     for name, moving, fixed, direction, limit in (("battery_back", ["battery"], ["back"], [0, 1, 0], 1.5),
                                                   ("battery_up", ["battery"], ["body"], [0, 0, 1], m["shelf_gap"] + 0.5),
-                                                  ("battery_side", ["battery"], ["body"], [1, 0, 0], 1.0),
-                                                  ("feet_back", ["feet"], ["back"], [0, 1, 0], 1.0),
-                                                  ("feet_down", ["feet"], ["body"], [0, 0, -1], 1.0)):
+                                                  ("battery_side", ["battery"], ["body"], [1, 0, 0], 1.0)):
         count, first, _ = ctx.sweep(moving, fixed, direction, limit, 0.25)
         stops.append(dict(name=name, first_contact_mm=first, limit_mm=limit))
         assert count > 0, f"Stop {name}: no contact within {limit} mm"
@@ -151,7 +150,7 @@ def checks(ctx):
             ("knob_off", ["knob"], others("knob"), [1, 0, 0], 25, 0.5),
             ("cover_off", ["cover"], ["body", "pot", "pot_nut", "pwm_board"], [1, 0, 0], 30, 0.5),
             ("handle_up", ["handle"], ["body"], [0, 0, 1], 15, 0.5),
-            ("feet_out", ["feet"], ["body"], [0, 1, 0], 72, 1)):
+            ("feet_down", ["feet"], ["body"], [0, 0, -1], 6, 0.5)):
         count, first, maximum = ctx.sweep(moving, fixed, direction, length, step)
         paths.append(dict(name=name, collisions=count, first_mm=first, max_volume_mm3=round(maximum, 4)))
         assert count == 0, f"Path {name} obstructed at {first} mm"
@@ -199,7 +198,7 @@ VIEWER = dict(
     groups=[("white", "Printed · PETG white"), ("grey", "Printed · PETG grey"),
             ("tpu", "Printed · TPU"), ("screws", "Screws M3"), ("bought", "Bought parts")],
     hidden_groups=["bought"],
-    outer=["body", "back", "cover", "grille", "handle", "feet", "screws_grille", "screws_back", "screws_cover", "screws_handle"],
+    outer=["body", "back", "cover", "grille", "handle", "feet", "screws_grille", "screws_back", "screws_cover", "screws_handle", "screws_feet"],
     cut=["back", "cover", "screws_back", "screws_cover"],
     # id, label, group, colour, quantity, explode direction (mm per slider mm)
     parts=[("body", "Housing", "white", "#f2f2ee", "1x", [0, 0, 0]),
@@ -208,7 +207,7 @@ VIEWER = dict(
            ("cover", "Service cover", "grey", "#8f9396", "1x", [1, 0, 0]),
            ("handle", "Handle", "grey", "#8f9396", "1x", [0, 0, 1.2]),
            ("knob", "Speed knob", "grey", "#8f9396", "1x", [2, 0, 0]),
-           ("feet", "Feet · TPU, slid in from behind", "tpu", "#222326", "2x", [0, 1.5, -0.8]),
+           ("feet", "Feet · TPU", "tpu", "#222326", "2x", [0, 0, -0.8]),
            ("fan_visual", "Fan Noctua NF-F12 iPPC-2000", "bought", "#303236", "1x", [0, 0.8, 0]),
            ("battery", "Battery LiFePO4 3.2 V 6000 mAh", "bought", "#3f7fbf", "1x", [0, 0.5, 0]),
            ("pot", "Potentiometer of the PWM controller (assumed)", "bought", "#3a3d41", "1x", [-0.5, 0, 0]),
@@ -220,7 +219,8 @@ VIEWER = dict(
            ("screws_fan", "Fan · M3 × 30 button head", "screws", "#26282b", "4x", [0, 1.4, 0]),
            ("screws_back", "Back cover · M3 × 8 button head", "screws", "#26282b", "6x", [0, 2.2, 0]),
            ("screws_cover", "Service cover · M3 × 16 button head, from outside", "screws", "#26282b", "2x", [1.6, 0, 0]),
-           ("screws_handle", "Handle · M3 × 12 button head", "screws", "#26282b", "4x", [0, 0, -0.5])],
+           ("screws_handle", "Handle · M3 × 12 button head", "screws", "#26282b", "4x", [0, 0, -0.5]),
+           ("screws_feet", "Feet · M3 × 8 button head, from below", "screws", "#26282b", "4x", [0, 0, -1.4])],
     colour={"body": [("label", "Housing · logo", "#8f9396"), ("dedication", "Housing · dedication", "#8f9396")]},
     bodies={"body_base": 'body_install_pose() body_piece("base");',
             "body_label": 'body_install_pose() body_piece("label");',
@@ -232,7 +232,8 @@ VIEWER = dict(
             "screws_fan": "screws_fan(true);",
             "screws_back": "screws_back(true);",
             "screws_cover": "screws_cover(true);",
-            "screws_handle": "screws_handle(true);"},
+            "screws_handle": "screws_handle(true);",
+            "screws_feet": "screws_feet(true);"},
     output="build/viewer.html",
 )
 
@@ -262,5 +263,8 @@ VIEWS = {"01_assembly": ("assembly();", "-160,-330,230,112,40,70"),
          # back cover insert boss in the top left corner from behind and below, back cover off: column and cone into the corner
          "12_back_bosses": ("intersection() { body(); translate([-1, 30, 105]) cube([45, body_d, 60]); }",
                             "110,190,60,12,62,142"),
+         # left TPU foot cut at its screw axes, seen from the right: pocket, insert boss, screw, recessed head
+         "13_foot_mount": ('intersection() { union() { color("#f2f2ee") body(); color("#222326") place_feet(); color("#26282b") screws_feet(true); } translate([-1, 0, -10]) cube([foot_inset + 1, body_d, 30]); }',
+                           "130,40,-35,17,40,2"),
          # underside with the M5 mount insert
-         "07_underside": ('color("#f2f2ee") body(); color("#222326") place_feet();', "40,-160,-260,112,40,40")}
+         "07_underside": ('color("#f2f2ee") body(); color("#222326") place_feet(); color("#26282b") screws_feet(true);', "40,-160,-260,112,40,40")}

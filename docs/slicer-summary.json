@@ -6,12 +6,12 @@
       "quantity": 1,
       "material": "PETG-white",
       "passed": true,
-      "source_sha256": "53acaf3413843b42e3398a3f2221d4aad37d09bfcb329f02c6d38f0d657101e9",
+      "source_sha256": "7142b2a4c35bae94e904fed7777dc20d4256f3bd3e6f2e50b7692cca20cd3ef5",
       "exit_code": 0,
       "result_code": 0,
       "warnings": "",
-      "hours": 10.097,
-      "grams": 394.227,
+      "hours": 10.101,
+      "grams": 395.808,
       "wall_loops": 6,
       "infill_percent": 30.0,
       "layer_height": 0.20000000298023224,
@@ -102,7 +102,7 @@
       "exit_code": 0,
       "result_code": 0,
       "warnings": "",
-      "hours": 1.628,
+      "hours": 1.629,
       "grams": 55.516,
       "wall_loops": 6,
       "infill_percent": 30.0,
@@ -144,12 +144,12 @@
       "quantity": 2,
       "material": "TPU",
       "passed": true,
-      "source_sha256": "9649986ce185e5240897fae0d42b7951bf11c97a4b8d961be22d9e1092b5419c",
+      "source_sha256": "a96222648a67dea3e8321555b1a5faff88fa0ff21a5088edf005c0aa140ecafc",
       "exit_code": 0,
       "result_code": 0,
       "warnings": "",
-      "hours": 0.569,
-      "grams": 6.38,
+      "hours": 0.58,
+      "grams": 6.304,
       "wall_loops": 6,
       "infill_percent": 100.0,
       "layer_height": 0.20000000298023224,
@@ -164,7 +164,7 @@
     }
   ],
   "total_parts": 8,
-  "total_grams_individual_plates": 694.9,
+  "total_grams_individual_plates": 696.3,
   "total_hours_individual_plates": 20.6,
   "production_gcode": false,
   "project_3mf": {
@@ -221,7 +221,7 @@
         ],
         "size_mm": [
           34.0,
-          67.8
+          62.0
         ]
       }
     ],
@@ -234,9 +234,9 @@
     "multicolour_slices": {
       "Housing": {
         "plate": 1,
-        "hours": 10.39,
+        "hours": 10.4,
         "grams_by_filament": {
-          "1": 394.48,
+          "1": 396.06,
           "3": 1.73
         },
         "warnings": ""
@@ -244,6 +244,6 @@
     },
     "pause_slices": {},
     "own_infill_parts": 2,
-    "sha256": "40fbb31e4287551782c83a144dfbd2222c4f19b4b9791ffd3b03c811940fbaaf"
+    "sha256": "d7632f449d2f6934c4f44858b89887073aa324dbba921991d4c43acb1f27950f"
   }
 }
