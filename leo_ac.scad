@@ -120,19 +120,25 @@ handle_c = 2.5;        // 45 degree bevels on all edges
 handle_screw_dx = [62, 77];  // screw axes from the handle centre, both sides
 handle_rib = [2.4, 12, 55];  // ribs inside the top wall under each handle foot: thickness, height, depth from the front
 
+/* [Mount insert in the underside, like a camera thread] */
+mount_xy = [121, 36];      // near the centre of mass (fan left, battery right)
+mount_insert = [6.4, 11];  // Ruthex M5 x 9.5: hole diameter, pocket depth from the underside
+mount_boss_d = 14;
+
 /* [Screws, M3 heat-set inserts] */
 insert_hole_d = 4.0; // Ruthex M3 x 5.7
 insert_len = 5.7;
-insert_depth = 6.5;  // pocket depth
+insert_depth = 7;    // pocket depth, as in the nas-case project
 screw_clear_d = 3.4;
-csk_d = 6.4;         // countersink at the surface, 90 degrees
-screw_head_d = 5.5;  // pan / socket head
-screw_head_h = 3;
-len_grille = 14;     // M3 x 14 countersunk, from the front
-len_fan = 30;        // M3 x 30 socket head, from behind the fan
-len_back = 8;        // M3 x 8 countersunk, from the back
-len_cover = 8;       // M3 x 8 socket head, from inside the body
-len_handle = 8;      // M3 x 8 socket head, from inside the body
+// ISO 7380 button head Torx screws (same set as the nas-case project: M3 x 6, 8, 10, 12, 16, 25), no countersunk heads
+screw_head_d = 5.7;
+screw_head_h = 1.65;
+head_pocket = [6.4, 1.9];  // head recess in the grille ring: diameter, depth
+len_grille = 12;     // M3 x 12, from the front, head recessed in the grille ring
+len_fan = 30;        // M3 x 30, from behind the fan (not in the nas-case set)
+len_back = 8;        // M3 x 8, from the back, head on the surface
+len_cover = 8;       // M3 x 8, from inside the body
+len_handle = 8;      // M3 x 8, from inside the body
 
 /* [Decor] */
 inlay_t = 0.6;       // multicolour inlay depth: the first three 0.2 mm layers
@@ -193,8 +199,8 @@ function cover_screws() = [for (s = [-1, 1]) [cover_y, cover_z + s * cover_screw
 // thread engagement in the insert and margin of the screw tip to the pocket end
 screw_table = [
     // name, length, engagement, tip margin
-    ["grille", len_grille, (-grille_t + len_grille) - (front_t + grille_boss_h - insert_len),
-     (front_t + grille_boss_h) - (-grille_t + len_grille)],
+    ["grille", len_grille, (-grille_t + head_pocket[1] + len_grille) - (front_t + grille_boss_h - insert_len),
+     (front_t + grille_boss_h) - (-grille_t + head_pocket[1] + len_grille)],
     ["fan", len_fan, fan_y - max(fan_y + fan_t - len_fan, fan_y - insert_len),
      (fan_y + fan_t - len_fan) - (fan_y - insert_depth)],
     ["back", len_back, (body_d - back_t) - max(body_d - len_back, body_d - back_t - insert_len),
@@ -211,7 +217,7 @@ assert(grille_depth <= fan_y - 2, "Grille bars too close to the fan");
 assert(grille_gap <= 6, "Grille openings wider than 6 mm (finger safety)");
 assert(ring_in - spigot_w > grille_hub_r + grille_rings * grille_bar, "Grille collar hits the rings");
 assert(grille_screw_r - grille_boss_d / 2 > open_r, "Grille bosses reach into the opening");
-assert(grille_r - (grille_screw_r + csk_d / 2) >= 1.2, "Grille ring too narrow outside the countersinks");
+assert(grille_r - (grille_screw_r + head_pocket[0] / 2) >= 1.2 && grille_t - head_pocket[1] >= 2, "Grille ring too narrow or too thin at the screw heads");
 assert(fan_blade_d / 2 < open_r, "Front opening smaller than the fan blades");
 assert(open_r < fan_size / 2 - 0.5, "Air duct does not sit on the fan frame face");
 assert(fan_cx - open_r - shroud_t > wall + inner_c && fan_cx + open_r + shroud_t < part_x
@@ -219,6 +225,7 @@ assert(fan_cx - open_r - shroud_t > wall + inner_c && fan_cx + open_r + shroud_t
        "Air duct hits the walls or the partition");
 assert(cover_out - insert_depth >= 3, "Cover insert pocket too close to the visible face");
 assert(shelf_z + shelf_t < body_h - wall, "Shelf above the top wall");
+assert(mount_insert[1] + 2 < fan_cz - fan_size / 2 - 2 && mount_boss_d - mount_insert[0] >= 2 * 3, "Mount boss hits the fan or is too thin");
 // hand under the grip: child hand breadth about 55-70 mm, adult 80-90 mm; comfortable finger clearance 30-35 mm
 assert(handle_h - handle_bar >= 30 && handle_open[1] >= 90, "Handle opening too small for a hand");
 assert(knob_d <= cover_w - 4 && min([for (s = [-1, 1]) abs(pot_yz[1] - cover_z - s * cover_screw_dz)]) > boss_d / 2 + pot_nut[0] / 2 + 1,
@@ -316,6 +323,11 @@ module body() difference() {
             translate([bay_x0 - eps, front_t - eps, z]) cube([bay_x1 - bay_x0 + 2 * eps, bat_cy - front_t + eps, cradle_t]);
             translate([bat_cx, bat_cy, z - 1]) cylinder(r = bat_d / 2 + bat_clear, h = cradle_t + 2);
         }
+        // boss for the M5 mount insert, with a 45 degree cone to the bottom wall towards the front (printable)
+        let (zt = mount_insert[1] + 2) hull() {
+            translate([mount_xy[0], mount_xy[1], wall - eps]) cylinder(d = mount_boss_d, h = zt - wall + eps);
+            translate([mount_xy[0] - mount_boss_d / 2, mount_xy[1] - mount_boss_d / 2 - (zt - wall), wall - 1]) cube([mount_boss_d, eps, 1]);
+        }
         // ribs under the handle feet: carry the load of a drop on the handle into the front plate
         for (sx = [-1, 1]) let (x = handle_cx + sx * (handle_screw_dx[0] + handle_screw_dx[1]) / 2)
             translate([x - handle_rib[0] / 2, front_t - eps, body_h - wall - handle_rib[1]]) cube([handle_rib[0], handle_rib[2] - front_t, handle_rib[1] + eps]);
@@ -339,6 +351,7 @@ module body() difference() {
     for (p = cover_screws()) cyl_x(p, body_w - wall - 1, body_w + 1, screw_clear_d / 2);
     cyl_x(pot_yz, body_w - wall - 1, body_w + 1, (pot_bush[0] + 0.4) / 2);   // potentiometer bushing, nutted to the wall
     for (p = handle_screws()) translate([p[0], p[1], body_h - wall - 1]) cylinder(d = screw_clear_d, h = wall + 2);
+    translate([mount_xy[0], mount_xy[1], -1]) cylinder(d = mount_insert[0], h = mount_insert[1] + 1);   // M5 mount insert
 }
 
 // ---------- logo: block letters in industrial / cyberpunk style ----------
@@ -425,7 +438,7 @@ module grille() {
             }
         }
         for (p = grille_screws()) {
-            cyl_y(p, -grille_t - eps, -grille_t + (csk_d - screw_clear_d) / 2, csk_d / 2, screw_clear_d / 2);
+            cyl_y(p, -grille_t - 1, -grille_t + head_pocket[1], head_pocket[0] / 2);
             cyl_y(p, -grille_t - 1, spigot_t + 1, screw_clear_d / 2);
         }
     }
@@ -450,7 +463,6 @@ module back() difference() {
     }
     along_y(y1 - 1, body_d + 1) intake_slots_back();
     for (b = back_bosses()) {
-        cyl_y(b[0], body_d - (csk_d - screw_clear_d) / 2, body_d + eps, screw_clear_d / 2, csk_d / 2);
         cyl_y(b[0], y1 - 1, body_d + 1, screw_clear_d / 2);
     }
 }
@@ -545,20 +557,18 @@ module battery_env() translate([bat_cx, bat_cy, wall]) cylinder(d = bat_d, h = b
 
 // Local +z = screw direction, z = 0 at the surface under the head. socket = hex key recess for the viewer,
 // the checks use the plain envelope.
-module screw(len, countersunk, socket = false) difference() {
+module screw(len, socket = false) difference() {   // ISO 7380 button head, head above z = 0
     union() {
-        if (countersunk) cylinder(r1 = screw_head_d / 2, r2 = 1.5, h = screw_head_d / 2 - 1.5);
-        else translate([0, 0, -screw_head_h]) cylinder(d = screw_head_d, h = screw_head_h);
-        cylinder(r = 1.5, h = len);
+        translate([0, 0, -screw_head_h]) cylinder(d = screw_head_d, h = screw_head_h);
+        translate([0, 0, -screw_head_h]) cylinder(r = 1.5, h = len + screw_head_h);
     }
-    if (socket) translate([0, 0, (countersunk ? 0 : -screw_head_h) - eps])
-        cylinder(d = (countersunk ? 2 : 2.5) / cos(30), h = countersunk ? 1 : 1.5, $fn = 6);
+    if (socket) translate([0, 0, -screw_head_h - eps]) cylinder(d = 2.5 / cos(30), h = 1, $fn = 6);   // drive recess, viewer only
 }
-module screws_grille(socket = false) for (p = grille_screws()) translate([p[0], -grille_t, p[1]]) orient([0, 1, 0]) screw(len_grille, true, socket);
-module screws_fan(socket = false) for (p = fan_holes()) translate([p[0], fan_y + fan_t, p[1]]) orient([0, -1, 0]) screw(len_fan, false, socket);
-module screws_back(socket = false) for (b = back_bosses()) translate([b[0][0], body_d, b[0][1]]) orient([0, -1, 0]) screw(len_back, true, socket);
-module screws_handle(socket = false) for (p = handle_screws()) translate([p[0], p[1], body_h - wall]) orient([0, 0, 1]) screw(len_handle, false, socket);
-module screws_cover(socket = false) for (p = cover_screws()) translate([body_w - wall, p[0], p[1]]) orient([1, 0, 0]) screw(len_cover, false, socket);
+module screws_grille(socket = false) for (p = grille_screws()) translate([p[0], -grille_t + head_pocket[1], p[1]]) orient([0, 1, 0]) screw(len_grille, socket);
+module screws_fan(socket = false) for (p = fan_holes()) translate([p[0], fan_y + fan_t, p[1]]) orient([0, -1, 0]) screw(len_fan, socket);
+module screws_back(socket = false) for (b = back_bosses()) translate([b[0][0], body_d, b[0][1]]) orient([0, -1, 0]) screw(len_back, socket);
+module screws_handle(socket = false) for (p = handle_screws()) translate([p[0], p[1], body_h - wall]) orient([0, 0, 1]) screw(len_handle, socket);
+module screws_cover(socket = false) for (p = cover_screws()) translate([body_w - wall, p[0], p[1]]) orient([1, 0, 0]) screw(len_cover, socket);
 
 module assembly(explode = 0) {
     body_install_pose() {
@@ -592,7 +602,8 @@ else if (part == "metrics") echo("PROJECT_METRICS", [
         [for (p = fan_holes()) ["body", [p[0], fan_y, p[1]], [0, -1, 0], insert_depth]],
         [for (b = back_bosses()) ["body", [b[0][0], body_d - back_t, b[0][1]], [0, -1, 0], insert_depth]],
         [for (p = cover_screws()) ["cover", [body_w, p[0], p[1]], [1, 0, 0], insert_depth]],
-        [for (p = handle_screws()) ["handle", [p[0], p[1], body_h], [0, 0, 1], insert_depth]])]]);
+        [for (p = handle_screws()) ["handle", [p[0], p[1], body_h], [0, 0, 1], insert_depth]],
+        [["body", [mount_xy[0], mount_xy[1], 0], [0, 0, 1], mount_insert[1], mount_insert[0]]])]]);
 else if (part == "none") {}
 else if (part == "body") body_print_pose() body();
 else if (part == "body_base") inlay_base() { body_print_pose() body(); body_label_print_2d(); }

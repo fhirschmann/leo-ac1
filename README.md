@@ -6,9 +6,9 @@ Kleiner Akku-Ventilator für das Kinderzimmer, gestaltet wie die Außeneinheit e
 
 3D-Viewer (Artifact, wird nach jeder Modelländerung unter derselben URL erneuert): a private Claude viewer artifact
 
-| Rückseite | Explosionsansicht | Logo und Rillen | Luftkanal von hinten | Servicedeckel mit Drehknopf |
-|---|---|---|---|---|
-| ![Rückseite](img/02_back.png) | ![Explosion](img/03_exploded.png) | ![Logo](img/04_front_right.png) | ![Luftkanal](img/05_duct.png) | ![Drehknopf](img/06_knob.png) |
+| Rückseite | Explosionsansicht | Logo und Rillen | Luftkanal von hinten | Servicedeckel mit Drehknopf | Unterseite mit M5-Gewinde |
+|---|---|---|---|---|---|
+| ![Rückseite](img/02_back.png) | ![Explosion](img/03_exploded.png) | ![Logo](img/04_front_right.png) | ![Luftkanal](img/05_duct.png) | ![Drehknopf](img/06_knob.png) | ![Unterseite](img/07_underside.png) |
 
 ## Teile
 
@@ -23,7 +23,7 @@ Kleiner Akku-Ventilator für das Kinderzimmer, gestaltet wie die Außeneinheit e
 
 Alle Teile liegen als Bambu-Studio-Projekt in [`stl/leo_ac1_all_parts.3mf`](stl/leo_ac1_all_parts.3mf): Platte 1 Gehäuse (mit Wischturm), Platte 2 Rückwand, Platte 3 graue Teile (Gitter, Servicedeckel, Griff, Drehknopf). Filament 1 PETG Basic Weiß, Filament 2 PETG Basic Grau, Filament 3 Grau für das Typenschild (im AMS dieselbe Spule wie Filament 2). Wer das Gehäuse einfarbig druckt, nimmt `stl/body.stl`.
 
-Rechnerisch **ca. 0,56 kg und 15,6 Stunden** (diagnostisches Slicen, jede Instanz als eigener Druck; Gehäuse allein 337 g / 7,7 h).
+Rechnerisch **ca. 0,56 kg und 15,7 Stunden** (diagnostisches Slicen, jede Instanz als eigener Druck; Gehäuse allein 338 g / 7,8 h).
 
 ## Druck und Stabilität
 
@@ -45,20 +45,21 @@ Alle Teile drucken ohne Stützen (geprüft mit `analyze.py islands`, `overhangs`
 | Lade-/Boostmodul „2-in-1 3,2 V LiFePO4“, Variante 12 V | 1 | 35,4 × 11 × 3,6 mm; Pads IN± (5 V laden), B± (Akku), O± (12 V, max. ca. 0,32 A) |
 | PWM-Lüfterregler DC 8–24 V 5 A mit Drehpoti und Schalter | 1 | 4-Pin-Lüfter; Poti an der rechten Seitenwand unter dem Servicedeckel (Maße angenommen: WH148, D-Achse Ø 6 × 15, M7) |
 | USB-C-Einbaubuchse 5 V | 1 | Zum Laden, Lage im Servicedeckel noch offen |
-| Einschmelzmuttern Ruthex M3 × 5,7 | 20 | Loch Ø 4,0, Tiefe 6,5 |
-| M3 × 14 Senkkopf | 4 | Gitter, von vorn |
-| M3 × 30 Zylinderkopf | 4 | Lüfter, von hinten durch den Rahmen |
-| M3 × 8 Senkkopf | 6 | Rückwand |
-| M3 × 8 Zylinderkopf | 6 | Servicedeckel (2) und Griff (4), von innen |
+| Einschmelzmuttern Ruthex RX-M3x5.7 | 20 | Loch Ø 4,0, Tiefe 7 |
+| Einschmelzmutter Ruthex M5 × 9,5 | 1 | Halterungsgewinde in der Unterseite (wie ein Kamerastativgewinde), Loch Ø 6,4, Tiefe 11 |
+| M3 × 12, ISO 7380 Torx | 4 | Gitter, von vorn, Kopf 1,9 mm im Gitterring versenkt |
+| **M3 × 30**, ISO 7380 Torx | 4 | Lüfter, von hinten durch den Rahmen (nicht im nas-case-Satz, nachkaufen) |
+| M3 × 8, ISO 7380 Torx | 6 | Rückwand, von außen, Kopf liegt auf |
+| M3 × 8, ISO 7380 Torx | 6 | Servicedeckel (2) und Griff (4), von innen |
 
 ## Zusammenbau
 
-1. Einschmelzmuttern setzen: 4 Gitter- und 4 Lüfterdome innen an der Front, 6 Dome am hinteren Rand des Gehäuses, 2 im Servicedeckel, 4 in den Griff-Füßen.
+1. Einschmelzmuttern setzen: 4 Gitter- und 4 Lüfterdome innen an der Front, 6 Dome am hinteren Rand des Gehäuses, 2 im Servicedeckel, 4 in den Griff-Füßen; die M5-Mutter von unten in den Dom der Unterseite.
 2. Poti von innen durch die rechte Seitenwand stecken und außen mit seiner Mutter festziehen; Servicedeckel und Griff von innen mit M3 × 8 anschrauben; Drehknopf durch das Loch im Servicedeckel auf die Achse drücken (Zeigerstrich zur Achsabflachung).
-3. Gitter von vorn aufsetzen (der Kragen zentriert es in der Öffnung) und mit M3 × 14 Senkkopf anschrauben.
+3. Gitter von vorn aufsetzen (der Kragen zentriert es in der Öffnung) und mit M3 × 12 anschrauben.
 4. Lüfter von hinten auf die Dome hinter dem Luftkanal setzen, Blasrichtung nach vorn, mit M3 × 30 anschrauben. Kabel durch die Aussparung in der Trennwand ins Elektronikfach führen.
 5. Akku stehend von hinten in die Wiege schieben, Kabelende nach oben; das Kabel läuft durch den Schlitz im Elektronikboden darüber.
-6. Rückwand aufsetzen (die Rippen halten den Akku mit 1 mm Luft) und mit M3 × 8 Senkkopf verschrauben.
+6. Rückwand aufsetzen (die Rippen halten den Akku mit 1 mm Luft) und mit M3 × 8 verschrauben.
 
 ## Offen
 
@@ -81,4 +82,4 @@ python3 -m venv .venv
 .venv/bin/python scripts/render_views.py           # img/
 ```
 
-Geprüft werden: Teileliste gegen die `part`-Zweige, geschlossene Netze, Bettlage, Bauraum, keine Überschneidung zwischen 14 Baugruppenkörpern (91 Paare, inklusive Schrauben, Lüfter- und Akku-Hüllkörper), Auflagekontakt von Gitter, Lüfter, Rückwand, Deckel, Griff, Poti und Akku, Anschläge des Akkus (hinten 1,25 mm, oben 3,25 mm, seitlich 0,75 mm), 7 Ein- und Ausbauwege in realistischer Reihenfolge, 20 Insert-Aufnahmen (Achse frei, Ring und Boden voll), Einschraubtiefen (≥ 4,7 mm, Spitze ≥ 0,9 mm vor dem Taschenende), Normmaße (120-mm-Lüfter, Ruthex M3), Gitterspalt ≤ 6 mm (Fingerschutz), Mehrfarb-Deckung des Logos. Druckbarkeit: keine schwebenden Bereiche, Einlage auf Schicht 1 ohne zu schmale Stellen, Stege zwischen den Rillen ≥ 1,1 mm. Keine Festigkeits-, Luftstrom- oder Passungsprüfung am echten Teil.
+Geprüft werden: Teileliste gegen die `part`-Zweige, geschlossene Netze, Bettlage, Bauraum, keine Überschneidung zwischen 14 Baugruppenkörpern (91 Paare, inklusive Schrauben, Lüfter- und Akku-Hüllkörper), Auflagekontakt von Gitter, Lüfter, Rückwand, Deckel, Griff, Poti und Akku, Anschläge des Akkus (hinten 1,25 mm, oben 3,25 mm, seitlich 0,75 mm), 7 Ein- und Ausbauwege in realistischer Reihenfolge, 21 Insert-Aufnahmen (20 × M3, 1 × M5; Achse frei, Ring und Boden voll), Einschraubtiefen (≥ 4,7 mm, Spitze ≥ 0,9 mm vor dem Taschenende), Normmaße (120-mm-Lüfter, Ruthex M3), Gitterspalt ≤ 6 mm (Fingerschutz), Mehrfarb-Deckung des Logos. Druckbarkeit: keine schwebenden Bereiche, Einlage auf Schicht 1 ohne zu schmale Stellen, Stege zwischen den Rillen ≥ 1,1 mm. Keine Festigkeits-, Luftstrom- oder Passungsprüfung am echten Teil.

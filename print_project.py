@@ -142,13 +142,14 @@ def checks(ctx):
 
     # Insert pockets: axis empty, ring around it and floor below it filled
     inserts = []
-    for body, start, direction, depth in m["inserts"]:
+    for body, start, direction, depth, *hole in m["inserts"]:
         solid, d, s = ctx.solids[body], np.array(direction, float), np.array(start, float)
+        k = (hole[0] if hole else 4.0) / 4.0          # probe radii scale with the core hole (M3: 4.0, M5: 6.4)
         length = depth - 0.5
-        core = axis_cylinder(s + d * 0.2, d, length, 1.5)
-        ring = axis_cylinder(s + d * 0.2, d, length, 3.1) - axis_cylinder(s + d * 0.2, d, length, 2.3)
+        core = axis_cylinder(s + d * 0.2, d, length, 1.5 * k)
+        ring = axis_cylinder(s + d * 0.2, d, length, 3.1 * k) - axis_cylinder(s + d * 0.2, d, length, 2.3 * k)
         # ring, not disc: the grille screws pass through the pocket floor
-        floor = axis_cylinder(s + d * (depth + 0.2), d, 0.4, 3.0) - axis_cylinder(s + d * (depth + 0.2), d, 0.4, 1.8)
+        floor = axis_cylinder(s + d * (depth + 0.2), d, 0.4, 3.0 * k) - axis_cylinder(s + d * (depth + 0.2), d, 0.4, 1.8 * k)
         empty = (core ^ solid).volume()
         filled = (ring ^ solid).volume() / ring.volume()
         bottom = (floor ^ solid).volume() / floor.volume()
@@ -184,11 +185,11 @@ VIEWER = dict(
            ("battery", "Akku LiFePO4 3,2 V", "zugekauft", "#3f7fbf", "1x", [0, 0.5, 0]),
            ("pot", "Poti PWM-Regler (Annahme)", "zugekauft", "#3a3d41", "1x", [1, 0, 0]),
            # screws leave their part: same direction, further out
-           ("screws_grille", "Gitter · M3 × 10 Senkkopf", "schrauben", "#26282b", "4x", [0, -1.6, 0]),
-           ("screws_fan", "Lüfter · M3 × 30 Zylinderkopf", "schrauben", "#26282b", "4x", [0, 1.4, 0]),
-           ("screws_back", "Rückwand · M3 × 8 Senkkopf", "schrauben", "#26282b", "6x", [0, 2.2, 0]),
-           ("screws_cover", "Servicedeckel · M3 × 8 Zylinderkopf", "schrauben", "#26282b", "2x", [-0.5, 0, 0]),
-           ("screws_handle", "Griff · M3 × 8 Zylinderkopf", "schrauben", "#26282b", "4x", [0, 0, -0.5])],
+           ("screws_grille", "Gitter · M3 × 12 Linsenkopf", "schrauben", "#26282b", "4x", [0, -1.6, 0]),
+           ("screws_fan", "Lüfter · M3 × 30 Linsenkopf", "schrauben", "#26282b", "4x", [0, 1.4, 0]),
+           ("screws_back", "Rückwand · M3 × 8 Linsenkopf", "schrauben", "#26282b", "6x", [0, 2.2, 0]),
+           ("screws_cover", "Servicedeckel · M3 × 8 Linsenkopf", "schrauben", "#26282b", "2x", [-0.5, 0, 0]),
+           ("screws_handle", "Griff · M3 × 8 Linsenkopf", "schrauben", "#26282b", "4x", [0, 0, -0.5])],
     colour={"body": [("label", "Gehäuse · Logo", "#8f9396")]},
     bodies={"body_base": "body_install_pose() inlay_base() { body_print_pose() body(); body_label_print_2d(); }",
             "body_label": "body_install_pose() inlay_piece() { body_print_pose() body(); body_label_print_2d(); }",
@@ -212,4 +213,6 @@ VIEWS = {"01_assembly": ("assembly();", "-160,-330,230,112,40,70"),
                      "112,420,300,112,0,77"),
          # service cover with the speed knob, from the right
          "06_knob": ("intersection() { assembly(); translate([190, 20, 15]) cube([80, 70, 110]); }",
-                     "420,-120,140,230,57,68")}
+                     "420,-120,140,230,57,68"),
+         # underside with the M5 mount insert
+         "07_underside": ("body();", "40,-160,-260,112,40,40")}
