@@ -1,5 +1,5 @@
 {
-  "source_sha256": "a5219e45dc4c98ea4f323ed36350637e6bafa146c95feff5967f755b8efb5502",
+  "source_sha256": "5cf0ba80dedfbf6167cdd16b6259f4fe8942e3eea747ebc3a9ab20698f33de01",
   "software": {
     "numpy": "2.5.3",
     "trimesh": "5.1.0",
@@ -29,17 +29,17 @@
           76.0
         ]
       ],
-      "volume_mm3": 306924.9392,
-      "triangles": 11718,
+      "volume_mm3": 305146.0049,
+      "triangles": 11870,
       "watertight": true,
       "consistent_winding": true,
       "degenerate_faces": 0,
       "components": 1,
       "backend": "CGAL",
-      "sha256": "9cf58c9616398c9cd929115531ef53b941a1b7f4aa94eacbb6ae05991687af23",
+      "sha256": "b1b79c9b8601b7900c9481eabe20e5b53babb53f339321622c0a75cf221804e1",
       "quantity": 1,
       "material": "PETG-weiss",
-      "committed_sha256": "9cf58c9616398c9cd929115531ef53b941a1b7f4aa94eacbb6ae05991687af23"
+      "committed_sha256": "b1b79c9b8601b7900c9481eabe20e5b53babb53f339321622c0a75cf221804e1"
     },
     "back": {
       "size_mm": [
@@ -103,33 +103,33 @@
     },
     "cover": {
       "size_mm": [
-        116.0,
+        84.0,
         34.0,
         11.0
       ],
       "bounds_mm": [
         [
-          30.0,
-          40.0,
+          35.5,
+          42.0,
           0.0
         ],
         [
-          146.0,
-          74.0,
+          119.5,
+          76.0,
           11.0
         ]
       ],
-      "volume_mm3": 14772.9425,
-      "triangles": 584,
+      "volume_mm3": 11600.812,
+      "triangles": 1088,
       "watertight": true,
       "consistent_winding": true,
       "degenerate_faces": 0,
       "components": 1,
       "backend": "Manifold",
-      "sha256": "738cc8c72fc5727945875ab7136b8a444668ff93e461530923f185fb0086bb48",
+      "sha256": "dd21cf15f6b954f8b8e498bdf63ceb396924cf3302b8baf66663eecde982e30b",
       "quantity": 1,
       "material": "PETG-grau",
-      "committed_sha256": "738cc8c72fc5727945875ab7136b8a444668ff93e461530923f185fb0086bb48"
+      "committed_sha256": "dd21cf15f6b954f8b8e498bdf63ceb396924cf3302b8baf66663eecde982e30b"
     },
     "handle": {
       "size_mm": [
@@ -211,14 +211,14 @@
           76.0
         ]
       ],
-      "volume_mm3": 306614.9367,
-      "triangles": 12906,
+      "volume_mm3": 304836.0025,
+      "triangles": 13058,
       "watertight": true,
       "consistent_winding": true,
       "degenerate_faces": 0,
       "components": 1,
       "backend": "CGAL",
-      "sha256": "42f33fbd34cc5cdc89399b897c64186591b067b2092d124fceea9f9301c1becf"
+      "sha256": "c0f114bc9107cad750c4a6468ab7e88935c9e02af5bac95cf63c6bbb26307743"
     },
     "body_label": {
       "size_mm": [
@@ -259,8 +259,8 @@
       }
     }
   },
-  "assembly_bodies": 15,
-  "assembly_pairs": 105,
+  "assembly_bodies": 16,
+  "assembly_pairs": 120,
   "metrics": {
     "wall": 3.2,
     "front_t": 3.2,
@@ -331,6 +331,12 @@
         8,
         5.7,
         1.1
+      ],
+      [
+        "cover",
+        8,
+        4.8,
+        2.2
       ],
       [
         "handle",
@@ -565,6 +571,38 @@
         1.6
       ],
       [
+        "cover",
+        [
+          225,
+          59,
+          43.5
+        ],
+        [
+          1,
+          0,
+          0
+        ],
+        7,
+        4,
+        1.6
+      ],
+      [
+        "cover",
+        [
+          225,
+          59,
+          111.5
+        ],
+        [
+          1,
+          0,
+          0
+        ],
+        7,
+        4,
+        1.6
+      ],
+      [
         "handle",
         [
           50.5,
@@ -663,6 +701,11 @@
       "engagement_mm": 5.7,
       "tip_margin_mm": 1.1
     },
+    "cover": {
+      "length": 8,
+      "engagement_mm": 4.8,
+      "tip_margin_mm": 2.2
+    },
     "handle": {
       "length": 8,
       "engagement_mm": 4.8,
@@ -673,7 +716,7 @@
     "grille@body": 177.726,
     "fan@body": 10.211,
     "back@body": 128.348,
-    "cover@body": 34.271,
+    "cover@body": 30.361,
     "battery@body": 48.096,
     "handle@body": 54.674,
     "pot@body": 8.541,
@@ -728,7 +771,19 @@
       "max_volume_mm3": 0
     },
     {
+      "name": "cover_off",
+      "collisions": 0,
+      "first_mm": null,
+      "max_volume_mm3": 0
+    },
+    {
       "name": "handle_up",
+      "collisions": 0,
+      "first_mm": null,
+      "max_volume_mm3": 0
+    },
+    {
+      "name": "pwm_board_out",
       "collisions": 0,
       "first_mm": null,
       "max_volume_mm3": 0
@@ -884,6 +939,28 @@
         153.2,
         76,
         148.5
+      ],
+      "empty_mm3": 0.0,
+      "ring_fill": 1.0,
+      "floor_fill": 1.0
+    },
+    {
+      "body": "cover",
+      "at": [
+        225,
+        59,
+        43.5
+      ],
+      "empty_mm3": 0.0,
+      "ring_fill": 1.0,
+      "floor_fill": 1.0
+    },
+    {
+      "body": "cover",
+      "at": [
+        225,
+        59,
+        111.5
       ],
       "empty_mm3": 0.0,
       "ring_fill": 1.0,

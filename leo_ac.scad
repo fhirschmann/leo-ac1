@@ -57,7 +57,7 @@ back_t = 4;          // screw heads recessed 1.9 mm, 2.1 mm below
 lip_h = 4;           // lip reaching into the body
 lip_t = 3;
 lip_cl = 0.25;       // clearance per side between lip and body wall
-boss_d = 8;          // screw bosses for inserts (back cover)
+boss_d = 8;          // screw bosses for inserts (back cover, service cover)
 boss_inset = 6.5;    // back bosses: axis distance from the outer edges
 back_boss_len = 12;
 gusset = 14;         // 45 degree cone below the back bosses in print orientation
@@ -80,26 +80,27 @@ retain_t = 3;
 retain_w = 24;
 shelf_gap = 3;       // battery top to electronics shelf (cable, protection board)
 shelf_t = 3;
-shelf_d = 50;        // shelf depth from the front plate
+shelf_d = 40;        // shelf depth from the front plate: covers the battery, ends in front of the PWM board
 
 /* [Service cover, right side] */
-cover_y = 57;        // centre
-cover_z = 88;
+cover_y = 59;        // centre, towards the back like the valve cover of the original
+cover_z = body_h / 2;
 cover_w = 34;        // along y
-cover_hgt = 116;     // along z, reaches up to the speed knob above the battery
+cover_hgt = 84;      // along z
 cover_out = 11;      // protrusion
 cover_t = 2.4;
 cover_r = 4;
+cover_screw_dz = 34;
 
 /* [Speed knob, potentiometer of the PWM fan controller] */
-pot_yz = [57, 118];       // axis under the service cover (y, z), above the shelf; the potentiometer is nutted to the right body wall
+pot_yz = [cover_y, cover_z];  // axis in the middle of the service cover; the potentiometer is nutted to the right body wall
 pot_shaft = [6, 4.5, 15]; // D shaft: diameter, across the flat, length from the outer wall face (WH148 type, to be measured)
 pot_bush = [7, 7];        // threaded bushing M7: diameter, length from the inner wall face
 pot_nut = [11, 2];        // nut as cylinder: diameter across corners, thickness
 pot_body = [16.5, 18];    // housing incl. switch: diameter, depth behind the wall
-pwm_pcb = [45, 30, 1.6];  // PWM controller board behind the potentiometer, parallel to the wall: y, z, thickness (assumed, to be measured)
+pwm_pcb = [30, 45, 1.6];  // PWM controller board behind the potentiometer, parallel to the wall: y, z, thickness (assumed, to be measured)
 pwm_comp_h = 12;          // parts on its back side (terminals, fan header)
-pwm_pot_offset = [10, 0]; // potentiometer axis relative to the board centre (y, z)
+pwm_pot_offset = [0, -12.5];  // potentiometer axis relative to the board centre: 10 mm above the lower edge, board upwards
 knob_d = 28;              // flat cap in front of the cover
 knob_h = 6.5;
 knob_gap = 0.5;           // cap to the cover face
@@ -144,6 +145,7 @@ head_pocket = [6.4, 1.9];  // head recess in the grille ring: diameter, depth
 len_grille = 12;     // M3 x 12, from the front, head recessed in the grille ring
 len_fan = 30;        // M3 x 30, from behind the fan (not in the nas-case set)
 len_back = 8;        // M3 x 8, from the back, head on the surface
+len_cover = 8;       // M3 x 8, from inside the body
 len_handle = 8;      // M3 x 8, from inside the body
 
 /* [Decor] */
@@ -201,6 +203,7 @@ function back_bosses() = concat(
         w = [part_x, sz ? body_h - wall + 1 : wall - 1],
         t = [part_x + part_t, sz ? body_h - wall : wall])
      [c, w, [part_x + part_t, c[1]], w, t]]);
+function cover_screws() = [for (s = [-1, 1]) [cover_y, cover_z + s * cover_screw_dz]];
 function handle_screws() = [for (sx = [-1, 1], dx = handle_screw_dx) [handle_cx + sx * dx, handle_cy]];
 // thread engagement in the insert and margin of the screw tip to the pocket end
 screw_table = [
@@ -211,6 +214,7 @@ screw_table = [
      (fan_y + fan_t - len_fan) - (fan_y - insert_depth)],
     ["back", len_back, (body_d - back_t) - max(body_d - head_pocket[1] - len_back, body_d - back_t - insert_len),
      (body_d - head_pocket[1] - len_back) - (body_d - back_t - insert_depth)],
+    ["cover", len_cover, min(len_cover - wall, insert_len), insert_depth - (len_cover - wall)],
     ["handle", len_handle, min(len_handle - wall, insert_len), insert_depth - (len_handle - wall)]];
 
 assert(wall >= 3.2 && front_t >= 3.2 && back_t >= 3 && corner_r >= 5, "Drop resistance: walls >= 3.2 mm (back 3 mm), corner radius >= 5 mm");
@@ -235,10 +239,13 @@ assert(mount_xy[0] + mount_doubler[0] / 2 >= part_x - 1, "Mount doubler does not
 assert(back_t - head_pocket[1] >= 2, "Back cover too thin under the recessed screw heads");
 // hand under the grip: child hand breadth about 55-70 mm, adult 80-90 mm; comfortable finger clearance 30-35 mm
 assert(handle_h - handle_bar >= 30 && handle_open[1] >= 90, "Handle opening too small for a hand");
-assert(knob_d <= cover_w - 4 && abs(pot_yz[1] - cover_z) + knob_d / 2 < cover_hgt / 2 - 2, "Knob does not fit on the service cover");
-assert(pot_yz[0] - pwm_pot_offset[0] - pwm_pcb[0] / 2 > front_t + inner_c && pot_yz[0] - pwm_pot_offset[0] + pwm_pcb[0] / 2 < lip_y0 - 1
-       && pot_yz[1] - pwm_pot_offset[1] - pwm_pcb[1] / 2 > shelf_z + shelf_t + 2 && pot_yz[1] + pot_body[0] / 2 < cover_z + cover_hgt / 2 - cover_t,
-       "PWM board or potentiometer outside the free bay above the shelf");
+assert(knob_d <= cover_w - 4 && abs(pot_yz[1] - cover_z) + knob_d / 2 < cover_hgt / 2 - 2
+       && min([for (s = [-1, 1]) abs(pot_yz[1] - cover_z - s * cover_screw_dz)]) > boss_d / 2 + pot_nut[0] / 2 + 1,
+       "Knob or nut does not fit between the cover bosses");
+assert(cover_out - insert_depth >= 3, "Cover insert pocket too close to the visible face");
+assert(pot_yz[0] - pwm_pot_offset[0] + pwm_pcb[0] / 2 < body_d - back_t - 1 && pot_yz[1] - pwm_pot_offset[1] + pwm_pcb[1] / 2 < body_h - wall - 1
+       && front_t + shelf_d < pot_yz[0] - pwm_pot_offset[0] - pwm_pcb[0] / 2 - 0.5 && front_t + shelf_d > bat_cy + bat_d / 2,
+       "PWM board outside the bay, or the shelf does not end in front of the board / no longer covers the battery");
 assert(pot_shaft[2] - knob_stem_z >= 8 && knob_len - knob_bore_top >= 2 && knob_stem_z > pot_nut[1] + 0.5,
        "Knob: shaft engagement, top skin or stem end");
 assert(handle_end[1] > insert_depth && handle_open[2] > insert_depth, "Handle insert pockets reach the slants");
@@ -365,6 +372,7 @@ module body() difference() {
     along_x(-1, wall + 1) intake_slots_side();
     cyl_x(pot_yz, body_w - wall - 1, body_w + 1, (pot_bush[0] + 0.4) / 2);   // potentiometer bushing, nutted to the wall
     for (p = handle_screws()) translate([p[0], p[1], body_h - wall - 1]) cylinder(d = screw_clear_d, h = wall + 2);
+    for (p = cover_screws()) cyl_x(p, body_w - wall - 1, body_w + 1, screw_clear_d / 2);
     translate([mount_xy[0], mount_xy[1], -1]) cylinder(d = mount_insert[0], h = mount_insert[1] + 1 + 1);   // M5 insert from the underside
 }
 
@@ -484,7 +492,6 @@ module back() difference() {
 module back_print_pose() translate([0, 0, body_d]) rotate([-90, 0, 0]) children();   // back face on the bed
 
 // ---------- service cover ----------
-// glued onto the right wall along its 2.4 mm rim
 module cover_2d(inset = 0) translate([cover_y, cover_z]) rrect([cover_w - 2 * inset, cover_hgt - 2 * inset], max(cover_r - inset, 0.5));
 module cover() difference() {
     x0 = body_w;
@@ -497,7 +504,9 @@ module cover() difference() {
             }
             along_x(x0 - 1, x1 - cover_t) cover_2d(cover_t);
         }
+        for (p = cover_screws()) cyl_x(p, x0, x1 - cover_t + eps, boss_d / 2);
     }
+    for (p = cover_screws()) cyl_x(p, x0 - 1, x0 + insert_depth, insert_hole_d / 2);
     cyl_x(pot_yz, x1 - cover_t - 1, x1 + 1, knob_stem_d / 2 + knob_stem_cl);   // knob stem
 }
 module cover_print_pose() translate([0, 0, body_w + cover_out]) rotate([0, 90, 0]) children();   // outer face on the bed
@@ -590,6 +599,7 @@ module screw(len, socket = false) difference() {   // ISO 7380 button head, head
 module screws_grille(socket = false) for (p = grille_screws()) translate([p[0], -grille_t + head_pocket[1], p[1]]) orient([0, 1, 0]) screw(len_grille, socket);
 module screws_fan(socket = false) for (p = fan_holes()) translate([p[0], fan_y + fan_t, p[1]]) orient([0, -1, 0]) screw(len_fan, socket);
 module screws_back(socket = false) for (b = back_bosses()) translate([b[0][0], body_d - head_pocket[1], b[0][1]]) orient([0, -1, 0]) screw(len_back, socket);
+module screws_cover(socket = false) for (p = cover_screws()) translate([body_w - wall, p[0], p[1]]) orient([1, 0, 0]) screw(len_cover, socket);
 module screws_handle(socket = false) for (p = handle_screws()) translate([p[0], p[1], body_h - wall]) orient([0, 0, 1]) screw(len_handle, socket);
 
 module assembly(explode = 0) {
@@ -624,6 +634,7 @@ else if (part == "metrics") echo("PROJECT_METRICS", [
         [for (p = grille_screws()) ["body", [p[0], front_t + grille_boss_h, p[1]], [0, -1, 0], insert_depth, insert_hole_d, insert_w_min]],
         [for (p = fan_holes()) ["body", [p[0], fan_y, p[1]], [0, -1, 0], insert_depth, insert_hole_d, insert_w_min]],
         [for (b = back_bosses()) ["body", [b[0][0], body_d - back_t, b[0][1]], [0, -1, 0], insert_depth, insert_hole_d, insert_w_min]],
+        [for (p = cover_screws()) ["cover", [body_w, p[0], p[1]], [1, 0, 0], insert_depth, insert_hole_d, insert_w_min]],
         [for (p = handle_screws()) ["handle", [p[0], p[1], body_h], [0, 0, 1], insert_depth, insert_hole_d, insert_w_min]],
         [["body", [mount_xy[0], mount_xy[1], 0], [0, 0, 1], mount_insert[1] + 1, mount_insert[0], mount_insert[2]]])]]);
 else if (part == "none") {}

@@ -39,6 +39,7 @@ ASSEMBLY = {
     "screws_grille": "screws_grille();",
     "screws_fan": "screws_fan();",
     "screws_back": "screws_back();",
+    "screws_cover": "screws_cover();",
     "screws_handle": "screws_handle();",
 }
 ALLOWED_OVERLAPS = [("fan", "screws_fan")]   # the fan is a solid envelope, its screws run through the frame holes
@@ -133,13 +134,23 @@ def checks(ctx):
     for name, moving, fixed, direction, length, step in (
             ("grille_front", ["grille", "screws_grille"], ["body", "fan", "screws_fan"], [0, -1, 0], 12, 0.25),
             ("back_off", ["back", "screws_back"], others("back", "screws_back"), [0, 1, 0], 12, 0.25),
-            ("battery_out", ["battery"], others("battery", "back", "screws_back"), [0, 1, 0], 90, 1),
+            # the battery comes out after the PWM board, which sits beside its top
+            ("battery_out", ["battery"], others("battery", "back", "screws_back", "knob", "cover", "screws_cover", "pot", "pot_nut", "pwm_board"), [0, 1, 0], 90, 1),
             ("fan_out", ["fan", "screws_fan"], others("fan", "screws_fan", "battery", "back", "screws_back"), [0, 1, 0], 90, 1),
             ("knob_off", ["knob"], others("knob"), [1, 0, 0], 25, 0.5),
+            ("cover_off", ["cover"], ["body", "pot", "pot_nut", "pwm_board"], [1, 0, 0], 30, 0.5),
             ("handle_up", ["handle"], ["body"], [0, 0, 1], 15, 0.5)):
         count, first, maximum = ctx.sweep(moving, fixed, direction, length, step)
         paths.append(dict(name=name, collisions=count, first_mm=first, max_volume_mm3=round(maximum, 4)))
         assert count == 0, f"Path {name} obstructed at {first} mm"
+    # PWM board with the potentiometer: after knob, cover and nut, away from the wall until the shaft is clear, then out the back
+    fixed = ctx.union(others("pot", "pot_nut", "pwm_board", "knob", "cover", "screws_cover", "back", "screws_back"))
+    moving = ctx.union(["pot", "pwm_board"])
+    clear_x = m["pot_shaft_len"] + m["wall"] + 1          # shaft end clear of the inner wall face
+    blocked = [("away", float(d)) for d in np.arange(0, clear_x + 0.01, 0.5) if (moving.translate([-d, 0, 0]) ^ fixed).volume() > 0.01]
+    blocked += [("back", float(d)) for d in np.arange(0, 90.01, 1) if (moving.translate([-clear_x, d, 0]) ^ fixed).volume() > 0.01]
+    paths.append(dict(name="pwm_board_out", collisions=len(blocked), first_mm=blocked[0] if blocked else None, max_volume_mm3=0))
+    assert not blocked, f"Path pwm_board_out obstructed at {blocked[:3]}"
     ctx.summary.append(f"{len(paths)} paths")
 
     # Insert pockets: axis empty, ring around it and floor below it filled
@@ -175,8 +186,8 @@ VIEWER = dict(
     groups=[("weiss", "Gedruckt · PETG weiß"), ("grau", "Gedruckt · PETG grau"),
             ("schrauben", "Schrauben M3"), ("zugekauft", "Zugekauft")],
     hidden_groups=["zugekauft"],
-    outer=["body", "back", "cover", "grille", "handle", "screws_grille", "screws_back", "screws_handle"],
-    cut=["back", "cover", "screws_back"],
+    outer=["body", "back", "cover", "grille", "handle", "screws_grille", "screws_back", "screws_cover", "screws_handle"],
+    cut=["back", "cover", "screws_back", "screws_cover"],
     # id, label, group, colour, quantity, explode direction (mm per slider mm)
     parts=[("body", "Gehäuse", "weiss", "#f2f2ee", "1x", [0, 0, 0]),
            ("back", "Rückwand", "weiss", "#e6e6e1", "1x", [0, 1.5, 0]),
@@ -187,11 +198,12 @@ VIEWER = dict(
            ("fan_visual", "Lüfter 120 mm", "zugekauft", "#303236", "1x", [0, 0.8, 0]),
            ("battery", "Akku LiFePO4 3,2 V", "zugekauft", "#3f7fbf", "1x", [0, 0.5, 0]),
            ("pot", "Poti PWM-Regler (Annahme)", "zugekauft", "#3a3d41", "1x", [-0.5, 0, 0]),
-           ("pwm_board", "PWM-Platine (Annahme 45 × 30)", "zugekauft", "#2e6b3f", "1x", [-0.5, 0, 0]),
+           ("pwm_board", "PWM-Platine (Annahme 30 × 45)", "zugekauft", "#2e6b3f", "1x", [-0.5, 0, 0]),
            # screws leave their part: same direction, further out
            ("screws_grille", "Gitter · M3 × 12 Linsenkopf", "schrauben", "#26282b", "4x", [0, -1.6, 0]),
            ("screws_fan", "Lüfter · M3 × 30 Linsenkopf", "schrauben", "#26282b", "4x", [0, 1.4, 0]),
            ("screws_back", "Rückwand · M3 × 8 Linsenkopf", "schrauben", "#26282b", "6x", [0, 2.2, 0]),
+           ("screws_cover", "Servicedeckel · M3 × 8 Linsenkopf", "schrauben", "#26282b", "2x", [-0.5, 0, 0]),
            ("screws_handle", "Griff · M3 × 8 Linsenkopf", "schrauben", "#26282b", "4x", [0, 0, -0.5])],
     colour={"body": [("label", "Gehäuse · Logo", "#8f9396")]},
     bodies={"body_base": "body_install_pose() inlay_base() { body_print_pose() body(); body_label_print_2d(); }",
@@ -201,6 +213,7 @@ VIEWER = dict(
             "screws_grille": "screws_grille(true);",
             "screws_fan": "screws_fan(true);",
             "screws_back": "screws_back(true);",
+            "screws_cover": "screws_cover(true);",
             "screws_handle": "screws_handle(true);"},
     output="build/viewer.html",
 )
@@ -215,7 +228,7 @@ VIEWS = {"01_assembly": ("assembly();", "-160,-330,230,112,40,70"),
          "05_duct": ("intersection() { body(); translate([-1, -1, -1]) cube([body_w + 2, 30, body_h + 2]); }",
                      "112,420,300,112,0,77"),
          # service cover with the speed knob, from the right
-         "06_knob": ("intersection() { assembly(); translate([165, 20, 20]) cube([100, 70, 140]); }",
-                     "420,-120,200,230,57,90"),
+         "06_knob": ("intersection() { assembly(); translate([165, 20, 10]) cube([100, 70, 120]); }",
+                     "420,-120,160,230,59,77"),
          # underside with the M5 mount insert
          "07_underside": ("body();", "40,-160,-260,112,40,40")}
