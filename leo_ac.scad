@@ -18,7 +18,7 @@ wall = 3.2;          // side, top and bottom walls, eight 0.4 mm lines (drop res
 front_t = 3.2;       // front plate
 corner_r = 6;        // corner radius seen from the front, spreads the load of a drop on a corner
 edge_c = 1.5;        // 45 degree chamfer on the bed edges (front of the body, back of the cover)
-part_x = 152;        // left face of the partition between fan section and electronics bay
+part_x = 150;        // left face of the partition between fan section and electronics bay
 part_t = 2.4;
 inner_c = 4;         // 45 degree fillet between front plate and walls (stiffness, printable)
 
@@ -81,7 +81,7 @@ retain_t = 3;
 retain_w = 24;
 shelf_gap = 3;       // battery top to electronics shelf (cable, protection board)
 shelf_t = 3;
-shelf_d = 50;        // shelf depth from the front plate
+shelf_d = 60;        // shelf depth from the front plate, carries the PWM board
 
 /* [Service cover, right side] */
 cover_y = body_d / 2; // centre, in the middle of the side depth
@@ -96,14 +96,17 @@ cover_boss_d = 9;    // screw columns inside the cover, screws from outside
 cover_ins_depth = 7.5;  // insert pocket from the outer wall face, into an inner boss (M3 x 16)
 
 /* [Speed knob, potentiometer of the PWM fan controller] */
-pot_yz = [cover_y, 118];  // axis above the battery, centred in the depth; the potentiometer is nutted to the right body wall
 pot_shaft = [6, 4.5, 15]; // D shaft: diameter, across the flat, length from the outer wall face (WH148 type, to be measured)
 pot_bush = [7, 7];        // threaded bushing M7: diameter, length from the inner wall face
 pot_nut = [11, 2];        // nut as cylinder: diameter across corners, thickness
 pot_body = [16.5, 18];    // housing incl. switch: diameter, depth behind the wall
-pwm_pcb = [45, 30, 1.6];  // PWM controller board behind the potentiometer, parallel to the wall: y, z, thickness (assumed, to be measured)
-pwm_comp_h = 12;          // parts on its back side (terminals, fan header)
-pwm_pot_offset = [0, 0];  // potentiometer axis relative to the board centre (y, z)
+// PWM board CNY-FA5-PRO: right-angle potentiometer on its edge, shaft parallel to the board. The board lies on two ribs
+// above the shelf, potentiometer edge at the right wall, held there by the potentiometer nut. Estimated from a photo.
+pwm_pcb = [48, 34, 1.6];  // length (x, from the wall inwards), width (y), thickness — to be measured
+pwm_comp_h = 13;          // screw terminals and fan header above the board
+pwm_standoff = 4;         // board underside above the shelf (solder joints)
+pwm_wall_gap = 0.5;       // board edge to the inner wall face
+pot_axis_h = 8.5;         // potentiometer axis above the board top — to be measured
 knob_d = 28;              // flat cap in front of the cover
 knob_h = 6.5;
 knob_gap = 0.5;           // cap to the cover face
@@ -173,6 +176,7 @@ groove_z0 = 19;            // axis of the lowest groove
 groove_x = [160, 219];
 
 // ---------- derived values ----------
+pot_yz = [cover_y, wall + bat_l + shelf_gap + shelf_t + pwm_standoff + pwm_pcb[2] + pot_axis_h];   // knob axis above the battery, centred in the depth
 mount_top = mount_insert[1] + 1 + mount_floor;        // boss top inside; blind hole L + 1 from the underside
 knob_stem_z = -wall + pot_bush[1] + knob_stem_cl;     // stem end, from the outer face of the right wall
 knob_cap_z = cover_out + knob_gap;                    // cap underside, same reference
@@ -247,9 +251,10 @@ assert(handle_h - handle_bar >= 30 && handle_open[1] >= 90, "Handle opening too 
 assert(knob_d <= cover_w - 4 && abs(pot_yz[1] - cover_z) + knob_d / 2 < cover_hgt / 2 - 2
        && min([for (s = [-1, 1]) abs(pot_yz[1] - cover_z - s * cover_screw_dz)]) > max(cover_boss_d / 2 + pot_nut[0] / 2, screw_head_d / 2 + knob_d / 2) + 1,
        "Knob or nut does not fit between the cover bosses");
-assert(pot_yz[0] - pwm_pot_offset[0] - pwm_pcb[0] / 2 > front_t + inner_c && pot_yz[0] - pwm_pot_offset[0] + pwm_pcb[0] / 2 < body_d - back_t - 1
-       && pot_yz[1] - pwm_pot_offset[1] - pwm_pcb[1] / 2 > shelf_z + shelf_t + 2 && pot_yz[1] - pwm_pot_offset[1] + pwm_pcb[1] / 2 < body_h - wall - 1,
-       "PWM board outside the free bay above the shelf");
+assert(pot_yz[0] - pwm_pcb[1] / 2 > front_t + inner_c && pot_yz[0] + pwm_pcb[1] / 2 < front_t + shelf_d
+       && body_w - wall - pwm_wall_gap - pwm_pcb[0] - (pot_shaft[2] + wall + 1) > bay_x0 + 0.5
+       && pot_yz[1] + pwm_comp_h + 2 < body_h - wall - 10,
+       "PWM board: beyond the shelf, no room to pull it off the wall, or too high");
 assert(pot_shaft[2] - knob_stem_z >= 8 && knob_len - knob_bore_top >= 2 && knob_stem_z > pot_nut[1] + 0.5,
        "Knob: shaft engagement, top skin or stem end");
 assert(handle_end[1] > insert_depth && handle_open[2] > insert_depth, "Handle insert pockets reach the slants");
@@ -365,6 +370,9 @@ module body() difference() {
         // ribs under the handle feet: carry the load of a drop on the handle into the front plate
         for (sx = [-1, 1]) let (x = handle_cx + sx * (handle_screw_dx[0] + handle_screw_dx[1]) / 2)
             translate([x - handle_rib[0] / 2, front_t - eps, body_h - wall - handle_rib[1]]) cube([handle_rib[0], handle_rib[2] - front_t, handle_rib[1] + eps]);
+        // two ribs on the shelf carry the PWM board; they start at the front plate (printable)
+        for (x = [body_w - wall - pwm_wall_gap - pwm_pcb[0] + 1, body_w - wall - pwm_wall_gap - 5])
+            translate([x, front_t - eps, shelf_z + shelf_t - eps]) cube([3, pot_yz[0] + pwm_pcb[1] / 2 - front_t, pwm_standoff + eps]);
         // electronics shelf, also stops the battery upwards
         translate([bay_x0 - eps, front_t - eps, shelf_z]) cube([bay_x1 - bay_x0 + 2 * eps, shelf_d + eps, shelf_t]);
     }
@@ -380,7 +388,7 @@ module body() difference() {
     // cable notch at the back edge of the partition
     translate([part_x - 1, part_y1 - 14, 120]) cube([part_t + 2, 15, 12]);
     // battery cable slot through the shelf; the shelf rim still stops the battery upwards
-    translate([bat_cx - cable_slot_w / 2, bat_cy - 6, shelf_z - 1]) cube([cable_slot_w, shelf_d + front_t - bat_cy + 7, shelf_t + 2]);
+    translate([bat_cx + 10 - cable_slot_w / 2, bat_cy - 6, shelf_z - 1]) cube([cable_slot_w, shelf_d + front_t - bat_cy + 7, shelf_t + 2]);
     along_x(-1, wall + 1) intake_slots_side();
     cyl_x(pot_yz, body_w - wall - 1, body_w + 1, (pot_bush[0] + 0.4) / 2);   // potentiometer bushing, nutted to the wall
     for (p = handle_screws()) translate([p[0], p[1], body_h - wall - 1]) cylinder(d = screw_clear_d, h = wall + 2);
@@ -555,10 +563,12 @@ module pot_nut_env() translate([body_w, pot_yz[0], pot_yz[1]]) orient([1, 0, 0])
     cylinder(d = pot_nut[0], h = pot_nut[1]);
     translate([0, 0, -1]) cylinder(d = pot_bush[0] + 0.1, h = pot_nut[1] + 2);
 }
-module pwm_board_env() {             // board and parts behind the potentiometer housing
-    x1 = body_w - wall - pot_body[1];
-    translate([x1 - pwm_pcb[2] - pwm_comp_h, pot_yz[0] - pwm_pot_offset[0] - pwm_pcb[0] / 2, pot_yz[1] - pwm_pot_offset[1] - pwm_pcb[1] / 2])
-        cube([pwm_pcb[2] + pwm_comp_h, pwm_pcb[0], pwm_pcb[1]]);
+module pwm_board_env() {             // board on the ribs, parts behind the potentiometer
+    x1 = body_w - wall - pwm_wall_gap;
+    translate([x1 - pwm_pcb[0], pot_yz[0] - pwm_pcb[1] / 2, shelf_z + shelf_t + pwm_standoff]) {
+        cube([pwm_pcb[0], pwm_pcb[1], pwm_pcb[2]]);
+        translate([0, 0, pwm_pcb[2] - eps]) cube([pwm_pcb[0] - pot_body[1], pwm_pcb[1], pwm_comp_h + eps]);
+    }
 }
 
 // ---------- handle ----------
@@ -642,7 +652,7 @@ else if (part == "exploded") assembly(40);
 else if (part == "metrics") echo("PROJECT_METRICS", [
     ["wall", wall], ["front_t", front_t], ["back_t", back_t], ["corner_r", corner_r], ["body_mm", [body_w, body_d, body_h]],
     ["fan_size", fan_size], ["fan_t", fan_t], ["fan_pitch", fan_pitch], ["fan_hole_d", fan_hole_d],
-    ["fan_blade_d", fan_blade_d], ["pot_shaft_len", pot_shaft[2]], ["knob_shaft_engagement", pot_shaft[2] - knob_stem_z], ["knob_top_skin", knob_len - knob_bore_top], ["knob_protrusion", knob_cap_z + knob_h - cover_out], ["handle_clearance", handle_h - handle_bar], ["handle_open_top", handle_open[1]], ["fan_axis", [fan_cx, fan_cz]], ["fan_y", fan_y], ["shroud_r", [open_r, open_r + shroud_t]], ["shroud_gap", shroud_gap], ["open_d", 2 * open_r], ["grille_gap", grille_gap],
+    ["fan_blade_d", fan_blade_d], ["pot_shaft_len", pot_shaft[2]], ["pwm_pcb", pwm_pcb], ["pot_axis_h", pot_axis_h], ["knob_shaft_engagement", pot_shaft[2] - knob_stem_z], ["knob_top_skin", knob_len - knob_bore_top], ["knob_protrusion", knob_cap_z + knob_h - cover_out], ["handle_clearance", handle_h - handle_bar], ["handle_open_top", handle_open[1]], ["fan_axis", [fan_cx, fan_cz]], ["fan_y", fan_y], ["shroud_r", [open_r, open_r + shroud_t]], ["shroud_gap", shroud_gap], ["open_d", 2 * open_r], ["grille_gap", grille_gap],
     ["bat_mm", [bat_d, bat_l]], ["bat_bms", bat_bms], ["bat_clear", bat_clear], ["bat_retain_gap", bat_retain_gap], ["shelf_gap", shelf_gap],
     ["lip_clearance", lip_cl], ["spigot_clearance", spigot_cl],
     ["insert_hole_d", insert_hole_d], ["insert_w_min", insert_w_min], ["mount_insert", mount_insert], ["mount_floor", mount_floor], ["insert_len", insert_len], ["insert_depth", insert_depth],

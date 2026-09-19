@@ -176,7 +176,8 @@ def checks(ctx):
     ctx.open_items.append("Lüfter messen (Rahmen 120 × 120 × 25, Lochabstand 105, Kabelabgang)")
     ctx.open_items.append("Poti des PWM-Reglers messen (Annahme WH148: D-Achse Ø6/4,5 × 15, Buchse M7, Gehäuse Ø16,5 × 18)")
     ctx.open_items.append("BMS-Platine am Akku messen (Annahme 16 × 4 mm über die ganze Länge, zur Trennwand)")
-    ctx.open_items.append("PWM-Platine und USB-C-Buchse messen: Lage im Elektronikfach, Durchbruch für USB-C im Servicedeckel")
+    ctx.open_items.append("PWM-Platine CNY-FA5-PRO messen (Annahme 48 × 34 mm, Bauteile 13 mm hoch, Poti-Achse 8,5 mm über der Platine)")
+    ctx.open_items.append("USB-C-Buchse wählen und messen: Durchbruch im Servicedeckel")
     return dict(standard_screws=screws, contact_volumes_mm3=contacts, stops=stops, sampled_paths=paths,
                 insert_probes=inserts, air_duct=duct)
 
@@ -199,7 +200,7 @@ VIEWER = dict(
            ("fan_visual", "Lüfter 120 mm", "zugekauft", "#303236", "1x", [0, 0.8, 0]),
            ("battery", "Akku LiFePO4 3,2 V", "zugekauft", "#3f7fbf", "1x", [0, 0.5, 0]),
            ("pot", "Poti PWM-Regler (Annahme)", "zugekauft", "#3a3d41", "1x", [-0.5, 0, 0]),
-           ("pwm_board", "PWM-Platine (Annahme 45 × 30)", "zugekauft", "#2e6b3f", "1x", [-0.5, 0, 0]),
+           ("pwm_board", "PWM-Platine CNY-FA5-PRO (Annahme 48 × 34)", "zugekauft", "#2e6b3f", "1x", [-0.5, 0, 0]),
            # screws leave their part: same direction, further out
            ("screws_grille", "Gitter · M3 × 12 Linsenkopf", "schrauben", "#26282b", "4x", [0, -1.6, 0]),
            ("screws_fan", "Lüfter · M3 × 30 Linsenkopf", "schrauben", "#26282b", "4x", [0, 1.4, 0]),

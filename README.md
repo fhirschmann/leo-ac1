@@ -23,7 +23,7 @@ Kleiner Akku-Ventilator für das Kinderzimmer, gestaltet wie die Außeneinheit e
 
 Alle Teile liegen als Bambu-Studio-Projekt in [`stl/leo_ac1_all_parts.3mf`](stl/leo_ac1_all_parts.3mf): Platte 1 Gehäuse (mit Wischturm), Platte 2 Rückwand, Platte 3 graue Teile (Gitter, Servicedeckel, Griff, Drehknopf). Filament 1 PETG Basic Weiß, Filament 2 PETG Basic Grau, Filament 3 Grau für das Typenschild (im AMS dieselbe Spule wie Filament 2). Wer das Gehäuse einfarbig druckt, nimmt `stl/body.stl`.
 
-Rechnerisch **ca. 0,6 kg und 16,9 Stunden** (diagnostisches Slicen, jede Instanz als eigener Druck; Gehäuse allein 349 g / 8,1 h).
+Rechnerisch **ca. 0,6 kg und 17,0 Stunden** (diagnostisches Slicen, jede Instanz als eigener Druck; Gehäuse allein 353 g / 8,2 h).
 
 ## Druck und Stabilität
 
@@ -44,7 +44,7 @@ Alle Teile drucken ohne Stützen (geprüft mit `analyze.py islands`, `overhangs`
 | PC-Lüfter 120 × 120 × 25 mm | 1 | Lochabstand 105 mm; 12-V-Lüfter brauchen einen Step-up-Wandler |
 | Akku 3,2 V 6000 mAh LiFePO4 mit Schutzplatine, JST-PH 2.0 (32700-Zelle, Ø 34 × 70 mm) | 1 | Nur mit LiFePO4-Ladegerät laden (3,65 V), **kein** TP4056 (4,2 V) |
 | Lade-/Boostmodul „2-in-1 3,2 V LiFePO4“, Variante 12 V | 1 | 35,4 × 11 × 3,6 mm; Pads IN± (5 V laden), B± (Akku), O± (12 V, max. ca. 0,32 A) |
-| PWM-Lüfterregler DC 8–24 V 5 A mit Drehpoti und Schalter | 1 | 4-Pin-Lüfter; Poti sitzt auf der Platine; Knopf oben im Servicedeckel über dem Akku, mittig in der Tiefe; die Platine liegt dahinter parallel zur rechten Seitenwand über dem Elektronikboden (angenommen: Platine 45 × 30 mm, Poti in der Mitte, 12 mm hohe Bauteile, Poti WH148 mit D-Achse Ø 6 × 15, M7) |
+| PWM-Lüfterregler DC 8–24 V 5 A mit Drehpoti und Schalter | 1 | 4-Pin-Lüfter; Platine CNY-FA5-PRO mit liegendem Poti an der Kante: Sie liegt waagerecht auf zwei Rippen über dem Elektronikboden, Poti-Kante an der rechten Wand, gehalten von der Poti-Mutter; Knopf über dem Akku, mittig in der Tiefe (angenommen: Platine 48 × 34 mm, Bauteile 13 mm hoch, Poti-Achse 8,5 mm über der Platine, Poti WH148 mit D-Achse Ø 6 × 15, M7) |
 | USB-C-Einbaubuchse 5 V | 1 | Zum Laden, Lage im Servicedeckel noch offen |
 | Einschmelzmuttern Ruthex RX-M3x5.7 | 20 | Loch Ø 4,0, Tiefe 7 (Datenblatt: ≥ L + 1 = 6,7), Wand ≥ 1,6 |
 | Einschmelzmutter Ruthex RX-M5x9.5 | 1 | Halterungsgewinde in der Unterseite (wie ein Stativgewinde): von außen eingepresst, Sackloch Ø 6,4 × 10,5 (L + 1), darüber 2,5 mm Boden; Wand 4,3 mm (Datenblatt ≥ 2,6) |
@@ -54,10 +54,21 @@ Alle Teile drucken ohne Stützen (geprüft mit `analyze.py islands`, `overhangs`
 | M3 × 8, ISO 7380 Torx | 4 | Griff, von innen |
 | M3 × 16, ISO 7380 Torx | 2 | Servicedeckel, von außen, Kopf 1,9 mm versenkt |
 
+## Verkabelung
+
+```
+USB-C-Buchse 5 V ──► IN+ / IN−   Lade-/Boostmodul (12-V-Variante) ──► O+ / O− 12 V ──► PWM-Regler „DC 8–24V“ ──► 4-Pin-Lüfter
+Akku (JST-PH, mit eingebautem BMS) ──► B+ / B−
+```
+
+- Das Modul lädt den Akku mit bis zu 1 A auf 3,6 V und liefert gleichzeitig 12 V (USV-Betrieb): Der Lüfter läuft auch beim Laden. Netzteil mit mindestens 2 A verwenden.
+- Das BMS im Akku bleibt als zweite Schutzebene dazwischen (Überladung, Tiefentladung, Kurzschluss); das Modul schaltet bei 2,6 V vorher ab.
+- Stromaufnahme prüfen: 12 V × Lüfterstrom (Typenschild) darf die ca. 0,32 A des Moduls nicht überschreiten; der Akku liefert dabei gut 1 A.
+
 ## Zusammenbau
 
 1. Einschmelzmuttern setzen: 4 Gitter- und 4 Lüfterdome innen an der Front, 6 Dome am hinteren Rand des Gehäuses, 2 von außen in die rechte Seitenwand unter dem Servicedeckel, 4 in den Griff-Füßen; die M5-Mutter von unten in das Sackloch in der Unterseite.
-2. PWM-Platine mit dem Poti von hinten über den Elektronikboden führen, Poti von innen durch die rechte Seitenwand stecken und außen mit seiner Mutter festziehen; Griff von innen mit M3 × 8 anschrauben, Servicedeckel von außen mit M3 × 16; Drehknopf durch das Loch im Servicedeckel auf die Achse drücken (Zeigerstrich zur Achsabflachung).
+2. PWM-Platine von hinten mit der Poti-Kante voran auf die zwei Rippen über dem Elektronikboden schieben, Poti durch die rechte Seitenwand stecken und außen mit seiner Mutter festziehen; Griff von innen mit M3 × 8 anschrauben, Servicedeckel von außen mit M3 × 16; Drehknopf durch das Loch im Servicedeckel auf die Achse drücken (Zeigerstrich zur Achsabflachung).
 3. Gitter von vorn aufsetzen (der Kragen zentriert es in der Öffnung) und mit M3 × 12 anschrauben.
 4. Lüfter von hinten auf die Dome hinter dem Luftkanal setzen, Blasrichtung nach vorn, mit M3 × 30 anschrauben. Kabel durch die Aussparung in der Trennwand ins Elektronikfach führen.
 5. Akku stehend von hinten in die Wiege schieben, Kabelende nach oben und BMS-Platine zur Trennwand (rechteckige Aussparung in der Wiege); das Kabel läuft durch den Schlitz im Elektronikboden darüber.
@@ -66,7 +77,7 @@ Alle Teile drucken ohne Stützen (geprüft mit `analyze.py islands`, `overhangs`
 ## Offen
 
 - BMS-Platine am Akku messen (Annahme 16 × 4 mm über die ganze Länge, zur Trennwand).
-- Poti des PWM-Reglers, PWM-Platine und USB-C-Buchse messen (Lage im Elektronikfach, USB-C-Durchbruch).
+- PWM-Platine CNY-FA5-PRO messen (Annahme 48 × 34 mm, Bauteile 13 mm, Poti-Achse 8,5 mm über der Platine), Poti-Achse (Form, Länge) und USB-C-Buchse wählen.
 - Akku und Lüfter nachmessen (Akku laut Etikett Ø 34 × 70 mm, im Modell Ø 35 × 72 mm; Lüfter nach Norm).
 - Elektronik (Wandler, Laden, Schalter, Drehzahl) festlegen: Lage im Elektronikfach, Durchbrüche für Ladebuchse und Schalter (z. B. im Servicedeckel).
 

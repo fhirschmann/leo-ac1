@@ -1,5 +1,5 @@
 {
-  "source_sha256": "eff323fb7712b1d200ff5dcb547aa3aa529360f6f796e7bcd903c2ab5442c3af",
+  "source_sha256": "4533176dc7d01053af81f529425e1c4e6e2bd86515e8b13ce5360a0ddef1edeb",
   "software": {
     "numpy": "2.5.3",
     "trimesh": "5.1.0",
@@ -29,17 +29,17 @@
           76.0
         ]
       ],
-      "volume_mm3": 311810.4479,
-      "triangles": 11974,
+      "volume_mm3": 315132.1596,
+      "triangles": 12006,
       "watertight": true,
       "consistent_winding": true,
       "degenerate_faces": 0,
       "components": 1,
       "backend": "CGAL",
-      "sha256": "8f2b44ce4307c693c88cf1cb15f380115f1ac468bbf2ce133af974f315ac7d0d",
+      "sha256": "9e3a5196e956e70390a1a4686c99fd973ae56dacf7eaff18fc76efe1eed028a9",
       "quantity": 1,
       "material": "PETG-weiss",
-      "committed_sha256": "8f2b44ce4307c693c88cf1cb15f380115f1ac468bbf2ce133af974f315ac7d0d"
+      "committed_sha256": "9e3a5196e956e70390a1a4686c99fd973ae56dacf7eaff18fc76efe1eed028a9"
     },
     "back": {
       "size_mm": [
@@ -66,10 +66,10 @@
       "degenerate_faces": 0,
       "components": 1,
       "backend": "Manifold",
-      "sha256": "8a6328017d2c2d284b8c6579196cf6c4c6cef6e9e9d75f60ffff0c226a843834",
+      "sha256": "35da5bf63583fc00ccb13ba2f61cc28a02164547640df8440e27172a71e63b99",
       "quantity": 1,
       "material": "PETG-weiss",
-      "committed_sha256": "8a6328017d2c2d284b8c6579196cf6c4c6cef6e9e9d75f60ffff0c226a843834"
+      "committed_sha256": "35da5bf63583fc00ccb13ba2f61cc28a02164547640df8440e27172a71e63b99"
     },
     "grille": {
       "size_mm": [
@@ -126,10 +126,10 @@
       "degenerate_faces": 0,
       "components": 1,
       "backend": "Manifold",
-      "sha256": "e81bef8155917ec55a3d7004597ee53e0f65061c7b7f1a021f5a24ac429256da",
+      "sha256": "7ad067bf9cdf51a4e7dfd8b3d41eefecee7c24b190e77617445615d40e508355",
       "quantity": 1,
       "material": "PETG-grau",
-      "committed_sha256": "e81bef8155917ec55a3d7004597ee53e0f65061c7b7f1a021f5a24ac429256da"
+      "committed_sha256": "7ad067bf9cdf51a4e7dfd8b3d41eefecee7c24b190e77617445615d40e508355"
     },
     "handle": {
       "size_mm": [
@@ -211,14 +211,14 @@
           76.0
         ]
       ],
-      "volume_mm3": 311500.4455,
-      "triangles": 13162,
+      "volume_mm3": 314822.1572,
+      "triangles": 13194,
       "watertight": true,
       "consistent_winding": true,
       "degenerate_faces": 0,
       "components": 1,
       "backend": "CGAL",
-      "sha256": "0baaa0cee1958cbef7abdb3e95d527864559c5acdc19fc3da9386728bee1d9c3"
+      "sha256": "5ade22a2e79e6ace57c54df5138be316add09d50c997009005315daeb0fa4534"
     },
     "body_label": {
       "size_mm": [
@@ -277,6 +277,12 @@
     "fan_hole_d": 4.3,
     "fan_blade_d": 116,
     "pot_shaft_len": 15,
+    "pwm_pcb": [
+      48,
+      34,
+      1.6
+    ],
+    "pot_axis_h": 8.5,
     "knob_shaft_engagement": 10.7,
     "knob_top_skin": 2,
     "knob_protrusion": 7,
@@ -545,7 +551,7 @@
       [
         "body",
         [
-          153.2,
+          151.2,
           76,
           6.5
         ],
@@ -561,7 +567,7 @@
       [
         "body",
         [
-          153.2,
+          151.2,
           76,
           148.5
         ],
@@ -929,7 +935,7 @@
     {
       "body": "body",
       "at": [
-        153.2,
+        151.2,
         76,
         6.5
       ],
@@ -940,7 +946,7 @@
     {
       "body": "body",
       "at": [
-        153.2,
+        151.2,
         76,
         148.5
       ],
@@ -1046,7 +1052,8 @@
     "Lüfter messen (Rahmen 120 × 120 × 25, Lochabstand 105, Kabelabgang)",
     "Poti des PWM-Reglers messen (Annahme WH148: D-Achse Ø6/4,5 × 15, Buchse M7, Gehäuse Ø16,5 × 18)",
     "BMS-Platine am Akku messen (Annahme 16 × 4 mm über die ganze Länge, zur Trennwand)",
-    "PWM-Platine und USB-C-Buchse messen: Lage im Elektronikfach, Durchbruch für USB-C im Servicedeckel"
+    "PWM-Platine CNY-FA5-PRO messen (Annahme 48 × 34 mm, Bauteile 13 mm hoch, Poti-Achse 8,5 mm über der Platine)",
+    "USB-C-Buchse wählen und messen: Durchbruch im Servicedeckel"
   ],
   "limitations": [
     "Bought parts as envelopes (fan block, battery cylinder), no vendor CAD",
