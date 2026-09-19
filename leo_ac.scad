@@ -79,6 +79,9 @@ bat_front_gap = 4.5; // front plate to battery, clears the inner fillet
 cradle_z = [14, 28, 56];  // lower faces of the rings, clear of the corner bosses (z <= 10.5) and the cover bosses (z 34-42)
 cradle_t = 4;
 saddle_gap = 0.3;    // rib end to saddle along y
+saddle_gusset = 6;            // 45 degree fillets between the back cover and the battery saddles (not below the lowest: back bosses)
+saddle_rib = [3, 180];         // rib across the three saddles behind the battery: thickness, x position
+saddle_rib_slot = [12, 12];    // wire passage through the rib at the lower cable notch: height, depth from the back cover (pointed end)
 shelf_gap = 3;       // battery top to electronics shelf (cable, protection board)
 shelf_t = 4;         // stops the battery when the unit falls on its top
 shelf_fillet = 3;    // 45 degree fillets along its joints with partition and right wall, above and below
@@ -332,6 +335,9 @@ assert(chg_fan_gap >= 5 && chg_gap - chg_tape >= 3
 assert(chg_gap - chg_tape >= 0.5 && (part_x - chg_gap) - max(part_x - chg_gap - chg_pcb[2] + chg_ledge[1], fan_cx + fan_size / 2 + 0.3) >= 1,
        "Charge module: pads too thin for the tape, or less than 1 mm of board on the ledge beside the fan frame");
 assert(bat_cx - bat_d / 2 - bat_bms[1] - bat_clear > bay_x0 + 1, "BMS board of the battery hits the partition");
+assert(cable_notch_z[0] - saddle_rib_slot[0] / 2 > cradle_z[1] + cradle_t + saddle_gusset - 0.5 && cable_notch_z[0] + saddle_rib_slot[0] / 2 < cradle_z[2] - saddle_gusset + 0.5
+       && body_d - back_t - saddle_rib_slot[1] - saddle_rib_slot[0] / 2 > bat_cy + bat_d / 2 + bat_clear + 5,
+       "Saddle stiffening: wire passage in the rib hits a fillet or reaches the battery end of the rib");
 assert(mount_top < fan_cz - fan_size / 2 - 2 && (mount_boss_d - mount_insert[0]) / 2 >= mount_insert[2] + 1.5 && mount_floor >= 2,
        "Mount boss hits the fan, is thinner than the datasheet wall + 1.5 mm, or its floor is too thin");
 assert(mount_xy[0] + mount_doubler[0] / 2 >= part_x - 1, "Mount doubler does not reach the partition");
@@ -707,6 +713,16 @@ module back() difference() {
             translate([bat_cx, bat_cy, z - 1]) cylinder(r = bat_d / 2 + bat_clear, h = cradle_t + 2);
             translate([bat_cx - bat_d / 2 - bat_bms[1] - bat_clear, bat_cy - 1, z - 1])
                 cube([bat_bms[1] + bat_clear + bat_d / 2, bat_bms[0] / 2 + bat_clear + 1, cradle_t + 2]);
+        }
+        // stiffening against drops: 45 degree fillets at the saddle roots, rib tying the saddles together behind the battery
+        for (i = [0:len(cradle_z) - 1], s = [-1, 1]) if (i > 0 || s > 0) let (z = s > 0 ? cradle_z[i] + cradle_t : cradle_z[i])
+            along_x(bay_x0 + 0.5, bay_x1 - 0.5) polygon([[y1 + eps, z - s * eps], [y1 - saddle_gusset, z - s * eps], [y1 + eps, z + s * saddle_gusset]]);
+        let (ry = bat_cy + bat_d / 2 + bat_clear + 1) difference() {
+            translate([saddle_rib[1] - saddle_rib[0] / 2, ry, cradle_z[0]])
+                cube([saddle_rib[0], y1 - ry + eps, cradle_z[len(cradle_z) - 1] + cradle_t - cradle_z[0]]);
+            let (zc = cable_notch_z[0], h = saddle_rib_slot[0], d = saddle_rib_slot[1])   // pointed towards the bay: printable
+                along_x(saddle_rib[1] - saddle_rib[0], saddle_rib[1] + saddle_rib[0])
+                    polygon([[y1 + 1, zc - h / 2], [y1 - d, zc - h / 2], [y1 - d - h / 2, zc], [y1 - d, zc + h / 2], [y1 + 1, zc + h / 2]]);
         }
         sw_funnel(body_d - sw_well[0] - sw_panel, y1 + eps, sw_well[2]);   // box around the switch well, reaching into the bay
         // channel for the USB-C module on the inside, open towards the bay and at the top (wires)

@@ -294,5 +294,7 @@ VIEWS = {"01_assembly": ("assembly();", "-160,-330,230,112,40,70"),
          # power switch in its well above the USB-C socket, cut at the switch axis and seen from the left
          "15_switch": ('intersection() { union() { color("#e6e6e1") back(); color("#1b1b1b") sw_env(); } translate([sw_xz[0], 40, 50]) cube([30, 45, 40]); }',
                        "90,40,120,205,70,71"),
+         # battery saddles on the inside of the back cover: root fillets and the rib behind the battery, seen from the front
+         "16_saddles": ('intersection() { back(); translate([150, 20, 0]) cube([76, 61, 90]); }', "120,-60,120,186,60,40"),
          # underside with the M5 mount insert
          "07_underside": ('color("#f2f2ee") body(); color("#222326") place_feet(); color("#26282b") screws_feet(true);', "40,-160,-260,112,40,40")}

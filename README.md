@@ -6,9 +6,9 @@ Small battery fan for a child's room, styled like the outdoor unit of a split ai
 
 3D viewer (artifact, republished under the same URL after every model change): a private Claude viewer artifact
 
-| Back | Exploded | Logo and grooves | Air duct from behind | Service cover with knob | Underside with M5 thread and TPU feet | Charge module in the air stream | LED pocket behind the O | Dedication inside the front | Handle mount, cut at the screws | Back cover bosses | TPU foot, cut at the screws | USB-C socket in the back cover, cut at its axis | Power switch in its well |
-|---|---|---|---|---|---|---|---|---|---|---|---|---|---|
-| ![Back](img/02_back.png) | ![Exploded](img/03_exploded.png) | ![Logo](img/04_front_right.png) | ![Air duct](img/05_duct.png) | ![Knob](img/06_knob.png) | ![Underside](img/07_underside.png) | ![Charge module](img/08_charge_module.png) | ![LED pocket](img/09_led.png) | ![Dedication](img/10_dedication.png) | ![Handle mount](img/11_handle_mount.png) | ![Back cover bosses](img/12_back_bosses.png) | ![TPU foot mount](img/13_foot_mount.png) | ![USB-C socket](img/14_usb_c.png) | ![Power switch](img/15_switch.png) |
+| Back | Exploded | Logo and grooves | Air duct from behind | Service cover with knob | Underside with M5 thread and TPU feet | Charge module in the air stream | LED pocket behind the O | Dedication inside the front | Handle mount, cut at the screws | Back cover bosses | TPU foot, cut at the screws | USB-C socket in the back cover, cut at its axis | Power switch in its well | Battery saddles on the back cover |
+|---|---|---|---|---|---|---|---|---|---|---|---|---|---|---|
+| ![Back](img/02_back.png) | ![Exploded](img/03_exploded.png) | ![Logo](img/04_front_right.png) | ![Air duct](img/05_duct.png) | ![Knob](img/06_knob.png) | ![Underside](img/07_underside.png) | ![Charge module](img/08_charge_module.png) | ![LED pocket](img/09_led.png) | ![Dedication](img/10_dedication.png) | ![Handle mount](img/11_handle_mount.png) | ![Back cover bosses](img/12_back_bosses.png) | ![TPU foot mount](img/13_foot_mount.png) | ![USB-C socket](img/14_usb_c.png) | ![Power switch](img/15_switch.png) | ![Battery saddles](img/16_saddles.png) |
 
 ## Printed parts
 
@@ -24,7 +24,7 @@ Small battery fan for a child's room, styled like the outdoor unit of a split ai
 
 All parts are in the Bambu Studio project [`stl/leo_ac1_all_parts.3mf`](stl/leo_ac1_all_parts.3mf): plate 1 housing (with prime tower), plate 2 back cover, plate 3 grey parts (grille, service cover, handle, knob), plate 4 TPU feet. Filament 1 PETG Basic white, filament 2 PETG Basic grey, filament 3 grey for the logo and the dedication (same AMS spool as filament 2), filament 4 TPU (Generic TPU profile; set your TPU), filament 5 white for the pointer on the knob (same AMS spool as filament 1; plate 3 gets a small prime tower). To print the housing in one colour, use `stl/body.stl`.
 
-Estimated **approx. 0.70 kg and 21.0 hours** (diagnostic slicing, every instance as its own print; housing alone 402 g / 10.3 h, the two TPU feet 13 g / 1.2 h).
+Estimated **approx. 0.71 kg and 21.2 hours** (diagnostic slicing, every instance as its own print; housing alone 402 g / 10.3 h, the two TPU feet 13 g / 1.2 h).
 
 ## Bought parts
 
@@ -89,7 +89,7 @@ All parts are designed to print without supports: `analyze.py islands`, `overhan
 - Grille gap 4.9 mm (nominal, against fingers; not tested under force).
 - USB-C module: the stop behind it is a 4 mm thick, 6 mm high wedge on the right wall that runs into the wall at 45°; the channel on the back cover has 2 mm walls and floor.
 - M5 mount: the insert is pressed from outside into a blind hole (10.5 mm = L + 1 per datasheet) with a 2.5 mm floor above; the load on the mount presses it against this floor. The boss is deliberately only Ø 15 mm: its 4.3 mm wall is printed fully solid with 6 wall loops instead of infill. Plus a rib towards the back, a 45° ramp to the front and a 3 mm floor doubler inside from the front to the partition (60 × 56 mm) that leads leverage into the front and the partition. For real camera accessories there is also Ruthex RX-1/4x12.7 (1/4"-20, hole Ø 8.0, wall ≥ 3.3).
-- Battery holder for drops: three closed rings (4 mm) around the cell, at the front as ribs in the housing, at the back as saddles across the whole bay on the back cover, 0.5 mm clearance all around with a cut-out for the BMS board. The electronics shelf above is 4 mm thick with 3 mm fillets on both sides into the partition and the side wall; a hold-down plate on the back cover rests 0.2 mm above its free back edge, which should keep the shelf from breaking off in a drop onto the top. Add a thin foam strip between battery and saddles if you like.
+- Battery holder for drops: three closed rings (4 mm) around the cell, at the front as ribs in the housing, at the back as saddles across the whole bay on the back cover, 0.5 mm clearance all around with a cut-out for the BMS board. The saddles are joined to the back cover by 6 mm 45° fillets and tied together by a 3 mm rib behind the battery, with a pointed wire passage at the height of the lower cable notch. The electronics shelf above is 4 mm thick with 3 mm fillets on both sides into the partition and the side wall; a hold-down plate on the back cover rests 0.2 mm above its free back edge, which should keep the shelf from breaking off in a drop onto the top. Add a thin foam strip between battery and saddles if you like.
 - Feet: two TPU strips (16 × 62 mm, 4.5 mm under the housing), each screwed with two M3 × 8 button heads from below into Ruthex inserts. The inserts are pressed from outside into Ø 9 bosses inside the bottom wall (2.5 mm around the hole). The top of each foot sits 1 mm deep in a pocket of the bottom wall with 45° ends, so sideways pushes go into the housing and not into the screws; 2.65 mm of TPU are clamped under each head, the heads stay 1.2 mm above the table. A floor doubler inside keeps the bottom wall at 3.2 mm.
 - Slicer profile: 6 wall loops, 5 top/bottom layers, 30 % gyroid; the TPU feet 100 % (zig-zag). PETG is tougher than PLA.
 
