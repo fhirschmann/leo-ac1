@@ -130,7 +130,8 @@ def export_one(job):
         assert abs(mesh.bounds[0, 2]) < 0.002, (name, "Not on print bed")
         assert np.all(mesh.extents <= ENVELOPE), (name, f"Exceeds the build volume {ENVELOPE}")
         info.update(quantity=qty, material=material)
-    if group == "color":
+    if group == "color" and name.endswith("_base"):
+        # the base carries the bed contact; inlays may sit on a face higher up (their union with the base is checked)
         assert abs(mesh.bounds[0, 2]) < 0.002, (name, "Not on print bed")
     return group, name, info
 
@@ -210,7 +211,7 @@ def sweep(solids, moving, fixed, direction, length, step):
 
 
 def check_color_parts():
-    """Base and inlays do not overlap, together they are the single-colour part, inlays stay in the first layers."""
+    """Base and inlays do not overlap, together they are the single-colour part, each inlay spans only a few layers."""
     report = {}
     for name, inlays in COLOR_PARTS.items():
         full = manifold(trimesh.load_mesh(BUILD / "print" / f"{name}.stl"))
@@ -225,11 +226,13 @@ def check_color_parts():
         assert delta <= max(0.5, full.volume() * 1e-5), f"{name}: pieces differ from the single-colour part by {delta:.3f} mm3"
         info = dict(overlap_mm3=round(overlap, 4), union_delta_mm3=round(delta, 4))
         for piece in inlays:
+            # colour changes cost time and filament per layer: an inlay spans only a few layers, on the bed
+            # (logo on the visible face) or higher up (e.g. raised text on an inner face)
             mesh = meshes[piece]
-            depth = float(mesh.bounds[1, 2])
-            assert mesh.volume > 1 and depth <= INLAY_MAX_DEPTH, \
-                f"{name}_{piece}: inlay missing or deeper than the first layers ({depth} mm)"
-            info[piece] = dict(mm3=round(float(mesh.volume), 2), depth_mm=round(depth, 3),
+            z0, z1 = float(mesh.bounds[0, 2]), float(mesh.bounds[1, 2])
+            assert mesh.volume > 1 and z1 - z0 <= INLAY_MAX_DEPTH, \
+                f"{name}_{piece}: inlay missing or spanning more than {INLAY_MAX_DEPTH} mm of layers (z {z0:.2f}-{z1:.2f})"
+            info[piece] = dict(mm3=round(float(mesh.volume), 2), depth_mm=round(z1 - z0, 3), z_mm=[round(z0, 3), round(z1, 3)],
                                bodies=len(mesh.split(only_watertight=False)))
         report[name] = info
     return report

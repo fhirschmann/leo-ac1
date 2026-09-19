@@ -6,24 +6,24 @@ Small battery fan for a child's room, styled like the outdoor unit of a split ai
 
 3D viewer (artifact, republished under the same URL after every model change): a private Claude viewer artifact
 
-| Back | Exploded | Logo and grooves | Air duct from behind | Service cover with knob | Underside with M5 thread | Charge module in the air stream | LED pocket behind the O | Dedication inside the front | Handle mount, cut at the screws |
-|---|---|---|---|---|---|---|---|---|---|
-| ![Back](img/02_back.png) | ![Exploded](img/03_exploded.png) | ![Logo](img/04_front_right.png) | ![Air duct](img/05_duct.png) | ![Knob](img/06_knob.png) | ![Underside](img/07_underside.png) | ![Charge module](img/08_charge_module.png) | ![LED pocket](img/09_led.png) | ![Dedication](img/10_dedication.png) | ![Handle mount](img/11_handle_mount.png) |
+| Back | Exploded | Logo and grooves | Air duct from behind | Service cover with knob | Underside with M5 thread | Charge module in the air stream | LED pocket behind the O | Dedication inside the front | Handle mount, cut at the screws | Back cover bosses |
+|---|---|---|---|---|---|---|---|---|---|---|
+| ![Back](img/02_back.png) | ![Exploded](img/03_exploded.png) | ![Logo](img/04_front_right.png) | ![Air duct](img/05_duct.png) | ![Knob](img/06_knob.png) | ![Underside](img/07_underside.png) | ![Charge module](img/08_charge_module.png) | ![LED pocket](img/09_led.png) | ![Dedication](img/10_dedication.png) | ![Handle mount](img/11_handle_mount.png) | ![Back cover bosses](img/12_back_bosses.png) |
 
 ## Printed parts
 
 | Part | Qty | Material | Size (mm) | Print orientation |
 |---|---|---|---|---|
-| `body` housing | 1 | PETG white + grey (logo) | 225 × 155 × 77.6 | front on the bed, logo as inlay in the first 0.6 mm, fake grooves 0.8 mm deep and open towards the bed; "Für Leo von Papa" raised 0.8 mm on the inside of the front plate, readable with the back cover off |
+| `body` housing | 1 | PETG white + grey (logo) | 225 × 155 × 77.6 | front on the bed, logo as inlay in the first 0.6 mm, fake grooves 0.8 mm deep and open towards the bed; "Für Leo von Papa" raised 0.8 mm in grey on the inside of the front plate, readable with the back cover off |
 | `back` back cover | 1 | PETG white | 225 × 155 × 55 | outside on the bed, the three battery saddles and the hold-down plate stand upright |
 | `grille` fan grille | 1 | PETG grey | Ø 136 × 6 | front on the bed |
 | `cover` service cover | 1 | PETG grey | 116 × 34 × 11 | outside on the bed; right side, centred in depth, knob at the top; screwed from outside (heads recessed) |
 | `knob` speed knob | 1 | PETG grey | Ø 28 × 13.7 (flat cap, 7 mm proud of the service cover) | top on the bed, stem with D bore points up |
 | `handle` handle | 1 | PETG grey | 170 × 42 × 24 plus 1.2 mm keys under the feet (30 mm clearance under the bar, 90 mm opening at the top) | lying on its side (layers along the pull direction), 45° bevels, keys with 45° flanks |
 
-All parts are in the Bambu Studio project [`stl/leo_ac1_all_parts.3mf`](stl/leo_ac1_all_parts.3mf): plate 1 housing (with prime tower), plate 2 back cover, plate 3 grey parts (grille, service cover, handle, knob). Filament 1 PETG Basic white, filament 2 PETG Basic grey, filament 3 grey for the logo (same AMS spool as filament 2). To print the housing in one colour, use `stl/body.stl`.
+All parts are in the Bambu Studio project [`stl/leo_ac1_all_parts.3mf`](stl/leo_ac1_all_parts.3mf): plate 1 housing (with prime tower), plate 2 back cover, plate 3 grey parts (grille, service cover, handle, knob). Filament 1 PETG Basic white, filament 2 PETG Basic grey, filament 3 grey for the logo and the dedication (same AMS spool as filament 2). To print the housing in one colour, use `stl/body.stl`.
 
-Estimated **approx. 0.68 kg and 18.9 hours** (diagnostic slicing, every instance as its own print; housing alone 390 g / 9.6 h).
+Estimated **approx. 0.68 kg and 19.0 hours** (diagnostic slicing, every instance as its own print; housing alone 394 g / 9.7 h).
 
 ## Bought parts
 
@@ -31,7 +31,7 @@ Estimated **approx. 0.68 kg and 18.9 hours** (diagnostic slicing, every instance
 |---|---|---|---|
 | Fan Noctua NF-F12 industrialPPC-2000 PWM | 1 | [noctua.at](https://noctua.at/en/nf-f12-industrialppc-2000-pwm) | 120 × 25 mm, hole spacing 105 mm, 12 V, max. 0.1 A / 1.2 W, 2000 rpm, 122 m³/h, 3.94 mm H₂O; silicone corner pads 1 mm proud of both frame faces (from the Noctua CAD); the pads rest on the bosses, M3 × 30 engages 3 mm, tighten by hand only |
 | Battery 3.2 V 6000 mAh LiFePO4 pack with protection board (BMS), JST-PH 2.0 (32700 cell, Ø 34 × 70 mm) | 1 | [eremit.de](https://www.eremit.de/p/3-2v-6000mah-pack-mit-schutz-arduino-aio-jst-ph-2-0-stecker) | charge only with a LiFePO4 charger (3.65 V), **no** TP4056 (4.2 V) |
-| Charge/boost module "2-in-1 3.2 V LiFePO4", **12 V variant** | 1 | [AliExpress 1005008094801881](https://de.aliexpress.com/item/1005008094801881.html) | 35.4 × 11 × 3.6 mm; pads IN± (5 V charging), B± (battery), O± (12 V, max. approx. 0.32 A); stands upright on the partition in the air stream directly behind the fan, taped onto two pads, lower short edge on a ledge (pads and components at the edges stay free) |
+| Charge/boost module "2-in-1 3.2 V LiFePO4", **12 V variant** | 1 | [AliExpress 1005008094801881](https://de.aliexpress.com/item/1005008094801881.html) | 35.4 × 11 × 3.6 mm; pads IN± (5 V charging), B± (battery), O± (12 V, max. approx. 0.32 A); stands upright on the partition in the air stream 5 mm behind the fan, taped onto two pads, lower short edge on a ledge (pads and components at the edges stay free) |
 | PWM fan controller CNY-FA5-PRO, DC 8–24 V 5 A, with potentiometer and switch | 1 | [AliExpress 1005010113177510](https://de.aliexpress.com/item/1005010113177510.html) | 4-pin fan; right-angle potentiometer on the board edge. The board lies flat on two ribs above the electronics shelf, potentiometer edge against the right wall, held by the potentiometer nut; knob above the battery, centred in depth (assumed: board 48 × 34 mm, components 13 mm high, potentiometer axis 8.5 mm above the board, potentiometer WH148 with D shaft Ø 6 × 15, M7) |
 | LED 3 mm, breathing/fading, 3.3 V, water clear, through-hole | 1 | [AliExpress 1005005336879647](https://de.aliexpress.com/item/1005005336879647.html) | charge indicator, pulses while the USB charger is plugged in; glued from inside into the pocket behind the O of LEO: Ø 3.2 blind hole, 0.8 mm white PETG left in front of the LED, flange rests on a Ø 7 boss; wiring below |
 | Resistor 220 Ω, 1/4 W | 1 | – | series resistor for the LED on the 5 V USB input (approx. 8 mA) |
@@ -75,9 +75,10 @@ battery (JST-PH, built-in BMS) ──► (PTC) ──► B+ / B−
 
 All parts print without supports (checked with `analyze.py islands`, `overhangs` > 45°, `ridges`, `inlays`):
 
-- Housing with the front on the bed: walls, partition, battery cradle and electronics shelf stand upright; the back cover bosses run into the corners with 45° cones; side slots only bridge 1.6 mm; fake grooves and the LED pocket are open towards the inside; the dedication grows upwards from the inside of the front plate.
+- Housing with the front on the bed: walls, partition, battery cradle and electronics shelf stand upright; the back cover bosses run into the corners with cones flatter than 45°; side slots only bridge 1.6 mm; fake grooves and the LED pocket are open towards the inside; the dedication grows upwards from the inside of the front plate in grey (colour change only for its four layers at 3.2–4.0 mm).
 - Air duct: round tube Ø 118 mm (like the grille opening), 3.2 mm wall, from the front to 0.2 mm in front of the fan frame (checked: wall closed all around, tube end sits fully on the frame); no dead corners between the round grille and the square frame.
 - Drop-proof: walls and front 3.2 mm, back cover 4 mm (screw heads recessed), corner radius 6 mm, 4 mm fillet inside between front and walls, grille ring 4 mm with 2.4 mm bars, extra bar in the back cover slots.
+- Back cover mounting: the six insert bosses at the back edge are Ø 10 mm (3 mm of material around the insert hole instead of 2 mm) and 16 mm long, joined to the wall corners and the partition by 20 mm long cones, so a drop onto the back cover does not snap them off.
 - Handle mount: under each foot the top wall is doubled to 6.4 mm, with three 3.2 mm ribs from the front plate to the back lip (7 mm driver room next to the screws). A 1.2 mm key under each foot sits in a matching recess (0.2 mm clearance), so a drop or a jerk on the handle is taken as shear by the housing instead of bending the screws. The inserts start at the key face (pocket 8.5 mm), M3 × 12 engages the full 5.7 mm.
 - Heat-set inserts have at least 3 mm of material to the visible face (grille 3.5 mm, fan 3.9 mm, service cover 4.5 mm), so the front does not warp when pressing them in.
 - Grille gap 4.9 mm (finger guard).
@@ -107,4 +108,4 @@ python3 -m venv .venv
 .venv/bin/python scripts/render_views.py           # img/
 ```
 
-Checked: part list against the `part` branches, closed meshes, bed placement, build volume, no intersection between 18 assembly bodies (153 pairs, including the assumed PWM board, LED, screws, fan and battery envelopes), contact of grille, fan, back cover, service cover, handle, potentiometer, charge module, LED and battery, battery stops (back 0.75 mm, top 3.25 mm, side 0.75 mm), 9 assembly/removal paths (including the charge module towards the back before the fan, and the PWM board: first 19 mm away from the wall, then towards the back) in a realistic order, 21 insert holes (20 × M3, 1 × M5; axis free, full minimum wall per Ruthex datasheet, floor solid), screw engagement (≥ 3 mm = 1 × d in the brass, fan on silicone pads 3 mm, others ≥ 4.8 mm; tip ≥ 0.9 mm before the end of the pocket), standard dimensions (120 mm fan, Ruthex M3), grille gap ≤ 6 mm (finger guard), multicolour coverage of the logo. Printability: no floating regions, inlay on layer 1 without too narrow spots, ridges between the grooves ≥ 1.1 mm. No strength, airflow or fit test on the real part.
+Checked: part list against the `part` branches, closed meshes, bed placement, build volume, no intersection between 18 assembly bodies (153 pairs, including the assumed PWM board, LED, screws, fan and battery envelopes), contact of grille, fan, back cover, service cover, handle, potentiometer, charge module, LED and battery, battery stops (back 0.75 mm, top 3.25 mm, side 0.75 mm), 9 assembly/removal paths (including the charge module towards the back before the fan, and the PWM board: first 19 mm away from the wall, then towards the back) in a realistic order, 21 insert holes (20 × M3, 1 × M5; axis free, full minimum wall per Ruthex datasheet, floor solid), screw engagement (≥ 3 mm = 1 × d in the brass, fan on silicone pads 3 mm, others ≥ 4.8 mm; tip ≥ 0.9 mm before the end of the pocket), standard dimensions (120 mm fan, Ruthex M3), grille gap ≤ 6 mm (finger guard), multicolour coverage of logo and dedication. Printability: no floating regions, logo and dedication on their first layer without too narrow spots, ridges between the grooves ≥ 1.1 mm. No strength, airflow or fit test on the real part.

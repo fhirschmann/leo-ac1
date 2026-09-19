@@ -1,5 +1,5 @@
 {
-  "source_sha256": "9d11443502388b819baf1b1cbd16577ad4dd1e0bb6fc5f50e7281cdb12925094",
+  "source_sha256": "cd3e4d5642af62513d819175becbeb280152755919b3e018a21cc25e3a4b5bc5",
   "software": {
     "numpy": "2.5.3",
     "trimesh": "5.1.0",
@@ -29,17 +29,17 @@
           76.0
         ]
       ],
-      "volume_mm3": 349671.6998,
-      "triangles": 20166,
+      "volume_mm3": 353286.4861,
+      "triangles": 19938,
       "watertight": true,
       "consistent_winding": true,
       "degenerate_faces": 0,
       "components": 1,
       "backend": "CGAL",
-      "sha256": "22433006bb08a35979e318fb6c2089c3d7dc6a7476562cf08bed7810ab7fb00e",
+      "sha256": "a395da78eec932cbe81cccfc2960c64c102d9cb503b396723d8cf42f81078c55",
       "quantity": 1,
       "material": "PETG-white",
-      "committed_sha256": "22433006bb08a35979e318fb6c2089c3d7dc6a7476562cf08bed7810ab7fb00e"
+      "committed_sha256": "a395da78eec932cbe81cccfc2960c64c102d9cb503b396723d8cf42f81078c55"
     },
     "back": {
       "size_mm": [
@@ -59,17 +59,17 @@
           55.25
         ]
       ],
-      "volume_mm3": 156337.4858,
-      "triangles": 10270,
+      "volume_mm3": 156183.4899,
+      "triangles": 10250,
       "watertight": true,
       "consistent_winding": true,
       "degenerate_faces": 0,
       "components": 1,
       "backend": "Manifold",
-      "sha256": "ec7c2cb859b47a464c179b68187a29cf50258d0216ecd0e1604f86dad94215ad",
+      "sha256": "d7361bcd1df2f90de3d293a39f6700d540bd40ae711b6abfa06d89132ae7a132",
       "quantity": 1,
       "material": "PETG-white",
-      "committed_sha256": "ec7c2cb859b47a464c179b68187a29cf50258d0216ecd0e1604f86dad94215ad"
+      "committed_sha256": "d7361bcd1df2f90de3d293a39f6700d540bd40ae711b6abfa06d89132ae7a132"
     },
     "grille": {
       "size_mm": [
@@ -211,14 +211,14 @@
           76.0
         ]
       ],
-      "volume_mm3": 349361.6974,
-      "triangles": 21354,
+      "volume_mm3": 352711.6283,
+      "triangles": 21126,
       "watertight": true,
       "consistent_winding": true,
       "degenerate_faces": 0,
       "components": 1,
       "backend": "CGAL",
-      "sha256": "e8f0d72f67b4f9301282ad6da4a86028568293510846410b2ddf286c73365afa"
+      "sha256": "5a7c312a48b7a62196e8c60f0600f3cf35b81467da9e89941288ac4816ad9c03"
     },
     "body_label": {
       "size_mm": [
@@ -246,16 +246,56 @@
       "components": 22,
       "backend": "Manifold",
       "sha256": "3d31f0d2efaff7aae5d760c0c03180e634645f06a8f078c1d78f806bd2b6b7ff"
+    },
+    "body_dedication": {
+      "size_mm": [
+        49.7874,
+        23.2982,
+        0.81
+      ],
+      "bounds_mm": [
+        [
+          162.181,
+          -125.8426,
+          3.19
+        ],
+        [
+          211.9684,
+          -102.5444,
+          4.0
+        ]
+      ],
+      "volume_mm3": 264.8552,
+      "triangles": 10600,
+      "watertight": true,
+      "consistent_winding": true,
+      "degenerate_faces": 0,
+      "components": 15,
+      "backend": "Manifold",
+      "sha256": "2f9f84a7a6cb041817d2ad0b6dd0541fd350cb91d9d5f0b8e6eb88e835a26395"
     }
   },
   "color_parts": {
     "body": {
       "overlap_mm3": 0.0001,
-      "union_delta_mm3": 0.0,
+      "union_delta_mm3": 0.0001,
       "label": {
         "mm3": 310.0,
         "depth_mm": 0.6,
+        "z_mm": [
+          0.0,
+          0.6
+        ],
         "bodies": 22
+      },
+      "dedication": {
+        "mm3": 264.86,
+        "depth_mm": 0.81,
+        "z_mm": [
+          3.19,
+          4.0
+        ],
+        "bodies": 15
       }
     }
   },
@@ -728,7 +768,7 @@
   "contact_volumes_mm3": {
     "grille@body": 177.726,
     "fan@body": 10.211,
-    "back@body": 128.348,
+    "back@body": 133.41,
     "cover@body": 39.376,
     "battery@body": 47.791,
     "handle@body": 12.376,
@@ -1056,7 +1096,8 @@
     "handle": 0.0,
     "knob": 0.0,
     "multicolour/body_base": 0.0,
-    "multicolour/body_label": 0.0
+    "multicolour/body_label": 0.0,
+    "multicolour/body_dedication": 0.0
   },
   "open_measurements": [
     "Measure the battery (label Ø34 × 70 mm, model Ø35 × 72 mm) and its cable exit",

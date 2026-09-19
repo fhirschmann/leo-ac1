@@ -5,7 +5,7 @@
 // Modules build every part in its INSTALLED position; the part branches at the end put each print
 // part into PRINT orientation (largest flat face on the bed at z = 0). The tools set `part`.
 
-part = "assembly";   // print part, "body_base" / "body_label", "assembly", "exploded", "metrics", "none"
+part = "assembly";   // print part, "body_base" / "body_label" / "body_dedication", "assembly", "exploded", "metrics", "none"
 $fa = 2;
 $fs = 0.6;
 eps = 0.01;
@@ -59,10 +59,11 @@ back_t = 4;          // screw heads recessed 1.9 mm, 2.1 mm below
 lip_h = 4;           // lip reaching into the body
 lip_t = 3;
 lip_cl = 0.25;       // clearance per side between lip and body wall
-boss_d = 8;          // screw bosses for inserts (back cover, service cover)
+boss_d = 8;          // screw bosses for inserts (service cover)
+back_boss_d = 10;    // back cover bosses: 3 mm of material around the Ruthex hole (datasheet 1.6)
 boss_inset = 6.5;    // back bosses: axis distance from the outer edges
-back_boss_len = 12;
-gusset = 14;         // 45 degree cone below the back bosses in print orientation
+back_boss_len = 16;  // solid column behind the insert
+gusset = 20;         // cone below the back bosses into the wall corner (print orientation), flatter than 45 degrees
 slot_w = 1.6;        // intake slots, back and left side
 slot_pitch = 3.2;
 back_bar_x = 80;     // extra vertical bar through the back intake slots
@@ -124,7 +125,7 @@ chg_comp_h = 2;                // parts on the top side
 chg_sink = [8.8, 8.8, 5, 6];   // two stick-on aluminium heatsinks: y, z, height, gap between them
 chg_z = 95;                    // centre height on the partition, board upright (long axis along z), at the fan rim
 chg_gap = 2;                   // air gap between board and partition; parts stay clear of the fan frame
-chg_y0 = 37.5;                 // front edge of the upright board, heatsinks right behind the fan frame
+chg_fan_gap = 5;               // free space from the fan's back pads to the front edge of the upright board (intake air)
 // solder pads (IN, B, O) and parts reach the long edges: no grooves. The board back sits on two pads with heat-resistant
 // double-sided tape, its lower edge on a ledge that stays behind the part side.
 chg_pads = [[5.5, 4], [21.5, 6]];  // pads behind the board, clear of the through-hole solder pads: start from the lower end, length
@@ -197,6 +198,7 @@ led_boss = [7, 5.8];       // boss around the LED pocket: diameter, height from 
 dedication = ["Für Leo", "von Papa"];   // raised on the inside of the front plate, readable from behind with the back cover off
 dedication_font = "Liberation Sans:style=Bold";   // bundled with OpenSCAD
 dedication_size = 8;
+dedication_bold = 0.15;    // extra stroke per side: thin joints of the font reach two lines (0.8 mm) in grey
 dedication_h = 0.8;        // raised height (four layers)
 dedication_z = [118, 105]; // baselines, between the PWM board and the LED boss
 
@@ -213,6 +215,7 @@ logo_x0 = logo_cx - logo_w / 2;
 logo_bottom = logo_top - big_size[1] - 2 * (line_gap + sub_size[1]);
 led_xz = [logo_x0 + text_x(brand, big_size, big_stroke, big_gap, 2) + big_size[0] / 2, logo_top - big_size[1] / 2];   // centre of the O
 fan_y = front_t + fan_standoff;                       // front face of the fan frame
+chg_y0 = fan_y + fan_t + fan_pad + chg_fan_gap;       // front edge of the upright charge module
 bat_cy = front_t + bat_front_gap + bat_d / 2;         // battery axis y
 shelf_z = wall + bat_l + shelf_gap;
 bay_x0 = part_x + part_t;
@@ -273,7 +276,7 @@ assert(fan_cx - open_r - shroud_t > wall + inner_c && fan_cx + open_r + shroud_t
 assert(shelf_z + shelf_t < body_h - wall, "Shelf above the top wall");
 assert(front_t + shelf_d - shelf_hold[0] > pot_yz[0] + pwm_pcb[1] / 2 + 0.5, "Shelf hold-down plate reaches the PWM board");
 assert(part_x - chg_gap - chg_pcb[2] - chg_comp_h > fan_cx + fan_size / 2 + 0.3
-       && chg_y0 + (chg_pcb[1] - chg_sink[1]) / 2 > fan_y + fan_t + fan_pad + 0.3
+       && chg_fan_gap >= 5
        && chg_y0 + chg_pcb[1] < body_d - back_t - 1 && chg_z + chg_pcb[0] / 2 < 118,
        "Charge module reaches the fan frame, the back or the cable notch");
 assert(bat_cx - bat_d / 2 - bat_bms[1] - bat_clear > bay_x0 + 1, "BMS board of the battery hits the partition");
@@ -281,6 +284,8 @@ assert(mount_top < fan_cz - fan_size / 2 - 2 && (mount_boss_d - mount_insert[0])
        "Mount boss hits the fan, is thinner than the datasheet wall + 1.5 mm, or its floor is too thin");
 assert(mount_xy[0] + mount_doubler[0] / 2 >= part_x - 1, "Mount doubler does not reach the partition");
 assert(back_t - head_pocket[1] >= 2, "Back cover too thin under the recessed screw heads");
+assert((back_boss_d - insert_hole_d) / 2 >= 3 && back_boss_len >= insert_depth + 6 && boss_inset + back_boss_d / 2 + 1 < 14,
+       "Back bosses: wall around the insert, column length, or reaching the back cover slots");
 // hand under the grip: child hand breadth about 55-70 mm, adult 80-90 mm; comfortable finger clearance 30-35 mm
 assert(handle_h - handle_bar >= 30 && handle_open[1] >= 90, "Handle opening too small for a hand");
 assert(knob_d <= cover_w - 4 && abs(pot_yz[1] - cover_z) + knob_d / 2 < cover_hgt / 2 - 2
@@ -335,14 +340,14 @@ module orient(d) {
 
 // Multicolour inlays, applied in print orientation: children(0) = part with the decorated face on the bed,
 // children(1) = 2D inlay in print-orientation xy. The pieces overlap nowhere and together are the part.
-module inlay_zone(d = inlay_t) translate([0, 0, -eps]) linear_extrude(d + eps) children();
+module inlay_zone(d = inlay_t, z0 = 0) translate([0, 0, z0 - eps]) linear_extrude(d + eps) children();   // z0: face the inlay sits on
 module inlay_base(d = inlay_t) difference() { children(0); inlay_zone(d) children(1); }
 module inlay_piece(d = inlay_t) intersection() { children(0); inlay_zone(d) children(1); }
 
 // ---------- body ----------
 module body_outline(inset = 0) translate([body_w / 2, body_h / 2]) rrect([body_w - 2 * inset, body_h - 2 * inset], max(corner_r - inset, 0.5));
 module body_inner(extra = 0) body_outline(wall + extra);
-module boss_footprint(b) hull() { translate(b[0]) circle(d = boss_d); rect(b[1], b[2]); }
+module boss_footprint(b) hull() { translate(b[0]) circle(d = back_boss_d); rect(b[1], b[2]); }
 
 module back_boss(b) {
     y1 = body_d - back_t;
@@ -380,9 +385,7 @@ module body() difference() {
             }
         }
         cyl_y(led_xz, front_t - eps, led_boss[1], led_boss[0] / 2);   // boss for the LED behind the O
-        // dedication on the inside of the front plate, mirrored in x so it reads from behind
-        along_y(front_t - eps, front_t + dedication_h) for (i = [0:len(dedication) - 1])
-            translate([(bay_x0 + bay_x1) / 2, dedication_z[i]]) mirror([1, 0]) text(dedication[i], size = dedication_size, font = dedication_font, halign = "center");
+        along_y(front_t - eps, front_t + dedication_h) dedication_2d();   // dedication on the inside of the front plate, grey in print
         // round air duct from the front plate to the fan frame face
         difference() {
             cyl_y([fan_cx, fan_cz], front_t - eps, fan_y - shroud_gap, open_r + shroud_t);
@@ -533,6 +536,23 @@ module label_front_2d() {
 module body_print_pose() rotate([90, 0, 0]) children();       // front face on the bed: (x, y, z) -> (x, -z, y)
 module body_install_pose() rotate([-90, 0, 0]) children();
 module body_label_print_2d() mirror([0, 1]) label_front_2d();
+// dedication in front view coordinates (x, z), mirrored in x so it reads from behind
+module dedication_2d() for (i = [0:len(dedication) - 1])
+    translate([(bay_x0 + bay_x1) / 2, dedication_z[i]]) mirror([1, 0]) offset(delta = dedication_bold)
+        text(dedication[i], size = dedication_size, font = dedication_font, halign = "center");
+module body_dedication_print_2d() mirror([0, 1]) dedication_2d();
+// multicolour pieces of the body in print orientation: logo inlay on the bed, dedication raised on the inside of the front plate
+module body_piece(piece)
+    if (piece == "base") difference() {
+        body_print_pose() body();
+        inlay_zone() body_label_print_2d();
+        inlay_zone(dedication_h + eps, front_t) body_dedication_print_2d();
+    }
+    else intersection() {
+        body_print_pose() body();
+        if (piece == "label") inlay_zone() body_label_print_2d();
+        else inlay_zone(dedication_h + eps, front_t) body_dedication_print_2d();
+    }
 
 // ---------- grille ----------
 module grille_bars_2d() {
@@ -744,8 +764,9 @@ module screws_handle(socket = false) for (p = handle_screws()) translate([p[0], 
 
 module assembly(explode = 0) {
     body_install_pose() {
-        color("#f2f2ee") inlay_base() { body_print_pose() body(); body_label_print_2d(); }
-        color("#8f9396") inlay_piece() { body_print_pose() body(); body_label_print_2d(); }
+        color("#f2f2ee") body_piece("base");
+        color("#8f9396") body_piece("label");
+        color("#8f9396") body_piece("dedication");
     }
     color("#8f9396") translate([0, -explode, 0]) grille();
     color("#f2f2ee") translate([0, 2 * explode, 0]) back();
@@ -780,8 +801,9 @@ else if (part == "metrics") echo("PROJECT_METRICS", [
         [["body", [mount_xy[0], mount_xy[1], 0], [0, 0, 1], mount_insert[1] + 1, mount_insert[0], mount_insert[2]]])]]);
 else if (part == "none") {}
 else if (part == "body") body_print_pose() body();
-else if (part == "body_base") inlay_base() { body_print_pose() body(); body_label_print_2d(); }
-else if (part == "body_label") inlay_piece() { body_print_pose() body(); body_label_print_2d(); }
+else if (part == "body_base") body_piece("base");
+else if (part == "body_label") body_piece("label");
+else if (part == "body_dedication") body_piece("dedication");
 else if (part == "back") back_print_pose() back();
 else if (part == "grille") grille_print_pose() grille();
 else if (part == "cover") cover_print_pose() cover();

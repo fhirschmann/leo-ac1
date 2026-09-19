@@ -5,7 +5,7 @@
            (the slicer calls them "floating regions"; they need support or a design change)
   ridges   webs and lines narrower than --min-width in cross-sections at --z (default 0.4 mm, i.e.
            inside engravings that are open to the bed); tiny components below --ignore-area are skipped
-  inlays   multicolour inlay pieces on the first layer: bodies, area and features narrower than --min-width
+  inlays   multicolour inlay pieces on their first layer (bed or a face higher up): bodies, area and features narrower than --min-width
   overhangs  areas of a layer steeper than 45 degrees over the layer below (bridges, rebates and grooves in the
            bed face, cantilevers), larger than --min-area (default 100 mm2); --max-z limits the height
 
@@ -105,10 +105,11 @@ def main():
             found = [dict(z_mm=z, **item) for z in args.z
                      for item in thin(solid.slice(z), args.min_width or 1.1, args.ignore_area, args.min_area or 0.1)]
         else:
-            section = solid.slice(0.1)
+            z0 = float(mesh.bounds[0, 2])   # first layer of the inlay itself
+            section = solid.slice(z0 + 0.1)
             pieces = section.decompose()
             found = thin(section, args.min_width or 0.8, 0, args.min_area or 0.1)
-            print(f"{name}: {len(pieces)} bodies on the first layer, {section.area():.1f} mm2, "
+            print(f"{name}: {len(pieces)} bodies on its first layer (z {z0:.2f}), {section.area():.1f} mm2, "
                   f"smallest {min((p.area() for p in pieces), default=0):.2f} mm2")
         report[name] = found
         total += len(found)

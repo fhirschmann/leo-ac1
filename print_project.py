@@ -47,16 +47,16 @@ ASSEMBLY = {
 ALLOWED_OVERLAPS = [("fan", "screws_fan")]   # the fan is a solid envelope, its screws run through the frame holes
 
 # Multicolour: part -> inlay names; SOURCE needs the branches <part>_base and <part>_<inlay>
-COLOR_PARTS = {"body": ("label",)}
+COLOR_PARTS = {"body": ("label", "dedication")}   # logo on the front face, dedication raised inside
 STL_DIR, COLOR_DIR, ASM_DIR, REPORT = "stl", "stl/multicolour", "asm", "docs/verification.json"
 
 PRINTER = dict(machine="Bambu Lab H2S 0.4 nozzle", process="0.20mm Standard @BBL H2S",
                bed="Textured PEI Plate", envelope_mm=(340, 320, 340))
 PROCESS = dict(wall_loops=6, top_shell_layers=5, bottom_shell_layers=5, infill=30, pattern="gyroid")   # drop resistant
-# Filament slots of the project 3MF, 1-based in this order; inlay slots name their inlay
+# Filament slots of the project 3MF, 1-based in this order; inlay slots name their inlay or a tuple of inlays
 FILAMENTS = [dict(material="PETG-white", profile="Bambu PETG Basic @BBL H2S", colour="#FFFFFF"),
              dict(material="PETG-grey", profile="Bambu PETG Basic @BBL H2S", colour="#8E9294"),
-             dict(material="PETG-grey", profile="Bambu PETG Basic @BBL H2S", inlay="label", colour="#8E9294")]
+             dict(material="PETG-grey", profile="Bambu PETG Basic @BBL H2S", inlay=("label", "dedication"), colour="#8E9294")]
 PLATES = [("Housing", ["body"]), ("Back cover", ["back"]), ("Grey parts", ["grille", "cover", "handle", "knob"])]
 PROJECT_3MF = "stl/leo_ac1_all_parts.3mf"
 SLICER_SUMMARY = "docs/slicer-summary.json"
@@ -213,9 +213,10 @@ VIEWER = dict(
            ("screws_back", "Back cover · M3 × 8 button head", "screws", "#26282b", "6x", [0, 2.2, 0]),
            ("screws_cover", "Service cover · M3 × 16 button head, from outside", "screws", "#26282b", "2x", [1.6, 0, 0]),
            ("screws_handle", "Handle · M3 × 12 button head", "screws", "#26282b", "4x", [0, 0, -0.5])],
-    colour={"body": [("label", "Housing · logo", "#8f9396")]},
-    bodies={"body_base": "body_install_pose() inlay_base() { body_print_pose() body(); body_label_print_2d(); }",
-            "body_label": "body_install_pose() inlay_piece() { body_print_pose() body(); body_label_print_2d(); }",
+    colour={"body": [("label", "Housing · logo", "#8f9396"), ("dedication", "Housing · dedication", "#8f9396")]},
+    bodies={"body_base": 'body_install_pose() body_piece("base");',
+            "body_label": 'body_install_pose() body_piece("label");',
+            "body_dedication": 'body_install_pose() body_piece("dedication");',
             # Noctua CAD (vendor/, not in the repo): outlet face with stator vanes and hub label at CAD y = 0.3, towards the front
             "fan_visual": 'translate([fan_cx, fan_y - 0.3, fan_cz]) import("$ROOT/vendor/noctua/NF-F12_iPPC.stl");',
             "pot": "pot_env();",
@@ -245,10 +246,13 @@ VIEWS = {"01_assembly": ("assembly();", "-160,-330,230,112,40,70"),
          "09_led": ("intersection() { union() { color(\"#f2f2ee\") body(); color(\"#9fd3ff\") led_env(); } translate([led_xz[0] - 9, -1, led_xz[1] - 8]) cube([18, 10, 8]); }",
                     "232,40,178,207,3,131"),
          # dedication on the inside of the front plate: electronics bay, face turned up and read from behind
-         "10_dedication": ("rotate([0, 0, 180]) rotate([90, 0, 0]) intersection() { body(); translate([bay_x0 - 1, -1, 95]) cube([bay_x1 - bay_x0 + 2, 12, 50]); }",
+         "10_dedication": ("rotate([0, 0, 180]) rotate([90, 0, 0]) intersection() { body_install_pose() { color(\"#f2f2ee\") body_piece(\"base\"); color(\"#8f9396\") body_piece(\"dedication\"); } translate([bay_x0 - 1, -1, 95]) cube([bay_x1 - bay_x0 + 2, 12, 50]); }",
                            "-187,40,160,-187,117,3"),
          # handle mount from below: doubler, ribs and screws under the right foot, cut at the screw axis, with the handle keys
          "11_handle_mount": ("rotate([0, 0, 180]) rotate([90, 0, 0]) intersection() { union() { color(\"#f2f2ee\") body(); color(\"#8f9396\") handle(); color(\"#26282b\") screws_handle(); } translate([150, -1, 125]) cube([76, handle_cy + 1, 60]); }",
                              "-185,95,215,-185,150,40"),
+         # back cover insert boss in the top left corner from behind and below, back cover off: column and cone into the corner
+         "12_back_bosses": ("intersection() { body(); translate([-1, 30, 105]) cube([45, body_d, 60]); }",
+                            "110,190,60,12,62,142"),
          # underside with the M5 mount insert
          "07_underside": ("body();", "40,-160,-260,112,40,40")}

@@ -39,7 +39,7 @@ PROCESS = dict(wall_loops=4, top_shell_layers=5, bottom_shell_layers=5, infill=2
                pattern="gyroid") | getattr(P, "PROCESS", {})
 FULL_INFILL = set(getattr(P, "FULL_INFILL", ()))
 FULL_INFILL_MATERIALS = set(getattr(P, "FULL_INFILL_MATERIALS", ("TPU",)))
-# Filament slots of the project 3MF, 1-based in list order; inlay slots name their inlay
+# Filament slots of the project 3MF, 1-based in list order; inlay slots name their inlay or a tuple of inlays sharing the slot
 FILAMENTS = getattr(P, "FILAMENTS", None) or [dict(material=m, profile=f"Generic {m} @BBL H2S")
                                               for m in sorted({m for _, m, _ in PARTS.values()})]
 PLATES = getattr(P, "PLATES", None) or [(name, [name]) for name in PARTS if PARTS[name][0] > 0]
@@ -48,7 +48,8 @@ PLATES = getattr(P, "PLATES", None) or [(name, [name]) for name in PARTS if PART
 PAUSES = getattr(P, "PAUSES", {})
 PROJECT_3MF = ROOT / getattr(P, "PROJECT_3MF", f"{STL_DIR.relative_to(ROOT).as_posix()}/{ROOT.name}_all_parts.3mf")
 SUMMARY = ROOT / getattr(P, "SLICER_SUMMARY", "docs/slicer-summary.json")
-INLAY_FILAMENT = {f["inlay"]: i for i, f in enumerate(FILAMENTS, 1) if f.get("inlay")}
+INLAY_FILAMENT = {inlay: i for i, f in enumerate(FILAMENTS, 1)
+                  for inlay in ((f["inlay"],) if isinstance(f.get("inlay"), str) else f.get("inlay", ()))}
 DEFAULT_INFILL = int(PROCESS["infill"])
 
 

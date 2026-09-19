@@ -6,12 +6,12 @@
       "quantity": 1,
       "material": "PETG-white",
       "passed": true,
-      "source_sha256": "22433006bb08a35979e318fb6c2089c3d7dc6a7476562cf08bed7810ab7fb00e",
+      "source_sha256": "a395da78eec932cbe81cccfc2960c64c102d9cb503b396723d8cf42f81078c55",
       "exit_code": 0,
       "result_code": 0,
       "warnings": "",
-      "hours": 9.593,
-      "grams": 390.409,
+      "hours": 9.723,
+      "grams": 393.55,
       "wall_loops": 6,
       "infill_percent": 30.0,
       "layer_height": 0.20000000298023224,
@@ -29,12 +29,12 @@
       "quantity": 1,
       "material": "PETG-white",
       "passed": true,
-      "source_sha256": "ec7c2cb859b47a464c179b68187a29cf50258d0216ecd0e1604f86dad94215ad",
+      "source_sha256": "d7361bcd1df2f90de3d293a39f6700d540bd40ae711b6abfa06d89132ae7a132",
       "exit_code": 0,
       "result_code": 0,
       "warnings": "",
       "hours": 5.209,
-      "grams": 160.47,
+      "grams": 160.29,
       "wall_loops": 6,
       "infill_percent": 30.0,
       "layer_height": 0.20000000298023224,
@@ -141,8 +141,8 @@
     }
   ],
   "total_parts": 6,
-  "total_grams_individual_plates": 678.5,
-  "total_hours_individual_plates": 18.9,
+  "total_grams_individual_plates": 681.4,
+  "total_hours_individual_plates": 19.0,
   "production_gcode": false,
   "project_3mf": {
     "file": "stl/leo_ac1_all_parts.3mf",
@@ -192,22 +192,23 @@
     ],
     "multicolour_parts": {
       "body": [
-        "label"
+        "label",
+        "dedication"
       ]
     },
     "multicolour_slices": {
       "Housing": {
         "plate": 1,
-        "hours": 9.79,
+        "hours": 10.05,
         "grams_by_filament": {
-          "1": 389.76,
-          "3": 0.84
+          "1": 393.91,
+          "3": 1.62
         },
         "warnings": ""
       }
     },
     "pause_slices": {},
     "own_infill_parts": 0,
-    "sha256": "73fc347d462979fe049a32ea5a9ba7eac2b5ec22aae30e41dac25aa7fb0e1f84"
+    "sha256": "bbd49f086c14b58de1c9970e4a2f792ce3c7ee3b4336db4a0b2536a1ee27f2ca"
   }
 }
