@@ -1,5 +1,5 @@
 {
-  "source_sha256": "54f42ae7484c54baa76215121776f9c10fee407b3c4b4e0bf45b7b99ac037046",
+  "source_sha256": "1409b7794a92af337a585a183a3840ccfa0a50fff9c5d026774c55b2cc203930",
   "software": {
     "numpy": "2.5.3",
     "trimesh": "5.1.0",
@@ -36,10 +36,10 @@
       "degenerate_faces": 0,
       "components": 1,
       "backend": "CGAL",
-      "sha256": "39a63629a8c690c24a2bd0fa532fbe93adaf8823de9868fc4d9dd92e0ff44de7",
+      "sha256": "ff20a164e968fc790a2b39c55d0cf87cf93789442ce8c16f9a0e6aa98c3831af",
       "quantity": 1,
       "material": "PETG-white",
-      "committed_sha256": "39a63629a8c690c24a2bd0fa532fbe93adaf8823de9868fc4d9dd92e0ff44de7"
+      "committed_sha256": "ff20a164e968fc790a2b39c55d0cf87cf93789442ce8c16f9a0e6aa98c3831af"
     },
     "back": {
       "size_mm": [
@@ -59,17 +59,17 @@
           55.25
         ]
       ],
-      "volume_mm3": 155469.5036,
-      "triangles": 10428,
+      "volume_mm3": 154479.2195,
+      "triangles": 10444,
       "watertight": true,
       "consistent_winding": true,
       "degenerate_faces": 0,
       "components": 1,
       "backend": "Manifold",
-      "sha256": "762e495aa584360bbf59a0b65c29318249d2339055518bcbac7e35813c852a2b",
+      "sha256": "fc3e3316bec8816770045a24c61eeebbbc78b16a47aa48975579bc3b58fb49f1",
       "quantity": 1,
       "material": "PETG-white",
-      "committed_sha256": "762e495aa584360bbf59a0b65c29318249d2339055518bcbac7e35813c852a2b"
+      "committed_sha256": "fc3e3316bec8816770045a24c61eeebbbc78b16a47aa48975579bc3b58fb49f1"
     },
     "grille": {
       "size_mm": [
@@ -126,10 +126,10 @@
       "degenerate_faces": 0,
       "components": 1,
       "backend": "CGAL",
-      "sha256": "27b3a612afd70387cd44c9ef4193288258c1ee06f21ea927f1a8a85d50c0d1c9",
+      "sha256": "a5c741ddee4d4e06bf07d1d1b4b0802609f8b08e696d82ddf619f5aaa7d74373",
       "quantity": 1,
       "material": "PETG-grey",
-      "committed_sha256": "27b3a612afd70387cd44c9ef4193288258c1ee06f21ea927f1a8a85d50c0d1c9"
+      "committed_sha256": "a5c741ddee4d4e06bf07d1d1b4b0802609f8b08e696d82ddf619f5aaa7d74373"
     },
     "handle": {
       "size_mm": [
@@ -248,7 +248,7 @@
       "degenerate_faces": 0,
       "components": 1,
       "backend": "CGAL",
-      "sha256": "a745fe88c1bcb48e89b2e5f2076b97624385ae951a36e467a3277014227771e0"
+      "sha256": "029bd4d72c43ede7f2cfc9d4146c7e9a2c97f06e0c6e0a79f816711cb337b118"
     },
     "body_label": {
       "size_mm": [

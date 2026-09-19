@@ -161,15 +161,15 @@ usbc_wall = 2;               // channel on the inside of the back cover: side wa
 usbc_stop = [4, 6];          // stop on the right wall behind the module end (takes the plug force with the back cover on): thickness, height
                              // (reaches below the module, the wires leave its end at the top)
 
-/* [Power switch: KCD11 mini rocker 10 x 15 mm, snap-in, in the battery plus line] */
-sw_xz = [183, 44];           // axis in the back cover: left of the USB-C socket, between two battery saddles
-sw_cut = [8.6, 13.6];        // panel hole (x, z) — KCD11 typical, to be measured
-sw_bezel = [10.2, 15.2, 2];  // frame on the outside: width, height, thickness
+/* [Power switch: KCD11 mini rocker 10 x 15 mm, snap-in, in a well of the back cover] */
+sw_xz = [205, 71.2];         // axis above the USB-C socket, between the battery saddle and the shelf hold-down plate; switch lying horizontal
+sw_cut = [13.6, 8.6];        // panel hole (x, z) — KCD11 typical, to be measured
+sw_bezel = [15.2, 10.2, 2];  // frame on the outside: width (x), height (z), thickness
 sw_rocker = 4;               // rocker above the frame
-sw_body = [8.4, 13.4, 11];   // housing behind the frame
+sw_body = [13.4, 8.4, 11];   // housing behind the frame
 sw_pins = 6;                 // blade terminals behind the housing
-sw_panel = 1.5;              // panel thickness for the snap clips: back cover thinned around the hole from inside
-sw_recess = 3;               // width of the thinned zone around the hole (clips)
+sw_panel = 1.5;              // panel thickness for the snap clips (floor of the well)
+sw_well = [7, 1, 1.5];       // well: panel below the back face (frame and rocker stay inside when the fan lies on its back), floor margin around the frame, wall
 
 /* [Feet: TPU strips, each screwed with two M3 x 8 from below into Ruthex inserts] */
 foot_w = 16;          // width (x)
@@ -338,10 +338,11 @@ assert(mount_xy[0] + mount_doubler[0] / 2 >= part_x - 1, "Mount doubler does not
 assert(back_t - head_pocket[1] >= 2, "Back cover too thin under the recessed screw heads");
 assert(usbc_xz[0] - usbc[1] / 2 - usbc_cl > bat_cx + bat_d / 2 + 2,   // the wall stop stays out of the battery removal path
        "USB-C module: its stop on the right wall reaches the battery path");
-assert(sw_xz[1] - sw_cut[1] / 2 - sw_recess > cradle_z[1] + cradle_t + 0.5 && sw_xz[1] + sw_cut[1] / 2 + sw_recess < cradle_z[2] - 0.5
-       && sw_xz[0] + sw_cut[0] / 2 + sw_recess + 2 < usbc_xz[0] - usbc[1] / 2 - usbc_cl - usbc_wall && sw_xz[0] - sw_cut[0] / 2 - sw_recess > bay_x0 + 3
-       && back_t - sw_panel >= 2 && sw_body[0] < sw_cut[0] && sw_body[1] < sw_cut[1] && sw_bezel[0] > sw_cut[0] + 1 && sw_bezel[1] > sw_cut[1] + 1,
-       "Power switch: hits a battery saddle, the USB-C channel or the partition, or hole and frame do not match");
+assert(sw_bezel[2] + sw_rocker <= sw_well[0] - 1 && sw_body[0] < sw_cut[0] && sw_body[1] < sw_cut[1] && sw_bezel[0] > sw_cut[0] + 1 && sw_bezel[1] > sw_cut[1] + 1
+       && sw_xz[1] - (sw_bezel[1] / 2 + sw_well[1] + sw_well[2] + sw_well[0] - back_t) > cradle_z[2] + cradle_t
+       && sw_xz[1] + (sw_bezel[1] / 2 + sw_well[1] + sw_well[2] + sw_well[0] - back_t) < shelf_z + shelf_t + shelf_hold[2]
+       && sw_xz[1] + sw_body[1] / 2 < shelf_z - 1 && sw_xz[0] + (sw_bezel[0] / 2 + sw_well[1] + sw_well[2] + sw_well[0] - back_t) < bay_x1 - lip_cl - lip_t,
+       "Power switch: well hits a battery saddle, the hold-down plate or the back lip, its housing the shelf, or hole and frame do not match");
 assert(usbc_stop[0] >= 4 && usbc_stop[1] >= usbc[2] && usbc_wall >= 2 && back_t - usbc_plate >= 1 && usbc[0] - usbc_plate >= 8, "USB-C module: back cover recess too shallow or module too short for the channel");
 assert(usbc_xz[0] + usbc[1] / 2 + usbc_cl < bay_x1 - lip_cl - lip_t && usbc_xz[0] - usbc[1] / 2 - usbc_cl - usbc_wall > bay_x0 + 5
        && usbc_xz[1] + usbc[2] / 2 + usbc_cl < body_h - wall - handle_rib[1] - 1
@@ -707,6 +708,7 @@ module back() difference() {
             translate([bat_cx - bat_d / 2 - bat_bms[1] - bat_clear, bat_cy - 1, z - 1])
                 cube([bat_bms[1] + bat_clear + bat_d / 2, bat_bms[0] / 2 + bat_clear + 1, cradle_t + 2]);
         }
+        sw_funnel(body_d - sw_well[0] - sw_panel, y1 + eps, sw_well[2]);   // box around the switch well, reaching into the bay
         // channel for the USB-C module on the inside, open towards the bay and at the top (wires)
         let (x0 = usbc_xz[0] - usbc[1] / 2 - usbc_cl, z0 = usbc_xz[1] - usbc[2] / 2 - usbc_cl) difference() {
             translate([x0 - usbc_wall, usbc_y0 + 2, z0 - usbc_wall]) cube([usbc[1] + 2 * (usbc_cl + usbc_wall), y1 - usbc_y0 - 2 + eps, usbc[2] + 2 * usbc_cl + usbc_wall]);
@@ -714,10 +716,9 @@ module back() difference() {
         }
     }
     along_y(y1 - 1, body_d + 1) intake_slots_back();
-    // power switch: hole, back cover thinned around it from inside for the snap clips
-    translate([sw_xz[0] - sw_cut[0] / 2, y1 - 1, sw_xz[1] - sw_cut[1] / 2]) cube([sw_cut[0], back_t + 2, sw_cut[1]]);
-    translate([sw_xz[0] - sw_cut[0] / 2 - sw_recess, y1 - 1, sw_xz[1] - sw_cut[1] / 2 - sw_recess])
-        cube([sw_cut[0] + 2 * sw_recess, 1 + back_t - sw_panel, sw_cut[1] + 2 * sw_recess]);
+    // power switch: well from outside with 45 degree walls (printable on the back face), hole in its thin floor
+    sw_funnel(body_d - sw_well[0], body_d + 1, 0);
+    translate([sw_xz[0] - sw_cut[0] / 2, body_d - sw_well[0] - sw_panel - 1, sw_xz[1] - sw_cut[1] / 2]) cube([sw_cut[0], sw_panel + 2, sw_cut[1]]);
     // USB-C module: recess from the inside leaves usbc_plate in front of the board, opening for the receptacle
     translate([usbc_xz[0] - usbc[1] / 2 - usbc_cl, y1 - 1, usbc_xz[1] - usbc[2] / 2 - usbc_cl]) cube([usbc[1] + 2 * usbc_cl, 1 + back_t - usbc_plate, usbc[2] + 2 * usbc_cl]);
     usbc_stadium(body_d - usbc_plate - 1, body_d + 1, usbc_cl);
@@ -799,11 +800,15 @@ module led_env() {                   // 3 mm LED: body in the pocket, flange on 
 }
 module usbc_stadium(y0, y1, grow) along_y(y0, y1) translate(usbc_xz) hull()
     for (s = [-1, 1]) translate([s * (usbc_shell[0] - usbc_shell[1]) / 2, 0]) circle(d = usbc_shell[1] + 2 * grow);
-module sw_env() {                  // KCD11 rocker: frame and rocker outside, housing and blades inside
-    translate([sw_xz[0] - sw_bezel[0] / 2, body_d, sw_xz[1] - sw_bezel[1] / 2]) cube([sw_bezel[0], sw_bezel[2], sw_bezel[1]]);
-    translate([sw_xz[0] - sw_bezel[0] / 2 + 1, body_d + sw_bezel[2] - eps, sw_xz[1] - sw_bezel[1] / 2 + 1]) cube([sw_bezel[0] - 2, sw_rocker + eps, sw_bezel[1] - 2]);
-    translate([sw_xz[0] - sw_body[0] / 2, body_d - sw_body[2], sw_xz[1] - sw_body[1] / 2]) cube([sw_body[0], sw_body[2] + eps, sw_body[1]]);
-    translate([sw_xz[0] - 3, body_d - sw_body[2] - sw_pins, sw_xz[1] - 4]) cube([6, sw_pins + eps, 8]);
+// rectangle around the switch frame at the well floor, growing 45 degrees towards the back face; grow = offset for the outer box
+module sw_funnel(y0, y1, grow) hull() for (y = [y0, y1]) let (g = grow + sw_well[1] + y - (body_d - sw_well[0]))
+    translate([sw_xz[0] - sw_bezel[0] / 2 - g, y, sw_xz[1] - sw_bezel[1] / 2 - g]) cube([sw_bezel[0] + 2 * g, eps, sw_bezel[1] + 2 * g]);
+module sw_env() {                  // KCD11 rocker lying horizontal in the well: frame and rocker on the floor, housing and blades inside
+    yf = body_d - sw_well[0];
+    translate([sw_xz[0] - sw_bezel[0] / 2, yf, sw_xz[1] - sw_bezel[1] / 2]) cube([sw_bezel[0], sw_bezel[2], sw_bezel[1]]);
+    translate([sw_xz[0] - sw_bezel[0] / 2 + 1, yf + sw_bezel[2] - eps, sw_xz[1] - sw_bezel[1] / 2 + 1]) cube([sw_bezel[0] - 2, sw_rocker + eps, sw_bezel[1] - 2]);
+    translate([sw_xz[0] - sw_body[0] / 2, yf - sw_body[2], sw_xz[1] - sw_body[1] / 2]) cube([sw_body[0], sw_body[2] + eps, sw_body[1]]);
+    translate([sw_xz[0] - 4, yf - sw_body[2] - sw_pins, sw_xz[1] - 3]) cube([8, sw_pins + eps, 6]);
 }
 module usbc_env() {                 // PD trigger: board with parts up to the thinned back cover, receptacle through it
     translate([usbc_xz[0] - usbc[1] / 2, usbc_y0, usbc_xz[1] - usbc[2] / 2]) cube([usbc[1], usbc[0] - usbc_plate, usbc[2]]);

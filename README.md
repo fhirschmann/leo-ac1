@@ -6,9 +6,9 @@ Small battery fan for a child's room, styled like the outdoor unit of a split ai
 
 3D viewer (artifact, republished under the same URL after every model change): a private Claude viewer artifact
 
-| Back | Exploded | Logo and grooves | Air duct from behind | Service cover with knob | Underside with M5 thread and TPU feet | Charge module in the air stream | LED pocket behind the O | Dedication inside the front | Handle mount, cut at the screws | Back cover bosses | TPU foot, cut at the screws | USB-C socket in the back cover, cut at its axis |
-|---|---|---|---|---|---|---|---|---|---|---|---|---|
-| ![Back](img/02_back.png) | ![Exploded](img/03_exploded.png) | ![Logo](img/04_front_right.png) | ![Air duct](img/05_duct.png) | ![Knob](img/06_knob.png) | ![Underside](img/07_underside.png) | ![Charge module](img/08_charge_module.png) | ![LED pocket](img/09_led.png) | ![Dedication](img/10_dedication.png) | ![Handle mount](img/11_handle_mount.png) | ![Back cover bosses](img/12_back_bosses.png) | ![TPU foot mount](img/13_foot_mount.png) | ![USB-C socket](img/14_usb_c.png) |
+| Back | Exploded | Logo and grooves | Air duct from behind | Service cover with knob | Underside with M5 thread and TPU feet | Charge module in the air stream | LED pocket behind the O | Dedication inside the front | Handle mount, cut at the screws | Back cover bosses | TPU foot, cut at the screws | USB-C socket in the back cover, cut at its axis | Power switch in its well |
+|---|---|---|---|---|---|---|---|---|---|---|---|---|---|
+| ![Back](img/02_back.png) | ![Exploded](img/03_exploded.png) | ![Logo](img/04_front_right.png) | ![Air duct](img/05_duct.png) | ![Knob](img/06_knob.png) | ![Underside](img/07_underside.png) | ![Charge module](img/08_charge_module.png) | ![LED pocket](img/09_led.png) | ![Dedication](img/10_dedication.png) | ![Handle mount](img/11_handle_mount.png) | ![Back cover bosses](img/12_back_bosses.png) | ![TPU foot mount](img/13_foot_mount.png) | ![USB-C socket](img/14_usb_c.png) | ![Power switch](img/15_switch.png) |
 
 ## Printed parts
 
@@ -41,7 +41,7 @@ Estimated **approx. 0.70 kg and 21.0 hours** (diagnostic slicing, every instance
 | Double-sided, heat-resistant tape, up to 1.1 mm thick | – | – | for the charge module on its two pads: 3M VHB 1.1 mm (modelled, the pads are 1.1 mm shorter for it) or thinner double-sided Kapton (the board then sits further on the ledge); no hot glue |
 | Resettable PTC fuse Bourns MF-R160 (1.6 A hold / 3.2 A trip) | 1 | – | optional, between battery plus and B+ (check the datasheet) |
 | USB-C PD trigger module, Type A (default 5 V) | 1 | [AliExpress 1005010610660644](https://de.aliexpress.com/item/1005010610660644.html) | charging socket, 13 × 10 × 4 mm: sits in a channel on the inside of the back cover (low on the right, between two battery saddles), receptacle flush in the back cover; with the back cover on, a stop on the right wall behind the module takes the plug force; **leave pads 1–4 open** (1 = 9 V, 2 = 12 V, 3 = 15 V, 4 = 20 V), the charge module only takes 4–6 V; check 5 V with a multimeter before connecting |
-| Rocker switch KCD11 10 × 15 mm, 2 pins, ON-OFF (3 A) | 1 | [AliExpress 1005008871215158](https://de.aliexpress.com/item/1005008871215158.html) | power switch in the battery plus line, snapped into the back cover left of the USB-C socket (I up); the back cover is thinned to 1.5 mm around the hole for the snap clips; hole 8.6 × 13.6 mm assumed, measure |
+| Rocker switch KCD11 10 × 15 mm, 2 pins, ON-OFF (3 A) | 1 | [AliExpress 1005008871215158](https://de.aliexpress.com/item/1005008871215158.html) | power switch in the battery plus line, snapped horizontally into a well above the USB-C socket: its floor lies 7 mm below the back face, so frame and rocker stay inside when the fan lies on its back; 45° walls give finger room and print without support; the floor is 1.5 mm thick for the snap clips; hole 13.6 × 8.6 mm assumed, measure |
 | Heat-set inserts Ruthex RX-M3x5.7 | 22 | [ruthex.de](https://www.ruthex.de) | hole Ø 4.0, depth 7 (datasheet: ≥ L + 1 = 6.7), wall ≥ 1.6 |
 | Heat-set insert Ruthex RX-M5x9.5 | 1 | [ruthex.de](https://www.ruthex.de) | mounting thread in the underside (like a tripod thread): pressed in from outside, blind hole Ø 6.4 × 10.5 (L + 1), 2.5 mm floor above; wall 4.3 mm (datasheet ≥ 2.6) |
 | M3 × 12, ISO 7380 Torx | 4 | – | grille, from the front, head in a 1.9 mm pocket of the grille ring (0.25 mm below the face) |
@@ -74,7 +74,7 @@ battery (JST-PH, built-in BMS) ──► (PTC) ──► power switch ──► 
 5. Put the fan from behind onto the bosses behind the air duct, blowing forward, and screw it on with M3 × 30. Route the cable through the upper notch in the partition into the electronics bay. Tape the charge/boost module with its heatsinks (component side towards the fan) upright onto the two pads on the partition, lower edge on the ledge, O± end up towards the cable notch.
 6. Slide the battery upright in from behind into the cradle, cable end up and BMS board towards the partition (rectangular cut-out in the cradle); the cable runs through the slot in the electronics shelf above.
 7. Put the two TPU feet into the pockets in the underside and screw each on with two M3 × 8 from below; tighten only until the TPU just starts to compress.
-8. Solder about 15 cm of wire to + and − of the USB-C module (enough slack to lay the back cover aside later), push the module into the channel on the inside of the back cover with the receptacle in the opening, and connect the wires through the lower cable notch in the partition to IN+ / IN− of the charge module. Snap the power switch into the back cover from outside (I up) and wire it into the battery plus line, also through the lower notch. Put on the back cover (its three saddles close the cradle to rings with 0.5 mm clearance all around, the hold-down plate covers the back edge of the shelf) and screw it on with M3 × 8.
+8. Solder about 15 cm of wire to + and − of the USB-C module (enough slack to lay the back cover aside later), push the module into the channel on the inside of the back cover with the receptacle in the opening, and connect the wires through the lower cable notch in the partition to IN+ / IN− of the charge module. Snap the power switch into its well in the back cover from outside and wire it into the battery plus line, also through the lower notch. Put on the back cover (its three saddles close the cradle to rings with 0.5 mm clearance all around, the hold-down plate covers the back edge of the shelf) and screw it on with M3 × 8.
 
 ## Print and robustness
 
@@ -99,7 +99,7 @@ All parts are designed to print without supports: `analyze.py islands`, `overhan
 - Measure the PWM board CNY-FA5-PRO (assumed 48 × 34 mm, components 13 mm, potentiometer axis 8.5 mm above the board) and the potentiometer shaft (shape, length).
 - Measure the battery (label Ø 34 × 70 mm; model: cell Ø 33.5 × 72 mm, holder rings Ø 34.5 mm, a real Ø 35 pack would not fit) and its cable exit.
 - Measure the USB-C PD trigger (listing 13 × 10 × 4 mm; the receptacle must reach at least 2.4 mm beyond the board to sit flush in the back cover).
-- Measure the power switch (KCD11: panel hole assumed 8.6 × 13.6 mm, housing 11 mm deep, snap clips for 1–2 mm panels).
+- Measure the power switch (KCD11: panel hole assumed 13.6 × 8.6 mm, housing 11 mm deep, snap clips for 1–2 mm panels).
 - Fit tests before the full print: a slice of the battery holder, the knob on the real potentiometer shaft, the USB-C channel with a plugged cable, insert holes.
 - Wiring: stow the excess of the 400 mm fan cable, keep all wires away from the fan blades and out of the saddles and the back lip, leave slack in the USB-C wires; check the charge module temperature while charging with the fan off.
 

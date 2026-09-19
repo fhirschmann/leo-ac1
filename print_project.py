@@ -291,5 +291,8 @@ VIEWS = {"01_assembly": ("assembly();", "-160,-330,230,112,40,70"),
          # USB-C charging socket in the back cover, cut at its axis and seen from above: plate, channel, module, stop on the wall
          "14_usb_c": ('intersection() { union() { color("#f2f2ee") body(); color("#e6e6e1") back(); color("#4b2a7a") usbc_env(); } translate([196, 48, usbc_xz[1] - 20]) cube([30, 36, 20]); }',
                       "205,40,156,208,66,44"),
+         # power switch in its well above the USB-C socket, cut at the switch axis and seen from the left
+         "15_switch": ('intersection() { union() { color("#e6e6e1") back(); color("#1b1b1b") sw_env(); } translate([sw_xz[0], 40, 50]) cube([30, 45, 40]); }',
+                       "90,40,120,205,70,71"),
          # underside with the M5 mount insert
          "07_underside": ('color("#f2f2ee") body(); color("#222326") place_feet(); color("#26282b") screws_feet(true);', "40,-160,-260,112,40,40")}
