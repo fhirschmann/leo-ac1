@@ -19,6 +19,7 @@ PARTS = {
     "cover": (1, "PETG-grey", 1),
     "handle": (1, "PETG-grey", 1),
     "knob": (1, "PETG-grey", 1),
+    "foot": (2, "TPU", 1),
 }
 FULL_INFILL = set()
 FULL_INFILL_MATERIALS = {"TPU"}
@@ -30,6 +31,7 @@ ASSEMBLY = {
     "back": "back();",
     "cover": "cover();",
     "handle": "handle();",
+    "feet": "place_feet();",
     "knob": "knob();",
     "pot": "pot_env(nut = false);",
     "pot_nut": "pot_nut_env();",
@@ -56,8 +58,9 @@ PROCESS = dict(wall_loops=6, top_shell_layers=5, bottom_shell_layers=5, infill=3
 # Filament slots of the project 3MF, 1-based in this order; inlay slots name their inlay or a tuple of inlays
 FILAMENTS = [dict(material="PETG-white", profile="Bambu PETG Basic @BBL H2S", colour="#FFFFFF"),
              dict(material="PETG-grey", profile="Bambu PETG Basic @BBL H2S", colour="#8E9294"),
-             dict(material="PETG-grey", profile="Bambu PETG Basic @BBL H2S", inlay=("label", "dedication"), colour="#8E9294")]
-PLATES = [("Housing", ["body"]), ("Back cover", ["back"]), ("Grey parts", ["grille", "cover", "handle", "knob"])]
+             dict(material="PETG-grey", profile="Bambu PETG Basic @BBL H2S", inlay=("label", "dedication"), colour="#8E9294"),
+             dict(material="TPU", profile="Generic TPU @BBL H2S", colour="#222326")]
+PLATES = [("Housing", ["body"]), ("Back cover", ["back"]), ("Grey parts", ["grille", "cover", "handle", "knob"]), ("TPU feet", ["foot"])]
 PROJECT_3MF = "stl/leo_ac1_all_parts.3mf"
 SLICER_SUMMARY = "docs/slicer-summary.json"
 
@@ -95,6 +98,7 @@ def checks(ctx):
     assert m["knob_shaft_engagement"] >= 8 and m["knob_top_skin"] >= 2 and m["knob_protrusion"] <= 8, "Knob: on the shaft, at most 8 mm in front of the cover"
     assert m["handle_clearance"] >= 30 and m["handle_open_top"] >= 90, "Handle: 30 mm finger clearance, 90 mm hand breadth"
     assert m["handle_mount_wall"] >= 6, "Handle mount: top wall with doubler at least 6 mm under the feet"
+    assert m["foot_clearance"] >= 0.2 and m["foot_lift"] >= 3, "TPU feet: slide clearance 0.2 mm, housing at least 3 mm above the ground"
     screws = {name: dict(length=length, engagement_mm=round(eng, 2), tip_margin_mm=round(margin, 2))
               for name, length, eng, margin in m["screws"]}
     for name, info in screws.items():
@@ -105,7 +109,7 @@ def checks(ctx):
     contacts = {}
     for name, base, shift in (("grille", "body", [0, 0.05, 0]), ("fan", "body", [0, -0.05, 0]),
                               ("back", "body", [0, -0.05, 0]), ("cover", "body", [-0.05, 0, 0]), ("battery", "body", [0, 0, -0.05]),
-                              ("handle", "body", [0, 0, -0.05]), ("pot", "body", [0.05, 0, 0]), ("pot_nut", "body", [-0.05, 0, 0]), ("chg_module", "body", [0.05, 0, -0.05]), ("led", "body", [0, -0.05, 0])):
+                              ("handle", "body", [0, 0, -0.05]), ("pot", "body", [0.05, 0, 0]), ("pot_nut", "body", [-0.05, 0, 0]), ("chg_module", "body", [0.05, 0, -0.05]), ("led", "body", [0, -0.05, 0]), ("feet", "body", [0, 0, 0.05])):
         volume = (ctx.solids[name].translate(shift) ^ ctx.solids[base]).volume()
         assert volume > 0.1, f"{name} does not rest on {base}"
         contacts[f"{name}@{base}"] = round(volume, 3)
@@ -114,7 +118,9 @@ def checks(ctx):
     stops = []
     for name, moving, fixed, direction, limit in (("battery_back", ["battery"], ["back"], [0, 1, 0], 1.5),
                                                   ("battery_up", ["battery"], ["body"], [0, 0, 1], m["shelf_gap"] + 0.5),
-                                                  ("battery_side", ["battery"], ["body"], [1, 0, 0], 1.0)):
+                                                  ("battery_side", ["battery"], ["body"], [1, 0, 0], 1.0),
+                                                  ("feet_back", ["feet"], ["back"], [0, 1, 0], 1.0),
+                                                  ("feet_down", ["feet"], ["body"], [0, 0, -1], 1.0)):
         count, first, _ = ctx.sweep(moving, fixed, direction, limit, 0.25)
         stops.append(dict(name=name, first_contact_mm=first, limit_mm=limit))
         assert count > 0, f"Stop {name}: no contact within {limit} mm"
@@ -144,7 +150,8 @@ def checks(ctx):
             ("fan_out", ["fan", "screws_fan"], others("fan", "screws_fan", "battery", "chg_module", "back", "screws_back"), [0, 1, 0], 90, 1),
             ("knob_off", ["knob"], others("knob"), [1, 0, 0], 25, 0.5),
             ("cover_off", ["cover"], ["body", "pot", "pot_nut", "pwm_board"], [1, 0, 0], 30, 0.5),
-            ("handle_up", ["handle"], ["body"], [0, 0, 1], 15, 0.5)):
+            ("handle_up", ["handle"], ["body"], [0, 0, 1], 15, 0.5),
+            ("feet_out", ["feet"], ["body"], [0, 1, 0], 72, 1)):
         count, first, maximum = ctx.sweep(moving, fixed, direction, length, step)
         paths.append(dict(name=name, collisions=count, first_mm=first, max_volume_mm3=round(maximum, 4)))
         assert count == 0, f"Path {name} obstructed at {first} mm"
@@ -190,9 +197,9 @@ VIEWER = dict(
     title="LEO-AC1", page_title="LEO-AC1 fan", eyebrow="Assembly · installed position",
     dims=[("Width", "234"), ("Depth", "84"), ("Height", "197")],
     groups=[("white", "Printed · PETG white"), ("grey", "Printed · PETG grey"),
-            ("screws", "Screws M3"), ("bought", "Bought parts")],
+            ("tpu", "Printed · TPU"), ("screws", "Screws M3"), ("bought", "Bought parts")],
     hidden_groups=["bought"],
-    outer=["body", "back", "cover", "grille", "handle", "screws_grille", "screws_back", "screws_cover", "screws_handle"],
+    outer=["body", "back", "cover", "grille", "handle", "feet", "screws_grille", "screws_back", "screws_cover", "screws_handle"],
     cut=["back", "cover", "screws_back", "screws_cover"],
     # id, label, group, colour, quantity, explode direction (mm per slider mm)
     parts=[("body", "Housing", "white", "#f2f2ee", "1x", [0, 0, 0]),
@@ -201,6 +208,7 @@ VIEWER = dict(
            ("cover", "Service cover", "grey", "#8f9396", "1x", [1, 0, 0]),
            ("handle", "Handle", "grey", "#8f9396", "1x", [0, 0, 1.2]),
            ("knob", "Speed knob", "grey", "#8f9396", "1x", [2, 0, 0]),
+           ("feet", "Feet · TPU, slid in from behind", "tpu", "#222326", "2x", [0, 1.5, -0.8]),
            ("fan_visual", "Fan Noctua NF-F12 iPPC-2000", "bought", "#303236", "1x", [0, 0.8, 0]),
            ("battery", "Battery LiFePO4 3.2 V 6000 mAh", "bought", "#3f7fbf", "1x", [0, 0.5, 0]),
            ("pot", "Potentiometer of the PWM controller (assumed)", "bought", "#3a3d41", "1x", [-0.5, 0, 0]),
@@ -255,4 +263,4 @@ VIEWS = {"01_assembly": ("assembly();", "-160,-330,230,112,40,70"),
          "12_back_bosses": ("intersection() { body(); translate([-1, 30, 105]) cube([45, body_d, 60]); }",
                             "110,190,60,12,62,142"),
          # underside with the M5 mount insert
-         "07_underside": ("body();", "40,-160,-260,112,40,40")}
+         "07_underside": ('color("#f2f2ee") body(); color("#222326") place_feet();', "40,-160,-260,112,40,40")}

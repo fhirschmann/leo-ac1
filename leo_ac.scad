@@ -147,6 +147,16 @@ handle_rib = [3.2, 12];      // three ribs per foot from the front plate to the 
 handle_key = [1.2, 0.2];     // key under each foot in a recess of the top wall, takes shear off the screws: height, clearance
 handle_ins_depth = 8.5;      // insert pockets in the feet, from the key face (Ruthex: >= L + 1)
 
+/* [Feet: TPU strips in dovetail grooves, slid in from behind, locked by the back cover] */
+foot_w = 16;          // width below the housing (x)
+foot_lift = 3.8;      // housing above the ground
+foot_c = 1;           // 45 degree chamfer at the ground
+foot_neck = 12;       // dovetail width at the bottom face of the housing
+foot_dt = [1.2, 0.8]; // dovetail: depth into the bottom wall, undercut per side (flank flatter than 45 degrees)
+foot_cl = 0.2;        // slide clearance of the TPU in the PETG groove, all around
+foot_inset = 18;      // foot axis from the side faces
+foot_y0 = 8;          // front end of the feet
+
 /* [Mount insert in the underside, like a camera thread] */
 mount_xy = [121, 36];      // near the centre of mass (fan left, battery right)
 // Ruthex RX-M5x9.5 (datasheet RX series 08/2022): outer 7.1 / 6.3, length 9.5, hole 6.4, min. wall 2.6, blind hole >= L + 1
@@ -195,12 +205,12 @@ groove_x = [160, 219];
 led_d = 3;                 // 3 mm breathing LED as charge indicator, glued in from inside; shines through the white PETG in the counter of the O
 led_skin = 0.8;            // white PETG left in front of the LED (four layers)
 led_boss = [7, 5.8];       // boss around the LED pocket: diameter, height from the front face; the LED flange rests on it
-dedication = ["Für Leo", "von Papa"];   // raised on the inside of the front plate, readable from behind with the back cover off
+dedication = ["Für Leo", "von Papa", "14.09.2026"];   // raised on the inside of the front plate, readable from behind with the back cover off
 dedication_font = "Liberation Sans:style=Bold";   // bundled with OpenSCAD
-dedication_size = 8;
+dedication_size = [8, 8, 5.5];   // per line, the date smaller
 dedication_bold = 0.15;    // extra stroke per side: thin joints of the font reach two lines (0.8 mm) in grey
 dedication_h = 0.8;        // raised height (four layers)
-dedication_z = [118, 105]; // baselines, between the PWM board and the LED boss
+dedication_z = [121, 111, 103.5];   // baselines, between the PWM board and the LED boss
 
 // ---------- derived values ----------
 pot_yz = [cover_y, wall + bat_l + shelf_gap + shelf_t + pwm_standoff + pwm_pcb[2] + pot_axis_h];   // knob axis above the battery, centred in the depth
@@ -245,6 +255,13 @@ function handle_pad_u() = [handle_screw_dx[0] - handle_pad[1] - handle_rib[0], h
 function handle_key_u() = [handle_open[0] / 2 + 3, handle_len / 2 - 3];   // key span from the handle centre
 handle_key_w = handle_d - 2 * handle_c - 1;           // key width along y, inside the flat foot face
 handle_screw_skin = wall + handle_pad[0] - handle_key[0];   // head face to insert mouth
+function foot_x() = [foot_inset, body_w - foot_inset];
+foot_len = body_d - back_t - foot_cl - foot_y0;       // up to the back cover, which stops the feet
+foot_doubler_hw = foot_neck / 2 + foot_dt[1] + foot_cl + 1.6;   // half width of the floor doubler over a groove
+// foot cross-section (x, z): strip under the housing, dovetail in the groove; neck extended below z = 0 for the groove
+function foot_neck_pts() = let (n = foot_neck / 2, d = foot_dt[0], u = foot_dt[1]) [[-n, -1], [n, -1], [n, 0], [n + u, d], [-n - u, d], [-n, 0]];
+function foot_pts() = let (w = foot_w / 2, c = foot_c, z = -foot_lift, n = foot_neck / 2, d = foot_dt[0], u = foot_dt[1])
+    [[-w + c, z], [w - c, z], [w, z + c], [w, 0], [n, 0], [n + u, d], [-n - u, d], [-n, 0], [-w, 0], [-w, z + c]];
 // thread engagement in the insert and margin of the screw tip to the pocket end
 screw_table = [
     // name, length, engagement, tip margin
@@ -284,6 +301,10 @@ assert(mount_top < fan_cz - fan_size / 2 - 2 && (mount_boss_d - mount_insert[0])
        "Mount boss hits the fan, is thinner than the datasheet wall + 1.5 mm, or its floor is too thin");
 assert(mount_xy[0] + mount_doubler[0] / 2 >= part_x - 1, "Mount doubler does not reach the partition");
 assert(back_t - head_pocket[1] >= 2, "Back cover too thin under the recessed screw heads");
+assert(foot_dt[0] + foot_cl < wall && foot_dt[1] <= foot_dt[0] && foot_neck + 2 * foot_dt[1] < foot_w - 2,
+       "Foot dovetail deeper than the bottom wall, flank steeper than 45 degrees, or wider than the foot");
+assert(body_w - foot_inset - foot_doubler_hw > bat_cx + bat_d / 2 + 1 && foot_inset - foot_w / 2 > corner_r && foot_y0 > edge_c + 3,
+       "Feet: floor doubler reaches the battery, or foot in the corner radius or the front chamfer");
 assert((back_boss_d - insert_hole_d) / 2 >= 3 && back_boss_len >= insert_depth + 6 && boss_inset + back_boss_d / 2 + 1 < 14,
        "Back bosses: wall around the insert, column length, or reaching the back cover slots");
 // hand under the grip: child hand breadth about 55-70 mm, adult 80-90 mm; comfortable finger clearance 30-35 mm
@@ -311,8 +332,10 @@ assert(logo_x0 > fan_cx + grille_r + 3 && logo_x0 + logo_w < body_w - corner_r -
        "Logo outside the free front area");
 assert(big_gap >= 2, "Big letters too wide for the second line");
 assert(sub_stroke >= 1.2 && stencil_gap >= 1.2, "Logo lines or gaps below 1.2 mm");
-assert(dedication_z[1] - dedication_size / 4 > shelf_z + shelf_t + pwm_standoff + pwm_pcb[2] + pwm_comp_h + 1
-       && dedication_z[0] + dedication_size < led_xz[1] - led_boss[0] / 2 - 1, "Dedication hidden behind the PWM board or runs into the LED boss");
+assert(len(dedication_size) == len(dedication) && len(dedication_z) == len(dedication)
+       && dedication_z[len(dedication) - 1] - dedication_size[len(dedication) - 1] / 4 > shelf_z + shelf_t + pwm_standoff + pwm_pcb[2] + pwm_comp_h + 1
+       && dedication_z[0] + dedication_size[0] < led_xz[1] - led_boss[0] / 2 - 1
+       && min([for (i = [1:len(dedication) - 1]) dedication_z[i - 1] - dedication_size[i - 1] / 4 - (dedication_z[i] + 0.75 * dedication_size[i])]) >= 1, "Dedication hidden behind the PWM board or runs into the LED boss");
 assert(brand[2] == "O" && led_skin > inlay_t && led_d / 2 + 1 < (big_size[0] - 2 * big_stroke) / 2, "LED pocket does not fit into the counter of the O");
 assert(front_t - groove_depth >= 1.2 && groove_pitch - groove_w >= 1.1, "Grooves too deep or webs too thin");
 assert(groove_z0 + (groove_count - 1) * groove_pitch + groove_w < logo_bottom - 3, "Grooves run into the logo");
@@ -443,6 +466,9 @@ module body() difference() {
                 translate([part_x, chg_y0 - 1 - reach, zb - chg_ledge[0]]) cube([1, eps, chg_ledge[0]]);
             }
         }
+        // floor doublers over the foot grooves: the bottom wall keeps 3.2 mm; they start at the front plate (printable)
+        for (fx = foot_x()) translate([fx - foot_doubler_hw, front_t - eps, wall - eps])
+            cube([2 * foot_doubler_hw, part_y1 - front_t + eps, foot_dt[0] + foot_cl + eps]);
         // electronics shelf, also stops the battery upwards
         translate([bay_x0 - eps, front_t - eps, shelf_z]) cube([bay_x1 - bay_x0 + 2 * eps, shelf_d + eps, shelf_t]);
         along_y(front_t - eps, front_t + shelf_d) {
@@ -453,6 +479,8 @@ module body() difference() {
         }
     }
     cyl_y([fan_cx, fan_cz], -1, front_t + 1, open_r);
+    // dovetail grooves for the TPU feet, open towards the back
+    for (fx = foot_x()) translate([fx, 0, 0]) along_y(foot_y0 - foot_cl, body_d + 1) offset(delta = foot_cl) polygon(foot_neck_pts());
     cyl_y(led_xz, led_skin, led_boss[1] + 1, (led_d + 0.2) / 2);   // LED pocket, blind towards the front
     for (i = [0:groove_count - 1]) let (z = groove_z0 + i * groove_pitch)
         along_y(-1, groove_depth) slot2d([groove_x[0] + groove_w, z], [groove_x[1] - groove_w, z], groove_w);
@@ -539,7 +567,7 @@ module body_label_print_2d() mirror([0, 1]) label_front_2d();
 // dedication in front view coordinates (x, z), mirrored in x so it reads from behind
 module dedication_2d() for (i = [0:len(dedication) - 1])
     translate([(bay_x0 + bay_x1) / 2, dedication_z[i]]) mirror([1, 0]) offset(delta = dedication_bold)
-        text(dedication[i], size = dedication_size, font = dedication_font, halign = "center");
+        text(dedication[i], size = dedication_size[i], font = dedication_font, halign = "center");
 module body_dedication_print_2d() mirror([0, 1]) dedication_2d();
 // multicolour pieces of the body in print orientation: logo inlay on the bed, dedication raised on the inside of the front plate
 module body_piece(piece)
@@ -749,6 +777,10 @@ module battery_env() translate([bat_cx, bat_cy, wall]) {
 
 // Local +z = screw direction, z = 0 at the surface under the head. socket = hex key recess for the viewer,
 // the checks use the plain envelope.
+module foot() along_y(0, foot_len) polygon(foot_pts());   // local: x centred, y from the front end, z = 0 at the housing bottom
+module place_feet() for (fx = foot_x()) translate([fx, foot_y0, 0]) foot();
+module foot_print_pose() translate([0, 0, foot_lift]) children();   // ground face on the bed
+
 module screw(len, socket = false) difference() {   // ISO 7380 button head, head above z = 0
     union() {
         translate([0, 0, -screw_head_h]) cylinder(d = screw_head_d, h = screw_head_h);
@@ -772,6 +804,7 @@ module assembly(explode = 0) {
     color("#f2f2ee") translate([0, 2 * explode, 0]) back();
     color("#8f9396") translate([explode, 0, 0]) cover();
     color("#8f9396") translate([0, 0, explode]) handle();
+    color("#222326") translate([0, 2 * explode, -explode / 2]) place_feet();
     color("#8f9396") translate([2 * explode, 0, 0]) knob();
     color("#3a3d41") translate([explode, 0, 0]) pot_env();
     color("#2e6b3f") translate([explode, 0, 0]) pwm_board_env();
@@ -786,7 +819,7 @@ else if (part == "exploded") assembly(40);
 else if (part == "metrics") echo("PROJECT_METRICS", [
     ["wall", wall], ["front_t", front_t], ["back_t", back_t], ["corner_r", corner_r], ["body_mm", [body_w, body_d, body_h]],
     ["fan_size", fan_size], ["fan_pad", fan_pad], ["fan_t", fan_t], ["fan_pitch", fan_pitch], ["fan_hole_d", fan_hole_d],
-    ["fan_blade_d", fan_blade_d], ["pot_shaft_len", pot_shaft[2]], ["pwm_pcb", pwm_pcb], ["pot_axis_h", pot_axis_h], ["knob_shaft_engagement", pot_shaft[2] - knob_stem_z], ["knob_top_skin", knob_len - knob_bore_top], ["knob_protrusion", knob_cap_z + knob_h - cover_out], ["handle_clearance", handle_h - handle_bar], ["handle_open_top", handle_open[1]], ["handle_mount_wall", wall + handle_pad[0]], ["fan_axis", [fan_cx, fan_cz]], ["fan_y", fan_y], ["shroud_r", [open_r, open_r + shroud_t]], ["shroud_gap", shroud_gap], ["open_d", 2 * open_r], ["grille_gap", grille_gap],
+    ["fan_blade_d", fan_blade_d], ["pot_shaft_len", pot_shaft[2]], ["pwm_pcb", pwm_pcb], ["pot_axis_h", pot_axis_h], ["knob_shaft_engagement", pot_shaft[2] - knob_stem_z], ["knob_top_skin", knob_len - knob_bore_top], ["knob_protrusion", knob_cap_z + knob_h - cover_out], ["handle_clearance", handle_h - handle_bar], ["handle_open_top", handle_open[1]], ["handle_mount_wall", wall + handle_pad[0]], ["foot_clearance", foot_cl], ["foot_lift", foot_lift], ["fan_axis", [fan_cx, fan_cz]], ["fan_y", fan_y], ["shroud_r", [open_r, open_r + shroud_t]], ["shroud_gap", shroud_gap], ["open_d", 2 * open_r], ["grille_gap", grille_gap],
     ["bat_mm", [bat_d, bat_l]], ["bat_bms", bat_bms], ["bat_clear", bat_clear], ["saddle_gap", saddle_gap], ["cradle_rings", len(cradle_z)], ["shelf_gap", shelf_gap],
     ["lip_clearance", lip_cl], ["spigot_clearance", spigot_cl],
     ["insert_hole_d", insert_hole_d], ["insert_w_min", insert_w_min], ["mount_insert", mount_insert], ["mount_floor", mount_floor], ["insert_len", insert_len], ["insert_depth", insert_depth],
@@ -809,3 +842,4 @@ else if (part == "grille") grille_print_pose() grille();
 else if (part == "cover") cover_print_pose() cover();
 else if (part == "handle") handle_print_pose() handle();
 else if (part == "knob") knob_print_pose() knob_local();
+else if (part == "foot") foot_print_pose() foot();

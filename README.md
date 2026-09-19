@@ -6,7 +6,7 @@ Small battery fan for a child's room, styled like the outdoor unit of a split ai
 
 3D viewer (artifact, republished under the same URL after every model change): a private Claude viewer artifact
 
-| Back | Exploded | Logo and grooves | Air duct from behind | Service cover with knob | Underside with M5 thread | Charge module in the air stream | LED pocket behind the O | Dedication inside the front | Handle mount, cut at the screws | Back cover bosses |
+| Back | Exploded | Logo and grooves | Air duct from behind | Service cover with knob | Underside with M5 thread and TPU feet | Charge module in the air stream | LED pocket behind the O | Dedication inside the front | Handle mount, cut at the screws | Back cover bosses |
 |---|---|---|---|---|---|---|---|---|---|---|
 | ![Back](img/02_back.png) | ![Exploded](img/03_exploded.png) | ![Logo](img/04_front_right.png) | ![Air duct](img/05_duct.png) | ![Knob](img/06_knob.png) | ![Underside](img/07_underside.png) | ![Charge module](img/08_charge_module.png) | ![LED pocket](img/09_led.png) | ![Dedication](img/10_dedication.png) | ![Handle mount](img/11_handle_mount.png) | ![Back cover bosses](img/12_back_bosses.png) |
 
@@ -14,16 +14,17 @@ Small battery fan for a child's room, styled like the outdoor unit of a split ai
 
 | Part | Qty | Material | Size (mm) | Print orientation |
 |---|---|---|---|---|
-| `body` housing | 1 | PETG white + grey (logo) | 225 × 155 × 77.6 | front on the bed, logo as inlay in the first 0.6 mm, fake grooves 0.8 mm deep and open towards the bed; "Für Leo von Papa" raised 0.8 mm in grey on the inside of the front plate, readable with the back cover off |
+| `body` housing | 1 | PETG white + grey (logo) | 225 × 155 × 77.6 | front on the bed, logo as inlay in the first 0.6 mm, fake grooves 0.8 mm deep and open towards the bed; "Für Leo von Papa" with the date 14.09.2026 raised 0.8 mm in grey on the inside of the front plate, readable with the back cover off |
 | `back` back cover | 1 | PETG white | 225 × 155 × 55 | outside on the bed, the three battery saddles and the hold-down plate stand upright |
 | `grille` fan grille | 1 | PETG grey | Ø 136 × 6 | front on the bed |
 | `cover` service cover | 1 | PETG grey | 116 × 34 × 11 | outside on the bed; right side, centred in depth, knob at the top; screwed from outside (heads recessed) |
+| `foot` foot | 2 | TPU (black) | 16 × 68 × 5 (lifts the housing 3.8 mm) | ground face on the bed; slides from behind into a dovetail groove in the underside, the back cover locks it |
 | `knob` speed knob | 1 | PETG grey | Ø 28 × 13.7 (flat cap, 7 mm proud of the service cover) | top on the bed, stem with D bore points up |
 | `handle` handle | 1 | PETG grey | 170 × 42 × 24 plus 1.2 mm keys under the feet (30 mm clearance under the bar, 90 mm opening at the top) | lying on its side (layers along the pull direction), 45° bevels, keys with 45° flanks |
 
-All parts are in the Bambu Studio project [`stl/leo_ac1_all_parts.3mf`](stl/leo_ac1_all_parts.3mf): plate 1 housing (with prime tower), plate 2 back cover, plate 3 grey parts (grille, service cover, handle, knob). Filament 1 PETG Basic white, filament 2 PETG Basic grey, filament 3 grey for the logo and the dedication (same AMS spool as filament 2). To print the housing in one colour, use `stl/body.stl`.
+All parts are in the Bambu Studio project [`stl/leo_ac1_all_parts.3mf`](stl/leo_ac1_all_parts.3mf): plate 1 housing (with prime tower), plate 2 back cover, plate 3 grey parts (grille, service cover, handle, knob), plate 4 TPU feet. Filament 1 PETG Basic white, filament 2 PETG Basic grey, filament 3 grey for the logo and the dedication (same AMS spool as filament 2), filament 4 TPU (Generic TPU profile; set your TPU). To print the housing in one colour, use `stl/body.stl`.
 
-Estimated **approx. 0.68 kg and 19.0 hours** (diagnostic slicing, every instance as its own print; housing alone 394 g / 9.7 h).
+Estimated **approx. 0.69 kg and 20.6 hours** (diagnostic slicing, every instance as its own print; housing alone 394 g / 10.1 h, the two TPU feet 13 g / 1.1 h).
 
 ## Bought parts
 
@@ -69,7 +70,8 @@ battery (JST-PH, built-in BMS) ──► (PTC) ──► B+ / B−
 4. Put the grille on from the front (the collar centres it in the opening) and screw it on with M3 × 12.
 5. Put the fan from behind onto the bosses behind the air duct, blowing forward, and screw it on with M3 × 30. Route the cable through the notch in the partition into the electronics bay. Tape the charge/boost module with its heatsinks (component side towards the fan) upright onto the two pads on the partition, lower edge on the ledge, O± end up towards the cable notch.
 6. Slide the battery upright in from behind into the cradle, cable end up and BMS board towards the partition (rectangular cut-out in the cradle); the cable runs through the slot in the electronics shelf above.
-7. Put on the back cover (its three saddles close the cradle to rings with 0.5 mm clearance all around, the hold-down plate covers the back edge of the shelf) and screw it on with M3 × 8.
+7. Slide the two TPU feet from behind into the dovetail grooves in the underside, up to their front stop.
+8. Put on the back cover (its three saddles close the cradle to rings with 0.5 mm clearance all around, the hold-down plate covers the back edge of the shelf, the back cover keeps the feet in their grooves) and screw it on with M3 × 8.
 
 ## Print and robustness
 
@@ -84,6 +86,7 @@ All parts print without supports (checked with `analyze.py islands`, `overhangs`
 - Grille gap 4.9 mm (finger guard).
 - M5 mount: the insert is pressed from outside into a blind hole (10.5 mm = L + 1 per datasheet) with a 2.5 mm floor above; the load on the mount presses it against this floor. The boss is deliberately only Ø 15 mm: its 4.3 mm wall is printed fully solid with 6 wall loops instead of infill. Plus a rib towards the back, a 45° ramp to the front and a 3 mm floor doubler inside from the front to the partition (60 × 56 mm) that leads leverage into the front and the partition. For real camera accessories there is also Ruthex RX-1/4x12.7 (1/4"-20, hole Ø 8.0, wall ≥ 3.3).
 - Battery drop-proof: three closed rings (4 mm) around the cell, at the front as ribs in the housing, at the back as saddles across the whole bay on the back cover, 0.5 mm clearance all around with a cut-out for the BMS board. The electronics shelf above is 4 mm thick with 3 mm fillets on both sides into the partition and the side wall; a hold-down plate on the back cover rests 0.2 mm above its free back edge, so a drop onto the top cannot break the shelf off. Add a thin foam strip between battery and saddles if you like.
+- Feet: two TPU strips (16 mm wide, 3.8 mm under the housing) in dovetail grooves (12 mm neck, 0.8 mm undercut, 0.2 mm clearance) that run from 8 mm behind the front to the back edge. They slide in from behind and cannot fall out when the unit is carried: the dovetail holds them downwards, the back cover at the back. The grooves have a constant cross-section in the print direction (no overhang); a floor doubler inside keeps the bottom wall at 3.2 mm.
 - Slicer profile: 6 wall loops, 5 top/bottom layers, 30 % gyroid. PETG is tougher than PLA.
 
 ## Open items
@@ -108,4 +111,4 @@ python3 -m venv .venv
 .venv/bin/python scripts/render_views.py           # img/
 ```
 
-Checked: part list against the `part` branches, closed meshes, bed placement, build volume, no intersection between 18 assembly bodies (153 pairs, including the assumed PWM board, LED, screws, fan and battery envelopes), contact of grille, fan, back cover, service cover, handle, potentiometer, charge module, LED and battery, battery stops (back 0.75 mm, top 3.25 mm, side 0.75 mm), 9 assembly/removal paths (including the charge module towards the back before the fan, and the PWM board: first 19 mm away from the wall, then towards the back) in a realistic order, 21 insert holes (20 × M3, 1 × M5; axis free, full minimum wall per Ruthex datasheet, floor solid), screw engagement (≥ 3 mm = 1 × d in the brass, fan on silicone pads 3 mm, others ≥ 4.8 mm; tip ≥ 0.9 mm before the end of the pocket), standard dimensions (120 mm fan, Ruthex M3), grille gap ≤ 6 mm (finger guard), multicolour coverage of logo and dedication. Printability: no floating regions, logo and dedication on their first layer without too narrow spots, ridges between the grooves ≥ 1.1 mm. No strength, airflow or fit test on the real part.
+Checked: part list against the `part` branches, closed meshes, bed placement, build volume, no intersection between 19 assembly bodies (171 pairs, including the TPU feet, the assumed PWM board, LED, screws, fan and battery envelopes), contact of grille, fan, back cover, service cover, handle, feet, potentiometer, charge module, LED and battery, stops of the battery (back, top, side) and of the feet (back cover behind them, dovetail below them), 10 assembly/removal paths (including the feet towards the back once the back cover is off, the charge module towards the back before the fan, and the PWM board: first 19 mm away from the wall, then towards the back) in a realistic order, 21 insert holes (20 × M3, 1 × M5; axis free, full minimum wall per Ruthex datasheet, floor solid), screw engagement (≥ 3 mm = 1 × d in the brass, fan on silicone pads 3 mm, others ≥ 4.8 mm; tip ≥ 0.9 mm before the end of the pocket), standard dimensions (120 mm fan, Ruthex M3), grille gap ≤ 6 mm (finger guard), multicolour coverage of logo and dedication. Printability: no floating regions, logo and dedication on their first layer without too narrow spots, ridges between the grooves ≥ 1.1 mm. No strength, airflow or fit test on the real part.

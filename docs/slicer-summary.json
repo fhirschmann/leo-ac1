@@ -1,17 +1,17 @@
 {
-  "profile": "Bambu Lab H2S 0.4 nozzle / 0.20mm Standard @BBL H2S, 6 walls, 5/5 top/bottom, no supports; 30 % gyroid, 100 % zig-zag: none",
+  "profile": "Bambu Lab H2S 0.4 nozzle / 0.20mm Standard @BBL H2S, 6 walls, 5/5 top/bottom, no supports; 30 % gyroid, 100 % zig-zag: foot",
   "parts": [
     {
       "part": "body",
       "quantity": 1,
       "material": "PETG-white",
       "passed": true,
-      "source_sha256": "a395da78eec932cbe81cccfc2960c64c102d9cb503b396723d8cf42f81078c55",
+      "source_sha256": "53acaf3413843b42e3398a3f2221d4aad37d09bfcb329f02c6d38f0d657101e9",
       "exit_code": 0,
       "result_code": 0,
       "warnings": "",
-      "hours": 9.723,
-      "grams": 393.55,
+      "hours": 10.097,
+      "grams": 394.227,
       "wall_loops": 6,
       "infill_percent": 30.0,
       "layer_height": 0.20000000298023224,
@@ -138,16 +138,39 @@
         "bottom_shell_layers": "5"
       },
       "start_gcode_diagnostic": true
+    },
+    {
+      "part": "foot",
+      "quantity": 2,
+      "material": "TPU",
+      "passed": true,
+      "source_sha256": "9649986ce185e5240897fae0d42b7951bf11c97a4b8d961be22d9e1092b5419c",
+      "exit_code": 0,
+      "result_code": 0,
+      "warnings": "",
+      "hours": 0.569,
+      "grams": 6.38,
+      "wall_loops": 6,
+      "infill_percent": 100.0,
+      "layer_height": 0.20000000298023224,
+      "effective_settings": {
+        "sparse_infill_pattern": "zig-zag",
+        "enable_support": "0",
+        "curr_bed_type": "Textured PEI Plate",
+        "top_shell_layers": "5",
+        "bottom_shell_layers": "5"
+      },
+      "start_gcode_diagnostic": true
     }
   ],
-  "total_parts": 6,
-  "total_grams_individual_plates": 681.4,
-  "total_hours_individual_plates": 19.0,
+  "total_parts": 8,
+  "total_grams_individual_plates": 694.9,
+  "total_hours_individual_plates": 20.6,
   "production_gcode": false,
   "project_3mf": {
     "file": "stl/leo_ac1_all_parts.3mf",
-    "parts": 6,
-    "plates": 3,
+    "parts": 8,
+    "plates": 4,
     "layout": [
       {
         "plate": 1,
@@ -188,6 +211,18 @@
           181.2,
           183.8
         ]
+      },
+      {
+        "plate": 4,
+        "name": "TPU feet",
+        "parts": [
+          "foot",
+          "foot"
+        ],
+        "size_mm": [
+          34.0,
+          67.8
+        ]
       }
     ],
     "multicolour_parts": {
@@ -199,16 +234,16 @@
     "multicolour_slices": {
       "Housing": {
         "plate": 1,
-        "hours": 10.05,
+        "hours": 10.39,
         "grams_by_filament": {
-          "1": 393.91,
-          "3": 1.62
+          "1": 394.48,
+          "3": 1.73
         },
         "warnings": ""
       }
     },
     "pause_slices": {},
-    "own_infill_parts": 0,
-    "sha256": "bbd49f086c14b58de1c9970e4a2f792ce3c7ee3b4336db4a0b2536a1ee27f2ca"
+    "own_infill_parts": 2,
+    "sha256": "40fbb31e4287551782c83a144dfbd2222c4f19b4b9791ffd3b03c811940fbaaf"
   }
 }

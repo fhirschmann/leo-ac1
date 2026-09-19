@@ -1,5 +1,5 @@
 {
-  "source_sha256": "cd3e4d5642af62513d819175becbeb280152755919b3e018a21cc25e3a4b5bc5",
+  "source_sha256": "249b84fee7bfa58bcf247b647cef9468ab7f498a1d8ec7106c9cd9a155deb2d5",
   "software": {
     "numpy": "2.5.3",
     "trimesh": "5.1.0",
@@ -8,8 +8,8 @@
     "rtree": "1.4.1",
     "networkx": "3.6.1"
   },
-  "print_parts": 6,
-  "print_quantity": 6,
+  "print_parts": 7,
+  "print_quantity": 8,
   "print_meshes": {
     "body": {
       "size_mm": [
@@ -29,17 +29,17 @@
           76.0
         ]
       ],
-      "volume_mm3": 353286.4861,
-      "triangles": 19938,
+      "volume_mm3": 353910.8525,
+      "triangles": 23946,
       "watertight": true,
       "consistent_winding": true,
       "degenerate_faces": 0,
       "components": 1,
       "backend": "CGAL",
-      "sha256": "a395da78eec932cbe81cccfc2960c64c102d9cb503b396723d8cf42f81078c55",
+      "sha256": "53acaf3413843b42e3398a3f2221d4aad37d09bfcb329f02c6d38f0d657101e9",
       "quantity": 1,
       "material": "PETG-white",
-      "committed_sha256": "a395da78eec932cbe81cccfc2960c64c102d9cb503b396723d8cf42f81078c55"
+      "committed_sha256": "53acaf3413843b42e3398a3f2221d4aad37d09bfcb329f02c6d38f0d657101e9"
     },
     "back": {
       "size_mm": [
@@ -190,6 +190,36 @@
       "quantity": 1,
       "material": "PETG-grey",
       "committed_sha256": "7d5f636fa55ba30d48116c713007d5030305cd6c29f6d14ead563673ff0b5461"
+    },
+    "foot": {
+      "size_mm": [
+        16.0,
+        67.8,
+        5.0
+      ],
+      "bounds_mm": [
+        [
+          -8.0,
+          0.0,
+          0.0
+        ],
+        [
+          8.0,
+          67.8,
+          5.0
+        ]
+      ],
+      "volume_mm3": 5095.8482,
+      "triangles": 36,
+      "watertight": true,
+      "consistent_winding": true,
+      "degenerate_faces": 0,
+      "components": 1,
+      "backend": "Manifold",
+      "sha256": "9649986ce185e5240897fae0d42b7951bf11c97a4b8d961be22d9e1092b5419c",
+      "quantity": 2,
+      "material": "TPU",
+      "committed_sha256": "9649986ce185e5240897fae0d42b7951bf11c97a4b8d961be22d9e1092b5419c"
     }
   },
   "color_meshes": {
@@ -211,14 +241,14 @@
           76.0
         ]
       ],
-      "volume_mm3": 352711.6283,
-      "triangles": 21126,
+      "volume_mm3": 353239.749,
+      "triangles": 25134,
       "watertight": true,
       "consistent_winding": true,
       "degenerate_faces": 0,
       "components": 1,
       "backend": "CGAL",
-      "sha256": "5a7c312a48b7a62196e8c60f0600f3cf35b81467da9e89941288ac4816ad9c03"
+      "sha256": "59f90e2284d1e31290d69bcedc5f34fb3f6e1be9cb464c84fa234aebc4a39f6f"
     },
     "body_label": {
       "size_mm": [
@@ -250,29 +280,29 @@
     "body_dedication": {
       "size_mm": [
         49.7874,
-        23.2982,
+        25.5676,
         0.81
       ],
       "bounds_mm": [
         [
           162.181,
-          -125.8426,
+          -128.8426,
           3.19
         ],
         [
           211.9684,
-          -102.5444,
+          -103.2751,
           4.0
         ]
       ],
-      "volume_mm3": 264.8552,
-      "triangles": 10600,
+      "volume_mm3": 361.1009,
+      "triangles": 16458,
       "watertight": true,
       "consistent_winding": true,
       "degenerate_faces": 0,
-      "components": 15,
+      "components": 24,
       "backend": "Manifold",
-      "sha256": "2f9f84a7a6cb041817d2ad0b6dd0541fd350cb91d9d5f0b8e6eb88e835a26395"
+      "sha256": "fb8a498b4ceab567d59877c161712eeea2d4157a34ee5c9cab6eb391db5ddf28"
     }
   },
   "color_parts": {
@@ -289,18 +319,18 @@
         "bodies": 22
       },
       "dedication": {
-        "mm3": 264.86,
+        "mm3": 361.1,
         "depth_mm": 0.81,
         "z_mm": [
           3.19,
           4.0
         ],
-        "bodies": 15
+        "bodies": 24
       }
     }
   },
-  "assembly_bodies": 18,
-  "assembly_pairs": 153,
+  "assembly_bodies": 19,
+  "assembly_pairs": 171,
   "metrics": {
     "wall": 3.2,
     "front_t": 3.2,
@@ -330,6 +360,8 @@
     "handle_clearance": 30,
     "handle_open_top": 90,
     "handle_mount_wall": 6.4,
+    "foot_clearance": 0.2,
+    "foot_lift": 3.8,
     "fan_axis": [
       84,
       77.5
@@ -768,14 +800,15 @@
   "contact_volumes_mm3": {
     "grille@body": 177.726,
     "fan@body": 10.211,
-    "back@body": 133.41,
+    "back@body": 131.532,
     "cover@body": 39.376,
     "battery@body": 47.791,
     "handle@body": 12.376,
     "pot@body": 8.541,
     "pot_nut@body": 2.601,
     "chg_module@body": 5.255,
-    "led@body": 0.165
+    "led@body": 0.165,
+    "feet@body": 23.635
   },
   "stops": [
     {
@@ -791,6 +824,16 @@
     {
       "name": "battery_side",
       "first_contact_mm": 0.75,
+      "limit_mm": 1.0
+    },
+    {
+      "name": "feet_back",
+      "first_contact_mm": 0.25,
+      "limit_mm": 1.0
+    },
+    {
+      "name": "feet_down",
+      "first_contact_mm": 0.5,
       "limit_mm": 1.0
     }
   ],
@@ -839,6 +882,12 @@
     },
     {
       "name": "handle_up",
+      "collisions": 0,
+      "first_mm": null,
+      "max_volume_mm3": 0
+    },
+    {
+      "name": "feet_out",
       "collisions": 0,
       "first_mm": null,
       "max_volume_mm3": 0
@@ -1095,6 +1144,7 @@
     "cover": 0.0,
     "handle": 0.0,
     "knob": 0.0,
+    "foot": 0.0,
     "multicolour/body_base": 0.0,
     "multicolour/body_label": 0.0,
     "multicolour/body_dedication": 0.0
