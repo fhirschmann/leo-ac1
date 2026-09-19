@@ -31,13 +31,14 @@ ASSEMBLY = {
     "cover": "cover();",
     "handle": "handle();",
     "knob": "knob();",
-    "pot": "pot_env();",
+    "pot": "pot_env(nut = false);",
+    "pot_nut": "pot_nut_env();",
+    "pwm_board": "pwm_board_env();",
     "fan": "fan_env();",
     "battery": "battery_env();",
     "screws_grille": "screws_grille();",
     "screws_fan": "screws_fan();",
     "screws_back": "screws_back();",
-    "screws_cover": "screws_cover();",
     "screws_handle": "screws_handle();",
 }
 ALLOWED_OVERLAPS = [("fan", "screws_fan")]   # the fan is a solid envelope, its screws run through the frame holes
@@ -86,7 +87,7 @@ def checks(ctx):
     assert m["insert_hole_d"] == 4.0 and m["insert_len"] == 5.7, "Ruthex M3 insert: hole 4.0 mm, length 5.7 mm"
     # Ruthex datasheet RX series (08/2022): M3x5.7 hole 4.0, depth >= L + 1, wall >= 1.6; M5x9.5 hole 6.4, L 9.5, wall >= 2.6
     assert m["insert_depth"] >= m["insert_len"] + 1 and m["insert_w_min"] >= 1.6, "Ruthex M3: hole depth L + 1 mm, wall 1.6 mm"
-    assert m["mount_insert"] == [6.4, 9.5, 2.6] and m["mount_shoulder"] >= 2, "Ruthex M5x9.5: hole 6.4, length 9.5, wall 2.6; shoulder 2 mm"
+    assert m["mount_insert"] == [6.4, 9.5, 2.6] and m["mount_floor"] >= 2, "Ruthex M5x9.5: hole 6.4, length 9.5, wall 2.6; 2 mm floor"
     assert m["grille_gap"] <= 6, "Grille openings above 6 mm let children's fingers through"
     assert m["knob_shaft_engagement"] >= 8 and m["knob_top_skin"] >= 2 and m["knob_protrusion"] <= 8, "Knob: on the shaft, at most 8 mm in front of the cover"
     assert m["handle_clearance"] >= 30 and m["handle_open_top"] >= 90, "Handle: 30 mm finger clearance, 90 mm hand breadth"
@@ -99,7 +100,7 @@ def checks(ctx):
     contacts = {}
     for name, base, shift in (("grille", "body", [0, 0.05, 0]), ("fan", "body", [0, -0.05, 0]),
                               ("back", "body", [0, -0.05, 0]), ("cover", "body", [-0.05, 0, 0]), ("battery", "body", [0, 0, -0.05]),
-                              ("handle", "body", [0, 0, -0.05]), ("pot", "body", [0.05, 0, 0])):
+                              ("handle", "body", [0, 0, -0.05]), ("pot", "body", [0.05, 0, 0]), ("pot_nut", "body", [-0.05, 0, 0])):
         volume = (ctx.solids[name].translate(shift) ^ ctx.solids[base]).volume()
         assert volume > 0.1, f"{name} does not rest on {base}"
         contacts[f"{name}@{base}"] = round(volume, 3)
@@ -135,7 +136,6 @@ def checks(ctx):
             ("battery_out", ["battery"], others("battery", "back", "screws_back"), [0, 1, 0], 90, 1),
             ("fan_out", ["fan", "screws_fan"], others("fan", "screws_fan", "battery", "back", "screws_back"), [0, 1, 0], 90, 1),
             ("knob_off", ["knob"], others("knob"), [1, 0, 0], 25, 0.5),
-            ("cover_off", ["cover"], ["body", "pot"], [1, 0, 0], 30, 0.5),
             ("handle_up", ["handle"], ["body"], [0, 0, 1], 15, 0.5)):
         count, first, maximum = ctx.sweep(moving, fixed, direction, length, step)
         paths.append(dict(name=name, collisions=count, first_mm=first, max_volume_mm3=round(maximum, 4)))
@@ -175,8 +175,8 @@ VIEWER = dict(
     groups=[("weiss", "Gedruckt · PETG weiß"), ("grau", "Gedruckt · PETG grau"),
             ("schrauben", "Schrauben M3"), ("zugekauft", "Zugekauft")],
     hidden_groups=["zugekauft"],
-    outer=["body", "back", "cover", "grille", "handle", "screws_grille", "screws_back", "screws_cover", "screws_handle"],
-    cut=["back", "cover", "screws_back", "screws_cover"],
+    outer=["body", "back", "cover", "grille", "handle", "screws_grille", "screws_back", "screws_handle"],
+    cut=["back", "cover", "screws_back"],
     # id, label, group, colour, quantity, explode direction (mm per slider mm)
     parts=[("body", "Gehäuse", "weiss", "#f2f2ee", "1x", [0, 0, 0]),
            ("back", "Rückwand", "weiss", "#e6e6e1", "1x", [0, 1.5, 0]),
@@ -186,21 +186,21 @@ VIEWER = dict(
            ("knob", "Drehknopf", "grau", "#8f9396", "1x", [2, 0, 0]),
            ("fan_visual", "Lüfter 120 mm", "zugekauft", "#303236", "1x", [0, 0.8, 0]),
            ("battery", "Akku LiFePO4 3,2 V", "zugekauft", "#3f7fbf", "1x", [0, 0.5, 0]),
-           ("pot", "Poti PWM-Regler (Annahme)", "zugekauft", "#3a3d41", "1x", [1, 0, 0]),
+           ("pot", "Poti PWM-Regler (Annahme)", "zugekauft", "#3a3d41", "1x", [-0.5, 0, 0]),
+           ("pwm_board", "PWM-Platine (Annahme 45 × 30)", "zugekauft", "#2e6b3f", "1x", [-0.5, 0, 0]),
            # screws leave their part: same direction, further out
            ("screws_grille", "Gitter · M3 × 12 Linsenkopf", "schrauben", "#26282b", "4x", [0, -1.6, 0]),
            ("screws_fan", "Lüfter · M3 × 30 Linsenkopf", "schrauben", "#26282b", "4x", [0, 1.4, 0]),
            ("screws_back", "Rückwand · M3 × 8 Linsenkopf", "schrauben", "#26282b", "6x", [0, 2.2, 0]),
-           ("screws_cover", "Servicedeckel · M3 × 8 Linsenkopf", "schrauben", "#26282b", "2x", [-0.5, 0, 0]),
            ("screws_handle", "Griff · M3 × 8 Linsenkopf", "schrauben", "#26282b", "4x", [0, 0, -0.5])],
     colour={"body": [("label", "Gehäuse · Logo", "#8f9396")]},
     bodies={"body_base": "body_install_pose() inlay_base() { body_print_pose() body(); body_label_print_2d(); }",
             "body_label": "body_install_pose() inlay_piece() { body_print_pose() body(); body_label_print_2d(); }",
             "fan_visual": "fan_visual();",
+            "pot": "pot_env();",
             "screws_grille": "screws_grille(true);",
             "screws_fan": "screws_fan(true);",
             "screws_back": "screws_back(true);",
-            "screws_cover": "screws_cover(true);",
             "screws_handle": "screws_handle(true);"},
     output="build/viewer.html",
 )
@@ -215,7 +215,7 @@ VIEWS = {"01_assembly": ("assembly();", "-160,-330,230,112,40,70"),
          "05_duct": ("intersection() { body(); translate([-1, -1, -1]) cube([body_w + 2, 30, body_h + 2]); }",
                      "112,420,300,112,0,77"),
          # service cover with the speed knob, from the right
-         "06_knob": ("intersection() { assembly(); translate([190, 20, 15]) cube([80, 70, 110]); }",
-                     "420,-120,140,230,57,68"),
+         "06_knob": ("intersection() { assembly(); translate([165, 20, 20]) cube([100, 70, 140]); }",
+                     "420,-120,200,230,57,90"),
          # underside with the M5 mount insert
          "07_underside": ("body();", "40,-160,-260,112,40,40")}
