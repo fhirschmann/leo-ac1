@@ -1,5 +1,5 @@
 {
-  "source_sha256": "5cf0ba80dedfbf6167cdd16b6259f4fe8942e3eea747ebc3a9ab20698f33de01",
+  "source_sha256": "e69d8af9fea006cb2d9a3db7ad3d9c1160585dbc52669337835cdb8db1be31cb",
   "software": {
     "numpy": "2.5.3",
     "trimesh": "5.1.0",
@@ -29,17 +29,17 @@
           76.0
         ]
       ],
-      "volume_mm3": 305146.0049,
+      "volume_mm3": 306868.0052,
       "triangles": 11870,
       "watertight": true,
       "consistent_winding": true,
       "degenerate_faces": 0,
       "components": 1,
       "backend": "CGAL",
-      "sha256": "b1b79c9b8601b7900c9481eabe20e5b53babb53f339321622c0a75cf221804e1",
+      "sha256": "40ea9b1a5f485b3c77456789c23c99bc70b12cacf9929083f6bd2ff632fe1592",
       "quantity": 1,
       "material": "PETG-weiss",
-      "committed_sha256": "b1b79c9b8601b7900c9481eabe20e5b53babb53f339321622c0a75cf221804e1"
+      "committed_sha256": "40ea9b1a5f485b3c77456789c23c99bc70b12cacf9929083f6bd2ff632fe1592"
     },
     "back": {
       "size_mm": [
@@ -103,33 +103,33 @@
     },
     "cover": {
       "size_mm": [
-        84.0,
+        116.0,
         34.0,
         11.0
       ],
       "bounds_mm": [
         [
-          35.5,
-          42.0,
+          30.0,
+          23.0,
           0.0
         ],
         [
-          119.5,
-          76.0,
+          146.0,
+          57.0,
           11.0
         ]
       ],
-      "volume_mm3": 11600.812,
+      "volume_mm3": 15460.97,
       "triangles": 1088,
       "watertight": true,
       "consistent_winding": true,
       "degenerate_faces": 0,
       "components": 1,
       "backend": "Manifold",
-      "sha256": "dd21cf15f6b954f8b8e498bdf63ceb396924cf3302b8baf66663eecde982e30b",
+      "sha256": "4ebe5a053236fc974496e26f5af33d5aa475b24ba74564087de455b0bdf4a126",
       "quantity": 1,
       "material": "PETG-grau",
-      "committed_sha256": "dd21cf15f6b954f8b8e498bdf63ceb396924cf3302b8baf66663eecde982e30b"
+      "committed_sha256": "4ebe5a053236fc974496e26f5af33d5aa475b24ba74564087de455b0bdf4a126"
     },
     "handle": {
       "size_mm": [
@@ -211,14 +211,14 @@
           76.0
         ]
       ],
-      "volume_mm3": 304836.0025,
+      "volume_mm3": 306558.0028,
       "triangles": 13058,
       "watertight": true,
       "consistent_winding": true,
       "degenerate_faces": 0,
       "components": 1,
       "backend": "CGAL",
-      "sha256": "c0f114bc9107cad750c4a6468ab7e88935c9e02af5bac95cf63c6bbb26307743"
+      "sha256": "60ddfc65bae6a49171c82548e6d900d9cf89a5dfb2d98a5d09571538d63df6bb"
     },
     "body_label": {
       "size_mm": [
@@ -574,8 +574,8 @@
         "cover",
         [
           225,
-          59,
-          43.5
+          40,
+          38
         ],
         [
           1,
@@ -590,8 +590,8 @@
         "cover",
         [
           225,
-          59,
-          111.5
+          40,
+          138
         ],
         [
           1,
@@ -716,7 +716,7 @@
     "grille@body": 177.726,
     "fan@body": 10.211,
     "back@body": 128.348,
-    "cover@body": 30.361,
+    "cover@body": 38.041,
     "battery@body": 48.096,
     "handle@body": 54.674,
     "pot@body": 8.541,
@@ -948,8 +948,8 @@
       "body": "cover",
       "at": [
         225,
-        59,
-        43.5
+        40,
+        38
       ],
       "empty_mm3": 0.0,
       "ring_fill": 1.0,
@@ -959,8 +959,8 @@
       "body": "cover",
       "at": [
         225,
-        59,
-        111.5
+        40,
+        138
       ],
       "empty_mm3": 0.0,
       "ring_fill": 1.0,

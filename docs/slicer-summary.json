@@ -6,12 +6,12 @@
       "quantity": 1,
       "material": "PETG-weiss",
       "passed": true,
-      "source_sha256": "b1b79c9b8601b7900c9481eabe20e5b53babb53f339321622c0a75cf221804e1",
+      "source_sha256": "40ea9b1a5f485b3c77456789c23c99bc70b12cacf9929083f6bd2ff632fe1592",
       "exit_code": 0,
       "result_code": 0,
       "warnings": "",
-      "hours": 7.899,
-      "grams": 341.157,
+      "hours": 7.935,
+      "grams": 343.173,
       "wall_loops": 6,
       "infill_percent": 30.0,
       "layer_height": 0.20000000298023224,
@@ -75,12 +75,12 @@
       "quantity": 1,
       "material": "PETG-grau",
       "passed": true,
-      "source_sha256": "dd21cf15f6b954f8b8e498bdf63ceb396924cf3302b8baf66663eecde982e30b",
+      "source_sha256": "4ebe5a053236fc974496e26f5af33d5aa475b24ba74564087de455b0bdf4a126",
       "exit_code": 0,
       "result_code": 0,
       "warnings": "",
-      "hours": 0.457,
-      "grams": 13.365,
+      "hours": 0.527,
+      "grams": 17.739,
       "wall_loops": 6,
       "infill_percent": 30.0,
       "layer_height": 0.20000000298023224,
@@ -141,8 +141,8 @@
     }
   ],
   "total_parts": 6,
-  "total_grams_individual_plates": 583.3,
-  "total_hours_individual_plates": 16.6,
+  "total_grams_individual_plates": 589.7,
+  "total_hours_individual_plates": 16.7,
   "production_gcode": false,
   "project_3mf": {
     "file": "stl/leo_ac1_all_parts.3mf",
@@ -186,7 +186,7 @@
         ],
         "size_mm": [
           180.0,
-          172.0
+          183.8
         ]
       }
     ],
@@ -198,9 +198,9 @@
     "multicolour_slices": {
       "Gehäuse": {
         "plate": 1,
-        "hours": 8.08,
+        "hours": 8.12,
         "grams_by_filament": {
-          "1": 340.48,
+          "1": 342.49,
           "3": 0.84
         },
         "warnings": ""
@@ -208,6 +208,6 @@
     },
     "pause_slices": {},
     "own_infill_parts": 0,
-    "sha256": "b64f858a8704948217df92545ee3b4d1ea1ccdffa791daec0a97f3d0c255b318"
+    "sha256": "5d114c2f264423d1e4da60dbde4b26f8a3fc9749b1e5a7f00bafcafa10d740a7"
   }
 }

@@ -80,27 +80,27 @@ retain_t = 3;
 retain_w = 24;
 shelf_gap = 3;       // battery top to electronics shelf (cable, protection board)
 shelf_t = 3;
-shelf_d = 40;        // shelf depth from the front plate: covers the battery, ends in front of the PWM board
+shelf_d = 50;        // shelf depth from the front plate
 
 /* [Service cover, right side] */
-cover_y = 59;        // centre, towards the back like the valve cover of the original
-cover_z = body_h / 2;
+cover_y = body_d / 2; // centre, in the middle of the side depth
+cover_z = 88;
 cover_w = 34;        // along y
-cover_hgt = 84;      // along z
+cover_hgt = 116;     // along z, reaches up to the speed knob above the battery
 cover_out = 11;      // protrusion
 cover_t = 2.4;
 cover_r = 4;
-cover_screw_dz = 34;
+cover_screw_dz = 50;
 
 /* [Speed knob, potentiometer of the PWM fan controller] */
-pot_yz = [cover_y, cover_z];  // axis in the middle of the service cover; the potentiometer is nutted to the right body wall
+pot_yz = [cover_y, 118];  // axis above the battery, centred in the depth; the potentiometer is nutted to the right body wall
 pot_shaft = [6, 4.5, 15]; // D shaft: diameter, across the flat, length from the outer wall face (WH148 type, to be measured)
 pot_bush = [7, 7];        // threaded bushing M7: diameter, length from the inner wall face
 pot_nut = [11, 2];        // nut as cylinder: diameter across corners, thickness
 pot_body = [16.5, 18];    // housing incl. switch: diameter, depth behind the wall
-pwm_pcb = [30, 45, 1.6];  // PWM controller board behind the potentiometer, parallel to the wall: y, z, thickness (assumed, to be measured)
+pwm_pcb = [45, 30, 1.6];  // PWM controller board behind the potentiometer, parallel to the wall: y, z, thickness (assumed, to be measured)
 pwm_comp_h = 12;          // parts on its back side (terminals, fan header)
-pwm_pot_offset = [0, -12.5];  // potentiometer axis relative to the board centre: 10 mm above the lower edge, board upwards
+pwm_pot_offset = [0, 0];  // potentiometer axis relative to the board centre (y, z)
 knob_d = 28;              // flat cap in front of the cover
 knob_h = 6.5;
 knob_gap = 0.5;           // cap to the cover face
@@ -243,9 +243,9 @@ assert(knob_d <= cover_w - 4 && abs(pot_yz[1] - cover_z) + knob_d / 2 < cover_hg
        && min([for (s = [-1, 1]) abs(pot_yz[1] - cover_z - s * cover_screw_dz)]) > boss_d / 2 + pot_nut[0] / 2 + 1,
        "Knob or nut does not fit between the cover bosses");
 assert(cover_out - insert_depth >= 3, "Cover insert pocket too close to the visible face");
-assert(pot_yz[0] - pwm_pot_offset[0] + pwm_pcb[0] / 2 < body_d - back_t - 1 && pot_yz[1] - pwm_pot_offset[1] + pwm_pcb[1] / 2 < body_h - wall - 1
-       && front_t + shelf_d < pot_yz[0] - pwm_pot_offset[0] - pwm_pcb[0] / 2 - 0.5 && front_t + shelf_d > bat_cy + bat_d / 2,
-       "PWM board outside the bay, or the shelf does not end in front of the board / no longer covers the battery");
+assert(pot_yz[0] - pwm_pot_offset[0] - pwm_pcb[0] / 2 > front_t + inner_c && pot_yz[0] - pwm_pot_offset[0] + pwm_pcb[0] / 2 < body_d - back_t - 1
+       && pot_yz[1] - pwm_pot_offset[1] - pwm_pcb[1] / 2 > shelf_z + shelf_t + 2 && pot_yz[1] - pwm_pot_offset[1] + pwm_pcb[1] / 2 < body_h - wall - 1,
+       "PWM board outside the free bay above the shelf");
 assert(pot_shaft[2] - knob_stem_z >= 8 && knob_len - knob_bore_top >= 2 && knob_stem_z > pot_nut[1] + 0.5,
        "Knob: shaft engagement, top skin or stem end");
 assert(handle_end[1] > insert_depth && handle_open[2] > insert_depth, "Handle insert pockets reach the slants");
