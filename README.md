@@ -18,12 +18,12 @@ Kleiner Akku-Ventilator für das Kinderzimmer, gestaltet wie die Außeneinheit e
 | `back` Rückwand | 1 | PETG weiß | 225 × 155 × 40,6 | Außenseite aufs Bett, Akku-Halterippen stehen senkrecht |
 | `grille` Lüftergitter | 1 | PETG grau | Ø 136 × 6 | Vorderseite aufs Bett |
 | `cover` Servicedeckel | 1 | PETG grau | 84 × 34 × 11 | Außenseite aufs Bett |
-| `knob` Drehknopf | 1 | PETG grau | Ø 22 × 18 | Oberseite aufs Bett, D-Bohrung und Riffeln oben offen, Zeigerrille zur Achsabflachung |
+| `knob` Drehknopf | 1 | PETG grau | Ø 28 × 13,7 (flache Kappe, steht 7 mm vor dem Servicedeckel) | Oberseite aufs Bett, Schaft mit D-Bohrung zeigt nach oben |
 | `handle` Griff | 1 | PETG grau | 170 × 42 × 24 (30 mm Luft unter dem Balken, Öffnung oben 90 mm) | auf der Seite liegend (Schichten in Zugrichtung), Fasen 45° |
 
 Alle Teile liegen als Bambu-Studio-Projekt in [`stl/leo_ac1_all_parts.3mf`](stl/leo_ac1_all_parts.3mf): Platte 1 Gehäuse (mit Wischturm), Platte 2 Rückwand, Platte 3 graue Teile (Gitter, Servicedeckel, Griff, Drehknopf). Filament 1 PETG Basic Weiß, Filament 2 PETG Basic Grau, Filament 3 Grau für das Typenschild (im AMS dieselbe Spule wie Filament 2). Wer das Gehäuse einfarbig druckt, nimmt `stl/body.stl`.
 
-Rechnerisch **ca. 0,56 kg und 15,6 Stunden** (diagnostisches Slicen, jede Instanz als eigener Druck; Gehäuse allein 336 g / 7,7 h).
+Rechnerisch **ca. 0,56 kg und 15,6 Stunden** (diagnostisches Slicen, jede Instanz als eigener Druck; Gehäuse allein 337 g / 7,7 h).
 
 ## Druck und Stabilität
 
@@ -43,7 +43,7 @@ Alle Teile drucken ohne Stützen (geprüft mit `analyze.py islands`, `overhangs`
 | PC-Lüfter 120 × 120 × 25 mm | 1 | Lochabstand 105 mm; 12-V-Lüfter brauchen einen Step-up-Wandler |
 | Akku 3,2 V 6000 mAh LiFePO4 mit Schutzplatine, JST-PH 2.0 (32700-Zelle, Ø 34 × 70 mm) | 1 | Nur mit LiFePO4-Ladegerät laden (3,65 V), **kein** TP4056 (4,2 V) |
 | Lade-/Boostmodul „2-in-1 3,2 V LiFePO4“, Variante 12 V | 1 | 35,4 × 11 × 3,6 mm; Pads IN± (5 V laden), B± (Akku), O± (12 V, max. ca. 0,32 A) |
-| PWM-Lüfterregler DC 8–24 V 5 A mit Drehpoti und Schalter | 1 | 4-Pin-Lüfter; Poti im Servicedeckel (Maße angenommen: WH148, D-Achse Ø 6 × 15, M7) |
+| PWM-Lüfterregler DC 8–24 V 5 A mit Drehpoti und Schalter | 1 | 4-Pin-Lüfter; Poti an der rechten Seitenwand unter dem Servicedeckel (Maße angenommen: WH148, D-Achse Ø 6 × 15, M7) |
 | USB-C-Einbaubuchse 5 V | 1 | Zum Laden, Lage im Servicedeckel noch offen |
 | Einschmelzmuttern Ruthex M3 × 5,7 | 20 | Loch Ø 4,0, Tiefe 6,5 |
 | M3 × 14 Senkkopf | 4 | Gitter, von vorn |
@@ -54,7 +54,7 @@ Alle Teile drucken ohne Stützen (geprüft mit `analyze.py islands`, `overhangs`
 ## Zusammenbau
 
 1. Einschmelzmuttern setzen: 4 Gitter- und 4 Lüfterdome innen an der Front, 6 Dome am hinteren Rand des Gehäuses, 2 im Servicedeckel, 4 in den Griff-Füßen.
-2. Poti mit seiner Mutter im Servicedeckel befestigen (Gehäuse zeigt nach innen), Servicedeckel und Griff von innen mit M3 × 8 anschrauben, Drehknopf mit der Zeigerrille zur Achsabflachung aufstecken.
+2. Poti von innen durch die rechte Seitenwand stecken und außen mit seiner Mutter festziehen; Servicedeckel und Griff von innen mit M3 × 8 anschrauben; Drehknopf durch das Loch im Servicedeckel auf die Achse drücken (Zeigerstrich zur Achsabflachung).
 3. Gitter von vorn aufsetzen (der Kragen zentriert es in der Öffnung) und mit M3 × 14 Senkkopf anschrauben.
 4. Lüfter von hinten auf die Dome hinter dem Luftkanal setzen, Blasrichtung nach vorn, mit M3 × 30 anschrauben. Kabel durch die Aussparung in der Trennwand ins Elektronikfach führen.
 5. Akku stehend von hinten in die Wiege schieben, Kabelende nach oben; das Kabel läuft durch den Schlitz im Elektronikboden darüber.

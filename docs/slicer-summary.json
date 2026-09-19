@@ -6,12 +6,12 @@
       "quantity": 1,
       "material": "PETG-weiss",
       "passed": true,
-      "source_sha256": "6326933948c8b2f3444afaacb68cc516fd91654d3891c134b908dd9404f2e64f",
+      "source_sha256": "019057e4bb1e79507f1a688cd93969cfc8e86b012497b21940ed7cc21643d3f8",
       "exit_code": 0,
       "result_code": 0,
       "warnings": "",
-      "hours": 7.686,
-      "grams": 335.738,
+      "hours": 7.683,
+      "grams": 336.545,
       "wall_loops": 6,
       "infill_percent": 30.0,
       "layer_height": 0.20000000298023224,
@@ -75,12 +75,12 @@
       "quantity": 1,
       "material": "PETG-grau",
       "passed": true,
-      "source_sha256": "465091b25b3f2a77a1c41b932b4ac2c8667c27e580cf8c438e3e28e00453ddc0",
+      "source_sha256": "7cc0a209faa14699a0acc99757e34609814c97a1f11fdc5840402094c136b809",
       "exit_code": 0,
       "result_code": 0,
       "warnings": "",
-      "hours": 0.462,
-      "grams": 13.509,
+      "hours": 0.457,
+      "grams": 13.382,
       "wall_loops": 6,
       "infill_percent": 30.0,
       "layer_height": 0.20000000298023224,
@@ -121,12 +121,12 @@
       "quantity": 1,
       "material": "PETG-grau",
       "passed": true,
-      "source_sha256": "e414076f1c5e7d3618e9fb0ca5bb4b5f19961fc0d8edbacb48ac11924c343ccb",
+      "source_sha256": "7d5f636fa55ba30d48116c713007d5030305cd6c29f6d14ead563673ff0b5461",
       "exit_code": 0,
       "result_code": 0,
       "warnings": "",
-      "hours": 0.456,
-      "grams": 5.964,
+      "hours": 0.411,
+      "grams": 4.07,
       "wall_loops": 6,
       "infill_percent": 30.0,
       "layer_height": 0.20000000298023224,
@@ -141,7 +141,7 @@
     }
   ],
   "total_parts": 6,
-  "total_grams_individual_plates": 560.3,
+  "total_grams_individual_plates": 559.1,
   "total_hours_individual_plates": 15.6,
   "production_gcode": false,
   "project_3mf": {
@@ -198,9 +198,9 @@
     "multicolour_slices": {
       "Gehäuse": {
         "plate": 1,
-        "hours": 7.87,
+        "hours": 7.85,
         "grams_by_filament": {
-          "1": 335.09,
+          "1": 335.9,
           "3": 0.84
         },
         "warnings": ""
@@ -208,6 +208,6 @@
     },
     "pause_slices": {},
     "own_infill_parts": 0,
-    "sha256": "128d6420c60506c13ec06bccd8dab561ce4a6185e4a4be754b36cffd362d973d"
+    "sha256": "f1f2ef58dd22c8a23b6bef68981ccb43d7e3a04f69528ddbf73d3701c94dedba"
   }
 }

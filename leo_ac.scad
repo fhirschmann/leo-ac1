@@ -93,18 +93,19 @@ cover_r = 4;
 cover_screw_dz = 34;
 
 /* [Speed knob, potentiometer of the PWM fan controller] */
-pot_yz = [57, 68];        // axis on the service cover (y, z)
-pot_shaft = [6, 4.5, 15]; // D shaft: diameter, across the flat, length from the cover face (WH148 type, to be measured)
-pot_bush = [7, 7];        // threaded bushing M7: diameter, length from the panel inner face
+pot_yz = [57, 68];        // axis under the service cover (y, z); the potentiometer is nutted to the right body wall
+pot_shaft = [6, 4.5, 15]; // D shaft: diameter, across the flat, length from the outer wall face (WH148 type, to be measured)
+pot_bush = [7, 7];        // threaded bushing M7: diameter, length from the inner wall face
 pot_nut = [11, 2];        // nut as cylinder: diameter across corners, thickness
-pot_body = [16.5, 18];    // housing incl. switch: diameter, depth behind the panel
-knob_d = 22;
-knob_h = 18;
-knob_gap = 1;             // knob skirt to the cover face
-knob_skirt = [12.5, 4];   // recess over nut and bushing: diameter, depth
+pot_body = [16.5, 18];    // housing incl. switch: diameter, depth behind the wall
+knob_d = 28;              // flat cap in front of the cover
+knob_h = 6.5;
+knob_gap = 0.5;           // cap to the cover face
+knob_stem_d = 10;         // stem through the cover, ends just above the bushing
+knob_stem_cl = 0.5;       // stem end to the bushing end, and radial clearance in the cover hole
 knob_bore_cl = 0.1;       // D bore clearance per side, press fit
-knob_flutes = 18;
-knob_c = 1.5;
+knob_flutes = 30;
+knob_c = 1.2;
 
 /* [Handle, top] */
 handle_len = 170;      // along x
@@ -155,8 +156,10 @@ groove_z0 = 19;            // axis of the lowest groove
 groove_x = [160, 219];
 
 // ---------- derived values ----------
-pot_x = body_w + cover_out;                           // outer face of the service cover (panel)
-knob_bore_top = pot_shaft[2] - knob_gap + 1;          // knob coordinates, 1 mm beyond the shaft end
+knob_stem_z = -wall + pot_bush[1] + knob_stem_cl;     // stem end, from the outer face of the right wall
+knob_cap_z = cover_out + knob_gap;                    // cap underside, same reference
+knob_len = knob_cap_z + knob_h - knob_stem_z;
+knob_bore_top = pot_shaft[2] + 1 - knob_stem_z;       // knob coordinates, 1 mm beyond the shaft end
 logo_w = text_w(brand_sub, sub_size, sub_stroke, sub_gap);
 big_gap = (logo_w - text_w(brand, big_size, big_stroke, 0)) / (len(brand) - 1);
 logo_x0 = logo_cx - logo_w / 2;
@@ -218,11 +221,10 @@ assert(cover_out - insert_depth >= 3, "Cover insert pocket too close to the visi
 assert(shelf_z + shelf_t < body_h - wall, "Shelf above the top wall");
 // hand under the grip: child hand breadth about 55-70 mm, adult 80-90 mm; comfortable finger clearance 30-35 mm
 assert(handle_h - handle_bar >= 30 && handle_open[1] >= 90, "Handle opening too small for a hand");
-assert(abs(pot_yz[0] - cover_y) + pot_body[0] / 2 < cover_w / 2 - cover_t - 0.5
-       && min([for (s = [-1, 1]) abs(pot_yz[1] - cover_z - s * cover_screw_dz)]) > boss_d / 2 + pot_body[0] / 2 + 1,
-       "Potentiometer does not fit between the cover walls and bosses");
-assert(pot_shaft[2] - knob_gap - knob_skirt[1] >= 8 && knob_h - knob_bore_top >= 2 && knob_skirt[1] > pot_nut[1] + 1,
-       "Knob: shaft engagement, top skin or skirt depth");
+assert(knob_d <= cover_w - 4 && min([for (s = [-1, 1]) abs(pot_yz[1] - cover_z - s * cover_screw_dz)]) > boss_d / 2 + pot_nut[0] / 2 + 1,
+       "Knob or nut does not fit on the service cover");
+assert(pot_shaft[2] - knob_stem_z >= 8 && knob_len - knob_bore_top >= 2 && knob_stem_z > pot_nut[1] + 0.5,
+       "Knob: shaft engagement, top skin or stem end");
 assert(handle_end[1] > insert_depth && handle_open[2] > insert_depth, "Handle insert pockets reach the slants");
 assert(handle_screw_dx[0] - insert_hole_d / 2 - handle_open[0] / 2 >= 2 && handle_len / 2 - handle_screw_dx[1] - insert_hole_d / 2 >= 2,
        "Handle feet too thin around the inserts");
@@ -335,7 +337,7 @@ module body() difference() {
     translate([bat_cx - cable_slot_w / 2, bat_cy - 6, shelf_z - 1]) cube([cable_slot_w, shelf_d + front_t - bat_cy + 7, shelf_t + 2]);
     along_x(-1, wall + 1) intake_slots_side();
     for (p = cover_screws()) cyl_x(p, body_w - wall - 1, body_w + 1, screw_clear_d / 2);
-    cyl_x(pot_yz, body_w - wall - 1, body_w + 1, (pot_body[0] + 1.5) / 2);   // potentiometer housing into the bay
+    cyl_x(pot_yz, body_w - wall - 1, body_w + 1, (pot_bush[0] + 0.4) / 2);   // potentiometer bushing, nutted to the wall
     for (p = handle_screws()) translate([p[0], p[1], body_h - wall - 1]) cylinder(d = screw_clear_d, h = wall + 2);
 }
 
@@ -470,32 +472,35 @@ module cover() difference() {
         for (p = cover_screws()) cyl_x(p, x0, x1 - cover_t + eps, boss_d / 2);
     }
     for (p = cover_screws()) cyl_x(p, x0 - 1, x0 + insert_depth, insert_hole_d / 2);
-    cyl_x(pot_yz, x1 - cover_t - 1, x1 + 1, (pot_bush[0] + 0.4) / 2);   // potentiometer bushing, held by its nut
+    cyl_x(pot_yz, x1 - cover_t - 1, x1 + 1, knob_stem_d / 2 + knob_stem_cl);   // knob stem
 }
 module cover_print_pose() translate([0, 0, body_w + cover_out]) rotate([0, 90, 0]) children();   // outer face on the bed
 
 // ---------- speed knob ----------
 module d_profile(d, flat) intersection() { circle(d = d); translate([-d / 2, -d / 2]) square([flat, d]); }   // flat on +x
-module knob_local() difference() {   // z = 0 at the skirt, z = knob_h at the top face
+module knob_local() difference() {   // z = 0 at the stem end, cap top face at knob_len
+    s = knob_cap_z - knob_stem_z;
     union() {
-        cylinder(d = knob_d, h = knob_h - knob_c);
-        translate([0, 0, knob_h - knob_c - eps]) cylinder(d1 = knob_d, d2 = knob_d - 2 * knob_c, h = knob_c + eps);
+        cylinder(d = knob_stem_d, h = s + eps);
+        translate([0, 0, s]) {
+            cylinder(d = knob_d, h = knob_h - knob_c);
+            translate([0, 0, knob_h - knob_c - eps]) cylinder(d1 = knob_d, d2 = knob_d - 2 * knob_c, h = knob_c + eps);
+        }
     }
-    for (i = [0:knob_flutes - 1]) rotate(i * 360 / knob_flutes)   // grip flutes, open at the skirt
-        translate([knob_d / 2 - 0.8, -0.6, -1]) cube([2, 1.2, knob_h - 4 + 1]);
-    translate([0, 0, -1]) cylinder(d = knob_skirt[0], h = knob_skirt[1] + 1);
-    translate([0, 0, knob_skirt[1] - eps]) linear_extrude(knob_bore_top - knob_skirt[1] + eps) offset(delta = knob_bore_cl) d_profile(pot_shaft[0], pot_shaft[1]);
-    translate([2, -0.6, knob_h - 0.8]) cube([knob_d / 2, 1.2, 1]);   // pointer groove on the top face, towards the flat
+    for (i = [0:knob_flutes - 1]) rotate(i * 360 / knob_flutes)   // fine grip flutes, open at the underside of the cap
+        translate([knob_d / 2 - 0.5, -0.5, s - 1]) cube([2, 1, knob_h - knob_c]);
+    translate([0, 0, -eps]) linear_extrude(knob_bore_top + eps) offset(delta = knob_bore_cl) d_profile(pot_shaft[0], pot_shaft[1]);
+    translate([knob_d / 2 - knob_c - 7, -0.6, knob_len - 0.6]) cube([6, 1.2, 1]);   // short pointer near the edge, towards the flat
 }
-module knob() translate([pot_x + knob_gap, pot_yz[0], pot_yz[1]]) orient([1, 0, 0]) knob_local();
-module knob_print_pose() translate([0, 0, knob_h]) mirror([0, 0, 1]) children();   // top face on the bed
-module pot_local() {                 // z = 0 at the outer cover face
-    translate([0, 0, -cover_t - pot_body[1]]) cylinder(d = pot_body[0], h = pot_body[1]);
-    translate([0, 0, -cover_t - eps]) cylinder(d = pot_bush[0], h = pot_bush[1] + eps);
+module knob() translate([body_w + knob_stem_z, pot_yz[0], pot_yz[1]]) orient([1, 0, 0]) knob_local();
+module knob_print_pose() translate([0, 0, knob_len]) mirror([0, 0, 1]) children();   // top face on the bed
+module pot_local() {                 // z = 0 at the outer face of the right wall
+    translate([0, 0, -wall - pot_body[1]]) cylinder(d = pot_body[0], h = pot_body[1]);
+    translate([0, 0, -wall - eps]) cylinder(d = pot_bush[0], h = pot_bush[1] + eps);
     cylinder(d = pot_nut[0], h = pot_nut[1]);
-    translate([0, 0, -cover_t + pot_bush[1] - 1]) linear_extrude(pot_shaft[2] + cover_t - pot_bush[1] + 1) d_profile(pot_shaft[0], pot_shaft[1]);
+    translate([0, 0, -wall + pot_bush[1] - 1]) linear_extrude(pot_shaft[2] + wall - pot_bush[1] + 1) d_profile(pot_shaft[0], pot_shaft[1]);
 }
-module pot_env() translate([pot_x, pot_yz[0], pot_yz[1]]) orient([1, 0, 0]) pot_local();
+module pot_env() translate([body_w, pot_yz[0], pot_yz[1]]) orient([1, 0, 0]) pot_local();
 
 // ---------- handle ----------
 function handle_outer() = let (l = handle_len / 2, e = handle_end)
@@ -576,7 +581,7 @@ else if (part == "exploded") assembly(40);
 else if (part == "metrics") echo("PROJECT_METRICS", [
     ["wall", wall], ["front_t", front_t], ["back_t", back_t], ["corner_r", corner_r], ["body_mm", [body_w, body_d, body_h]],
     ["fan_size", fan_size], ["fan_t", fan_t], ["fan_pitch", fan_pitch], ["fan_hole_d", fan_hole_d],
-    ["fan_blade_d", fan_blade_d], ["knob_shaft_engagement", pot_shaft[2] - knob_gap - knob_skirt[1]], ["knob_top_skin", knob_h - knob_bore_top], ["handle_clearance", handle_h - handle_bar], ["handle_open_top", handle_open[1]], ["fan_axis", [fan_cx, fan_cz]], ["fan_y", fan_y], ["shroud_r", [open_r, open_r + shroud_t]], ["shroud_gap", shroud_gap], ["open_d", 2 * open_r], ["grille_gap", grille_gap],
+    ["fan_blade_d", fan_blade_d], ["knob_shaft_engagement", pot_shaft[2] - knob_stem_z], ["knob_top_skin", knob_len - knob_bore_top], ["knob_protrusion", knob_cap_z + knob_h - cover_out], ["handle_clearance", handle_h - handle_bar], ["handle_open_top", handle_open[1]], ["fan_axis", [fan_cx, fan_cz]], ["fan_y", fan_y], ["shroud_r", [open_r, open_r + shroud_t]], ["shroud_gap", shroud_gap], ["open_d", 2 * open_r], ["grille_gap", grille_gap],
     ["bat_mm", [bat_d, bat_l]], ["bat_clear", bat_clear], ["bat_retain_gap", bat_retain_gap], ["shelf_gap", shelf_gap],
     ["lip_clearance", lip_cl], ["spigot_clearance", spigot_cl],
     ["insert_hole_d", insert_hole_d], ["insert_len", insert_len], ["insert_depth", insert_depth],
