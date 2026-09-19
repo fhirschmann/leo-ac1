@@ -102,7 +102,7 @@ def main():
             add(pid, pid, OUT / f"{pid}.stl", label, group, col, qty, direction)
         else:
             add(pid, pid, ASM_DIR / f"{pid}.stl", label, group, col, qty, direction)
-    meta = dict(title=V["title"], eyebrow=V.get("eyebrow", "Baugruppe · Einbaulage"), dims=V.get("dims", []),
+    meta = dict(title=V["title"], eyebrow=V.get("eyebrow", "Baugruppe · Einbaulage"), dims=V.get("dims", []), ui=V.get("ui", {}),
                 groups=V.get("groups", []), hidden_groups=V.get("hidden_groups", []),
                 outer=V.get("outer", []), cut=V.get("cut", []), screens=V.get("screens", []),
                 bounds=[low.round(2).tolist(), high.round(2).tolist()],

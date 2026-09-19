@@ -106,23 +106,23 @@ canvas{display:block;width:100%;height:100%;touch-action:none}
     </div>
     <div class="tools">
       <div class="presets">
-        <button class="preset" data-preset="all">Alles</button>
-        <button class="preset" data-preset="printed">Nur gedruckt</button>
-        <button class="preset" data-preset="inside">Innenleben</button>
-        <button class="preset" data-preset="cut">Aufgeschnitten</button>
+        <button class="preset" data-preset="all" data-ui="all">Alles</button>
+        <button class="preset" data-preset="printed" data-ui="printed">Nur gedruckt</button>
+        <button class="preset" data-preset="inside" data-ui="inside">Innenleben</button>
+        <button class="preset" data-preset="cut" data-ui="cut">Aufgeschnitten</button>
       </div>
       <div class="slider">
-        <label for="ex">Explosion</label>
+        <label for="ex" data-ui="explode">Explosion</label>
         <input id="ex" type="range" min="0" max="60" value="0" step="1">
         <output id="exv">0 mm</output>
       </div>
       <div class="slider">
-        <label for="cutaxis">Schnitt</label>
-        <select id="cutaxis" aria-label="Schnittachse">
-          <option value="">aus</option><option value="0">X</option><option value="1">Y</option><option value="2">Z</option>
+        <label for="cutaxis" data-ui="section">Schnitt</label>
+        <select id="cutaxis" aria-label="Schnittachse" data-ui-aria="section_axis">
+          <option value="" data-ui="off">aus</option><option value="0">X</option><option value="1">Y</option><option value="2">Z</option>
         </select>
-        <input id="cut" type="range" min="0" max="1000" value="500" step="1" disabled aria-label="Schnittposition">
-        <button class="preset" id="cutflip" type="button" disabled title="Andere Seite zeigen">⇄</button>
+        <input id="cut" type="range" min="0" max="1000" value="500" step="1" disabled aria-label="Schnittposition" data-ui-aria="section_pos">
+        <button class="preset" id="cutflip" type="button" disabled title="Andere Seite zeigen" data-ui-title="flip">⇄</button>
         <output id="cutv">–</output>
       </div>
     </div>
@@ -131,7 +131,7 @@ canvas{display:block;width:100%;height:100%;touch-action:none}
   <div class="stage">
     <canvas id="cv"></canvas>
     <div class="readout" id="ro">–</div>
-    <div class="hint">Ziehen = drehen · Rad = zoomen · Shift+Ziehen = schieben</div>
+    <div class="hint" data-ui="hint">Ziehen = drehen · Rad = zoomen · Shift+Ziehen = schieben</div>
   </div>
 </div>
 <script>/*__DATA__*/</script>
@@ -139,6 +139,14 @@ canvas{display:block;width:100%;height:100%;touch-action:none}
 <script>
 (function(){
   var P = window.PART_DATA, M = P.meta;
+  // UI texts: German defaults, VIEWER["ui"] in print_project.py overrides them (e.g. an English page)
+  var UI = {all:'Alles', printed:'Nur gedruckt', inside:'Innenleben', cut:'Aufgeschnitten', explode:'Explosion',
+    section:'Schnitt', off:'aus', flip:'Andere Seite zeigen', section_axis:'Schnittachse', section_pos:'Schnittposition',
+    hint:'Ziehen = drehen · Rad = zoomen · Shift+Ziehen = schieben', of:'von', parts:'Teilen', triangles:'Dreiecke', locale:'de-DE'};
+  Object.keys(M.ui || {}).forEach(function(k){ UI[k] = M.ui[k]; });
+  document.querySelectorAll('[data-ui]').forEach(function(el){ el.textContent = UI[el.dataset.ui]; });
+  document.querySelectorAll('[data-ui-title]').forEach(function(el){ el.title = UI[el.dataset.uiTitle]; });
+  document.querySelectorAll('[data-ui-aria]').forEach(function(el){ el.setAttribute('aria-label', UI[el.dataset.uiAria]); });
   document.getElementById('eyebrow').textContent = M.eyebrow;
   document.getElementById('title').textContent = M.title;
   var dims = document.getElementById('dims');
@@ -370,7 +378,7 @@ canvas{display:block;width:100%;height:100%;touch-action:none}
     var on=0, tris=0;
     P.parts.forEach(function(p){ if(meshes[p.id].visible){ on++; tris+=p.tris; } });
     syncScreens();
-    ro.innerHTML = '<b>'+on+'</b> von '+P.parts.length+' Teilen<br>'+tris.toLocaleString('de-DE')+' Dreiecke';
+    ro.innerHTML = '<b>'+on+'</b> '+UI.of+' '+P.parts.length+' '+UI.parts+'<br>'+tris.toLocaleString(UI.locale)+' '+UI.triangles;
   }
 
   function setVisible(fn){

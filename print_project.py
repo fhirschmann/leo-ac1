@@ -13,12 +13,12 @@ METRICS_TAG = "PROJECT_METRICS"       # part="metrics" echoes this tag with [key
 # Must match the part branches in SOURCE exactly (checked). The material key also picks the filament slot,
 # so one material in two colours gets one key per colour.
 PARTS = {
-    "body": (1, "PETG-weiss", 1),
-    "back": (1, "PETG-weiss", 1),
-    "grille": (1, "PETG-grau", 1),
-    "cover": (1, "PETG-grau", 1),
-    "handle": (1, "PETG-grau", 1),
-    "knob": (1, "PETG-grau", 1),
+    "body": (1, "PETG-white", 1),
+    "back": (1, "PETG-white", 1),
+    "grille": (1, "PETG-grey", 1),
+    "cover": (1, "PETG-grey", 1),
+    "handle": (1, "PETG-grey", 1),
+    "knob": (1, "PETG-grey", 1),
 }
 FULL_INFILL = set()
 FULL_INFILL_MATERIALS = {"TPU"}
@@ -34,6 +34,7 @@ ASSEMBLY = {
     "pot": "pot_env(nut = false);",
     "pot_nut": "pot_nut_env();",
     "pwm_board": "pwm_board_env();",
+    "led": "led_env();",
     "chg_module": "chg_module_env();",
     "fan": "fan_env();",
     "battery": "battery_env();",
@@ -53,10 +54,10 @@ PRINTER = dict(machine="Bambu Lab H2S 0.4 nozzle", process="0.20mm Standard @BBL
                bed="Textured PEI Plate", envelope_mm=(340, 320, 340))
 PROCESS = dict(wall_loops=6, top_shell_layers=5, bottom_shell_layers=5, infill=30, pattern="gyroid")   # drop resistant
 # Filament slots of the project 3MF, 1-based in this order; inlay slots name their inlay
-FILAMENTS = [dict(material="PETG-weiss", profile="Bambu PETG Basic @BBL H2S", colour="#FFFFFF"),
-             dict(material="PETG-grau", profile="Bambu PETG Basic @BBL H2S", colour="#8E9294"),
-             dict(material="PETG-grau", profile="Bambu PETG Basic @BBL H2S", inlay="label", colour="#8E9294")]
-PLATES = [("Gehäuse", ["body"]), ("Rückwand", ["back"]), ("Graue Teile", ["grille", "cover", "handle", "knob"])]
+FILAMENTS = [dict(material="PETG-white", profile="Bambu PETG Basic @BBL H2S", colour="#FFFFFF"),
+             dict(material="PETG-grey", profile="Bambu PETG Basic @BBL H2S", colour="#8E9294"),
+             dict(material="PETG-grey", profile="Bambu PETG Basic @BBL H2S", inlay="label", colour="#8E9294")]
+PLATES = [("Housing", ["body"]), ("Back cover", ["back"]), ("Grey parts", ["grille", "cover", "handle", "knob"])]
 PROJECT_3MF = "stl/leo_ac1_all_parts.3mf"
 SLICER_SUMMARY = "docs/slicer-summary.json"
 
@@ -103,7 +104,7 @@ def checks(ctx):
     contacts = {}
     for name, base, shift in (("grille", "body", [0, 0.05, 0]), ("fan", "body", [0, -0.05, 0]),
                               ("back", "body", [0, -0.05, 0]), ("cover", "body", [-0.05, 0, 0]), ("battery", "body", [0, 0, -0.05]),
-                              ("handle", "body", [0, 0, -0.05]), ("pot", "body", [0.05, 0, 0]), ("pot_nut", "body", [-0.05, 0, 0]), ("chg_module", "body", [0.05, 0, -0.05])):
+                              ("handle", "body", [0, 0, -0.05]), ("pot", "body", [0.05, 0, 0]), ("pot_nut", "body", [-0.05, 0, 0]), ("chg_module", "body", [0.05, 0, -0.05]), ("led", "body", [0, -0.05, 0])):
         volume = (ctx.solids[name].translate(shift) ^ ctx.solids[base]).volume()
         assert volume > 0.1, f"{name} does not rest on {base}"
         contacts[f"{name}@{base}"] = round(volume, 3)
@@ -175,42 +176,46 @@ def checks(ctx):
         assert empty < 0.01 and filled > 0.95 and bottom > 0.95, f"Insert pocket {inserts[-1]}"
     ctx.summary.append(f"{len(inserts)} inserts")
 
-    ctx.open_items.append("Akku nachmessen (Etikett: Ø34 × 70 mm, Modell Ø35 × 72 mm) und Kabelabgang prüfen")
-    ctx.open_items.append("Poti des PWM-Reglers messen (Annahme WH148: D-Achse Ø6/4,5 × 15, Buchse M7, Gehäuse Ø16,5 × 18)")
-    ctx.open_items.append("BMS-Platine am Akku messen (Annahme 16 × 4 mm über die ganze Länge, zur Trennwand)")
-    ctx.open_items.append("PWM-Platine CNY-FA5-PRO messen (Annahme 48 × 34 mm, Bauteile 13 mm hoch, Poti-Achse 8,5 mm über der Platine)")
-    ctx.open_items.append("USB-C-Buchse wählen und messen: Durchbruch im Servicedeckel")
+    ctx.open_items.append("Measure the battery (label Ø34 × 70 mm, model Ø35 × 72 mm) and its cable exit")
+    ctx.open_items.append("Measure the potentiometer of the PWM controller (assumed WH148: D shaft Ø6/4.5 × 15, bushing M7, housing Ø16.5 × 18)")
+    ctx.open_items.append("Measure the BMS board on the battery (assumed 16 × 4 mm over the full length, facing the partition)")
+    ctx.open_items.append("Measure the PWM board CNY-FA5-PRO (assumed 48 × 34 mm, parts 13 mm high, potentiometer axis 8.5 mm above the board)")
+    ctx.open_items.append("Choose and measure the USB-C charging socket: cut-out in the service cover")
     return dict(standard_screws=screws, contact_volumes_mm3=contacts, stops=stops, sampled_paths=paths,
                 insert_probes=inserts, air_duct=duct)
 
 
 VIEWER = dict(
-    title="LEO-AC1", page_title="LEO-AC1 Ventilator", eyebrow="Baugruppe · Einbaulage",
-    dims=[("Breite", "234"), ("Tiefe", "84"), ("Höhe", "197")],
-    groups=[("weiss", "Gedruckt · PETG weiß"), ("grau", "Gedruckt · PETG grau"),
-            ("schrauben", "Schrauben M3"), ("zugekauft", "Zugekauft")],
-    hidden_groups=["zugekauft"],
+    title="LEO-AC1", page_title="LEO-AC1 fan", eyebrow="Assembly · installed position",
+    ui=dict(all="All", printed="Printed only", inside="Internals", cut="Cut open", explode="Explode", section="Section",
+            off="off", flip="Show the other side", section_axis="Section axis", section_pos="Section position",
+            hint="Drag = rotate · Wheel = zoom · Shift+drag = pan", of="of", parts="parts", triangles="triangles", locale="en-GB"),
+    dims=[("Width", "234"), ("Depth", "84"), ("Height", "197")],
+    groups=[("white", "Printed · PETG white"), ("grey", "Printed · PETG grey"),
+            ("screws", "Screws M3"), ("bought", "Bought parts")],
+    hidden_groups=["bought"],
     outer=["body", "back", "cover", "grille", "handle", "screws_grille", "screws_back", "screws_cover", "screws_handle"],
     cut=["back", "cover", "screws_back", "screws_cover"],
     # id, label, group, colour, quantity, explode direction (mm per slider mm)
-    parts=[("body", "Gehäuse", "weiss", "#f2f2ee", "1x", [0, 0, 0]),
-           ("back", "Rückwand", "weiss", "#e6e6e1", "1x", [0, 1.5, 0]),
-           ("grille", "Lüftergitter", "grau", "#8f9396", "1x", [0, -1, 0]),
-           ("cover", "Servicedeckel", "grau", "#8f9396", "1x", [1, 0, 0]),
-           ("handle", "Griff", "grau", "#8f9396", "1x", [0, 0, 1.2]),
-           ("knob", "Drehknopf", "grau", "#8f9396", "1x", [2, 0, 0]),
-           ("fan_visual", "Lüfter Noctua NF-F12 iPPC-2000", "zugekauft", "#303236", "1x", [0, 0.8, 0]),
-           ("battery", "Akku LiFePO4 3,2 V", "zugekauft", "#3f7fbf", "1x", [0, 0.5, 0]),
-           ("pot", "Poti PWM-Regler (Annahme)", "zugekauft", "#3a3d41", "1x", [-0.5, 0, 0]),
-           ("chg_module", "Lade-/Boostmodul mit 2 Kühlkörpern", "zugekauft", "#c9c9c9", "1x", [0, 0.8, 0]),
-           ("pwm_board", "PWM-Platine CNY-FA5-PRO (Annahme 48 × 34)", "zugekauft", "#2e6b3f", "1x", [-0.5, 0, 0]),
+    parts=[("body", "Housing", "white", "#f2f2ee", "1x", [0, 0, 0]),
+           ("back", "Back cover", "white", "#e6e6e1", "1x", [0, 1.5, 0]),
+           ("grille", "Fan grille", "grey", "#8f9396", "1x", [0, -1, 0]),
+           ("cover", "Service cover", "grey", "#8f9396", "1x", [1, 0, 0]),
+           ("handle", "Handle", "grey", "#8f9396", "1x", [0, 0, 1.2]),
+           ("knob", "Speed knob", "grey", "#8f9396", "1x", [2, 0, 0]),
+           ("fan_visual", "Fan Noctua NF-F12 iPPC-2000", "bought", "#303236", "1x", [0, 0.8, 0]),
+           ("battery", "Battery LiFePO4 3.2 V 6000 mAh", "bought", "#3f7fbf", "1x", [0, 0.5, 0]),
+           ("pot", "Potentiometer of the PWM controller (assumed)", "bought", "#3a3d41", "1x", [-0.5, 0, 0]),
+           ("chg_module", "Charge/boost module with 2 heatsinks", "bought", "#c9c9c9", "1x", [0, 0.8, 0]),
+           ("led", "LED 3 mm breathing, behind the O", "bought", "#9fd3ff", "1x", [0, 1, 0]),
+           ("pwm_board", "PWM board CNY-FA5-PRO (assumed 48 × 34)", "bought", "#2e6b3f", "1x", [-0.5, 0, 0]),
            # screws leave their part: same direction, further out
-           ("screws_grille", "Gitter · M3 × 12 Linsenkopf", "schrauben", "#26282b", "4x", [0, -1.6, 0]),
-           ("screws_fan", "Lüfter · M3 × 30 Linsenkopf", "schrauben", "#26282b", "4x", [0, 1.4, 0]),
-           ("screws_back", "Rückwand · M3 × 8 Linsenkopf", "schrauben", "#26282b", "6x", [0, 2.2, 0]),
-           ("screws_cover", "Servicedeckel · M3 × 16 Linsenkopf, von außen", "schrauben", "#26282b", "2x", [1.6, 0, 0]),
-           ("screws_handle", "Griff · M3 × 8 Linsenkopf", "schrauben", "#26282b", "4x", [0, 0, -0.5])],
-    colour={"body": [("label", "Gehäuse · Logo", "#8f9396")]},
+           ("screws_grille", "Grille · M3 × 12 button head", "screws", "#26282b", "4x", [0, -1.6, 0]),
+           ("screws_fan", "Fan · M3 × 30 button head", "screws", "#26282b", "4x", [0, 1.4, 0]),
+           ("screws_back", "Back cover · M3 × 8 button head", "screws", "#26282b", "6x", [0, 2.2, 0]),
+           ("screws_cover", "Service cover · M3 × 16 button head, from outside", "screws", "#26282b", "2x", [1.6, 0, 0]),
+           ("screws_handle", "Handle · M3 × 8 button head", "screws", "#26282b", "4x", [0, 0, -0.5])],
+    colour={"body": [("label", "Housing · logo", "#8f9396")]},
     bodies={"body_base": "body_install_pose() inlay_base() { body_print_pose() body(); body_label_print_2d(); }",
             "body_label": "body_install_pose() inlay_piece() { body_print_pose() body(); body_label_print_2d(); }",
             # Noctua CAD (vendor/, not in the repo): outlet face with stator vanes and hub label at CAD y = 0.3, towards the front
@@ -237,6 +242,9 @@ VIEWS = {"01_assembly": ("assembly();", "-160,-330,230,112,40,70"),
          "06_knob": ("intersection() { assembly(); translate([165, 0, 20]) cube([100, 80, 140]); }",
                      "420,-120,200,230,40,90"),
          # charge/boost module on the partition in the air stream, from the back with the back cover removed
-         "08_charge_module": ("intersection() { union() { color(\"#f2f2ee\") body(); color(\"#c9c9c9\") chg_module_env(); color(\"#303236\") fan_visual(); } translate([95, 22, 80]) cube([60, 53, 50]); }", "20,260,220,140,50,104"),
+         "08_charge_module": ("intersection() { union() { color(\"#f2f2ee\") body(); color(\"#c9c9c9\") chg_module_env(); } translate([118, 14, 68]) cube([38, 52, 54]); }", "40,230,190,148,43,95"),
+         # LED pocket behind the O, cut through the LED axis and seen from behind: 0.8 mm white skin in front of the LED
+         "09_led": ("intersection() { union() { color(\"#f2f2ee\") body(); color(\"#9fd3ff\") led_env(); } translate([led_xz[0] - 9, -1, led_xz[1] - 8]) cube([18, 10, 8]); }",
+                    "232,40,178,207,3,131"),
          # underside with the M5 mount insert
          "07_underside": ("body();", "40,-160,-260,112,40,40")}

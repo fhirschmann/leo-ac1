@@ -4,14 +4,14 @@
     {
       "part": "body",
       "quantity": 1,
-      "material": "PETG-weiss",
+      "material": "PETG-white",
       "passed": true,
-      "source_sha256": "8e2971bc164c1cbee677016a00d2e114f1fd2ae66d42e591b9ff0298ab00a3ca",
+      "source_sha256": "d171e9fb42a197029915fdbe490f41c7396d92b6f58423f8d6d57e7e4470b977",
       "exit_code": 0,
       "result_code": 0,
       "warnings": "",
-      "hours": 8.441,
-      "grams": 360.285,
+      "hours": 8.74,
+      "grams": 365.973,
       "wall_loops": 6,
       "infill_percent": 30.0,
       "layer_height": 0.20000000298023224,
@@ -27,14 +27,14 @@
     {
       "part": "back",
       "quantity": 1,
-      "material": "PETG-weiss",
+      "material": "PETG-white",
       "passed": true,
-      "source_sha256": "6d7b138cf80b31c06fa230c162c574c174a21e046bdf8c5b24bf33043f2e6a92",
+      "source_sha256": "ec7c2cb859b47a464c179b68187a29cf50258d0216ecd0e1604f86dad94215ad",
       "exit_code": 0,
       "result_code": 0,
       "warnings": "",
-      "hours": 5.173,
-      "grams": 156.606,
+      "hours": 5.209,
+      "grams": 160.47,
       "wall_loops": 6,
       "infill_percent": 30.0,
       "layer_height": 0.20000000298023224,
@@ -50,7 +50,7 @@
     {
       "part": "grille",
       "quantity": 1,
-      "material": "PETG-grau",
+      "material": "PETG-grey",
       "passed": true,
       "source_sha256": "435ca7aa7e471ef69121cddc2c22cfab291d0a28f057fbce71a8ad21cf23fa99",
       "exit_code": 0,
@@ -73,14 +73,14 @@
     {
       "part": "cover",
       "quantity": 1,
-      "material": "PETG-grau",
+      "material": "PETG-grey",
       "passed": true,
-      "source_sha256": "7ad067bf9cdf51a4e7dfd8b3d41eefecee7c24b190e77617445615d40e508355",
+      "source_sha256": "e41c93e0685a0eb030f21dc23137fc2f614beb2bfdcd567d74a3bab023ddd13d",
       "exit_code": 0,
       "result_code": 0,
       "warnings": "",
       "hours": 0.553,
-      "grams": 17.921,
+      "grams": 17.922,
       "wall_loops": 6,
       "infill_percent": 30.0,
       "layer_height": 0.20000000298023224,
@@ -96,7 +96,7 @@
     {
       "part": "handle",
       "quantity": 1,
-      "material": "PETG-grau",
+      "material": "PETG-grey",
       "passed": true,
       "source_sha256": "b1e3a6c6e36298759b6cde673d8b9c311122247a79fa050c8c6bc85f47888135",
       "exit_code": 0,
@@ -119,7 +119,7 @@
     {
       "part": "knob",
       "quantity": 1,
-      "material": "PETG-grau",
+      "material": "PETG-grey",
       "passed": true,
       "source_sha256": "7d5f636fa55ba30d48116c713007d5030305cd6c29f6d14ead563673ff0b5461",
       "exit_code": 0,
@@ -141,8 +141,8 @@
     }
   ],
   "total_parts": 6,
-  "total_grams_individual_plates": 644.3,
-  "total_hours_individual_plates": 17.7,
+  "total_grams_individual_plates": 653.8,
+  "total_hours_individual_plates": 18.1,
   "production_gcode": false,
   "project_3mf": {
     "file": "stl/leo_ac1_all_parts.3mf",
@@ -151,7 +151,7 @@
     "layout": [
       {
         "plate": 1,
-        "name": "Gehäuse",
+        "name": "Housing",
         "parts": [
           "body"
         ],
@@ -166,7 +166,7 @@
       },
       {
         "plate": 2,
-        "name": "Rückwand",
+        "name": "Back cover",
         "parts": [
           "back"
         ],
@@ -177,7 +177,7 @@
       },
       {
         "plate": 3,
-        "name": "Graue Teile",
+        "name": "Grey parts",
         "parts": [
           "cover",
           "grille",
@@ -196,11 +196,11 @@
       ]
     },
     "multicolour_slices": {
-      "Gehäuse": {
+      "Housing": {
         "plate": 1,
-        "hours": 8.62,
+        "hours": 8.92,
         "grams_by_filament": {
-          "1": 359.68,
+          "1": 365.37,
           "3": 0.84
         },
         "warnings": ""
@@ -208,6 +208,6 @@
     },
     "pause_slices": {},
     "own_infill_parts": 0,
-    "sha256": "f8a206fc43a6a7ad4240d8227db9c6a53b47d581a53236777ae60e594f8e87a0"
+    "sha256": "fb205257399d18d5768f538910d21c999040fa1068c5898ce8845d42a1a14904"
   }
 }

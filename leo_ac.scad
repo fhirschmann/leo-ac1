@@ -80,7 +80,9 @@ cradle_z = [14, 28, 56];  // lower faces of the rings, clear of the corner bosse
 cradle_t = 4;
 saddle_gap = 0.3;    // rib end to saddle along y
 shelf_gap = 3;       // battery top to electronics shelf (cable, protection board)
-shelf_t = 3;
+shelf_t = 4;         // stops the battery when the unit falls on its top
+shelf_fillet = 3;    // 45 degree fillets along its joints with partition and right wall, above and below
+shelf_hold = [5, 3, 0.2];  // hold-down plate on the back cover over the free shelf edge: overlap (y), thickness, gap
 shelf_d = 60;        // shelf depth from the front plate, carries the PWM board
 
 /* [Service cover, right side] */
@@ -120,12 +122,12 @@ knob_c = 1.2;
 chg_pcb = [35.4, 11, 1.6];     // 2-in-1 LiFePO4 charge + 12 V boost module: length (y), width (z), thickness
 chg_comp_h = 2;                // parts on the top side
 chg_sink = [8.8, 8.8, 5, 6];   // two stick-on aluminium heatsinks: y, z, height, gap between them
-chg_z = 104;                   // centre height on the partition, just outside the fan blades where the intake air converges
+chg_z = 95;                    // centre height on the partition, board upright (long axis along z), at the fan rim
 chg_gap = 2;                   // air gap between board and partition; parts stay clear of the fan frame
-chg_y0 = 31;                   // front end of the board: heatsinks end right behind the fan frame
+chg_y0 = 37.5;                 // front edge of the upright board, heatsinks right behind the fan frame
 // solder pads (IN, B, O) and parts reach the long edges: no grooves. The board back sits on two pads with heat-resistant
 // double-sided tape, its lower edge on a ledge that stays behind the part side.
-chg_pads = [[5.5, 4], [21.5, 6]];  // pads behind the board, clear of the through-hole solder pads: start from the front end, length
+chg_pads = [[5.5, 4], [21.5, 6]];  // pads behind the board, clear of the through-hole solder pads: start from the lower end, length
 chg_ledge = [2, 0.3];          // ledge under the lower board edge: height, set back from the part side
 
 /* [Handle, top] */
@@ -186,6 +188,9 @@ groove_w = 1.2;
 groove_depth = 0.8;        // open to the bed in print
 groove_z0 = 19;            // axis of the lowest groove
 groove_x = [160, 219];
+led_d = 3;                 // 3 mm breathing LED glued in from inside; shines through the white PETG in the counter of the O
+led_skin = 0.8;            // white PETG left in front of the LED (four layers)
+led_boss = [7, 5.8];       // boss around the LED pocket: diameter, height from the front face; the LED flange rests on it
 
 // ---------- derived values ----------
 pot_yz = [cover_y, wall + bat_l + shelf_gap + shelf_t + pwm_standoff + pwm_pcb[2] + pot_axis_h];   // knob axis above the battery, centred in the depth
@@ -198,6 +203,7 @@ logo_w = text_w(brand_sub, sub_size, sub_stroke, sub_gap);
 big_gap = (logo_w - text_w(brand, big_size, big_stroke, 0)) / (len(brand) - 1);
 logo_x0 = logo_cx - logo_w / 2;
 logo_bottom = logo_top - big_size[1] - 2 * (line_gap + sub_size[1]);
+led_xz = [logo_x0 + text_x(brand, big_size, big_stroke, big_gap, 2) + big_size[0] / 2, logo_top - big_size[1] / 2];   // centre of the O
 fan_y = front_t + fan_standoff;                       // front face of the fan frame
 bat_cy = front_t + bat_front_gap + bat_d / 2;         // battery axis y
 shelf_z = wall + bat_l + shelf_gap;
@@ -253,9 +259,11 @@ assert(fan_cx - open_r - shroud_t > wall + inner_c && fan_cx + open_r + shroud_t
        && fan_cz - open_r - shroud_t > wall + inner_c && fan_cz + open_r + shroud_t < body_h - wall - inner_c,
        "Air duct hits the walls or the partition");
 assert(shelf_z + shelf_t < body_h - wall, "Shelf above the top wall");
+assert(front_t + shelf_d - shelf_hold[0] > pot_yz[0] + pwm_pcb[1] / 2 + 0.5, "Shelf hold-down plate reaches the PWM board");
 assert(part_x - chg_gap - chg_pcb[2] - chg_comp_h > fan_cx + fan_size / 2 + 0.3
-       && chg_y0 + (chg_pcb[0] - 2 * chg_sink[0] - chg_sink[3]) / 2 > fan_y + fan_t + 0.5
-       && chg_y0 + chg_pcb[0] < body_d - back_t - 1, "Charge module reaches the fan frame or beyond the back");
+       && chg_y0 + (chg_pcb[1] - chg_sink[1]) / 2 > fan_y + fan_t + fan_pad + 0.3
+       && chg_y0 + chg_pcb[1] < body_d - back_t - 1 && chg_z + chg_pcb[0] / 2 < 118,
+       "Charge module reaches the fan frame, the back or the cable notch");
 assert(bat_cx - bat_d / 2 - bat_bms[1] - bat_clear > bay_x0 + 1, "BMS board of the battery hits the partition");
 assert(mount_top < fan_cz - fan_size / 2 - 2 && (mount_boss_d - mount_insert[0]) / 2 >= mount_insert[2] + 1.5 && mount_floor >= 2,
        "Mount boss hits the fan, is thinner than the datasheet wall + 1.5 mm, or its floor is too thin");
@@ -279,6 +287,7 @@ assert(logo_x0 > fan_cx + grille_r + 3 && logo_x0 + logo_w < body_w - corner_r -
        "Logo outside the free front area");
 assert(big_gap >= 2, "Big letters too wide for the second line");
 assert(sub_stroke >= 1.2 && stencil_gap >= 1.2, "Logo lines or gaps below 1.2 mm");
+assert(brand[2] == "O" && led_skin > inlay_t && led_d / 2 + 1 < (big_size[0] - 2 * big_stroke) / 2, "LED pocket does not fit into the counter of the O");
 assert(front_t - groove_depth >= 1.2 && groove_pitch - groove_w >= 1.1, "Grooves too deep or webs too thin");
 assert(groove_z0 + (groove_count - 1) * groove_pitch + groove_w < logo_bottom - 3, "Grooves run into the logo");
 // thread engagement at least 1 x d in the brass inserts (the fan screws sit on 1 mm silicone pads)
@@ -349,6 +358,7 @@ module body() difference() {
                 along_y(front_t + inner_c, front_t + inner_c + eps) body_inner();
             }
         }
+        cyl_y(led_xz, front_t - eps, led_boss[1], led_boss[0] / 2);   // boss for the LED behind the O
         // round air duct from the front plate to the fan frame face
         difference() {
             cyl_y([fan_cx, fan_cz], front_t - eps, fan_y - shroud_gap, open_r + shroud_t);
@@ -389,22 +399,29 @@ module body() difference() {
         // two ribs on the shelf carry the PWM board; they start at the front plate (printable)
         for (x = [body_w - wall - pwm_wall_gap - pwm_pcb[0] + 1, body_w - wall - pwm_wall_gap - 5])
             translate([x, front_t - eps, shelf_z + shelf_t - eps]) cube([3, pot_yz[0] + pwm_pcb[1] / 2 - front_t, pwm_standoff + eps]);
-        // charge/boost module: board back on two pads (tape), lower edge on a ledge behind the part side;
-        // 45 degree cones towards the front (printable)
-        let (xb = part_x - chg_gap - chg_pcb[2], zb = chg_z - chg_pcb[1] / 2) {
+        // charge/boost module standing upright: board back on two pads (tape), lower short edge on a ledge behind the
+        // part side; 45 degree cones towards the front (printable)
+        let (xb = part_x - chg_gap - chg_pcb[2], zb = chg_z - chg_pcb[0] / 2) {
             for (pd = chg_pads) hull() {
-                translate([xb + chg_pcb[2], chg_y0 + pd[0], zb + 1]) cube([chg_gap + eps, pd[1], chg_pcb[1] - 2]);
-                translate([part_x, chg_y0 + pd[0] - chg_gap, zb + 1]) cube([1, eps, chg_pcb[1] - 2]);
+                translate([xb + chg_pcb[2], chg_y0 + 1, zb + pd[0]]) cube([chg_gap + eps, chg_pcb[1] - 2, pd[1]]);
+                translate([part_x, chg_y0 + 1 - chg_gap, zb + pd[0]]) cube([1, eps, pd[1]]);
             }
             let (x0 = xb + chg_ledge[1], reach = part_x - x0) hull() {
-                translate([x0, chg_y0 - 1, zb - chg_ledge[0]]) cube([reach + eps, chg_pcb[0] + 1, chg_ledge[0]]);
+                translate([x0, chg_y0 - 1, zb - chg_ledge[0]]) cube([reach + eps, chg_pcb[1] + 2, chg_ledge[0]]);
                 translate([part_x, chg_y0 - 1 - reach, zb - chg_ledge[0]]) cube([1, eps, chg_ledge[0]]);
             }
         }
         // electronics shelf, also stops the battery upwards
         translate([bay_x0 - eps, front_t - eps, shelf_z]) cube([bay_x1 - bay_x0 + 2 * eps, shelf_d + eps, shelf_t]);
+        along_y(front_t - eps, front_t + shelf_d) {
+            for (zj = [shelf_z + eps, shelf_z + shelf_t - eps], s = [-1, 1]) let (dz = zj > shelf_z + 1 ? shelf_fillet : -shelf_fillet) {
+                polygon([[bay_x0 - eps, zj], [bay_x0 + shelf_fillet, zj], [bay_x0 - eps, zj + dz]]);
+                polygon([[bay_x1 + eps, zj], [bay_x1 - shelf_fillet, zj], [bay_x1 + eps, zj + dz]]);
+            }
+        }
     }
     cyl_y([fan_cx, fan_cz], -1, front_t + 1, open_r);
+    cyl_y(led_xz, led_skin, led_boss[1] + 1, (led_d + 0.2) / 2);   // LED pocket, blind towards the front
     for (i = [0:groove_count - 1]) let (z = groove_z0 + i * groove_pitch)
         along_y(-1, groove_depth) slot2d([groove_x[0] + groove_w, z], [groove_x[1] - groove_w, z], groove_w);
     for (p = grille_screws()) {
@@ -528,6 +545,9 @@ module back() difference() {
             body_inner(lip_cl + lip_t);
             for (b = back_bosses()) offset(r = 0.8) boss_footprint(b);
         }
+        // hold-down plate over the free back edge of the battery shelf
+        translate([bay_x0 + shelf_fillet + 0.5, front_t + shelf_d - shelf_hold[0], shelf_z + shelf_t + shelf_hold[2]])
+            cube([bay_x1 - bay_x0 - 2 * shelf_fillet - 1, y1 - (front_t + shelf_d - shelf_hold[0]) + eps, shelf_hold[1]]);
         // saddles closing the cradle rings around the battery, across the whole bay, with the BMS cut-out
         for (z = cradle_z) difference() {
             translate([bay_x0 + 0.5, bat_cy + saddle_gap, z]) cube([bay_x1 - bay_x0 - 1, y1 - bat_cy - saddle_gap + eps, cradle_t]);
@@ -596,12 +616,18 @@ module pot_nut_env() translate([body_w, pot_yz[0], pot_yz[1]]) orient([1, 0, 0])
     cylinder(d = pot_nut[0], h = pot_nut[1]);
     translate([0, 0, -1]) cylinder(d = pot_bush[0] + 0.1, h = pot_nut[1] + 2);
 }
-module chg_module_env() {            // board parallel to the partition, parts and heatsinks towards the fan section
+module led_env() {                   // 3 mm LED: body in the pocket, flange on the boss
+    cyl_y(led_xz, led_skin + 0.3, led_boss[1], led_d / 2);
+    cyl_y(led_xz, led_boss[1], led_boss[1] + 1, 1.9);
+}
+module chg_module_env() {            // board upright on the partition, parts and heatsinks towards the fan section
     x0 = part_x - chg_gap - chg_pcb[2];
-    translate([x0, chg_y0, chg_z - chg_pcb[1] / 2]) cube([chg_pcb[2], chg_pcb[0], chg_pcb[1]]);
-    translate([x0 - chg_comp_h, chg_y0, chg_z - chg_pcb[1] / 2]) cube([chg_comp_h + eps, chg_pcb[0], chg_pcb[1]]);   // parts up to the edges
-    for (i = [0, 1]) translate([x0 - chg_comp_h - chg_sink[2], chg_y0 + (chg_pcb[0] - 2 * chg_sink[0] - chg_sink[3]) / 2 + i * (chg_sink[0] + chg_sink[3]), chg_z - chg_sink[1] / 2])
-        cube([chg_sink[2] + eps, chg_sink[0], chg_sink[1]]);
+    z0 = chg_z - chg_pcb[0] / 2;
+    translate([x0, chg_y0, z0]) cube([chg_pcb[2], chg_pcb[1], chg_pcb[0]]);
+    translate([x0 - chg_comp_h, chg_y0, z0]) cube([chg_comp_h + eps, chg_pcb[1], chg_pcb[0]]);   // parts up to the edges
+    for (i = [0, 1]) translate([x0 - chg_comp_h - chg_sink[2], chg_y0 + (chg_pcb[1] - chg_sink[1]) / 2,
+                                z0 + (chg_pcb[0] - 2 * chg_sink[0] - chg_sink[3]) / 2 + i * (chg_sink[0] + chg_sink[3])])
+        cube([chg_sink[2] + eps, chg_sink[1], chg_sink[0]]);
 }
 module pwm_board_env() {             // board on the ribs, parts behind the potentiometer
     x1 = body_w - wall - pwm_wall_gap;
