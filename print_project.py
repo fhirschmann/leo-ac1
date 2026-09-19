@@ -38,6 +38,7 @@ ASSEMBLY = {
     "pwm_board": "pwm_board_env();",
     "led": "led_env();",
     "chg_module": "chg_module_env();",
+    "usb_trigger": "usbc_env();",
     "fan": "fan_env();",
     "battery": "battery_env();",
     "screws_grille": "screws_grille();",
@@ -110,7 +111,7 @@ def checks(ctx):
     contacts = {}
     for name, base, shift in (("grille", "body", [0, 0.05, 0]), ("fan", "body", [0, -0.05, 0]),
                               ("back", "body", [0, -0.05, 0]), ("cover", "body", [-0.05, 0, 0]), ("battery", "body", [0, 0, -0.05]),
-                              ("handle", "body", [0, 0, -0.05]), ("pot", "body", [0.05, 0, 0]), ("pot_nut", "body", [-0.05, 0, 0]), ("chg_module", "body", [0.05, 0, -0.05]), ("led", "body", [0, -0.05, 0]), ("feet", "body", [0, 0, 0.05])):
+                              ("handle", "body", [0, 0, -0.05]), ("pot", "body", [0.05, 0, 0]), ("pot_nut", "body", [-0.05, 0, 0]), ("chg_module", "body", [0.05, 0, -0.05]), ("led", "body", [0, -0.05, 0]), ("feet", "body", [0, 0, 0.05]), ("usb_trigger", "body", [-0.05, 0, 0]), ("usb_trigger", "cover", [0.05, 0, 0])):
         volume = (ctx.solids[name].translate(shift) ^ ctx.solids[base]).volume()
         assert volume > 0.1, f"{name} does not rest on {base}"
         contacts[f"{name}@{base}"] = round(volume, 3)
@@ -150,7 +151,10 @@ def checks(ctx):
             ("knob_off", ["knob"], others("knob"), [1, 0, 0], 25, 0.5),
             ("cover_off", ["cover"], ["body", "pot", "pot_nut", "pwm_board"], [1, 0, 0], 30, 0.5),
             ("handle_up", ["handle"], ["body"], [0, 0, 1], 15, 0.5),
-            ("feet_down", ["feet"], ["body"], [0, 0, -1], 6, 0.5)):
+            ("feet_down", ["feet"], ["body"], [0, 0, -1], 6, 0.5),
+            # the USB-C module comes off with the cover, then out of its sleeve
+            ("usb_trigger_off", ["usb_trigger", "cover"], ["body", "pot", "pot_nut", "pwm_board"], [1, 0, 0], 30, 0.5),
+            ("usb_trigger_from_cover", ["usb_trigger"], ["cover"], [-1, 0, 0], 16, 0.5)):
         count, first, maximum = ctx.sweep(moving, fixed, direction, length, step)
         paths.append(dict(name=name, collisions=count, first_mm=first, max_volume_mm3=round(maximum, 4)))
         assert count == 0, f"Path {name} obstructed at {first} mm"
@@ -187,7 +191,7 @@ def checks(ctx):
     ctx.open_items.append("Measure the potentiometer of the PWM controller (assumed WH148: D shaft Ø6/4.5 × 15, bushing M7, housing Ø16.5 × 18)")
     ctx.open_items.append("Measure the BMS board on the battery (assumed 16 × 4 mm over the full length, facing the partition)")
     ctx.open_items.append("Measure the PWM board CNY-FA5-PRO (assumed 48 × 34 mm, parts 13 mm high, potentiometer axis 8.5 mm above the board)")
-    ctx.open_items.append("Choose and measure the USB-C charging socket: cut-out in the service cover")
+    ctx.open_items.append("Measure the USB-C PD trigger (listing 13 x 10 x 4 mm, receptacle at least 2.4 mm beyond the board) and check 5 V at + / - before connecting")
     return dict(standard_screws=screws, contact_volumes_mm3=contacts, stops=stops, sampled_paths=paths,
                 insert_probes=inserts, air_duct=duct)
 
@@ -213,6 +217,7 @@ VIEWER = dict(
            ("pot", "Potentiometer of the PWM controller (assumed)", "bought", "#3a3d41", "1x", [-0.5, 0, 0]),
            ("chg_module", "Charge/boost module with 2 heatsinks", "bought", "#c9c9c9", "1x", [0, 0.8, 0]),
            ("led", "Charge indicator LED 3 mm, behind the O", "bought", "#9fd3ff", "1x", [0, 1, 0]),
+           ("usb_trigger", "USB-C PD trigger, 5 V (Type A)", "bought", "#4b2a7a", "1x", [1.3, 0, 0]),
            ("pwm_board", "PWM board CNY-FA5-PRO (assumed 48 × 34)", "bought", "#2e6b3f", "1x", [-0.5, 0, 0]),
            # screws leave their part: same direction, further out
            ("screws_grille", "Grille · M3 × 12 button head", "screws", "#26282b", "4x", [0, -1.6, 0]),
@@ -266,5 +271,7 @@ VIEWS = {"01_assembly": ("assembly();", "-160,-330,230,112,40,70"),
          # left TPU foot cut at its screw axes, seen from the right: pocket, insert boss, screw, recessed head
          "13_foot_mount": ('intersection() { union() { color("#f2f2ee") body(); color("#222326") place_feet(); color("#26282b") screws_feet(true); } translate([-1, 0, -10]) cube([foot_inset + 1, body_d, 30]); }',
                            "130,40,-35,17,40,2"),
+         # USB-C charging socket in the service cover, from the right and behind
+         "14_usb_c": ('intersection() { assembly(); translate([190, 15, 45]) cube([60, 50, 50]); }', "330,150,120,230,40,69"),
          # underside with the M5 mount insert
          "07_underside": ('color("#f2f2ee") body(); color("#222326") place_feet(); color("#26282b") screws_feet(true);', "40,-160,-260,112,40,40")}

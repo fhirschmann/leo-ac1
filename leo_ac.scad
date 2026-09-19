@@ -147,6 +147,15 @@ handle_rib = [3.2, 12];      // three ribs per foot from the front plate to the 
 handle_key = [1.2, 0.2];     // key under each foot in a recess of the top wall, takes shear off the screws: height, clearance
 handle_ins_depth = 8.5;      // insert pockets in the feet, from the key face (Ruthex: >= L + 1)
 
+/* [USB-C charging socket: PD trigger module (Type A, pads 1-4 open = 5 V) in the service cover] */
+usbc = [13, 10, 4];          // module incl. receptacle: length (x), width (y), height (z) — listing, to be measured
+usbc_shell = [8.94, 3.26];   // USB-C receptacle shell: width, height (USB-C spec), protrudes beyond the board by >= cover_t
+usbc_z = 69;                 // axis height: above the battery saddle, below the potentiometer nut
+usbc_cl = 0.2;               // clearance in sleeve, pocket and plate opening
+usbc_sleeve_t = 1.2;         // sleeve inside the cover around the module
+usbc_wire = [7, 5];          // wire slot through the right wall behind the module (y, z); the module end rests on the rim
+usbc_boss = [16, 13, 4];     // reinforcement inside the right wall around the wire slot: y, z, thickness
+
 /* [Feet: TPU strips, each screwed with two M3 x 8 from below into Ruthex inserts] */
 foot_w = 16;          // width (x)
 foot_len = 62;        // length (y), ends before the back lip
@@ -259,6 +268,7 @@ function handle_pad_u() = [handle_screw_dx[0] - handle_pad[1] - handle_rib[0], h
 function handle_key_u() = [handle_open[0] / 2 + 3, handle_len / 2 - 3];   // key span from the handle centre
 handle_key_w = handle_d - 2 * handle_c - 1;           // key width along y, inside the flat foot face
 handle_screw_skin = wall + handle_pad[0] - handle_key[0];   // head face to insert mouth
+usbc_x0 = body_w + cover_out - usbc[0];                 // inner end of the module, in a pocket of the right wall
 function foot_x() = [foot_inset, body_w - foot_inset];
 function foot_screws() = [for (fx = foot_x(), dy = [-1, 1]) [fx, foot_y0 + foot_len / 2 + dy * foot_screw_dy]];
 foot_doubler_hw = foot_w / 2 + foot_cl + 1.2;        // half width of the floor doubler over a foot pocket
@@ -304,6 +314,13 @@ assert(mount_top < fan_cz - fan_size / 2 - 2 && (mount_boss_d - mount_insert[0])
        "Mount boss hits the fan, is thinner than the datasheet wall + 1.5 mm, or its floor is too thin");
 assert(mount_xy[0] + mount_doubler[0] / 2 >= part_x - 1, "Mount doubler does not reach the partition");
 assert(back_t - head_pocket[1] >= 2, "Back cover too thin under the recessed screw heads");
+assert(usbc_x0 >= body_w - wall + 1.2 && usbc[0] - (cover_out - cover_t) >= 1.5 && (usbc[1] - usbc_wire[0]) / 2 >= 1.2,
+       "USB-C module: wall under its pocket too thin, pocket too shallow, or no rim for the module end");
+assert(usbc_z - usbc_boss[1] / 2 > cradle_z[len(cradle_z) - 1] + cradle_t + 1 && usbc_z + usbc_boss[1] / 2 < pot_yz[1] - pot_body[0] / 2 - 1
+       && usbc_z + usbc[2] / 2 + usbc_cl + usbc_sleeve_t < pot_yz[1] - pot_nut[0] / 2 - 1
+       && usbc_z - usbc[2] / 2 - usbc_cl - usbc_sleeve_t > cover_z - cover_screw_dz + cover_boss_d / 2 + 1
+       && usbc_z + usbc_shell[1] / 2 + 3.5 < pot_yz[1] - knob_d / 2,
+       "USB-C module hits the battery saddle, the potentiometer, a cover boss, or the plug hits the knob");
 assert(foot_key <= wall - 2 && foot_screw_skin >= 2.5 && (foot_boss_d - insert_hole_d) / 2 >= insert_w_min + 0.5,
        "Feet: pocket too deep, too little TPU under the screw heads, or boss wall below the Ruthex minimum");
 assert(body_w - foot_inset - max(foot_doubler_hw, foot_boss_d / 2) > bat_cx + bat_d / 2 + 1 && foot_inset - foot_w / 2 > corner_r
@@ -478,6 +495,11 @@ module body() difference() {
             translate([p[0], p[1], wall - eps]) cylinder(d = foot_boss_d, h = foot_boss_top - wall + eps);
             translate([p[0] - foot_boss_d / 2, p[1] - foot_boss_d / 2 - (foot_boss_top - zf), zf - 1]) cube([foot_boss_d, eps, 1]);
         }
+        // reinforcement inside the right wall behind the USB-C module, 45 degree cone towards the front (printable)
+        hull() {
+            translate([body_w - wall - usbc_boss[2], cover_y - usbc_boss[0] / 2, usbc_z - usbc_boss[1] / 2]) cube([usbc_boss[2] + eps, usbc_boss[0], usbc_boss[1]]);
+            translate([body_w - wall - eps, cover_y - usbc_boss[0] / 2 - usbc_boss[2], usbc_z - usbc_boss[1] / 2]) cube([eps, usbc_boss[0], usbc_boss[1]]);
+        }
         // electronics shelf, also stops the battery upwards
         translate([bay_x0 - eps, front_t - eps, shelf_z]) cube([bay_x1 - bay_x0 + 2 * eps, shelf_d + eps, shelf_t]);
         along_y(front_t - eps, front_t + shelf_d) {
@@ -508,6 +530,9 @@ module body() difference() {
     // battery cable slot through the shelf; the shelf rim still stops the battery upwards
     translate([bat_cx + 10 - cable_slot_w / 2, bat_cy - 6, shelf_z - 1]) cube([cable_slot_w, shelf_d + front_t - bat_cy + 7, shelf_t + 2]);
     along_x(-1, wall + 1) intake_slots_side();
+    // USB-C module: pocket in the outer face of the right wall takes the plug force, wire slot into the bay
+    translate([usbc_x0, cover_y - usbc[1] / 2 - usbc_cl, usbc_z - usbc[2] / 2 - 1.5 - usbc_cl]) cube([body_w + 1 - usbc_x0, usbc[1] + 2 * usbc_cl, usbc[2] + 3 + 2 * usbc_cl]);
+    translate([body_w - wall - usbc_boss[2] - 1, cover_y - usbc_wire[0] / 2, usbc_z - usbc_wire[1] / 2]) cube([wall + usbc_boss[2] + 2, usbc_wire[0], usbc_wire[1]]);
     cyl_x(pot_yz, body_w - wall - 1, body_w + 1, (pot_bush[0] + 0.4) / 2);   // potentiometer bushing, nutted to the wall
     for (p = handle_screws()) translate([p[0], p[1], body_h - wall - handle_pad[0] - 1]) cylinder(d = screw_clear_d, h = wall + handle_pad[0] + 2);
     // recesses for the keys under the handle feet, 45 degree side walls along y
@@ -674,12 +699,19 @@ module cover() difference() {
             along_x(x0 - 1, x1 - cover_t) cover_2d(cover_t);
         }
         for (p = cover_screws()) cyl_x(p, x0, x1 - cover_t + eps, cover_boss_d / 2);
+        // sleeve for the USB-C module, from the plate towards the wall; the board edge rests on the plate (pull-out stop)
+        difference() {
+            translate([x0 + usbc_cl, cover_y - usbc[1] / 2 - usbc_cl - usbc_sleeve_t, usbc_z - usbc[2] / 2 - usbc_cl - usbc_sleeve_t])
+                cube([x1 - cover_t - x0 - usbc_cl + eps, usbc[1] + 2 * (usbc_cl + usbc_sleeve_t), usbc[2] + 2 * (usbc_cl + usbc_sleeve_t)]);
+            translate([x0 - 1, cover_y - usbc[1] / 2 - usbc_cl, usbc_z - usbc[2] / 2 - usbc_cl]) cube([x1 - cover_t - x0 + 1, usbc[1] + 2 * usbc_cl, usbc[2] + 2 * usbc_cl]);
+        }
     }
     for (p = cover_screws()) {   // screws from outside, heads recessed in the outer face
         cyl_x(p, x0 - 1, x1 + 1, screw_clear_d / 2);
         cyl_x(p, x1 - head_pocket[1], x1 + 1, head_pocket[0] / 2);
     }
     cyl_x(pot_yz, x1 - cover_t - 1, x1 + 1, knob_stem_d / 2 + knob_stem_cl);   // knob stem
+    usbc_stadium(x1 - cover_t - 1, x1 + 1, usbc_cl);   // opening for the receptacle, flush with the face
 }
 module cover_print_pose() translate([0, 0, body_w + cover_out]) rotate([0, 90, 0]) children();   // outer face on the bed
 
@@ -715,6 +747,12 @@ module pot_nut_env() translate([body_w, pot_yz[0], pot_yz[1]]) orient([1, 0, 0])
 module led_env() {                   // 3 mm LED: body in the pocket, flange on the boss
     cyl_y(led_xz, led_skin + 0.3, led_boss[1], led_d / 2);
     cyl_y(led_xz, led_boss[1], led_boss[1] + 1, 1.9);
+}
+module usbc_stadium(x0, x1, grow) along_x(x0, x1) translate([cover_y, usbc_z]) hull()
+    for (s = [-1, 1]) translate([s * (usbc_shell[0] - usbc_shell[1]) / 2, 0]) circle(d = usbc_shell[1] + 2 * grow);
+module usbc_env() {                 // PD trigger: board with parts up to the plate, receptacle through the plate
+    translate([usbc_x0, cover_y - usbc[1] / 2, usbc_z - usbc[2] / 2]) cube([body_w + cover_out - cover_t - usbc_x0, usbc[1], usbc[2]]);
+    usbc_stadium(body_w + cover_out - cover_t - eps, body_w + cover_out, 0);
 }
 module chg_module_env() {            // board upright on the partition, parts and heatsinks towards the fan section
     x0 = part_x - chg_gap - chg_pcb[2];
@@ -834,6 +872,7 @@ module assembly(explode = 0) {
     color("#3a3d41") translate([explode, 0, 0]) pot_env();
     color("#2e6b3f") translate([explode, 0, 0]) pwm_board_env();
     color("#c9c9c9") translate([0, explode, 0]) chg_module_env();
+    color("#4b2a7a") translate([explode, 0, 0]) usbc_env();
     color("#303236") translate([0, explode, 0]) fan_visual();
     color("#3f7fbf") translate([0, explode / 2, 0]) battery_env();
 }

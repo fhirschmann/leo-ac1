@@ -6,12 +6,12 @@
       "quantity": 1,
       "material": "PETG-white",
       "passed": true,
-      "source_sha256": "7142b2a4c35bae94e904fed7777dc20d4256f3bd3e6f2e50b7692cca20cd3ef5",
+      "source_sha256": "7ace6e4d779f25e19157a62892ffa6c1459370828fbde884e1ec7326176022a1",
       "exit_code": 0,
       "result_code": 0,
       "warnings": "",
-      "hours": 10.101,
-      "grams": 395.808,
+      "hours": 10.158,
+      "grams": 396.475,
       "wall_loops": 6,
       "infill_percent": 30.0,
       "layer_height": 0.20000000298023224,
@@ -75,12 +75,12 @@
       "quantity": 1,
       "material": "PETG-grey",
       "passed": true,
-      "source_sha256": "e41c93e0685a0eb030f21dc23137fc2f614beb2bfdcd567d74a3bab023ddd13d",
+      "source_sha256": "48926d3207e433a6c839b273279369169cdec7e22a626843dc1134a639503b70",
       "exit_code": 0,
       "result_code": 0,
       "warnings": "",
-      "hours": 0.553,
-      "grams": 17.922,
+      "hours": 0.573,
+      "grams": 18.256,
       "wall_loops": 6,
       "infill_percent": 30.0,
       "layer_height": 0.20000000298023224,
@@ -102,7 +102,7 @@
       "exit_code": 0,
       "result_code": 0,
       "warnings": "",
-      "hours": 1.629,
+      "hours": 1.628,
       "grams": 55.516,
       "wall_loops": 6,
       "infill_percent": 30.0,
@@ -164,8 +164,8 @@
     }
   ],
   "total_parts": 8,
-  "total_grams_individual_plates": 696.3,
-  "total_hours_individual_plates": 20.6,
+  "total_grams_individual_plates": 697.3,
+  "total_hours_individual_plates": 20.7,
   "production_gcode": false,
   "project_3mf": {
     "file": "stl/leo_ac1_all_parts.3mf",
@@ -234,9 +234,9 @@
     "multicolour_slices": {
       "Housing": {
         "plate": 1,
-        "hours": 10.4,
+        "hours": 10.48,
         "grams_by_filament": {
-          "1": 396.06,
+          "1": 396.72,
           "3": 1.73
         },
         "warnings": ""
@@ -244,6 +244,6 @@
     },
     "pause_slices": {},
     "own_infill_parts": 2,
-    "sha256": "d7632f449d2f6934c4f44858b89887073aa324dbba921991d4c43acb1f27950f"
+    "sha256": "f5b2add4cfc6a62dfbd5eb9a5622b49c39909a343f6c94e78c71cf1bca9011c3"
   }
 }
