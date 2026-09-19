@@ -188,7 +188,7 @@ groove_w = 1.2;
 groove_depth = 0.8;        // open to the bed in print
 groove_z0 = 19;            // axis of the lowest groove
 groove_x = [160, 219];
-led_d = 3;                 // 3 mm breathing LED glued in from inside; shines through the white PETG in the counter of the O
+led_d = 3;                 // 3 mm breathing LED as charge indicator, glued in from inside; shines through the white PETG in the counter of the O
 led_skin = 0.8;            // white PETG left in front of the LED (four layers)
 led_boss = [7, 5.8];       // boss around the LED pocket: diameter, height from the front face; the LED flange rests on it
 

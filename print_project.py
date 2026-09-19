@@ -204,7 +204,7 @@ VIEWER = dict(
            ("battery", "Battery LiFePO4 3.2 V 6000 mAh", "bought", "#3f7fbf", "1x", [0, 0.5, 0]),
            ("pot", "Potentiometer of the PWM controller (assumed)", "bought", "#3a3d41", "1x", [-0.5, 0, 0]),
            ("chg_module", "Charge/boost module with 2 heatsinks", "bought", "#c9c9c9", "1x", [0, 0.8, 0]),
-           ("led", "LED 3 mm breathing, behind the O", "bought", "#9fd3ff", "1x", [0, 1, 0]),
+           ("led", "Charge indicator LED 3 mm, behind the O", "bought", "#9fd3ff", "1x", [0, 1, 0]),
            ("pwm_board", "PWM board CNY-FA5-PRO (assumed 48 × 34)", "bought", "#2e6b3f", "1x", [-0.5, 0, 0]),
            # screws leave their part: same direction, further out
            ("screws_grille", "Grille · M3 × 12 button head", "screws", "#26282b", "4x", [0, -1.6, 0]),
