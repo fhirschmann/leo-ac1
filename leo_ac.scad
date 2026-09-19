@@ -92,7 +92,8 @@ cover_w = 46;        // along y, wide enough for solid corners beside the notch
 cover_out = 11;      // protrusion
 cover_t = 2.4;
 cover_r = 4;
-cover_glue = [1, 1.2, 0.2];  // glued in: rim depth into a groove of the wall, rim width (inner part of the cover wall), clearance per side and at the groove floor
+cover_glue = [0.8, 1.2, 0.2];  // glued in: rim depth into the groove, rim width (inner part of the cover wall), clearance per side and at the floor
+cover_notch_c = 3;           // 45 degree chamfer along the notch at the outer face (finger room)
 
 /* [Speed knob, potentiometer of the PWM fan controller] */
 pot_shaft = [6, 4.5, 15]; // D shaft: diameter, across the flat, length from the outer wall face (WH148 type, to be measured)
@@ -108,14 +109,15 @@ pwm_wall_gap = 0.5;       // board edge to the inner wall face
 pot_axis_h = 8.5;         // potentiometer axis above the board top — to be measured
 knob_d = 28;              // dial on the side wall, sits in the half-round notch of the service cover
 knob_gap = 0.5;           // underside to the wall face
-knob_niche = 1;           // radial gap to the notch of the service cover
+knob_niche = 3;           // radial gap to the notch of the service cover: room for fingertips
 knob_skin = 2;            // closed top above the D bore
 knob_cavity_d = 13;       // recess in the underside over nut and bushing
 knob_stem_d = 10;         // clamping sleeve around the D bore, free in a ring gap
 knob_stem_cl = 0.5;       // sleeve end above the bushing end
 knob_bore_cl = 0.02;      // D bore nominally line-to-line: printed holes come out slightly small, the slotted sleeve springs open and clamps
 knob_slit = [1, 6];       // slit through the sleeve from its end, parallel to the flat: width, length (= length of the ring gap)
-knob_flutes = 30;
+knob_flutes = 18;         // grip grooves
+knob_flute = [2, 1.2];    // grip groove width, depth
 knob_c = 1.2;
 
 /* [Charge/boost module in the air stream] */
@@ -338,7 +340,8 @@ assert((back_boss_d - insert_hole_d) / 2 >= 3 && back_boss_len >= insert_depth +
        "Back bosses: wall around the insert, column length, or reaching the back cover slots");
 // hand under the grip: child hand breadth about 55-70 mm, adult 80-90 mm; comfortable finger clearance 30-35 mm
 assert(handle_h - handle_bar >= 30 && handle_open[1] >= 90, "Handle opening too small for a hand");
-assert(cover_w / 2 - cover_notch_r >= 6 && wall - cover_glue[0] - cover_glue[2] >= 1.8 && cover_glue[1] + cover_glue[2] < cover_t,
+assert(cover_w / 2 - cover_notch_r >= 6 && wall - cover_glue[0] - cover_glue[2] >= 1.8 && cover_glue[1] + cover_glue[2] < cover_t
+       && cover_t - cover_glue[1] - cover_glue[2] >= cover_glue[0] + cover_glue[2] && cover_notch_c < 2 * cover_t,
        "Service cover: corners beside the notch too narrow, or the glue groove too deep for the wall or too wide for the cover rim");
 assert(pot_yz[0] - pwm_pcb[1] / 2 > front_t + inner_c && pot_yz[0] + pwm_pcb[1] / 2 < front_t + shelf_d
        && body_w - wall - pwm_wall_gap - pwm_pcb[0] - (pot_shaft[2] + wall + 1) > bay_x0 + 0.5
@@ -546,11 +549,14 @@ module body() difference() {
         translate([x0, handle_cy - hw + d, body_h - d]) cube([lx, 2 * (hw - d), eps]);
         translate([x0, handle_cy - hw - 1, body_h + 1]) cube([lx, 2 * (hw + 1), eps]);
     }
-    // groove for the glued-in service cover: its rim sits in it with a glue gap at the bottom
-    along_x(body_w - cover_glue[0] - cover_glue[2], body_w + 1) difference() {
-        cover_2d(cover_t - cover_glue[1] - cover_glue[2]);
-        cover_2d(cover_t + cover_glue[2]);
-    }
+    // groove for the glued-in service cover with 45 degree flanks, printable in every direction (the side wall stands upright in
+    // print, vertical flanks would leave overhanging groove ceilings); 0.2 mm steps, the rim sits on the floor with a glue gap
+    let (gd = cover_glue[0] + cover_glue[2], fo = cover_t - cover_glue[1] - cover_glue[2], fi = cover_t + cover_glue[2], n = ceil(gd / 0.2))
+        for (k = [0:n - 1]) let (s = gd * (k + 1) / n)
+            along_x(body_w - s, body_w - gd * k / n + (k == 0 ? 1 : eps)) difference() {
+                cover_2d(fo - (gd - s));
+                cover_2d(fi + (gd - s));
+            }
     translate([mount_xy[0], mount_xy[1], -1]) cylinder(d = mount_insert[0], h = mount_insert[1] + 1 + 1);   // M5 insert from the underside
 }
 
@@ -721,8 +727,8 @@ module cover() {   // glued in: the outer part of its wall rests on the side wal
                 along_x(x0 - 1, x1 + 1) cover_2d();
             }
             along_x(x0 - 1, x1 - cover_t) cover_2d(cover_t);
-            translate([x1 - edge_c, cover_y, pot_yz[1]]) rotate([0, 90, 0])   // 45 degree chamfer along the notch at the outer face
-                cylinder(r1 = cover_notch_r, r2 = cover_notch_r + edge_c + eps, h = edge_c + eps);
+            translate([x1 - cover_notch_c, cover_y, pot_yz[1]]) rotate([0, 90, 0])   // 45 degree chamfer along the notch at the outer face
+                cylinder(r1 = cover_notch_r, r2 = cover_notch_r + cover_notch_c + eps, h = cover_notch_c + eps);
         }
         along_x(x0 - cover_glue[0], x0 + eps) difference() {   // rim into the glue groove
             cover_2d(cover_t - cover_glue[1]);
@@ -740,7 +746,7 @@ module knob_local() difference() {   // z = 0 at the underside (knob_gap off the
         translate([0, 0, knob_len - knob_c - eps]) cylinder(d1 = knob_d, d2 = knob_d - 2 * knob_c, h = knob_c + eps);
     }
     for (i = [0:knob_flutes - 1]) rotate(i * 360 / knob_flutes)   // grip flutes around the dial
-        translate([knob_d / 2 - 0.5, -0.5, 1]) cube([2, 1, knob_len - knob_c - 1]);
+        translate([knob_d / 2 - knob_flute[1], -knob_flute[0] / 2, 1]) cube([knob_flute[1] + 1, knob_flute[0], knob_len - knob_c - 1]);
     translate([0, 0, -eps]) cylinder(d = knob_cavity_d, h = knob_sleeve_z + eps);   // over nut and bushing
     difference() {   // ring gap around the clamping sleeve
         translate([0, 0, knob_sleeve_z - eps]) cylinder(d = knob_cavity_d, h = knob_slit[1] + eps);
@@ -748,10 +754,14 @@ module knob_local() difference() {   // z = 0 at the underside (knob_gap off the
     }
     translate([0, 0, knob_sleeve_z - eps]) linear_extrude(knob_bore_top - knob_sleeve_z + eps) offset(delta = knob_bore_cl) d_profile(pot_shaft[0], pot_shaft[1]);
     translate([-knob_slit[0] / 2, -knob_stem_d / 2 - 1, knob_sleeve_z - eps]) cube([knob_slit[0], knob_stem_d + 2, knob_slit[1] + eps]);   // clamping slit
-    translate([knob_d / 2 - knob_c - 7, -0.6, knob_len - 0.6]) cube([6, 1.2, 1]);   // pointer on the top face, towards the flat
 }
 module knob() translate([body_w + knob_gap, pot_yz[0], pot_yz[1]]) orient([1, 0, 0]) knob_local();
 module knob_print_pose() translate([0, 0, knob_len]) mirror([0, 0, 1]) children();   // top face on the bed
+module knob_install_pose() translate([body_w + knob_gap, pot_yz[0], pot_yz[1]]) orient([1, 0, 0]) mirror([0, 0, 1]) translate([0, 0, -knob_len]) children();
+module knob_pointer_2d() translate([knob_d / 2 - knob_c - 9, -0.8]) square([7.5, 1.6]);   // white pointer on the top face, towards the flat
+module knob_piece(piece)   // multicolour pieces in print orientation: grey knob, white pointer inlay in the top face
+    if (piece == "base") inlay_base() { knob_print_pose() knob_local(); knob_pointer_2d(); }
+    else inlay_piece() { knob_print_pose() knob_local(); knob_pointer_2d(); }
 module pot_local(nut = true) {       // z = 0 at the outer face of the right wall
     translate([0, 0, -wall - pot_body[1]]) cylinder(d = pot_body[0], h = pot_body[1]);
     translate([0, 0, -wall - eps]) cylinder(d = pot_bush[0], h = pot_bush[1] + eps);
@@ -887,7 +897,7 @@ module assembly(explode = 0) {
     color("#8f9396") translate([0, 0, explode]) handle();
     color("#222326") translate([0, 0, -explode / 2]) place_feet();
     color("#26282b") translate([0, 0, -explode]) screws_feet(true);
-    color("#8f9396") translate([2 * explode, 0, 0]) knob();
+    translate([2 * explode, 0, 0]) { color("#8f9396") knob_install_pose() knob_piece("base"); color("#ffffff") knob_install_pose() knob_piece("pointer"); }
     color("#3a3d41") translate([explode, 0, 0]) pot_env();
     color("#2e6b3f") translate([explode, 0, 0]) pwm_board_env();
     color("#c9c9c9") translate([0, explode, 0]) chg_module_env();
@@ -925,4 +935,6 @@ else if (part == "grille") grille_print_pose() grille();
 else if (part == "cover") cover_print_pose() cover();
 else if (part == "handle") handle_print_pose() handle();
 else if (part == "knob") knob_print_pose() knob_local();
+else if (part == "knob_base") knob_piece("base");
+else if (part == "knob_pointer") knob_piece("pointer");
 else if (part == "foot") foot_print_pose() foot();

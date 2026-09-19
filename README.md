@@ -17,14 +17,14 @@ Small battery fan for a child's room, styled like the outdoor unit of a split ai
 | `body` housing | 1 | PETG white + grey (logo) | 225 × 155 × 76 | front on the bed, logo as inlay in the first 0.6 mm, fake grooves 0.8 mm deep and open towards the bed; "Für Leo von Papa" with the date 14.09.2026 raised 0.8 mm in grey on the inside of the front plate, readable with the back cover off |
 | `back` back cover | 1 | PETG white | 225 × 155 × 55 | outside on the bed, the three battery saddles and the hold-down plate stand upright |
 | `grille` fan grille | 1 | PETG grey | Ø 136 × 7 | front on the bed |
-| `cover` service cover | 1 | PETG grey | 77.3 × 46 × 11 | outside on the bed; right side below the knob, centred in depth, half-round notch around the knob in its upper edge; glued in: a 1.2 mm rim sits 1 mm deep in a groove of the side wall |
+| `cover` service cover | 1 | PETG grey | 77.3 × 46 × 11 | outside on the bed; right side below the knob, centred in depth, half-round notch around the knob in its upper edge (3 mm finger room plus a 3 mm chamfer); glued in: a 1.2 mm rim sits 0.8 mm deep in a groove of the side wall with 45° flanks, printable in every direction |
 | `foot` foot | 2 | TPU (black) | 16 × 62 × 5.5 (lifts the housing 4.5 mm) | ground face on the bed; screwed with two M3 × 8 from below, heads recessed 1.2 mm |
-| `knob` speed knob | 1 | PETG grey | Ø 28 × 17.5 dial on the side wall (7 mm proud of the service cover, hides nut and bushing) | top on the bed, underside with the D bore and the slotted clamping sleeve points up |
+| `knob` speed knob | 1 | PETG grey | Ø 28 × 17.5 dial on the side wall (7 mm proud of the service cover, hides nut and bushing), 18 grip grooves 1.2 mm deep, white pointer on the top | top on the bed with the pointer as inlay in the first 0.6 mm; underside with the D bore and the slotted clamping sleeve points up |
 | `handle` handle | 1 | PETG grey | 170 × 42 × 24 plus 1.2 mm keys under the feet (30 mm clearance under the bar, 90 mm opening at the top) | lying on its side (layers along the pull direction), 45° bevels, keys with 45° flanks |
 
-All parts are in the Bambu Studio project [`stl/leo_ac1_all_parts.3mf`](stl/leo_ac1_all_parts.3mf): plate 1 housing (with prime tower), plate 2 back cover, plate 3 grey parts (grille, service cover, handle, knob), plate 4 TPU feet. Filament 1 PETG Basic white, filament 2 PETG Basic grey, filament 3 grey for the logo and the dedication (same AMS spool as filament 2), filament 4 TPU (Generic TPU profile; set your TPU). To print the housing in one colour, use `stl/body.stl`.
+All parts are in the Bambu Studio project [`stl/leo_ac1_all_parts.3mf`](stl/leo_ac1_all_parts.3mf): plate 1 housing (with prime tower), plate 2 back cover, plate 3 grey parts (grille, service cover, handle, knob), plate 4 TPU feet. Filament 1 PETG Basic white, filament 2 PETG Basic grey, filament 3 grey for the logo and the dedication (same AMS spool as filament 2), filament 4 TPU (Generic TPU profile; set your TPU), filament 5 white for the pointer on the knob (same AMS spool as filament 1; plate 3 gets a small prime tower). To print the housing in one colour, use `stl/body.stl`.
 
-Estimated **approx. 0.70 kg and 20.9 hours** (diagnostic slicing, every instance as its own print; housing alone 401 g / 10.2 h, the two TPU feet 13 g / 1.2 h).
+Estimated **approx. 0.70 kg and 20.9 hours** (diagnostic slicing, every instance as its own print; housing alone 401 g / 10.3 h, the two TPU feet 13 g / 1.2 h).
 
 ## Bought parts
 

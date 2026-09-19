@@ -50,7 +50,7 @@ ASSEMBLY = {
 ALLOWED_OVERLAPS = [("fan", "screws_fan")]   # the fan is a solid envelope, its screws run through the frame holes
 
 # Multicolour: part -> inlay names; SOURCE needs the branches <part>_base and <part>_<inlay>
-COLOR_PARTS = {"body": ("label", "dedication")}   # logo on the front face, dedication raised inside
+COLOR_PARTS = {"body": ("label", "dedication"), "knob": ("pointer",)}   # logo on the front face, dedication raised inside, white knob pointer
 STL_DIR, COLOR_DIR, ASM_DIR, REPORT = "stl", "stl/multicolour", "asm", "docs/verification.json"
 
 PRINTER = dict(machine="Bambu Lab H2S 0.4 nozzle", process="0.20mm Standard @BBL H2S",
@@ -60,7 +60,8 @@ PROCESS = dict(wall_loops=6, top_shell_layers=5, bottom_shell_layers=5, infill=3
 FILAMENTS = [dict(material="PETG-white", profile="Bambu PETG Basic @BBL H2S", colour="#FFFFFF"),
              dict(material="PETG-grey", profile="Bambu PETG Basic @BBL H2S", colour="#8E9294"),
              dict(material="PETG-grey", profile="Bambu PETG Basic @BBL H2S", inlay=("label", "dedication"), colour="#8E9294"),
-             dict(material="TPU", profile="Generic TPU @BBL H2S", colour="#222326")]
+             dict(material="TPU", profile="Generic TPU @BBL H2S", colour="#222326"),
+             dict(material="PETG-white", profile="Bambu PETG Basic @BBL H2S", inlay=("pointer",), colour="#FFFFFF")]
 PLATES = [("Housing", ["body"]), ("Back cover", ["back"]), ("Grey parts", ["grille", "cover", "handle", "knob"]), ("TPU feet", ["foot"])]
 PROJECT_3MF = "stl/leo_ac1_all_parts.3mf"
 SLICER_SUMMARY = "docs/slicer-summary.json"
@@ -238,10 +239,12 @@ VIEWER = dict(
            ("screws_back", "Back cover · M3 × 8 button head", "screws", "#26282b", "6x", [0, 2.2, 0]),
            ("screws_handle", "Handle · M3 × 12 button head", "screws", "#26282b", "4x", [0, 0, -0.5]),
            ("screws_feet", "Feet · M3 × 8 button head, from below", "screws", "#26282b", "4x", [0, 0, -1.4])],
-    colour={"body": [("label", "Housing · logo", "#8f9396"), ("dedication", "Housing · dedication", "#8f9396")]},
+    colour={"body": [("label", "Housing · logo", "#8f9396"), ("dedication", "Housing · dedication", "#8f9396")], "knob": [("pointer", "Speed knob · pointer", "#ffffff")]},
     bodies={"body_base": 'body_install_pose() body_piece("base");',
             "body_label": 'body_install_pose() body_piece("label");',
             "body_dedication": 'body_install_pose() body_piece("dedication");',
+            "knob_base": 'knob_install_pose() knob_piece("base");',
+            "knob_pointer": 'knob_install_pose() knob_piece("pointer");',
             # Noctua CAD (vendor/, not in the repo): outlet face with stator vanes and hub label at CAD y = 0.3, towards the front
             "fan_visual": 'translate([fan_cx, fan_y - 0.3, fan_cz]) import("$ROOT/vendor/noctua/NF-F12_iPPC.stl");',
             "pot": "pot_env();",
