@@ -105,6 +105,7 @@ def main():
     meta = dict(title=V["title"], eyebrow=V.get("eyebrow", "Baugruppe · Einbaulage"), dims=V.get("dims", []),
                 groups=V.get("groups", []), hidden_groups=V.get("hidden_groups", []),
                 outer=V.get("outer", []), cut=V.get("cut", []), screens=V.get("screens", []),
+                bounds=[low.round(2).tolist(), high.round(2).tolist()],
                 center=((low + high) / 2).round(2).tolist(), size=float(np.max(high - low)))
     page = TEMPLATE.read_text().replace("__TITLE__", V.get("page_title", V["title"]))
     page = page.replace("/*__DATA__*/", "window.PART_DATA=" + json.dumps(dict(meta=meta, parts=parts), ensure_ascii=False) + ";")

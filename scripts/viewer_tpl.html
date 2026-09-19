@@ -60,6 +60,10 @@ button.preset:focus-visible{outline:2px solid var(--accent);outline-offset:1px}
 .slider label{font-family:"IBM Plex Mono",ui-monospace,monospace;font-size:10.5px;
   letter-spacing:.1em;text-transform:uppercase;color:var(--ink-3);flex:none}
 .slider input{flex:1;accent-color:var(--accent)}
+.slider select{font:inherit;font-size:11.5px;padding:2px 4px;border-radius:3px;
+  border:1px solid var(--rule-strong);background:var(--surface-2);color:var(--ink-2)}
+.slider button.preset{padding:2px 8px}
+.slider input:disabled,.slider button:disabled{opacity:.4;cursor:default}
 .slider output{font-family:"IBM Plex Mono",ui-monospace,monospace;font-size:11.5px;
   color:var(--ink-2);min-width:34px;text-align:right;font-variant-numeric:tabular-nums}
 .list{overflow-y:auto;flex:1;min-height:0;padding-bottom:8px}
@@ -111,6 +115,15 @@ canvas{display:block;width:100%;height:100%;touch-action:none}
         <label for="ex">Explosion</label>
         <input id="ex" type="range" min="0" max="60" value="0" step="1">
         <output id="exv">0 mm</output>
+      </div>
+      <div class="slider">
+        <label for="cutaxis">Schnitt</label>
+        <select id="cutaxis" aria-label="Schnittachse">
+          <option value="">aus</option><option value="0">X</option><option value="1">Y</option><option value="2">Z</option>
+        </select>
+        <input id="cut" type="range" min="0" max="1000" value="500" step="1" disabled aria-label="Schnittposition">
+        <button class="preset" id="cutflip" type="button" disabled title="Andere Seite zeigen">⇄</button>
+        <output id="cutv">–</output>
       </div>
     </div>
     <div class="list" id="list"></div>
@@ -386,6 +399,32 @@ canvas{display:block;width:100%;height:100%;touch-action:none}
     P.parts.forEach(function(p){ meshes[p.id].position.set(p.dir[0]*e, p.dir[1]*e, p.dir[2]*e); });
     screens.forEach(function(k){ k.mesh.position.copy(k.base).addScaledVector(k.dir, e); });
   });
+
+  // ---- section: clip everything at a plane across one model axis, to look into closed housings ----
+  renderer.localClippingEnabled = true;
+  var lo = M.bounds ? M.bounds[0] : M.center.map(function(c){ return c - size/2; }),
+      hi = M.bounds ? M.bounds[1] : M.center.map(function(c){ return c + size/2; });
+  var planes = [];
+  scene.traverse(function(o){
+    if (o.material){ o.material.side = THREE.DoubleSide; o.material.clippingPlanes = planes; }
+  });
+  var cutAxis = document.getElementById('cutaxis'), cut = document.getElementById('cut'),
+      cutv = document.getElementById('cutv'), cutFlip = document.getElementById('cutflip'), flip = false;
+  function section(){
+    var a = cutAxis.value;
+    cut.disabled = cutFlip.disabled = (a === '');
+    planes.length = 0;
+    if (a === ''){ cutv.textContent = '–'; return; }
+    a = +a;
+    var v = lo[a] + (hi[a] - lo[a]) * cut.value / 1000, n = new THREE.Vector3();
+    n.setComponent(a, flip ? -1 : 1);                 // keeps the side where the model coordinate is >= v (or <= v)
+    root.updateMatrixWorld();
+    planes.push(new THREE.Plane(n, flip ? v : -v).applyMatrix4(root.matrixWorld));
+    cutv.textContent = v.toFixed(0) + ' mm';
+  }
+  cutAxis.addEventListener('change', section);
+  cut.addEventListener('input', section);
+  cutFlip.addEventListener('click', function(){ flip = !flip; section(); });
 
   resize(); place(); count();
   (function loop(){ renderer.render(scene,cam); requestAnimationFrame(loop); })();

@@ -1,5 +1,5 @@
 {
-  "source_sha256": "e68c0a99576b4ec775a4be6d643b1584192cea4c43e8e55dd130f86d1b0133b7",
+  "source_sha256": "80f77476f604e09a46091b868a9152c5a056c42b4db4b8aa41e448db54dabc33",
   "software": {
     "numpy": "2.5.3",
     "trimesh": "5.1.0",
@@ -8,8 +8,8 @@
     "rtree": "1.4.1",
     "networkx": "3.6.1"
   },
-  "print_parts": 4,
-  "print_quantity": 4,
+  "print_parts": 5,
+  "print_quantity": 5,
   "print_meshes": {
     "body": {
       "size_mm": [
@@ -29,17 +29,17 @@
           77.6
         ]
       ],
-      "volume_mm3": 235757.9564,
-      "triangles": 10052,
+      "volume_mm3": 231928.7772,
+      "triangles": 10932,
       "watertight": true,
       "consistent_winding": true,
       "degenerate_faces": 0,
       "components": 1,
       "backend": "CGAL",
-      "sha256": "48cf40172c54776e2387bcff5bc4df0a54c8472d0e206359739b9a9829811742",
+      "sha256": "f772623ae7d384387369771f9edd45850d1f77700319711ee80c2e18720e5a0b",
       "quantity": 1,
       "material": "PETG-weiss",
-      "committed_sha256": "48cf40172c54776e2387bcff5bc4df0a54c8472d0e206359739b9a9829811742"
+      "committed_sha256": "f772623ae7d384387369771f9edd45850d1f77700319711ee80c2e18720e5a0b"
     },
     "back": {
       "size_mm": [
@@ -130,6 +130,36 @@
       "quantity": 1,
       "material": "PETG-grau",
       "committed_sha256": "786375f7e5f586120fe7b2f2caf5a7b351dca8a4a5a6b91ad4254247754aa09d"
+    },
+    "handle": {
+      "size_mm": [
+        150.0,
+        34.0,
+        20.0
+      ],
+      "bounds_mm": [
+        [
+          37.5,
+          -189.0,
+          0.0
+        ],
+        [
+          187.5,
+          -155.0,
+          20.0
+        ]
+      ],
+      "volume_mm3": 51312.4264,
+      "triangles": 436,
+      "watertight": true,
+      "consistent_winding": true,
+      "degenerate_faces": 0,
+      "components": 1,
+      "backend": "Manifold",
+      "sha256": "baa89ac49359fb35c0b65b5b2bed513aa354b4cc11123f1e734ce82eab9c5e2f",
+      "quantity": 1,
+      "material": "PETG-grau",
+      "committed_sha256": "baa89ac49359fb35c0b65b5b2bed513aa354b4cc11123f1e734ce82eab9c5e2f"
     }
   },
   "color_meshes": {
@@ -151,14 +181,14 @@
           77.6
         ]
       ],
-      "volume_mm3": 235447.9539,
-      "triangles": 11240,
+      "volume_mm3": 231618.7748,
+      "triangles": 12120,
       "watertight": true,
       "consistent_winding": true,
       "degenerate_faces": 0,
       "components": 1,
       "backend": "CGAL",
-      "sha256": "b55f6c1a3465c0a99e6069de587a104e84a8c407fc2668f65fd5b58183a1ee81"
+      "sha256": "d4b7cd9cc8969ef8451872e22022cc963a4d0c93dc1c71cca9007aa7db670646"
     },
     "body_label": {
       "size_mm": [
@@ -199,8 +229,8 @@
       }
     }
   },
-  "assembly_bodies": 10,
-  "assembly_pairs": 45,
+  "assembly_bodies": 12,
+  "assembly_pairs": 66,
   "metrics": {
     "wall": 2.4,
     "front_t": 2.4,
@@ -215,8 +245,16 @@
     "fan_pitch": 105,
     "fan_hole_d": 4.3,
     "fan_blade_d": 116,
-    "shroud_clearance": 0.3,
-    "shroud_overlap": 3,
+    "fan_axis": [
+      84,
+      77.5
+    ],
+    "fan_y": 10.4,
+    "shroud_r": [
+      59,
+      60.6
+    ],
+    "shroud_gap": 0.2,
     "open_d": 118,
     "grille_gap": 5.21429,
     "bat_mm": [
@@ -252,6 +290,12 @@
       ],
       [
         "cover",
+        8,
+        5.6,
+        0.9
+      ],
+      [
+        "handle",
         8,
         5.6,
         0.9
@@ -481,6 +525,62 @@
           0
         ],
         6.5
+      ],
+      [
+        "handle",
+        [
+          58.5,
+          40,
+          155
+        ],
+        [
+          0,
+          0,
+          1
+        ],
+        6.5
+      ],
+      [
+        "handle",
+        [
+          43.5,
+          40,
+          155
+        ],
+        [
+          0,
+          0,
+          1
+        ],
+        6.5
+      ],
+      [
+        "handle",
+        [
+          166.5,
+          40,
+          155
+        ],
+        [
+          0,
+          0,
+          1
+        ],
+        6.5
+      ],
+      [
+        "handle",
+        [
+          181.5,
+          40,
+          155
+        ],
+        [
+          0,
+          0,
+          1
+        ],
+        6.5
       ]
     ]
   },
@@ -505,6 +605,11 @@
       "length": 8,
       "engagement_mm": 5.6,
       "tip_margin_mm": 0.9
+    },
+    "handle": {
+      "length": 8,
+      "engagement_mm": 5.6,
+      "tip_margin_mm": 0.9
     }
   },
   "contact_volumes_mm3": {
@@ -512,7 +617,8 @@
     "fan@body": 10.211,
     "back@body": 102.103,
     "cover@body": 26.055,
-    "battery@body": 48.095
+    "battery@body": 48.095,
+    "handle@body": 38.159
   },
   "stops": [
     {
@@ -529,26 +635,6 @@
       "name": "battery_side",
       "first_contact_mm": 0.75,
       "limit_mm": 1.0
-    },
-    {
-      "name": "fan_duct_left",
-      "first_contact_mm": 0.5,
-      "limit_mm": 0.55
-    },
-    {
-      "name": "fan_duct_right",
-      "first_contact_mm": 0.5,
-      "limit_mm": 0.55
-    },
-    {
-      "name": "fan_duct_down",
-      "first_contact_mm": 0.5,
-      "limit_mm": 0.55
-    },
-    {
-      "name": "fan_duct_up",
-      "first_contact_mm": 0.5,
-      "limit_mm": 0.55
     }
   ],
   "sampled_paths": [
@@ -578,6 +664,12 @@
     },
     {
       "name": "cover_off",
+      "collisions": 0,
+      "first_mm": null,
+      "max_volume_mm3": 0
+    },
+    {
+      "name": "handle_up",
       "collisions": 0,
       "first_mm": null,
       "max_volume_mm3": 0
@@ -759,13 +851,63 @@
       "empty_mm3": 0.0,
       "ring_fill": 1.0,
       "floor_fill": 1.0
+    },
+    {
+      "body": "handle",
+      "at": [
+        58.5,
+        40,
+        155
+      ],
+      "empty_mm3": 0.0,
+      "ring_fill": 1.0,
+      "floor_fill": 1.0
+    },
+    {
+      "body": "handle",
+      "at": [
+        43.5,
+        40,
+        155
+      ],
+      "empty_mm3": 0.0,
+      "ring_fill": 1.0,
+      "floor_fill": 1.0
+    },
+    {
+      "body": "handle",
+      "at": [
+        166.5,
+        40,
+        155
+      ],
+      "empty_mm3": 0.0,
+      "ring_fill": 1.0,
+      "floor_fill": 1.0
+    },
+    {
+      "body": "handle",
+      "at": [
+        181.5,
+        40,
+        155
+      ],
+      "empty_mm3": 0.0,
+      "ring_fill": 1.0,
+      "floor_fill": 1.0
     }
   ],
+  "air_duct": {
+    "wall_fill": 1.0,
+    "gap_mm3": 0.0,
+    "on_fan_frame": 1.0
+  },
   "stl_difference_mm3": {
     "body": 0.0,
     "back": 0.0,
     "grille": 0.0,
     "cover": 0.0,
+    "handle": 0.0,
     "multicolour/body_base": 0.0,
     "multicolour/body_label": 0.0
   },

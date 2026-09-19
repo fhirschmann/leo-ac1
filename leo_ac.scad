@@ -32,9 +32,8 @@ fan_cx = 84;         // fan axis x
 fan_cz = body_h / 2; // fan axis z
 fan_standoff = 8;    // bosses between front plate and fan frame
 fan_boss_d = 9;
-shroud_t = 1.6;      // square duct front plate -> fan frame: the air leaves only through the grille
-shroud_cl = 0.3;     // clearance to the fan frame per side, also centres the fan
-shroud_overlap = 3;  // the duct reaches this far over the sides of the fan frame
+shroud_t = 1.6;      // round duct front plate -> fan frame, bore = grille opening: air leaves only through the grille
+shroud_gap = 0.2;    // duct end to the fan frame face
 
 /* [Grille] */
 open_r = 59;         // opening in the front plate
@@ -92,6 +91,18 @@ cover_t = 2;
 cover_r = 4;
 cover_screw_dz = 28;
 
+/* [Handle, top] */
+handle_len = 150;      // along x
+handle_h = 34;         // above the top wall
+handle_d = 20;         // along y
+handle_cx = body_w / 2;
+handle_cy = body_d / 2;
+handle_bar = 12;       // grip thickness (z)
+handle_open = [96, 76, 12];  // opening: width at the bottom, width at the top, height of its vertical sides
+handle_end = [15, 8];  // outer ends: slant inset at the top, height of the vertical foot face
+handle_c = 2.5;        // 45 degree bevels on all edges
+handle_screw_dx = [54, 69];  // screw axes from the handle centre, both sides
+
 /* [Screws, M3 heat-set inserts] */
 insert_hole_d = 4.0; // Ruthex M3 x 5.7
 insert_len = 5.7;
@@ -104,6 +115,7 @@ len_grille = 12;     // M3 x 12 countersunk, from the front
 len_fan = 30;        // M3 x 30 socket head, from behind the fan
 len_back = 8;        // M3 x 8 countersunk, from the back
 len_cover = 8;       // M3 x 8 socket head, from inside the body
+len_handle = 8;      // M3 x 8 socket head, from inside the body
 
 /* [Decor] */
 inlay_t = 0.6;       // multicolour inlay depth: the first three 0.2 mm layers
@@ -155,6 +167,7 @@ function back_bosses() = concat(
         w = [part_x, sz ? body_h - wall + 1 : wall - 1],
         t = [part_x + part_t, sz ? body_h - wall : wall])
      [c, w, [part_x + part_t, c[1]], w, t]]);
+function handle_screws() = [for (sx = [-1, 1], dx = handle_screw_dx) [handle_cx + sx * dx, handle_cy]];
 function cover_screws() = [for (s = [-1, 1]) [cover_y, cover_z + s * cover_screw_dz]];
 // thread engagement in the insert and margin of the screw tip to the pocket end
 screw_table = [
@@ -165,7 +178,8 @@ screw_table = [
      (fan_y + fan_t - len_fan) - (fan_y - insert_depth)],
     ["back", len_back, (body_d - back_t) - max(body_d - len_back, body_d - back_t - insert_len),
      (body_d - len_back) - (body_d - back_t - insert_depth)],
-    ["cover", len_cover, min(len_cover - wall, insert_len), insert_depth - (len_cover - wall)]];
+    ["cover", len_cover, min(len_cover - wall, insert_len), insert_depth - (len_cover - wall)],
+    ["handle", len_handle, min(len_handle - wall, insert_len), insert_depth - (len_handle - wall)]];
 
 assert(wall >= 3 * 0.4 && front_t >= 3 * 0.4 && back_t >= 3 * 0.4, "Walls need at least three perimeters");
 // heat-set inserts need material between pocket and visible face, otherwise the face deforms when pressing
@@ -178,11 +192,16 @@ assert(ring_in - spigot_w > grille_hub_r + grille_rings * grille_bar, "Grille co
 assert(grille_screw_r - grille_boss_d / 2 > open_r, "Grille bosses reach into the opening");
 assert(grille_r - (grille_screw_r + csk_d / 2) >= 1.2, "Grille ring too narrow outside the countersinks");
 assert(fan_blade_d / 2 < open_r, "Front opening smaller than the fan blades");
-assert(fan_cx - fan_size / 2 - shroud_cl - shroud_t > wall + inner_c && fan_cx + fan_size / 2 + shroud_cl + shroud_t < part_x
-       && fan_cz - fan_size / 2 - shroud_cl - shroud_t > wall + inner_c && fan_cz + fan_size / 2 + shroud_cl + shroud_t < body_h - wall - inner_c,
+assert(open_r < fan_size / 2 - 0.5, "Air duct does not sit on the fan frame face");
+assert(fan_cx - open_r - shroud_t > wall + inner_c && fan_cx + open_r + shroud_t < part_x
+       && fan_cz - open_r - shroud_t > wall + inner_c && fan_cz + open_r + shroud_t < body_h - wall - inner_c,
        "Air duct hits the walls or the partition");
 assert(cover_out - insert_depth >= 3, "Cover insert pocket too close to the visible face");
 assert(shelf_z + shelf_t < body_h - wall, "Shelf above the top wall");
+assert(handle_h - handle_bar >= 20, "Handle opening too low for a hand");
+assert(handle_end[1] > insert_depth && handle_open[2] > insert_depth, "Handle insert pockets reach the slants");
+assert(handle_screw_dx[0] - insert_hole_d / 2 - handle_open[0] / 2 >= 2 && handle_len / 2 - handle_screw_dx[1] - insert_hole_d / 2 >= 2,
+       "Handle feet too thin around the inserts");
 assert(logo_x0 > fan_cx + grille_r + 3 && logo_x0 + logo_w < body_w - corner_r - 2 && logo_top < body_h - corner_r - 2,
        "Logo outside the free front area");
 assert(big_gap >= 2, "Big letters too wide for the second line");
@@ -256,10 +275,10 @@ module body() difference() {
                 along_y(front_t + inner_c, front_t + inner_c + eps) body_inner();
             }
         }
-        // air duct from the front plate over the fan frame
-        let (s0 = fan_size + 2 * shroud_cl, s1 = s0 + 2 * shroud_t) translate([fan_cx, 0, fan_cz]) difference() {
-            translate([-s1 / 2, front_t - eps, -s1 / 2]) cube([s1, fan_y + shroud_overlap - front_t + eps, s1]);
-            translate([-s0 / 2, front_t - 1, -s0 / 2]) cube([s0, fan_y + shroud_overlap, s0]);
+        // round air duct from the front plate to the fan frame face
+        difference() {
+            cyl_y([fan_cx, fan_cz], front_t - eps, fan_y - shroud_gap, open_r + shroud_t);
+            cyl_y([fan_cx, fan_cz], front_t - 1, fan_y, open_r);
         }
         // partition between fan section and electronics bay
         translate([part_x, front_t - eps, wall - eps]) cube([part_t, part_y1 - front_t + eps, body_h - 2 * wall + 2 * eps]);
@@ -289,6 +308,7 @@ module body() difference() {
     translate([bat_cx - cable_slot_w / 2, bat_cy - 6, shelf_z - 1]) cube([cable_slot_w, shelf_d + front_t - bat_cy + 7, shelf_t + 2]);
     along_x(-1, wall + 1) intake_slots_side();
     for (p = cover_screws()) cyl_x(p, body_w - wall - 1, body_w + 1, screw_clear_d / 2);
+    for (p = handle_screws()) translate([p[0], p[1], body_h - wall - 1]) cylinder(d = screw_clear_d, h = wall + 2);
 }
 
 // ---------- logo: block letters in industrial / cyberpunk style ----------
@@ -427,6 +447,33 @@ module cover() difference() {
 }
 module cover_print_pose() translate([0, 0, body_w + cover_out]) rotate([0, 90, 0]) children();   // outer face on the bed
 
+// ---------- handle ----------
+function handle_outer() = let (l = handle_len / 2, e = handle_end)
+    [[-l, 0], [l, 0], [l, e[1]], [l - e[0], handle_h], [-l + e[0], handle_h], [-l, e[1]]];
+function handle_opening() = let (o = handle_open)
+    [[-o[0] / 2, -1], [o[0] / 2, -1], [o[0] / 2, o[2]], [o[1] / 2, handle_h - handle_bar], [-o[1] / 2, handle_h - handle_bar], [-o[0] / 2, o[2]]];
+module handle() translate([handle_cx, 0, body_h]) difference() {   // side profile in (x, z), bevelled on both faces
+    y0 = handle_cy - handle_d / 2;
+    y1 = handle_cy + handle_d / 2;
+    c = handle_c;
+    hull() {
+        along_y(y0, y0 + eps) offset(delta = -c) polygon(handle_outer());
+        along_y(y0 + c, y1 - c) polygon(handle_outer());
+        along_y(y1 - eps, y1) offset(delta = -c) polygon(handle_outer());
+    }
+    along_y(y0 - 1, y1 + 1) polygon(handle_opening());
+    hull() {
+        along_y(y0 - eps, y0) offset(delta = c) polygon(handle_opening());
+        along_y(y0 + c, y0 + c + eps) polygon(handle_opening());
+    }
+    hull() {
+        along_y(y1 - c - eps, y1 - c) polygon(handle_opening());
+        along_y(y1, y1 + eps) offset(delta = c) polygon(handle_opening());
+    }
+    for (sx = [-1, 1], dx = handle_screw_dx) translate([sx * dx, handle_cy, -eps]) cylinder(d = insert_hole_d, h = insert_depth + eps);
+}
+module handle_print_pose() translate([0, 0, -(handle_cy - handle_d / 2)]) rotate([90, 0, 0]) children();   // front face on the bed
+
 // ---------- bought parts: envelopes for the checks ----------
 module fan_env() translate([fan_cx - fan_size / 2, fan_y, fan_cz - fan_size / 2]) cube([fan_size, fan_t, fan_size]);
 module fan_visual() translate([fan_cx, fan_y, fan_cz]) rotate([-90, 0, 0]) {   // local z along +y
@@ -455,6 +502,7 @@ module screw(len, countersunk, socket = false) difference() {
 module screws_grille(socket = false) for (p = grille_screws()) translate([p[0], -grille_t, p[1]]) orient([0, 1, 0]) screw(len_grille, true, socket);
 module screws_fan(socket = false) for (p = fan_holes()) translate([p[0], fan_y + fan_t, p[1]]) orient([0, -1, 0]) screw(len_fan, false, socket);
 module screws_back(socket = false) for (b = back_bosses()) translate([b[0][0], body_d, b[0][1]]) orient([0, -1, 0]) screw(len_back, true, socket);
+module screws_handle(socket = false) for (p = handle_screws()) translate([p[0], p[1], body_h - wall]) orient([0, 0, 1]) screw(len_handle, false, socket);
 module screws_cover(socket = false) for (p = cover_screws()) translate([body_w - wall, p[0], p[1]]) orient([1, 0, 0]) screw(len_cover, false, socket);
 
 module assembly(explode = 0) {
@@ -465,6 +513,7 @@ module assembly(explode = 0) {
     color("#8f9396") translate([0, -explode, 0]) grille();
     color("#f2f2ee") translate([0, 2 * explode, 0]) back();
     color("#8f9396") translate([explode, 0, 0]) cover();
+    color("#8f9396") translate([0, 0, explode]) handle();
     color("#303236") translate([0, explode, 0]) fan_visual();
     color("#3f7fbf") translate([0, explode / 2, 0]) battery_env();
 }
@@ -475,7 +524,7 @@ else if (part == "exploded") assembly(40);
 else if (part == "metrics") echo("PROJECT_METRICS", [
     ["wall", wall], ["front_t", front_t], ["back_t", back_t], ["body_mm", [body_w, body_d, body_h]],
     ["fan_size", fan_size], ["fan_t", fan_t], ["fan_pitch", fan_pitch], ["fan_hole_d", fan_hole_d],
-    ["fan_blade_d", fan_blade_d], ["shroud_clearance", shroud_cl], ["shroud_overlap", shroud_overlap], ["open_d", 2 * open_r], ["grille_gap", grille_gap],
+    ["fan_blade_d", fan_blade_d], ["fan_axis", [fan_cx, fan_cz]], ["fan_y", fan_y], ["shroud_r", [open_r, open_r + shroud_t]], ["shroud_gap", shroud_gap], ["open_d", 2 * open_r], ["grille_gap", grille_gap],
     ["bat_mm", [bat_d, bat_l]], ["bat_clear", bat_clear], ["bat_retain_gap", bat_retain_gap], ["shelf_gap", shelf_gap],
     ["lip_clearance", lip_cl], ["spigot_clearance", spigot_cl],
     ["insert_hole_d", insert_hole_d], ["insert_len", insert_len], ["insert_depth", insert_depth],
@@ -485,7 +534,8 @@ else if (part == "metrics") echo("PROJECT_METRICS", [
         [for (p = grille_screws()) ["body", [p[0], front_t + grille_boss_h, p[1]], [0, -1, 0], insert_depth]],
         [for (p = fan_holes()) ["body", [p[0], fan_y, p[1]], [0, -1, 0], insert_depth]],
         [for (b = back_bosses()) ["body", [b[0][0], body_d - back_t, b[0][1]], [0, -1, 0], insert_depth]],
-        [for (p = cover_screws()) ["cover", [body_w, p[0], p[1]], [1, 0, 0], insert_depth]])]]);
+        [for (p = cover_screws()) ["cover", [body_w, p[0], p[1]], [1, 0, 0], insert_depth]],
+        [for (p = handle_screws()) ["handle", [p[0], p[1], body_h], [0, 0, 1], insert_depth]])]]);
 else if (part == "none") {}
 else if (part == "body") body_print_pose() body();
 else if (part == "body_base") inlay_base() { body_print_pose() body(); body_label_print_2d(); }
@@ -493,3 +543,4 @@ else if (part == "body_label") inlay_piece() { body_print_pose() body(); body_la
 else if (part == "back") back_print_pose() back();
 else if (part == "grille") grille_print_pose() grille();
 else if (part == "cover") cover_print_pose() cover();
+else if (part == "handle") handle_print_pose() handle();
