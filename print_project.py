@@ -17,7 +17,6 @@ PARTS = {
     "back": (1, "PETG-weiss", 1),
     "grille": (1, "PETG-grau", 1),
     "cover": (1, "PETG-grau", 1),
-    "foot": (2, "PETG-grau", 1),
 }
 FULL_INFILL = set()
 FULL_INFILL_MATERIALS = {"TPU"}
@@ -28,13 +27,11 @@ ASSEMBLY = {
     "grille": "grille();",
     "back": "back();",
     "cover": "cover();",
-    "feet": "place_feet();",
     "fan": "fan_env();",
     "battery": "battery_env();",
     "screws_grille": "screws_grille();",
     "screws_fan": "screws_fan();",
     "screws_back": "screws_back();",
-    "screws_feet": "screws_feet();",
     "screws_cover": "screws_cover();",
 }
 ALLOWED_OVERLAPS = [("fan", "screws_fan")]   # the fan is a solid envelope, its screws run through the frame holes
@@ -50,7 +47,7 @@ PROCESS = dict(wall_loops=4, top_shell_layers=5, bottom_shell_layers=5, infill=2
 FILAMENTS = [dict(material="PETG-weiss", profile="Bambu PETG Basic @BBL H2S", colour="#FFFFFF"),
              dict(material="PETG-grau", profile="Bambu PETG Basic @BBL H2S", colour="#8E9294"),
              dict(material="PETG-grau", profile="Bambu PETG Basic @BBL H2S", inlay="label", colour="#8E9294")]
-PLATES = [("Gehäuse", ["body"]), ("Rückwand", ["back"]), ("Graue Teile", ["grille", "cover", "foot"])]
+PLATES = [("Gehäuse", ["body"]), ("Rückwand", ["back"]), ("Graue Teile", ["grille", "cover"])]
 PROJECT_3MF = "stl/leo_ac1_all_parts.3mf"
 SLICER_SUMMARY = "docs/slicer-summary.json"
 
@@ -91,8 +88,7 @@ def checks(ctx):
     # Contact, not just freedom from overlap: pushed 0.05 mm into its support, a body must intersect it
     contacts = {}
     for name, base, shift in (("grille", "body", [0, 0.05, 0]), ("fan", "body", [0, -0.05, 0]),
-                              ("back", "body", [0, -0.05, 0]), ("feet", "body", [0, 0, 0.05]),
-                              ("cover", "body", [-0.05, 0, 0]), ("battery", "body", [0, 0, -0.05])):
+                              ("back", "body", [0, -0.05, 0]), ("cover", "body", [-0.05, 0, 0]), ("battery", "body", [0, 0, -0.05])):
         volume = (ctx.solids[name].translate(shift) ^ ctx.solids[base]).volume()
         assert volume > 0.1, f"{name} does not rest on {base}"
         contacts[f"{name}@{base}"] = round(volume, 3)
@@ -114,8 +110,7 @@ def checks(ctx):
             ("back_off", ["back", "screws_back"], others("back", "screws_back"), [0, 1, 0], 12, 0.25),
             ("battery_out", ["battery"], others("battery", "back", "screws_back"), [0, 1, 0], 90, 1),
             ("fan_out", ["fan", "screws_fan"], others("fan", "screws_fan", "battery", "back", "screws_back"), [0, 1, 0], 90, 1),
-            ("cover_off", ["cover"], ["body", "feet", "screws_feet"], [1, 0, 0], 15, 0.5),
-            ("feet_off", ["feet"], ["body", "cover"], [0, 0, -1], 15, 0.5)):
+            ("cover_off", ["cover"], ["body"], [1, 0, 0], 15, 0.5)):
         count, first, maximum = ctx.sweep(moving, fixed, direction, length, step)
         paths.append(dict(name=name, collisions=count, first_mm=first, max_volume_mm3=round(maximum, 4)))
         assert count == 0, f"Path {name} obstructed at {first} mm"
@@ -138,7 +133,7 @@ def checks(ctx):
         assert empty < 0.01 and filled > 0.95 and bottom > 0.95, f"Insert pocket {inserts[-1]}"
     ctx.summary.append(f"{len(inserts)} inserts")
 
-    ctx.open_items.append("Akku messen (Durchmesser, Länge mit Schutzplatine, Kabelabgang); Modell: Ø35 × 72 mm")
+    ctx.open_items.append("Akku nachmessen (Etikett: Ø34 × 70 mm, Modell Ø35 × 72 mm) und Kabelabgang prüfen")
     ctx.open_items.append("Lüfter messen (Rahmen 120 × 120 × 25, Lochabstand 105, Kabelabgang)")
     ctx.open_items.append("Elektronik (Wandler, Laden, Schalter) fehlt noch: Lage im Elektronikfach und Durchbrüche")
     return dict(standard_screws=screws, contact_volumes_mm3=contacts, stops=stops, sampled_paths=paths,
@@ -147,7 +142,7 @@ def checks(ctx):
 
 VIEWER = dict(
     title="LEO-AC1", page_title="LEO-AC1 Ventilator", eyebrow="Baugruppe · Einbaulage",
-    dims=[("Breite", "234"), ("Tiefe", "96"), ("Höhe", "165")],
+    dims=[("Breite", "234"), ("Tiefe", "83"), ("Höhe", "155")],
     groups=[("weiss", "Gedruckt · PETG weiß"), ("grau", "Gedruckt · PETG grau"), ("zugekauft", "Zugekauft")],
     hidden_groups=["zugekauft"],
     outer=["body", "back", "cover", "grille"],
@@ -157,10 +152,9 @@ VIEWER = dict(
            ("back", "Rückwand", "weiss", "#e6e6e1", "1x", [0, 1.5, 0]),
            ("grille", "Lüftergitter", "grau", "#8f9396", "1x", [0, -1, 0]),
            ("cover", "Servicedeckel", "grau", "#8f9396", "1x", [1, 0, 0]),
-           ("feet", "Fußschienen", "grau", "#8f9396", "2x", [0, 0, -0.6]),
            ("fan_visual", "Lüfter 120 mm", "zugekauft", "#303236", "1x", [0, 0.8, 0]),
            ("battery", "Akku LiFePO4 3,2 V", "zugekauft", "#3f7fbf", "1x", [0, 0.5, 0]),
-           ("screws", "Schrauben M3", "zugekauft", "#b8bcc0", "20x", [0, 0, 0])],
+           ("screws", "Schrauben M3", "zugekauft", "#b8bcc0", "16x", [0, 0, 0])],
     colour={"body": [("label", "Gehäuse · Typenschild", "#8f9396")]},
     bodies={"body_base": "body_install_pose() inlay_base() { body_print_pose() body(); body_label_print_2d(); }",
             "body_label": "body_install_pose() inlay_piece() { body_print_pose() body(); body_label_print_2d(); }",

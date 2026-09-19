@@ -1,5 +1,5 @@
 {
-  "source_sha256": "4d6ac37d4137e5257881713c6dfb666fe2dfedbef741613526f13cfee97ca405",
+  "source_sha256": "7d324e1836108cfcac68e0852770702660b743d2f6d53af40cb3fd9d7c1f829a",
   "software": {
     "numpy": "2.5.3",
     "trimesh": "5.1.0",
@@ -8,8 +8,8 @@
     "rtree": "1.4.1",
     "networkx": "3.6.1"
   },
-  "print_parts": 5,
-  "print_quantity": 6,
+  "print_parts": 4,
+  "print_quantity": 4,
   "print_meshes": {
     "body": {
       "size_mm": [
@@ -29,17 +29,17 @@
           77.6
         ]
       ],
-      "volume_mm3": 224064.8922,
-      "triangles": 9776,
+      "volume_mm3": 223250.2926,
+      "triangles": 9488,
       "watertight": true,
       "consistent_winding": true,
       "degenerate_faces": 0,
       "components": 1,
       "backend": "CGAL",
-      "sha256": "f3b943a9f2abc7284a99dac140920ca492f7e3bfaddc08836e36c56df54050ea",
+      "sha256": "7221824c8d23862fd0c32ba1974851e0114b1012a68fa7c1e0dcca8ff1d4da61",
       "quantity": 1,
       "material": "PETG-weiss",
-      "committed_sha256": "f3b943a9f2abc7284a99dac140920ca492f7e3bfaddc08836e36c56df54050ea"
+      "committed_sha256": "7221824c8d23862fd0c32ba1974851e0114b1012a68fa7c1e0dcca8ff1d4da61"
     },
     "back": {
       "size_mm": [
@@ -130,36 +130,6 @@
       "quantity": 1,
       "material": "PETG-grau",
       "committed_sha256": "32077654b8402b7bf4bf69be4bfe35caec54911dfd57c24c5ff4834f35d3d2cf"
-    },
-    "foot": {
-      "size_mm": [
-        18.0,
-        96.0,
-        10.0
-      ],
-      "bounds_mm": [
-        [
-          -9.0,
-          -8.0,
-          0.0
-        ],
-        [
-          9.0,
-          88.0,
-          10.0
-        ]
-      ],
-      "volume_mm3": 8102.3131,
-      "triangles": 766,
-      "watertight": true,
-      "consistent_winding": true,
-      "degenerate_faces": 0,
-      "components": 1,
-      "backend": "Manifold",
-      "sha256": "d8e25bd2c94d8ce07da998acc4ff57d8009b7bb59b2c023ef59290c61ccc93bb",
-      "quantity": 2,
-      "material": "PETG-grau",
-      "committed_sha256": "d8e25bd2c94d8ce07da998acc4ff57d8009b7bb59b2c023ef59290c61ccc93bb"
     }
   },
   "color_meshes": {
@@ -181,14 +151,14 @@
           77.6
         ]
       ],
-      "volume_mm3": 223887.5307,
-      "triangles": 11108,
+      "volume_mm3": 223072.9311,
+      "triangles": 10820,
       "watertight": true,
       "consistent_winding": true,
       "degenerate_faces": 0,
       "components": 1,
       "backend": "CGAL",
-      "sha256": "6913da9b1066b0aef2a3c52df880e20dfd72840f94dd78718d3fb192a93a9ecb"
+      "sha256": "afd08c5c61f9954df08a55004a0101c000c41269bf9f5acec5654af6a6ffd126"
     },
     "body_label": {
       "size_mm": [
@@ -215,7 +185,7 @@
       "degenerate_faces": 0,
       "components": 4,
       "backend": "Manifold",
-      "sha256": "eae31c990b876881f3850b87fd9bd6bc36e558fe4c7d16ca4c07ba8952fb42fd"
+      "sha256": "e021ad73e2852e1d3f7c773962996054808b557ed1c29b87d0e13370ca858a7e"
     }
   },
   "color_parts": {
@@ -229,8 +199,8 @@
       }
     }
   },
-  "assembly_bodies": 12,
-  "assembly_pairs": 66,
+  "assembly_bodies": 10,
+  "assembly_pairs": 45,
   "metrics": {
     "wall": 2.4,
     "front_t": 2.4,
@@ -274,12 +244,6 @@
       ],
       [
         "back",
-        8,
-        5.6,
-        0.9
-      ],
-      [
-        "foot",
         8,
         5.6,
         0.9
@@ -489,62 +453,6 @@
         6.5
       ],
       [
-        "feet",
-        [
-          20,
-          44,
-          0
-        ],
-        [
-          0,
-          0,
-          -1
-        ],
-        6.5
-      ],
-      [
-        "feet",
-        [
-          20,
-          66,
-          0
-        ],
-        [
-          0,
-          0,
-          -1
-        ],
-        6.5
-      ],
-      [
-        "feet",
-        [
-          205,
-          44,
-          0
-        ],
-        [
-          0,
-          0,
-          -1
-        ],
-        6.5
-      ],
-      [
-        "feet",
-        [
-          205,
-          66,
-          0
-        ],
-        [
-          0,
-          0,
-          -1
-        ],
-        6.5
-      ],
-      [
         "cover",
         [
           225,
@@ -591,11 +499,6 @@
       "engagement_mm": 5.6,
       "tip_margin_mm": 0.9
     },
-    "foot": {
-      "length": 8,
-      "engagement_mm": 5.6,
-      "tip_margin_mm": 0.9
-    },
     "cover": {
       "length": 8,
       "engagement_mm": 5.6,
@@ -606,7 +509,6 @@
     "grille@body": 177.726,
     "fan@body": 10.211,
     "back@body": 102.103,
-    "feet@body": 135.449,
     "cover@body": 26.055,
     "battery@body": 48.095
   },
@@ -654,12 +556,6 @@
     },
     {
       "name": "cover_off",
-      "collisions": 0,
-      "first_mm": null,
-      "max_volume_mm3": 0
-    },
-    {
-      "name": "feet_off",
       "collisions": 0,
       "first_mm": null,
       "max_volume_mm3": 0
@@ -821,50 +717,6 @@
       "floor_fill": 1.0
     },
     {
-      "body": "feet",
-      "at": [
-        20,
-        44,
-        0
-      ],
-      "empty_mm3": 0.0,
-      "ring_fill": 1.0,
-      "floor_fill": 1.0
-    },
-    {
-      "body": "feet",
-      "at": [
-        20,
-        66,
-        0
-      ],
-      "empty_mm3": 0.0,
-      "ring_fill": 1.0,
-      "floor_fill": 1.0
-    },
-    {
-      "body": "feet",
-      "at": [
-        205,
-        44,
-        0
-      ],
-      "empty_mm3": 0.0,
-      "ring_fill": 1.0,
-      "floor_fill": 1.0
-    },
-    {
-      "body": "feet",
-      "at": [
-        205,
-        66,
-        0
-      ],
-      "empty_mm3": 0.0,
-      "ring_fill": 1.0,
-      "floor_fill": 1.0
-    },
-    {
       "body": "cover",
       "at": [
         225,
@@ -892,12 +744,11 @@
     "back": 0.0,
     "grille": 0.0,
     "cover": 0.0,
-    "foot": 0.0,
     "multicolour/body_base": 0.0,
     "multicolour/body_label": 0.0
   },
   "open_measurements": [
-    "Akku messen (Durchmesser, Länge mit Schutzplatine, Kabelabgang); Modell: Ø35 × 72 mm",
+    "Akku nachmessen (Etikett: Ø34 × 70 mm, Modell Ø35 × 72 mm) und Kabelabgang prüfen",
     "Lüfter messen (Rahmen 120 × 120 × 25, Lochabstand 105, Kabelabgang)",
     "Elektronik (Wandler, Laden, Schalter) fehlt noch: Lage im Elektronikfach und Durchbrüche"
   ],

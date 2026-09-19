@@ -6,12 +6,12 @@
       "quantity": 1,
       "material": "PETG-weiss",
       "passed": true,
-      "source_sha256": "f3b943a9f2abc7284a99dac140920ca492f7e3bfaddc08836e36c56df54050ea",
+      "source_sha256": "7221824c8d23862fd0c32ba1974851e0114b1012a68fa7c1e0dcca8ff1d4da61",
       "exit_code": 0,
       "result_code": 0,
       "warnings": "",
-      "hours": 6.037,
-      "grams": 257.228,
+      "hours": 6.031,
+      "grams": 256.267,
       "wall_loops": 4,
       "infill_percent": 25.0,
       "layer_height": 0.20000000298023224,
@@ -92,38 +92,15 @@
         "bottom_shell_layers": "5"
       },
       "start_gcode_diagnostic": true
-    },
-    {
-      "part": "foot",
-      "quantity": 2,
-      "material": "PETG-grau",
-      "passed": true,
-      "source_sha256": "d8e25bd2c94d8ce07da998acc4ff57d8009b7bb59b2c023ef59290c61ccc93bb",
-      "exit_code": 0,
-      "result_code": 0,
-      "warnings": "",
-      "hours": 0.386,
-      "grams": 9.293,
-      "wall_loops": 4,
-      "infill_percent": 25.0,
-      "layer_height": 0.20000000298023224,
-      "effective_settings": {
-        "sparse_infill_pattern": "gyroid",
-        "enable_support": "0",
-        "curr_bed_type": "Textured PEI Plate",
-        "top_shell_layers": "5",
-        "bottom_shell_layers": "5"
-      },
-      "start_gcode_diagnostic": true
     }
   ],
-  "total_parts": 6,
-  "total_grams_individual_plates": 409.6,
-  "total_hours_individual_plates": 11.8,
+  "total_parts": 4,
+  "total_grams_individual_plates": 390.1,
+  "total_hours_individual_plates": 11.0,
   "production_gcode": false,
   "project_3mf": {
     "file": "stl/leo_ac1_all_parts.3mf",
-    "parts": 6,
+    "parts": 4,
     "plates": 3,
     "layout": [
       {
@@ -157,13 +134,11 @@
         "name": "Graue Teile",
         "parts": [
           "cover",
-          "foot",
-          "foot",
           "grille"
         ],
         "size_mm": [
-          172.0,
-          192.3
+          136.0,
+          172.0
         ]
       }
     ],
@@ -177,13 +152,13 @@
         "plate": 1,
         "hours": 6.19,
         "grams_by_filament": {
-          "1": 258.12,
+          "1": 257.16,
           "3": 0.71
         },
         "warnings": ""
       }
     },
     "own_infill_parts": 0,
-    "sha256": "b63656021436ca89df61053dd17c76e50fc2010365a8642f00c241642a3a4861"
+    "sha256": "75a512c2b7b38b1661f2aa62417d6d875b9349f18c6bbf1a492b471a9e8a7b02"
   }
 }

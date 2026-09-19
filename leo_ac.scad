@@ -1,7 +1,7 @@
 // LEO-AC1: battery fan styled like the outdoor unit of an air conditioner, 120 mm PC fan,
 // 3.2 V 6000 mAh LiFePO4 pack. Skill openscad-print-project. Units mm, Z up.
 // Installed frame: x = width (left to right seen from the front), y = depth (front face at y = 0,
-// back face at y = body_d), z = height (underside of the body at z = 0, feet below).
+// back face at y = body_d), z = height (underside of the body at z = 0).
 // Modules build every part in its INSTALLED position; the part branches at the end put each print
 // part into PRINT orientation (largest flat face on the bed at z = 0). The tools set `part`.
 
@@ -54,7 +54,7 @@ back_t = 2.4;
 lip_h = 4;           // lip reaching into the body
 lip_t = 2.4;
 lip_cl = 0.25;       // clearance per side between lip and body wall
-boss_d = 8;          // screw bosses for inserts (back, feet, service cover)
+boss_d = 8;          // screw bosses for inserts (back, service cover)
 boss_inset = 6.5;    // back bosses: axis distance from the outer edges
 back_boss_len = 12;
 gusset = 14;         // 45 degree cone below the back bosses in print orientation
@@ -62,8 +62,9 @@ slot_w = 1.6;        // intake slots, back and left side
 slot_pitch = 3.2;
 
 /* [Battery, 3.2 V 6000 mAh LiFePO4 pack] */
-bat_d = 35;          // dealer: 70 x 35 mm; envelope incl. protection board, to be measured
-bat_l = 72;
+bat_d = 35;          // 32700 cell, label "3,4 x 7 cm" incl. protection board; envelope with tolerance
+bat_l = 72;          // the cable leaves at one end: that end up, through the shelf slot
+cable_slot_w = 10;   // slot in the shelf above the battery, open towards the back
 bat_cx = 180;
 bat_clear = 0.5;     // radial clearance in the cradle
 bat_front_gap = 1;   // front plate to battery
@@ -87,16 +88,6 @@ cover_t = 2;
 cover_r = 4;
 cover_screw_dz = 28;
 
-/* [Feet] */
-foot_x = [20, 205];  // rail centres
-foot_w = 18;
-foot_h = 10;
-foot_over = 8;       // tab beyond the body, front and back
-foot_top = 2.4;
-foot_side = 2.4;
-foot_tab = 3;
-foot_screw_y = [44, 66];
-
 /* [Screws, M3 heat-set inserts] */
 insert_hole_d = 4.0; // Ruthex M3 x 5.7
 insert_len = 5.7;
@@ -108,7 +99,6 @@ screw_head_h = 3;
 len_grille = 10;     // M3 x 10 countersunk, from the front
 len_fan = 30;        // M3 x 30 socket head, from behind the fan
 len_back = 8;        // M3 x 8 countersunk, from the back
-len_foot = 8;        // M3 x 8 socket head, from inside the body
 len_cover = 8;       // M3 x 8 socket head, from inside the body
 
 /* [Decor] */
@@ -146,7 +136,6 @@ function back_bosses() = concat(
         t = [part_x + part_t, sz ? body_h - wall : wall])
      [c, w, [part_x + part_t, c[1]], w, t]]);
 function cover_screws() = [for (s = [-1, 1]) [cover_y, cover_z + s * cover_screw_dz]];
-function foot_screws() = [for (x = foot_x, y = foot_screw_y) [x, y]];
 // thread engagement in the insert and margin of the screw tip to the pocket end
 screw_table = [
     // name, length, engagement, tip margin
@@ -156,7 +145,6 @@ screw_table = [
      (fan_y + fan_t - len_fan) - (fan_y - insert_depth)],
     ["back", len_back, (body_d - back_t) - max(body_d - len_back, body_d - back_t - insert_len),
      (body_d - len_back) - (body_d - back_t - insert_depth)],
-    ["foot", len_foot, -max(wall - len_foot, -insert_len), (wall - len_foot) + insert_depth],
     ["cover", len_cover, min(len_cover - wall, insert_len), insert_depth - (len_cover - wall)]];
 
 assert(wall >= 3 * 0.4 && front_t >= 3 * 0.4 && back_t >= 3 * 0.4, "Walls need at least three perimeters");
@@ -170,7 +158,6 @@ assert(grille_screw_r - grille_boss_d / 2 > open_r, "Grille bosses reach into th
 assert(grille_r - (grille_screw_r + csk_d / 2) >= 1.2, "Grille ring too narrow outside the countersinks");
 assert(fan_blade_d / 2 < open_r, "Front opening smaller than the fan blades");
 assert(cover_out - cover_t - insert_depth >= 0.5, "Cover insert pocket breaks through");
-assert(foot_h - insert_depth >= 0.5, "Foot insert pocket breaks through");
 assert(shelf_z + shelf_t < body_h - wall, "Shelf above the top wall");
 for (s = screw_table) assert(s[2] >= 4 && s[3] >= 0.3, str("Screw ", s[0], ": engagement ", s[2], ", tip margin ", s[3]));
 
@@ -253,9 +240,10 @@ module body() difference() {
     for (b = back_bosses()) cyl_y(b[0], body_d - back_t - insert_depth, body_d + 1, insert_hole_d / 2);
     // cable notch at the back edge of the partition
     translate([part_x - 1, part_y1 - 14, 120]) cube([part_t + 2, 15, 12]);
+    // battery cable slot through the shelf; the shelf rim still stops the battery upwards
+    translate([bat_cx - cable_slot_w / 2, bat_cy - 6, shelf_z - 1]) cube([cable_slot_w, shelf_d + front_t - bat_cy + 7, shelf_t + 2]);
     along_x(-1, wall + 1) intake_slots_side();
     for (p = cover_screws()) cyl_x(p, body_w - wall - 1, body_w + 1, screw_clear_d / 2);
-    for (p = foot_screws()) translate([p[0], p[1], -1]) cylinder(d = screw_clear_d, h = wall + 2);
 }
 
 // Front view (x, z) of the name plate; in print xy it is mirrored in y (pose below)
@@ -348,21 +336,6 @@ module cover() difference() {
 }
 module cover_print_pose() translate([0, 0, body_w + cover_out]) rotate([0, 90, 0]) children();   // outer face on the bed
 
-// ---------- feet ----------
-module foot() difference() {       // one rail, centred on x = 0, top face at z = 0
-    union() {
-        difference() {
-            translate([-foot_w / 2, 0, -foot_h]) cube([foot_w, body_d, foot_h]);
-            translate([-foot_w / 2 + foot_side, foot_side, -foot_h - 1]) cube([foot_w - 2 * foot_side, body_d - 2 * foot_side, foot_h - foot_top + 1]);
-        }
-        for (y = [-foot_over, body_d - eps]) translate([-foot_w / 2, y, -foot_h]) cube([foot_w, foot_over + eps, foot_tab]);
-        for (y = foot_screw_y) translate([0, y, -foot_h]) cylinder(d = boss_d, h = foot_h);
-    }
-    for (y = foot_screw_y) translate([0, y, -insert_depth]) cylinder(d = insert_hole_d, h = insert_depth + 1);
-    for (y = [-foot_over / 2, body_d + foot_over / 2]) translate([0, y, -foot_h - 1]) linear_extrude(foot_tab + 2) slot2d([-3, 0], [3, 0], 4);
-}
-module place_feet() for (x = foot_x) translate([x, 0, 0]) foot();
-
 // ---------- bought parts: envelopes for the checks ----------
 module fan_env() translate([fan_cx - fan_size / 2, fan_y, fan_cz - fan_size / 2]) cube([fan_size, fan_t, fan_size]);
 module fan_visual() translate([fan_cx, fan_y, fan_cz]) rotate([-90, 0, 0]) {   // local z along +y
@@ -385,9 +358,8 @@ module screw(len, countersunk) {   // local +z = screw direction, z = 0 at the s
 module screws_grille() for (p = grille_screws()) translate([p[0], -grille_t, p[1]]) orient([0, 1, 0]) screw(len_grille, true);
 module screws_fan() for (p = fan_holes()) translate([p[0], fan_y + fan_t, p[1]]) orient([0, -1, 0]) screw(len_fan, false);
 module screws_back() for (b = back_bosses()) translate([b[0][0], body_d, b[0][1]]) orient([0, -1, 0]) screw(len_back, true);
-module screws_feet() for (p = foot_screws()) translate([p[0], p[1], wall]) orient([0, 0, -1]) screw(len_foot, false);
 module screws_cover() for (p = cover_screws()) translate([body_w - wall, p[0], p[1]]) orient([1, 0, 0]) screw(len_cover, false);
-module all_screws() { screws_grille(); screws_fan(); screws_back(); screws_feet(); screws_cover(); }
+module all_screws() { screws_grille(); screws_fan(); screws_back(); screws_cover(); }
 
 module assembly(explode = 0) {
     body_install_pose() {
@@ -397,7 +369,6 @@ module assembly(explode = 0) {
     color("#8f9396") translate([0, -explode, 0]) grille();
     color("#f2f2ee") translate([0, 2 * explode, 0]) back();
     color("#8f9396") translate([explode, 0, 0]) cover();
-    color("#8f9396") translate([0, 0, -explode]) place_feet();
     color("#303236") translate([0, explode, 0]) fan_visual();
     color("#3f7fbf") translate([0, explode / 2, 0]) battery_env();
 }
@@ -418,7 +389,6 @@ else if (part == "metrics") echo("PROJECT_METRICS", [
         [for (p = grille_screws()) ["body", [p[0], front_t + grille_boss_h, p[1]], [0, -1, 0], insert_depth]],
         [for (p = fan_holes()) ["body", [p[0], fan_y, p[1]], [0, -1, 0], insert_depth]],
         [for (b = back_bosses()) ["body", [b[0][0], body_d - back_t, b[0][1]], [0, -1, 0], insert_depth]],
-        [for (p = foot_screws()) ["feet", [p[0], p[1], 0], [0, 0, -1], insert_depth]],
         [for (p = cover_screws()) ["cover", [body_w, p[0], p[1]], [1, 0, 0], insert_depth]])]]);
 else if (part == "none") {}
 else if (part == "body") body_print_pose() body();
@@ -427,4 +397,3 @@ else if (part == "body_label") inlay_piece() { body_print_pose() body(); body_la
 else if (part == "back") back_print_pose() back();
 else if (part == "grille") grille_print_pose() grille();
 else if (part == "cover") cover_print_pose() cover();
-else if (part == "foot") translate([0, 0, foot_h]) foot();
