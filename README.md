@@ -6,7 +6,7 @@ Small battery fan for a child's room, styled like the outdoor unit of a split ai
 
 3D viewer (artifact, republished under the same URL after every model change): a private Claude viewer artifact
 
-| Back | Exploded | Logo and grooves | Air duct from behind | Service cover with knob | Underside with M5 thread and TPU feet | Charge module in the air stream | LED pocket behind the O | Dedication inside the front | Handle mount, cut at the screws | Back cover bosses | TPU foot, cut at the screws | USB-C socket in the service cover |
+| Back | Exploded | Logo and grooves | Air duct from behind | Service cover with knob | Underside with M5 thread and TPU feet | Charge module in the air stream | LED pocket behind the O | Dedication inside the front | Handle mount, cut at the screws | Back cover bosses | TPU foot, cut at the screws | USB-C socket in the back cover, cut at its axis |
 |---|---|---|---|---|---|---|---|---|---|---|---|---|
 | ![Back](img/02_back.png) | ![Exploded](img/03_exploded.png) | ![Logo](img/04_front_right.png) | ![Air duct](img/05_duct.png) | ![Knob](img/06_knob.png) | ![Underside](img/07_underside.png) | ![Charge module](img/08_charge_module.png) | ![LED pocket](img/09_led.png) | ![Dedication](img/10_dedication.png) | ![Handle mount](img/11_handle_mount.png) | ![Back cover bosses](img/12_back_bosses.png) | ![TPU foot mount](img/13_foot_mount.png) | ![USB-C socket](img/14_usb_c.png) |
 
@@ -24,7 +24,7 @@ Small battery fan for a child's room, styled like the outdoor unit of a split ai
 
 All parts are in the Bambu Studio project [`stl/leo_ac1_all_parts.3mf`](stl/leo_ac1_all_parts.3mf): plate 1 housing (with prime tower), plate 2 back cover, plate 3 grey parts (grille, service cover, handle, knob), plate 4 TPU feet. Filament 1 PETG Basic white, filament 2 PETG Basic grey, filament 3 grey for the logo and the dedication (same AMS spool as filament 2), filament 4 TPU (Generic TPU profile; set your TPU). To print the housing in one colour, use `stl/body.stl`.
 
-Estimated **approx. 0.70 kg and 20.7 hours** (diagnostic slicing, every instance as its own print; housing alone 397 g / 10.2 h, the two TPU feet 13 g / 1.2 h).
+Estimated **approx. 0.70 kg and 20.6 hours** (diagnostic slicing, every instance as its own print; housing alone 396 g / 10.1 h, the two TPU feet 13 g / 1.2 h).
 
 ## Bought parts
 
@@ -39,7 +39,7 @@ Estimated **approx. 0.70 kg and 20.7 hours** (diagnostic slicing, every instance
 | Aluminium heatsink 8.8 × 8.8 × 5 mm with thermal adhesive tape | 2 | – | on the chips of the charge/boost module, fins along the air flow |
 | Double-sided, heat-resistant tape | – | – | for the charge module on its two pads: double-sided Kapton (sand the pads flat) or 3M VHB; no hot glue |
 | Resettable PTC fuse Bourns MF-R160 (1.6 A hold / 3.2 A trip) | 1 | – | optional, between battery plus and B+ (check the datasheet) |
-| USB-C PD trigger module, Type A (default 5 V) | 1 | [AliExpress 1005010610660644](https://de.aliexpress.com/item/1005010610660644.html) | charging socket, 13 × 10 × 4 mm: sits in a sleeve inside the service cover, receptacle flush in the cover plate, its end in a pocket of the right wall; **leave pads 1–4 open** (1 = 9 V, 2 = 12 V, 3 = 15 V, 4 = 20 V), the charge module only takes 4–6 V; check 5 V with a multimeter before connecting |
+| USB-C PD trigger module, Type A (default 5 V) | 1 | [AliExpress 1005010610660644](https://de.aliexpress.com/item/1005010610660644.html) | charging socket, 13 × 10 × 4 mm: sits in a channel on the inside of the back cover (top right), receptacle flush in the back cover; with the back cover on, a stop on the right wall behind the module takes the plug force; **leave pads 1–4 open** (1 = 9 V, 2 = 12 V, 3 = 15 V, 4 = 20 V), the charge module only takes 4–6 V; check 5 V with a multimeter before connecting |
 | Heat-set inserts Ruthex RX-M3x5.7 | 24 | [ruthex.de](https://www.ruthex.de) | hole Ø 4.0, depth 7 (datasheet: ≥ L + 1 = 6.7), wall ≥ 1.6 |
 | Heat-set insert Ruthex RX-M5x9.5 | 1 | [ruthex.de](https://www.ruthex.de) | mounting thread in the underside (like a tripod thread): pressed in from outside, blind hole Ø 6.4 × 10.5 (L + 1), 2.5 mm floor above; wall 4.3 mm (datasheet ≥ 2.6) |
 | M3 × 12, ISO 7380 Torx | 4 | – | grille, from the front, head recessed 1.9 mm in the grille ring |
@@ -67,12 +67,12 @@ battery (JST-PH, built-in BMS) ──► (PTC) ──► B+ / B−
 
 1. Press in the heat-set inserts: 4 grille and 4 fan bosses inside the front, 6 bosses on the back edge of the housing, 2 from outside into the right side wall under the service cover, 4 in the handle feet; the M5 insert and 4 M3 inserts for the TPU feet from below into the blind holes in the underside.
 2. Glue the LED from inside into the pocket behind the O of LEO (top right behind the front; a drop of clear glue or hot glue on the flange), bend the legs back and solder the resistor and wires.
-3. Slide the PWM board in from behind, potentiometer edge first, onto the two ribs above the electronics shelf; push the potentiometer through the right side wall and tighten its nut outside; put the handle on (its keys sit in the recesses of the top wall) and screw it on from inside with M3 × 12 and the service cover from outside with M3 × 16 (before that, solder the wires to + and − of the USB-C module, push it into the sleeve on the inside of the cover with the receptacle in the opening, and lead the wires through the slot in the right wall; the wall holds the module once the cover is on); press the knob through the hole in the service cover onto the shaft (pointer line towards the flat of the shaft).
+3. Slide the PWM board in from behind, potentiometer edge first, onto the two ribs above the electronics shelf; push the potentiometer through the right side wall and tighten its nut outside; put the handle on (its keys sit in the recesses of the top wall) and screw it on from inside with M3 × 12 and the service cover from outside with M3 × 16; press the knob through the hole in the service cover onto the shaft (pointer line towards the flat of the shaft).
 4. Put the grille on from the front (the collar centres it in the opening) and screw it on with M3 × 12.
 5. Put the fan from behind onto the bosses behind the air duct, blowing forward, and screw it on with M3 × 30. Route the cable through the notch in the partition into the electronics bay. Tape the charge/boost module with its heatsinks (component side towards the fan) upright onto the two pads on the partition, lower edge on the ledge, O± end up towards the cable notch.
 6. Slide the battery upright in from behind into the cradle, cable end up and BMS board towards the partition (rectangular cut-out in the cradle); the cable runs through the slot in the electronics shelf above.
 7. Put the two TPU feet into the pockets in the underside and screw each on with two M3 × 8 from below; tighten only until the TPU just starts to compress.
-8. Put on the back cover (its three saddles close the cradle to rings with 0.5 mm clearance all around, the hold-down plate covers the back edge of the shelf) and screw it on with M3 × 8.
+8. Solder about 10 cm of wire to + and − of the USB-C module (enough slack to lay the back cover aside later), push the module into the channel on the inside of the back cover with the receptacle in the opening, and connect the wires through the cable notch in the partition to IN+ / IN− of the charge module. Put on the back cover (its three saddles close the cradle to rings with 0.5 mm clearance all around, the hold-down plate covers the back edge of the shelf) and screw it on with M3 × 8.
 
 ## Print and robustness
 
@@ -95,7 +95,7 @@ All parts print without supports (checked with `analyze.py islands`, `overhangs`
 - Measure the BMS board on the battery (assumed 16 × 4 mm over the full length, facing the partition).
 - Measure the PWM board CNY-FA5-PRO (assumed 48 × 34 mm, components 13 mm, potentiometer axis 8.5 mm above the board) and the potentiometer shaft (shape, length).
 - Measure the battery (label Ø 34 × 70 mm, model Ø 35 × 72 mm) and its cable exit.
-- Measure the USB-C PD trigger (listing 13 × 10 × 4 mm; the receptacle must reach at least 2.4 mm beyond the board to sit flush in the cover plate).
+- Measure the USB-C PD trigger (listing 13 × 10 × 4 mm; the receptacle must reach at least 2.4 mm beyond the board to sit flush in the back cover).
 
 ## Model, exports and checks
 
@@ -112,4 +112,4 @@ python3 -m venv .venv
 .venv/bin/python scripts/render_views.py           # img/
 ```
 
-Checked: part list against the `part` branches, closed meshes, bed placement, build volume, no intersection between 21 assembly bodies (210 pairs, including the TPU feet and their screws, the USB-C module, the assumed PWM board, LED, screws, fan and battery envelopes), contact of grille, fan, back cover, service cover, handle, feet, USB-C module (wall pocket and cover plate), potentiometer, charge module, LED and battery, stops of the battery (back, top, side), 12 assembly/removal paths (including the feet downwards, the USB-C module with the cover and then out of its sleeve, the charge module towards the back before the fan, and the PWM board: first 19 mm away from the wall, then towards the back) in a realistic order, 25 insert holes (24 × M3, 1 × M5; axis free, full minimum wall per Ruthex datasheet, floor solid), screw engagement (≥ 3 mm = 1 × d in the brass, fan on silicone pads 3 mm, others ≥ 4.8 mm; tip ≥ 0.9 mm before the end of the pocket), standard dimensions (120 mm fan, Ruthex M3), grille gap ≤ 6 mm (finger guard), multicolour coverage of logo and dedication. Printability: no floating regions, logo and dedication on their first layer without too narrow spots, ridges between the grooves ≥ 1.1 mm. No strength, airflow or fit test on the real part.
+Checked: part list against the `part` branches, closed meshes, bed placement, build volume, no intersection between 21 assembly bodies (210 pairs, including the TPU feet and their screws, the USB-C module, the assumed PWM board, LED, screws, fan and battery envelopes), contact of grille, fan, back cover, service cover, handle, feet, USB-C module (back cover), potentiometer, charge module, LED and battery, stops of the battery (back, top, side) and of the USB-C module (stop on the right wall), 11 assembly/removal paths (including the feet downwards, the USB-C module with the back cover and then out of its channel, the charge module towards the back before the fan, and the PWM board: first 19 mm away from the wall, then towards the back) in a realistic order, 25 insert holes (24 × M3, 1 × M5; axis free, full minimum wall per Ruthex datasheet, floor solid), screw engagement (≥ 3 mm = 1 × d in the brass, fan on silicone pads 3 mm, others ≥ 4.8 mm; tip ≥ 0.9 mm before the end of the pocket), standard dimensions (120 mm fan, Ruthex M3), grille gap ≤ 6 mm (finger guard), multicolour coverage of logo and dedication. Printability: no floating regions, logo and dedication on their first layer without too narrow spots, ridges between the grooves ≥ 1.1 mm. No strength, airflow or fit test on the real part.
