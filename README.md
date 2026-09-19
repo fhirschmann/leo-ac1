@@ -6,24 +6,24 @@ Small battery fan for a child's room, styled like the outdoor unit of a split ai
 
 3D viewer (artifact, republished under the same URL after every model change): a private Claude viewer artifact
 
-| Back | Exploded | Logo and grooves | Air duct from behind | Service cover with knob | Underside with M5 thread | Charge module in the air stream | LED pocket behind the O |
-|---|---|---|---|---|---|---|---|
-| ![Back](img/02_back.png) | ![Exploded](img/03_exploded.png) | ![Logo](img/04_front_right.png) | ![Air duct](img/05_duct.png) | ![Knob](img/06_knob.png) | ![Underside](img/07_underside.png) | ![Charge module](img/08_charge_module.png) | ![LED pocket](img/09_led.png) |
+| Back | Exploded | Logo and grooves | Air duct from behind | Service cover with knob | Underside with M5 thread | Charge module in the air stream | LED pocket behind the O | Dedication inside the front | Handle mount, cut at the screws |
+|---|---|---|---|---|---|---|---|---|---|
+| ![Back](img/02_back.png) | ![Exploded](img/03_exploded.png) | ![Logo](img/04_front_right.png) | ![Air duct](img/05_duct.png) | ![Knob](img/06_knob.png) | ![Underside](img/07_underside.png) | ![Charge module](img/08_charge_module.png) | ![LED pocket](img/09_led.png) | ![Dedication](img/10_dedication.png) | ![Handle mount](img/11_handle_mount.png) |
 
 ## Printed parts
 
 | Part | Qty | Material | Size (mm) | Print orientation |
 |---|---|---|---|---|
-| `body` housing | 1 | PETG white + grey (logo) | 225 × 155 × 77.6 | front on the bed, logo as inlay in the first 0.6 mm, fake grooves 0.8 mm deep and open towards the bed |
+| `body` housing | 1 | PETG white + grey (logo) | 225 × 155 × 77.6 | front on the bed, logo as inlay in the first 0.6 mm, fake grooves 0.8 mm deep and open towards the bed; "Für Leo von Papa" raised 0.8 mm on the inside of the front plate, readable with the back cover off |
 | `back` back cover | 1 | PETG white | 225 × 155 × 55 | outside on the bed, the three battery saddles and the hold-down plate stand upright |
 | `grille` fan grille | 1 | PETG grey | Ø 136 × 6 | front on the bed |
 | `cover` service cover | 1 | PETG grey | 116 × 34 × 11 | outside on the bed; right side, centred in depth, knob at the top; screwed from outside (heads recessed) |
 | `knob` speed knob | 1 | PETG grey | Ø 28 × 13.7 (flat cap, 7 mm proud of the service cover) | top on the bed, stem with D bore points up |
-| `handle` handle | 1 | PETG grey | 170 × 42 × 24 (30 mm clearance under the bar, 90 mm opening at the top) | lying on its side (layers along the pull direction), 45° bevels |
+| `handle` handle | 1 | PETG grey | 170 × 42 × 24 plus 1.2 mm keys under the feet (30 mm clearance under the bar, 90 mm opening at the top) | lying on its side (layers along the pull direction), 45° bevels, keys with 45° flanks |
 
 All parts are in the Bambu Studio project [`stl/leo_ac1_all_parts.3mf`](stl/leo_ac1_all_parts.3mf): plate 1 housing (with prime tower), plate 2 back cover, plate 3 grey parts (grille, service cover, handle, knob). Filament 1 PETG Basic white, filament 2 PETG Basic grey, filament 3 grey for the logo (same AMS spool as filament 2). To print the housing in one colour, use `stl/body.stl`.
 
-Estimated **approx. 0.65 kg and 18.1 hours** (diagnostic slicing, every instance as its own print; housing alone 366 g / 8.7 h).
+Estimated **approx. 0.68 kg and 18.9 hours** (diagnostic slicing, every instance as its own print; housing alone 390 g / 9.6 h).
 
 ## Bought parts
 
@@ -44,7 +44,7 @@ Estimated **approx. 0.65 kg and 18.1 hours** (diagnostic slicing, every instance
 | M3 × 12, ISO 7380 Torx | 4 | – | grille, from the front, head recessed 1.9 mm in the grille ring |
 | **M3 × 30**, ISO 7380 Torx | 4 | – | fan, from behind through the frame (not in the nas-case screw set, buy separately) |
 | M3 × 8, ISO 7380 Torx | 6 | – | back cover, from outside, head recessed 1.9 mm |
-| M3 × 8, ISO 7380 Torx | 4 | – | handle, from inside |
+| M3 × 12, ISO 7380 Torx | 4 | – | handle, from inside through the top wall and its doubler |
 | M3 × 16, ISO 7380 Torx | 2 | – | service cover, from outside, head recessed 1.9 mm |
 
 ## Wiring
@@ -65,7 +65,7 @@ battery (JST-PH, built-in BMS) ──► (PTC) ──► B+ / B−
 
 1. Press in the heat-set inserts: 4 grille and 4 fan bosses inside the front, 6 bosses on the back edge of the housing, 2 from outside into the right side wall under the service cover, 4 in the handle feet; the M5 insert from below into the blind hole in the underside.
 2. Glue the LED from inside into the pocket behind the O of LEO (top right behind the front; a drop of clear glue or hot glue on the flange), bend the legs back and solder the resistor and wires.
-3. Slide the PWM board in from behind, potentiometer edge first, onto the two ribs above the electronics shelf; push the potentiometer through the right side wall and tighten its nut outside; screw on the handle from inside with M3 × 8 and the service cover from outside with M3 × 16; press the knob through the hole in the service cover onto the shaft (pointer line towards the flat of the shaft).
+3. Slide the PWM board in from behind, potentiometer edge first, onto the two ribs above the electronics shelf; push the potentiometer through the right side wall and tighten its nut outside; put the handle on (its keys sit in the recesses of the top wall) and screw it on from inside with M3 × 12 and the service cover from outside with M3 × 16; press the knob through the hole in the service cover onto the shaft (pointer line towards the flat of the shaft).
 4. Put the grille on from the front (the collar centres it in the opening) and screw it on with M3 × 12.
 5. Put the fan from behind onto the bosses behind the air duct, blowing forward, and screw it on with M3 × 30. Route the cable through the notch in the partition into the electronics bay. Tape the charge/boost module with its heatsinks (component side towards the fan) upright onto the two pads on the partition, lower edge on the ledge, O± end up towards the cable notch.
 6. Slide the battery upright in from behind into the cradle, cable end up and BMS board towards the partition (rectangular cut-out in the cradle); the cable runs through the slot in the electronics shelf above.
@@ -75,9 +75,10 @@ battery (JST-PH, built-in BMS) ──► (PTC) ──► B+ / B−
 
 All parts print without supports (checked with `analyze.py islands`, `overhangs` > 45°, `ridges`, `inlays`):
 
-- Housing with the front on the bed: walls, partition, battery cradle and electronics shelf stand upright; the back cover bosses run into the corners with 45° cones; side slots only bridge 1.6 mm; fake grooves and the LED pocket are open towards the inside.
+- Housing with the front on the bed: walls, partition, battery cradle and electronics shelf stand upright; the back cover bosses run into the corners with 45° cones; side slots only bridge 1.6 mm; fake grooves and the LED pocket are open towards the inside; the dedication grows upwards from the inside of the front plate.
 - Air duct: round tube Ø 118 mm (like the grille opening), 3.2 mm wall, from the front to 0.2 mm in front of the fan frame (checked: wall closed all around, tube end sits fully on the frame); no dead corners between the round grille and the square frame.
-- Drop-proof: walls and front 3.2 mm, back cover 4 mm (screw heads recessed), corner radius 6 mm, 4 mm fillet inside between front and walls, grille ring 4 mm with 2.4 mm bars, stiffening ribs inside under the handle feet, extra bar in the back cover slots.
+- Drop-proof: walls and front 3.2 mm, back cover 4 mm (screw heads recessed), corner radius 6 mm, 4 mm fillet inside between front and walls, grille ring 4 mm with 2.4 mm bars, extra bar in the back cover slots.
+- Handle mount: under each foot the top wall is doubled to 6.4 mm, with three 3.2 mm ribs from the front plate to the back lip (7 mm driver room next to the screws). A 1.2 mm key under each foot sits in a matching recess (0.2 mm clearance), so a drop or a jerk on the handle is taken as shear by the housing instead of bending the screws. The inserts start at the key face (pocket 8.5 mm), M3 × 12 engages the full 5.7 mm.
 - Heat-set inserts have at least 3 mm of material to the visible face (grille 3.5 mm, fan 3.9 mm, service cover 4.5 mm), so the front does not warp when pressing them in.
 - Grille gap 4.9 mm (finger guard).
 - M5 mount: the insert is pressed from outside into a blind hole (10.5 mm = L + 1 per datasheet) with a 2.5 mm floor above; the load on the mount presses it against this floor. The boss is deliberately only Ø 15 mm: its 4.3 mm wall is printed fully solid with 6 wall loops instead of infill. Plus a rib towards the back, a 45° ramp to the front and a 3 mm floor doubler inside from the front to the partition (60 × 56 mm) that leads leverage into the front and the partition. For real camera accessories there is also Ruthex RX-1/4x12.7 (1/4"-20, hole Ø 8.0, wall ≥ 3.3).

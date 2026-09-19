@@ -94,6 +94,7 @@ def checks(ctx):
     assert m["grille_gap"] <= 6, "Grille openings above 6 mm let children's fingers through"
     assert m["knob_shaft_engagement"] >= 8 and m["knob_top_skin"] >= 2 and m["knob_protrusion"] <= 8, "Knob: on the shaft, at most 8 mm in front of the cover"
     assert m["handle_clearance"] >= 30 and m["handle_open_top"] >= 90, "Handle: 30 mm finger clearance, 90 mm hand breadth"
+    assert m["handle_mount_wall"] >= 6, "Handle mount: top wall with doubler at least 6 mm under the feet"
     screws = {name: dict(length=length, engagement_mm=round(eng, 2), tip_margin_mm=round(margin, 2))
               for name, length, eng, margin in m["screws"]}
     for name, info in screws.items():
@@ -211,7 +212,7 @@ VIEWER = dict(
            ("screws_fan", "Fan · M3 × 30 button head", "screws", "#26282b", "4x", [0, 1.4, 0]),
            ("screws_back", "Back cover · M3 × 8 button head", "screws", "#26282b", "6x", [0, 2.2, 0]),
            ("screws_cover", "Service cover · M3 × 16 button head, from outside", "screws", "#26282b", "2x", [1.6, 0, 0]),
-           ("screws_handle", "Handle · M3 × 8 button head", "screws", "#26282b", "4x", [0, 0, -0.5])],
+           ("screws_handle", "Handle · M3 × 12 button head", "screws", "#26282b", "4x", [0, 0, -0.5])],
     colour={"body": [("label", "Housing · logo", "#8f9396")]},
     bodies={"body_base": "body_install_pose() inlay_base() { body_print_pose() body(); body_label_print_2d(); }",
             "body_label": "body_install_pose() inlay_piece() { body_print_pose() body(); body_label_print_2d(); }",
@@ -243,5 +244,11 @@ VIEWS = {"01_assembly": ("assembly();", "-160,-330,230,112,40,70"),
          # LED pocket behind the O, cut through the LED axis and seen from behind: 0.8 mm white skin in front of the LED
          "09_led": ("intersection() { union() { color(\"#f2f2ee\") body(); color(\"#9fd3ff\") led_env(); } translate([led_xz[0] - 9, -1, led_xz[1] - 8]) cube([18, 10, 8]); }",
                     "232,40,178,207,3,131"),
+         # dedication on the inside of the front plate: electronics bay, face turned up and read from behind
+         "10_dedication": ("rotate([0, 0, 180]) rotate([90, 0, 0]) intersection() { body(); translate([bay_x0 - 1, -1, 95]) cube([bay_x1 - bay_x0 + 2, 12, 50]); }",
+                           "-187,40,160,-187,117,3"),
+         # handle mount from below: doubler, ribs and screws under the right foot, cut at the screw axis, with the handle keys
+         "11_handle_mount": ("rotate([0, 0, 180]) rotate([90, 0, 0]) intersection() { union() { color(\"#f2f2ee\") body(); color(\"#8f9396\") handle(); color(\"#26282b\") screws_handle(); } translate([150, -1, 125]) cube([76, handle_cy + 1, 60]); }",
+                             "-185,95,215,-185,150,40"),
          # underside with the M5 mount insert
          "07_underside": ("body();", "40,-160,-260,112,40,40")}

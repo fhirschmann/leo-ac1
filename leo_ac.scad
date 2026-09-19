@@ -141,7 +141,10 @@ handle_open = [110, 90, 14];  // opening: width at the bottom, width at the top 
 handle_end = [15, 8];  // outer ends: slant inset at the top, height of the vertical foot face
 handle_c = 2.5;        // 45 degree bevels on all edges
 handle_screw_dx = [62, 77];  // screw axes from the handle centre, both sides
-handle_rib = [2.4, 12, 55];  // ribs inside the top wall under each handle foot: thickness, height, depth from the front
+handle_pad = [3.2, 7];       // doubler under the top wall at each foot (6.4 mm together): thickness, driver room from a screw axis to the next rib
+handle_rib = [3.2, 12];      // three ribs per foot from the front plate to the back lip: thickness, height below the top wall
+handle_key = [1.2, 0.2];     // key under each foot in a recess of the top wall, takes shear off the screws: height, clearance
+handle_ins_depth = 8.5;      // insert pockets in the feet, from the key face (Ruthex: >= L + 1)
 
 /* [Mount insert in the underside, like a camera thread] */
 mount_xy = [121, 36];      // near the centre of mass (fan left, battery right)
@@ -166,7 +169,7 @@ len_grille = 12;     // M3 x 12, from the front, head recessed in the grille rin
 len_fan = 30;        // M3 x 30, from behind the fan (not in the nas-case set)
 len_back = 8;        // M3 x 8, from the back, head on the surface
 len_cover = 16;      // M3 x 16, from outside through the service cover, head recessed
-len_handle = 8;      // M3 x 8, from inside the body
+len_handle = 12;     // M3 x 12, from inside the body through top wall and doubler
 
 /* [Decor] */
 inlay_t = 0.6;       // multicolour inlay depth: the first three 0.2 mm layers
@@ -191,6 +194,11 @@ groove_x = [160, 219];
 led_d = 3;                 // 3 mm breathing LED as charge indicator, glued in from inside; shines through the white PETG in the counter of the O
 led_skin = 0.8;            // white PETG left in front of the LED (four layers)
 led_boss = [7, 5.8];       // boss around the LED pocket: diameter, height from the front face; the LED flange rests on it
+dedication = ["Für Leo", "von Papa"];   // raised on the inside of the front plate, readable from behind with the back cover off
+dedication_font = "Liberation Sans:style=Bold";   // bundled with OpenSCAD
+dedication_size = 8;
+dedication_h = 0.8;        // raised height (four layers)
+dedication_z = [118, 105]; // baselines, between the PWM board and the LED boss
 
 // ---------- derived values ----------
 pot_yz = [cover_y, wall + bat_l + shelf_gap + shelf_t + pwm_standoff + pwm_pcb[2] + pot_axis_h];   // knob axis above the battery, centred in the depth
@@ -230,6 +238,10 @@ function back_bosses() = concat(
      [c, w, [part_x + part_t, c[1]], w, t]]);
 function cover_screws() = [for (s = [-1, 1]) [cover_y, cover_z + s * cover_screw_dz]];
 function handle_screws() = [for (sx = [-1, 1], dx = handle_screw_dx) [handle_cx + sx * dx, handle_cy]];
+function handle_pad_u() = [handle_screw_dx[0] - handle_pad[1] - handle_rib[0], handle_screw_dx[1] + handle_pad[1] + handle_rib[0]];   // doubler span from the handle centre
+function handle_key_u() = [handle_open[0] / 2 + 3, handle_len / 2 - 3];   // key span from the handle centre
+handle_key_w = handle_d - 2 * handle_c - 1;           // key width along y, inside the flat foot face
+handle_screw_skin = wall + handle_pad[0] - handle_key[0];   // head face to insert mouth
 // thread engagement in the insert and margin of the screw tip to the pocket end
 screw_table = [
     // name, length, engagement, tip margin
@@ -241,7 +253,7 @@ screw_table = [
      (body_d - head_pocket[1] - len_back) - (body_d - back_t - insert_depth)],
     ["cover", len_cover, body_w - max(body_w + cover_out - head_pocket[1] - len_cover, body_w - insert_len),
      (body_w + cover_out - head_pocket[1] - len_cover) - (body_w - cover_ins_depth)],
-    ["handle", len_handle, min(len_handle - wall, insert_len), insert_depth - (len_handle - wall)]];
+    ["handle", len_handle, min(len_handle - handle_screw_skin, insert_len), handle_ins_depth - (len_handle - handle_screw_skin)]];
 
 assert(wall >= 3.2 && front_t >= 3.2 && back_t >= 3 && corner_r >= 5, "Drop resistance: walls >= 3.2 mm (back 3 mm), corner radius >= 5 mm");
 // heat-set inserts need material between pocket and visible face, otherwise the face deforms when pressing
@@ -280,13 +292,22 @@ assert(pot_yz[0] - pwm_pcb[1] / 2 > front_t + inner_c && pot_yz[0] + pwm_pcb[1] 
        "PWM board: beyond the shelf, no room to pull it off the wall, or too high");
 assert(pot_shaft[2] - knob_stem_z >= 8 && knob_len - knob_bore_top >= 2 && knob_stem_z > pot_nut[1] + 0.5,
        "Knob: shaft engagement, top skin or stem end");
-assert(handle_end[1] > insert_depth && handle_open[2] > insert_depth, "Handle insert pockets reach the slants");
+assert(handle_end[1] > handle_ins_depth - handle_key[0] && handle_open[2] > handle_ins_depth - handle_key[0] && handle_ins_depth >= insert_len + 1,
+       "Handle insert pockets reach the slants or are shorter than L + 1");
+assert(handle_pad[1] - screw_head_d / 2 >= 3 && (handle_screw_dx[1] - handle_screw_dx[0] - handle_rib[0] - screw_head_d) / 2 >= 3,
+       "Handle ribs leave no room for the screwdriver");
+assert(body_h - wall - handle_rib[1] > fan_cz + fan_size / 2 + 1, "Handle ribs reach the fan");
+assert(handle_key_w / 2 < handle_d / 2 - handle_c && handle_key_u()[0] - handle_open[0] / 2 >= 2.5
+       && min([for (dx = handle_screw_dx) min(dx - handle_key_u()[0], handle_key_u()[1] - dx) - insert_hole_d / 2]) >= insert_w_min,
+       "Handle key outside the flat foot face or too thin around the inserts");
 assert(handle_screw_dx[0] - insert_hole_d / 2 - handle_open[0] / 2 >= 2 && handle_len / 2 - handle_screw_dx[1] - insert_hole_d / 2 >= 2,
        "Handle feet too thin around the inserts");
 assert(logo_x0 > fan_cx + grille_r + 3 && logo_x0 + logo_w < body_w - corner_r - 2 && logo_top < body_h - corner_r - 2,
        "Logo outside the free front area");
 assert(big_gap >= 2, "Big letters too wide for the second line");
 assert(sub_stroke >= 1.2 && stencil_gap >= 1.2, "Logo lines or gaps below 1.2 mm");
+assert(dedication_z[1] - dedication_size / 4 > shelf_z + shelf_t + pwm_standoff + pwm_pcb[2] + pwm_comp_h + 1
+       && dedication_z[0] + dedication_size < led_xz[1] - led_boss[0] / 2 - 1, "Dedication hidden behind the PWM board or runs into the LED boss");
 assert(brand[2] == "O" && led_skin > inlay_t && led_d / 2 + 1 < (big_size[0] - 2 * big_stroke) / 2, "LED pocket does not fit into the counter of the O");
 assert(front_t - groove_depth >= 1.2 && groove_pitch - groove_w >= 1.1, "Grooves too deep or webs too thin");
 assert(groove_z0 + (groove_count - 1) * groove_pitch + groove_w < logo_bottom - 3, "Grooves run into the logo");
@@ -359,6 +380,9 @@ module body() difference() {
             }
         }
         cyl_y(led_xz, front_t - eps, led_boss[1], led_boss[0] / 2);   // boss for the LED behind the O
+        // dedication on the inside of the front plate, mirrored in x so it reads from behind
+        along_y(front_t - eps, front_t + dedication_h) for (i = [0:len(dedication) - 1])
+            translate([(bay_x0 + bay_x1) / 2, dedication_z[i]]) mirror([1, 0]) text(dedication[i], size = dedication_size, font = dedication_font, halign = "center");
         // round air duct from the front plate to the fan frame face
         difference() {
             cyl_y([fan_cx, fan_cz], front_t - eps, fan_y - shroud_gap, open_r + shroud_t);
@@ -393,9 +417,14 @@ module body() difference() {
             cyl_x(p, xb, body_w - wall + eps, boss_d / 2);
             translate([body_w - wall, p[0] - boss_d / 2 - rise, p[1] - boss_d / 2]) cube([1, eps, boss_d]);
         }
-        // ribs under the handle feet: carry the load of a drop on the handle into the front plate
-        for (sx = [-1, 1]) let (x = handle_cx + sx * (handle_screw_dx[0] + handle_screw_dx[1]) / 2)
-            translate([x - handle_rib[0] / 2, front_t - eps, body_h - wall - handle_rib[1]]) cube([handle_rib[0], handle_rib[2] - front_t, handle_rib[1] + eps]);
+        // doubler and three ribs under each handle foot, from the front plate to the back lip: carry drop and pull loads of
+        // the handle into the front plate and the walls; 45 degree ends of the doubler towards the top wall
+        for (sx = [-1, 1]) let (u = handle_pad_u(), x0 = handle_cx + (sx > 0 ? u[0] : -u[1]), x1 = handle_cx + (sx > 0 ? u[1] : -u[0]),
+                                zt = body_h - wall, tp = handle_pad[0]) {
+            along_y(front_t - eps, part_y1) polygon([[x0 - tp, zt + eps], [x1 + tp, zt + eps], [x1, zt - tp], [x0, zt - tp]]);
+            for (uc = [u[0] + handle_rib[0] / 2, (handle_screw_dx[0] + handle_screw_dx[1]) / 2, u[1] - handle_rib[0] / 2])
+                translate([handle_cx + sx * uc - handle_rib[0] / 2, front_t - eps, zt - handle_rib[1]]) cube([handle_rib[0], part_y1 - front_t + eps, handle_rib[1] + eps]);
+        }
         // two ribs on the shelf carry the PWM board; they start at the front plate (printable)
         for (x = [body_w - wall - pwm_wall_gap - pwm_pcb[0] + 1, body_w - wall - pwm_wall_gap - 5])
             translate([x, front_t - eps, shelf_z + shelf_t - eps]) cube([3, pot_yz[0] + pwm_pcb[1] / 2 - front_t, pwm_standoff + eps]);
@@ -436,7 +465,13 @@ module body() difference() {
     translate([bat_cx + 10 - cable_slot_w / 2, bat_cy - 6, shelf_z - 1]) cube([cable_slot_w, shelf_d + front_t - bat_cy + 7, shelf_t + 2]);
     along_x(-1, wall + 1) intake_slots_side();
     cyl_x(pot_yz, body_w - wall - 1, body_w + 1, (pot_bush[0] + 0.4) / 2);   // potentiometer bushing, nutted to the wall
-    for (p = handle_screws()) translate([p[0], p[1], body_h - wall - 1]) cylinder(d = screw_clear_d, h = wall + 2);
+    for (p = handle_screws()) translate([p[0], p[1], body_h - wall - handle_pad[0] - 1]) cylinder(d = screw_clear_d, h = wall + handle_pad[0] + 2);
+    // recesses for the keys under the handle feet, 45 degree side walls along y
+    for (sx = [-1, 1]) let (u = handle_key_u(), x0 = handle_cx + (sx > 0 ? u[0] : -u[1]) - handle_key[1], lx = u[1] - u[0] + 2 * handle_key[1],
+                            hw = handle_key_w / 2 + handle_key[1], d = handle_key[0] + handle_key[1]) hull() {
+        translate([x0, handle_cy - hw + d, body_h - d]) cube([lx, 2 * (hw - d), eps]);
+        translate([x0, handle_cy - hw - 1, body_h + 1]) cube([lx, 2 * (hw + 1), eps]);
+    }
     for (p = cover_screws()) cyl_x(p, body_w - cover_ins_depth, body_w + 1, insert_hole_d / 2);   // cover inserts, pressed in from outside
     translate([mount_xy[0], mount_xy[1], -1]) cylinder(d = mount_insert[0], h = mount_insert[1] + 1 + 1);   // M5 insert from the underside
 }
@@ -646,10 +681,17 @@ module handle() translate([handle_cx, 0, body_h]) difference() {   // side profi
     y0 = handle_cy - handle_d / 2;
     y1 = handle_cy + handle_d / 2;
     c = handle_c;
-    hull() {
-        along_y(y0, y0 + eps) offset(delta = -c) polygon(handle_outer());
-        along_y(y0 + c, y1 - c) polygon(handle_outer());
-        along_y(y1 - eps, y1) offset(delta = -c) polygon(handle_outer());
+    union() {
+        hull() {
+            along_y(y0, y0 + eps) offset(delta = -c) polygon(handle_outer());
+            along_y(y0 + c, y1 - c) polygon(handle_outer());
+            along_y(y1 - eps, y1) offset(delta = -c) polygon(handle_outer());
+        }
+        // keys under the feet, 45 degree side faces along y (printable lying on the front face)
+        for (sx = [-1, 1]) let (u = handle_key_u(), x0 = sx > 0 ? u[0] : -u[1], lx = u[1] - u[0], hw = handle_key_w / 2, k = handle_key[0]) hull() {
+            translate([x0, handle_cy - hw, -eps]) cube([lx, 2 * hw, 2 * eps]);
+            translate([x0, handle_cy - hw + k, -k]) cube([lx, 2 * (hw - k), eps]);
+        }
     }
     along_y(y0 - 1, y1 + 1) polygon(handle_opening());
     hull() {
@@ -660,7 +702,7 @@ module handle() translate([handle_cx, 0, body_h]) difference() {   // side profi
         along_y(y1 - c - eps, y1 - c) polygon(handle_opening());
         along_y(y1, y1 + eps) offset(delta = c) polygon(handle_opening());
     }
-    for (sx = [-1, 1], dx = handle_screw_dx) translate([sx * dx, handle_cy, -eps]) cylinder(d = insert_hole_d, h = insert_depth + eps);
+    for (sx = [-1, 1], dx = handle_screw_dx) translate([sx * dx, handle_cy, -handle_key[0] - eps]) cylinder(d = insert_hole_d, h = handle_ins_depth + eps);
 }
 module handle_print_pose() translate([0, 0, -(handle_cy - handle_d / 2)]) rotate([90, 0, 0]) children();   // front face on the bed
 
@@ -698,7 +740,7 @@ module screws_grille(socket = false) for (p = grille_screws()) translate([p[0], 
 module screws_fan(socket = false) for (p = fan_holes()) translate([p[0], fan_y + fan_t + fan_pad, p[1]]) orient([0, -1, 0]) screw(len_fan, socket);
 module screws_back(socket = false) for (b = back_bosses()) translate([b[0][0], body_d - head_pocket[1], b[0][1]]) orient([0, -1, 0]) screw(len_back, socket);
 module screws_cover(socket = false) for (p = cover_screws()) translate([body_w + cover_out - head_pocket[1], p[0], p[1]]) orient([-1, 0, 0]) screw(len_cover, socket);
-module screws_handle(socket = false) for (p = handle_screws()) translate([p[0], p[1], body_h - wall]) orient([0, 0, 1]) screw(len_handle, socket);
+module screws_handle(socket = false) for (p = handle_screws()) translate([p[0], p[1], body_h - wall - handle_pad[0]]) orient([0, 0, 1]) screw(len_handle, socket);
 
 module assembly(explode = 0) {
     body_install_pose() {
@@ -723,7 +765,7 @@ else if (part == "exploded") assembly(40);
 else if (part == "metrics") echo("PROJECT_METRICS", [
     ["wall", wall], ["front_t", front_t], ["back_t", back_t], ["corner_r", corner_r], ["body_mm", [body_w, body_d, body_h]],
     ["fan_size", fan_size], ["fan_pad", fan_pad], ["fan_t", fan_t], ["fan_pitch", fan_pitch], ["fan_hole_d", fan_hole_d],
-    ["fan_blade_d", fan_blade_d], ["pot_shaft_len", pot_shaft[2]], ["pwm_pcb", pwm_pcb], ["pot_axis_h", pot_axis_h], ["knob_shaft_engagement", pot_shaft[2] - knob_stem_z], ["knob_top_skin", knob_len - knob_bore_top], ["knob_protrusion", knob_cap_z + knob_h - cover_out], ["handle_clearance", handle_h - handle_bar], ["handle_open_top", handle_open[1]], ["fan_axis", [fan_cx, fan_cz]], ["fan_y", fan_y], ["shroud_r", [open_r, open_r + shroud_t]], ["shroud_gap", shroud_gap], ["open_d", 2 * open_r], ["grille_gap", grille_gap],
+    ["fan_blade_d", fan_blade_d], ["pot_shaft_len", pot_shaft[2]], ["pwm_pcb", pwm_pcb], ["pot_axis_h", pot_axis_h], ["knob_shaft_engagement", pot_shaft[2] - knob_stem_z], ["knob_top_skin", knob_len - knob_bore_top], ["knob_protrusion", knob_cap_z + knob_h - cover_out], ["handle_clearance", handle_h - handle_bar], ["handle_open_top", handle_open[1]], ["handle_mount_wall", wall + handle_pad[0]], ["fan_axis", [fan_cx, fan_cz]], ["fan_y", fan_y], ["shroud_r", [open_r, open_r + shroud_t]], ["shroud_gap", shroud_gap], ["open_d", 2 * open_r], ["grille_gap", grille_gap],
     ["bat_mm", [bat_d, bat_l]], ["bat_bms", bat_bms], ["bat_clear", bat_clear], ["saddle_gap", saddle_gap], ["cradle_rings", len(cradle_z)], ["shelf_gap", shelf_gap],
     ["lip_clearance", lip_cl], ["spigot_clearance", spigot_cl],
     ["insert_hole_d", insert_hole_d], ["insert_w_min", insert_w_min], ["mount_insert", mount_insert], ["mount_floor", mount_floor], ["insert_len", insert_len], ["insert_depth", insert_depth],
@@ -734,7 +776,7 @@ else if (part == "metrics") echo("PROJECT_METRICS", [
         [for (p = fan_holes()) ["body", [p[0], fan_y - fan_pad, p[1]], [0, -1, 0], insert_depth, insert_hole_d, insert_w_min]],
         [for (b = back_bosses()) ["body", [b[0][0], body_d - back_t, b[0][1]], [0, -1, 0], insert_depth, insert_hole_d, insert_w_min]],
         [for (p = cover_screws()) ["body", [body_w, p[0], p[1]], [-1, 0, 0], cover_ins_depth, insert_hole_d, insert_w_min]],
-        [for (p = handle_screws()) ["handle", [p[0], p[1], body_h], [0, 0, 1], insert_depth, insert_hole_d, insert_w_min]],
+        [for (p = handle_screws()) ["handle", [p[0], p[1], body_h - handle_key[0]], [0, 0, 1], handle_ins_depth, insert_hole_d, insert_w_min]],
         [["body", [mount_xy[0], mount_xy[1], 0], [0, 0, 1], mount_insert[1] + 1, mount_insert[0], mount_insert[2]]])]]);
 else if (part == "none") {}
 else if (part == "body") body_print_pose() body();

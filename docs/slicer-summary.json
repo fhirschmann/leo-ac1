@@ -6,12 +6,12 @@
       "quantity": 1,
       "material": "PETG-white",
       "passed": true,
-      "source_sha256": "d171e9fb42a197029915fdbe490f41c7396d92b6f58423f8d6d57e7e4470b977",
+      "source_sha256": "22433006bb08a35979e318fb6c2089c3d7dc6a7476562cf08bed7810ab7fb00e",
       "exit_code": 0,
       "result_code": 0,
       "warnings": "",
-      "hours": 8.74,
-      "grams": 365.973,
+      "hours": 9.593,
+      "grams": 390.409,
       "wall_loops": 6,
       "infill_percent": 30.0,
       "layer_height": 0.20000000298023224,
@@ -98,12 +98,12 @@
       "quantity": 1,
       "material": "PETG-grey",
       "passed": true,
-      "source_sha256": "b1e3a6c6e36298759b6cde673d8b9c311122247a79fa050c8c6bc85f47888135",
+      "source_sha256": "7b1a5447d63ce52d58b911bd836ea875d3de2e600ade58cb79e825f52929392e",
       "exit_code": 0,
       "result_code": 0,
       "warnings": "",
-      "hours": 1.618,
-      "grams": 55.304,
+      "hours": 1.628,
+      "grams": 55.516,
       "wall_loops": 6,
       "infill_percent": 30.0,
       "layer_height": 0.20000000298023224,
@@ -141,8 +141,8 @@
     }
   ],
   "total_parts": 6,
-  "total_grams_individual_plates": 653.8,
-  "total_hours_individual_plates": 18.1,
+  "total_grams_individual_plates": 678.5,
+  "total_hours_individual_plates": 18.9,
   "production_gcode": false,
   "project_3mf": {
     "file": "stl/leo_ac1_all_parts.3mf",
@@ -185,7 +185,7 @@
           "knob"
         ],
         "size_mm": [
-          180.0,
+          181.2,
           183.8
         ]
       }
@@ -198,9 +198,9 @@
     "multicolour_slices": {
       "Housing": {
         "plate": 1,
-        "hours": 8.92,
+        "hours": 9.79,
         "grams_by_filament": {
-          "1": 365.37,
+          "1": 389.76,
           "3": 0.84
         },
         "warnings": ""
@@ -208,6 +208,6 @@
     },
     "pause_slices": {},
     "own_infill_parts": 0,
-    "sha256": "fb205257399d18d5768f538910d21c999040fa1068c5898ce8845d42a1a14904"
+    "sha256": "73fc347d462979fe049a32ea5a9ba7eac2b5ec22aae30e41dac25aa7fb0e1f84"
   }
 }
