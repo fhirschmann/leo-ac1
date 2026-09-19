@@ -1,5 +1,5 @@
 {
-  "source_sha256": "84a4a33632e6fd48443a2c9a79188db22f48bc8a66ad338fdb6249142fa53f46",
+  "source_sha256": "94b4944a45eb56a264842409a6f847998314ac3381c3db6ecbcc6dde4cee0a0d",
   "software": {
     "numpy": "2.5.3",
     "trimesh": "5.1.0",
@@ -29,17 +29,17 @@
           76.0
         ]
       ],
-      "volume_mm3": 355719.0069,
-      "triangles": 24902,
+      "volume_mm3": 356613.9171,
+      "triangles": 24938,
       "watertight": true,
       "consistent_winding": true,
       "degenerate_faces": 0,
       "components": 1,
       "backend": "CGAL",
-      "sha256": "1f2c7a699d2078d195444c0be3fb9ee76a071d1b2bb192c685081c47fcd05f02",
+      "sha256": "85c61bf2b5ba572fcd77515c71b8d8dd34009adfbbf02a98c48565a44faba733",
       "quantity": 1,
       "material": "PETG-white",
-      "committed_sha256": "1f2c7a699d2078d195444c0be3fb9ee76a071d1b2bb192c685081c47fcd05f02"
+      "committed_sha256": "85c61bf2b5ba572fcd77515c71b8d8dd34009adfbbf02a98c48565a44faba733"
     },
     "back": {
       "size_mm": [
@@ -59,17 +59,17 @@
           55.25
         ]
       ],
-      "volume_mm3": 156197.9443,
-      "triangles": 10400,
+      "volume_mm3": 156318.104,
+      "triangles": 10404,
       "watertight": true,
       "consistent_winding": true,
       "degenerate_faces": 0,
       "components": 1,
       "backend": "Manifold",
-      "sha256": "73894f2fe0310e052f15c55e029a83ac4c5782710360a132835f751acb4310e9",
+      "sha256": "7bf6ab4267eb37538ac39d3748da12cdd9daaceed88fc257c4f0aa5c162fae0a",
       "quantity": 1,
       "material": "PETG-white",
-      "committed_sha256": "73894f2fe0310e052f15c55e029a83ac4c5782710360a132835f751acb4310e9"
+      "committed_sha256": "7bf6ab4267eb37538ac39d3748da12cdd9daaceed88fc257c4f0aa5c162fae0a"
     },
     "grille": {
       "size_mm": [
@@ -241,14 +241,14 @@
           76.0
         ]
       ],
-      "volume_mm3": 355047.9034,
-      "triangles": 26090,
+      "volume_mm3": 355942.3272,
+      "triangles": 26126,
       "watertight": true,
       "consistent_winding": true,
       "degenerate_faces": 0,
       "components": 1,
       "backend": "CGAL",
-      "sha256": "b03506ed3a08c02e2d4669636b15a50f0293e8084f03021f7156720cbb555162"
+      "sha256": "933c93ac2e070e9686866fe5fb23a7d2126c6bbe43e9c0a3318f14c9f87aaa39"
     },
     "body_label": {
       "size_mm": [
@@ -280,29 +280,29 @@
     "body_dedication": {
       "size_mm": [
         49.7874,
-        25.5676,
+        27.2676,
         0.81
       ],
       "bounds_mm": [
         [
           162.181,
-          -128.8426,
+          -130.2426,
           3.19
         ],
         [
           211.9684,
-          -103.2751,
+          -102.9751,
           4.0
         ]
       ],
-      "volume_mm3": 361.1009,
-      "triangles": 16458,
+      "volume_mm3": 361.5871,
+      "triangles": 16508,
       "watertight": true,
       "consistent_winding": true,
       "degenerate_faces": 0,
-      "components": 24,
+      "components": 25,
       "backend": "Manifold",
-      "sha256": "841c65b246e0342d12ecaa636af7645155aaa488d0958b8b350b5dd91b5294f1"
+      "sha256": "0b57921ed8706018328bb568c47b95c3c33bd3e18777514e403e6b77b12c80eb"
     }
   },
   "color_parts": {
@@ -319,13 +319,13 @@
         "bodies": 22
       },
       "dedication": {
-        "mm3": 361.1,
+        "mm3": 361.59,
         "depth_mm": 0.81,
         "z_mm": [
           3.19,
           4.0
         ],
-        "bodies": 24
+        "bodies": 25
       }
     }
   },
@@ -361,6 +361,7 @@
     "handle_open_top": 90,
     "handle_mount_wall": 6.4,
     "foot_clearance": 0.2,
+    "dedication_lines": 3,
     "foot_lift": 4.5,
     "fan_axis": [
       84,
@@ -840,6 +841,10 @@
     ]
   },
   "intersections": [],
+  "dedication_line_gaps_mm": [
+    1.55,
+    1.66
+  ],
   "standard_screws": {
     "grille": {
       "length": 12,
@@ -881,7 +886,7 @@
     "handle@body": 12.376,
     "pot@body": 8.541,
     "pot_nut@body": 2.601,
-    "chg_module@body": 5.198,
+    "chg_module@body": 6.906,
     "led@body": 0.165,
     "feet@body": 93.604,
     "usb_trigger@back": 0.443

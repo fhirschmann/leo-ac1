@@ -101,6 +101,19 @@ def checks(ctx):
     assert m["handle_clearance"] >= 30 and m["handle_open_top"] >= 90, "Handle: 30 mm finger clearance, 90 mm hand breadth"
     assert m["handle_mount_wall"] >= 6, "Handle mount: top wall with doubler at least 6 mm under the feet"
     assert m["foot_clearance"] >= 0.2 and m["foot_lift"] >= 3, "TPU feet: clearance 0.2 mm in the pockets, housing at least 3 mm above the ground"
+    # dedication: the lines must stay apart (descenders!); letters of the grey inlay in print orientation, merged by their y spans
+    import trimesh
+    from pathlib import Path
+    spans = sorted((float(c.bounds[0, 1]), float(c.bounds[1, 1]))
+                   for c in trimesh.load_mesh(Path(__file__).parent / "build" / "color" / "body_dedication.stl").split(only_watertight=False))
+    bands = []
+    for y0, y1 in spans:
+        if bands and y0 <= bands[-1][1] + 1.0:
+            bands[-1][1] = max(bands[-1][1], y1)
+        else:
+            bands.append([y0, y1])
+    gaps = [round(b[0] - a[1], 2) for a, b in zip(bands, bands[1:])]
+    assert len(bands) == m["dedication_lines"], f"Dedication lines touch or run into each other (gap < 1 mm): {len(bands)} bands, gaps {gaps}"
     screws = {name: dict(length=length, engagement_mm=round(eng, 2), tip_margin_mm=round(margin, 2))
               for name, length, eng, margin in m["screws"]}
     for name, info in screws.items():
@@ -193,7 +206,7 @@ def checks(ctx):
     ctx.open_items.append("Measure the BMS board on the battery (assumed 16 × 4 mm over the full length, facing the partition)")
     ctx.open_items.append("Measure the PWM board CNY-FA5-PRO (assumed 48 × 34 mm, parts 13 mm high, potentiometer axis 8.5 mm above the board)")
     ctx.open_items.append("Measure the USB-C PD trigger (listing 13 x 10 x 4 mm, receptacle at least 2.4 mm beyond the board) and check 5 V at + / - before connecting")
-    return dict(standard_screws=screws, contact_volumes_mm3=contacts, stops=stops, sampled_paths=paths,
+    return dict(dedication_line_gaps_mm=gaps, standard_screws=screws, contact_volumes_mm3=contacts, stops=stops, sampled_paths=paths,
                 insert_probes=inserts, air_duct=duct)
 
 

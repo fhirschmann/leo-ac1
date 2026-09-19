@@ -125,12 +125,13 @@ chg_pcb = [35.4, 11, 1.6];     // 2-in-1 LiFePO4 charge + 12 V boost module: len
 chg_comp_h = 2;                // parts on the top side
 chg_sink = [8.8, 8.8, 5, 6];   // two stick-on aluminium heatsinks: y, z, height, gap between them
 chg_z = 95;                    // centre height on the partition, board upright (long axis along z), at the fan rim
-chg_gap = 2;                   // air gap between board and partition; parts stay clear of the fan frame
+chg_gap = 4.5;                 // board back to partition: pads plus tape; board and heatsinks further in the intake air, but the ledge under
+                               // the board must stay beside the fan frame, otherwise the fan cannot be pulled out towards the back
 chg_tape = 1.1;                // double-sided tape between board and pads (3M VHB 1.1 mm); thinner tape moves the board further onto the ledge
 chg_fan_gap = 5;               // free space from the fan's back pads to the front edge of the upright board (intake air)
 // solder pads (IN, B, O) and parts reach the long edges: no grooves. The board back sits on two pads with heat-resistant
 // double-sided tape, its lower edge on a ledge that stays behind the part side.
-chg_pads = [[5.5, 4], [21.5, 6]];  // pads behind the board, clear of the through-hole solder pads: start from the lower end, length
+chg_pads = [[4, 7], [24.4, 7]];   // supports on the partition along the board (from its lower end): start, height; 4 mm free at both ends
 chg_ledge = [2, 0.3];          // ledge under the lower board edge: height, set back from the part side
 
 /* [Handle, top] */
@@ -155,8 +156,9 @@ usbc_shell = [8.94, 3.26];   // USB-C receptacle shell: width, height (USB-C spe
 usbc_plate = 2.4;            // back cover thinned to this around the module: receptacle flush with the face, board edge rests on it
 usbc_xz = [213, 118];        // receptacle axis: top right in the electronics bay, clear of the back lip and the handle ribs
 usbc_cl = 0.2;               // clearance in channel, plate opening and to the stop
-usbc_wall = 1.2;             // channel on the inside of the back cover: side walls and floor, open at the top for the wires
-usbc_stop = 2;               // stop on the right wall behind the module end, takes the plug force with the back cover on
+usbc_wall = 2;               // channel on the inside of the back cover: side walls and floor, open at the top for the wires
+usbc_stop = [4, 6];          // stop on the right wall behind the module end (takes the plug force with the back cover on): thickness, height
+                             // (reaches below the module, the wires leave its end at the top)
 
 /* [Feet: TPU strips, each screwed with two M3 x 8 from below into Ruthex inserts] */
 foot_w = 16;          // width (x)
@@ -225,7 +227,8 @@ dedication_font = "Liberation Sans:style=Bold";   // bundled with OpenSCAD
 dedication_size = [8, 8, 5.5];   // per line, the date smaller
 dedication_bold = 0.15;    // extra stroke per side: thin joints of the font reach two lines (0.8 mm) in grey
 dedication_h = 0.8;        // raised height (four layers)
-dedication_z = [121, 111, 103.5];   // baselines, between the PWM board and the LED boss
+dedication_z = [122.4, 112.8, 103.2];   // baselines, between the PWM board and the LED boss; measured glyphs: descender of p 2.46 mm,
+                                        // date 5.48 mm high -> line gaps 1.55 / 1.66 mm, checked on the grey inlay in print_project.py
 
 // ---------- derived values ----------
 pot_yz = [cover_y, wall + bat_l + shelf_gap + shelf_t + pwm_standoff + pwm_pcb[2] + pot_axis_h];   // knob axis above the battery, centred in the depth
@@ -307,17 +310,19 @@ assert(fan_cx - open_r - shroud_t > wall + inner_c && fan_cx + open_r + shroud_t
        "Air duct hits the walls or the partition");
 assert(shelf_z + shelf_t < body_h - wall, "Shelf above the top wall");
 assert(front_t + shelf_d - shelf_hold[0] > pot_yz[0] + pwm_pcb[1] / 2 + 0.5, "Shelf hold-down plate reaches the PWM board");
-assert(part_x - chg_gap - chg_pcb[2] - chg_comp_h > fan_cx + fan_size / 2 + 0.3
-       && chg_fan_gap >= 5
+assert(chg_fan_gap >= 5 && chg_gap - chg_tape >= 3
+       && max(chg_y0 - 1 - (chg_gap + chg_pcb[2] - chg_ledge[1]), fan_y + fan_t + fan_pad + 0.5) + (chg_gap + chg_pcb[2] - chg_ledge[1]) < chg_y0 + chg_pcb[1] - 4
+       && chg_pads[len(chg_pads) - 1][0] + chg_pads[len(chg_pads) - 1][1] <= chg_pcb[0] - 4 && chg_pads[0][0] >= 4
        && chg_y0 + chg_pcb[1] < body_d - back_t - 1 && chg_z + chg_pcb[0] / 2 < 118,
        "Charge module reaches the fan frame, the back or the cable notch");
-assert(chg_gap - chg_tape >= 0.5 && chg_pcb[2] - chg_ledge[1] >= 1, "Charge module: pads too thin for the tape, or too little board on the ledge");
+assert(chg_gap - chg_tape >= 0.5 && (part_x - chg_gap) - max(part_x - chg_gap - chg_pcb[2] + chg_ledge[1], fan_cx + fan_size / 2 + 0.3) >= 1,
+       "Charge module: pads too thin for the tape, or less than 1 mm of board on the ledge beside the fan frame");
 assert(bat_cx - bat_d / 2 - bat_bms[1] - bat_clear > bay_x0 + 1, "BMS board of the battery hits the partition");
 assert(mount_top < fan_cz - fan_size / 2 - 2 && (mount_boss_d - mount_insert[0]) / 2 >= mount_insert[2] + 1.5 && mount_floor >= 2,
        "Mount boss hits the fan, is thinner than the datasheet wall + 1.5 mm, or its floor is too thin");
 assert(mount_xy[0] + mount_doubler[0] / 2 >= part_x - 1, "Mount doubler does not reach the partition");
 assert(back_t - head_pocket[1] >= 2, "Back cover too thin under the recessed screw heads");
-assert(back_t - usbc_plate >= 1 && usbc[0] - usbc_plate >= 8, "USB-C module: back cover recess too shallow or module too short for the channel");
+assert(usbc_stop[0] >= 4 && usbc_stop[1] >= usbc[2] && usbc_wall >= 2 && back_t - usbc_plate >= 1 && usbc[0] - usbc_plate >= 8, "USB-C module: back cover recess too shallow or module too short for the channel");
 assert(usbc_xz[0] + usbc[1] / 2 + usbc_cl < bay_x1 - lip_cl - lip_t && usbc_xz[0] - usbc[1] / 2 - usbc_cl - usbc_wall > bay_x0 + 5
        && usbc_xz[1] + usbc[2] / 2 + usbc_cl < body_h - wall - handle_rib[1] - 1
        && usbc_xz[1] - usbc[2] / 2 - usbc_cl - usbc_wall > shelf_z + shelf_t + pwm_standoff + pwm_pcb[2] + pwm_comp_h + 3,
@@ -357,8 +362,7 @@ assert(big_gap >= 2, "Big letters too wide for the second line");
 assert(sub_stroke >= 1.2 && stencil_gap >= 1.2, "Logo lines or gaps below 1.2 mm");
 assert(len(dedication_size) == len(dedication) && len(dedication_z) == len(dedication)
        && dedication_z[len(dedication) - 1] - dedication_size[len(dedication) - 1] / 4 > shelf_z + shelf_t + pwm_standoff + pwm_pcb[2] + pwm_comp_h + 1
-       && dedication_z[0] + dedication_size[0] < led_xz[1] - led_boss[0] / 2 - 1
-       && min([for (i = [1:len(dedication) - 1]) dedication_z[i - 1] - dedication_size[i - 1] / 4 - (dedication_z[i] + 0.75 * dedication_size[i])]) >= 1, "Dedication hidden behind the PWM board or runs into the LED boss");
+       && dedication_z[0] + dedication_size[0] < led_xz[1] - led_boss[0] / 2 - 1, "Dedication hidden behind the PWM board or runs into the LED boss");
 assert(brand[2] == "O" && led_skin > inlay_t && led_d / 2 + 1 < (big_size[0] - 2 * big_stroke) / 2, "LED pocket does not fit into the counter of the O");
 assert(front_t - groove_depth >= 1.2 && groove_pitch - groove_w >= 1.1, "Grooves too deep or webs too thin");
 assert(groove_z0 + (groove_count - 1) * groove_pitch + groove_w < logo_bottom - 3, "Grooves run into the logo");
@@ -484,9 +488,10 @@ module body() difference() {
                 translate([xb + chg_pcb[2] + chg_tape, chg_y0 + 1, zb + pd[0]]) cube([chg_gap - chg_tape + eps, chg_pcb[1] - 2, pd[1]]);
                 translate([part_x, chg_y0 + 1 - (chg_gap - chg_tape), zb + pd[0]]) cube([1, eps, pd[1]]);
             }
-            let (x0 = xb + chg_ledge[1], reach = part_x - x0) hull() {
-                translate([x0, chg_y0 - 1, zb - chg_ledge[0]]) cube([reach + eps, chg_pcb[1] + 2, chg_ledge[0]]);
-                translate([part_x, chg_y0 - 1 - reach, zb - chg_ledge[0]]) cube([1, eps, chg_ledge[0]]);
+            // ledge: its 45 degree cone starts behind the fan frame and reaches full width towards the back
+            let (x0 = max(xb + chg_ledge[1], fan_cx + fan_size / 2 + 0.3), reach = part_x - x0, ya = max(chg_y0 - 1 - reach, fan_y + fan_t + fan_pad + 0.5), yf = ya + reach) hull() {
+                translate([x0, yf, zb - chg_ledge[0]]) cube([reach + eps, chg_y0 + chg_pcb[1] + 1 - yf, chg_ledge[0]]);
+                translate([part_x, ya, zb - chg_ledge[0]]) cube([1, eps, chg_ledge[0]]);
             }
         }
         // floor doublers over the foot pockets keep the bottom wall at 3.2 mm; bosses for the foot inserts with 45 degree
@@ -498,9 +503,9 @@ module body() difference() {
             translate([p[0] - foot_boss_d / 2, p[1] - foot_boss_d / 2 - (foot_boss_top - zf), zf - 1]) cube([foot_boss_d, eps, 1]);
         }
         // stop on the right wall behind the USB-C module in the back cover, 45 degree wedge towards the front (printable)
-        let (x0 = usbc_xz[0] - usbc[1] / 2, ys = usbc_y0 - usbc_cl, z0 = usbc_xz[1] - usbc[2] / 2) hull() {
-            translate([x0, ys - usbc_stop, z0]) cube([bay_x1 - x0 + eps, usbc_stop, usbc[2]]);
-            translate([bay_x1, ys - usbc_stop - (bay_x1 - x0), z0]) cube([eps, eps, usbc[2]]);
+        let (x0 = usbc_xz[0] - usbc[1] / 2, ys = usbc_y0 - usbc_cl, z0 = usbc_xz[1] + usbc[2] / 2 - usbc_stop[1]) hull() {
+            translate([x0, ys - usbc_stop[0], z0]) cube([bay_x1 - x0 + eps, usbc_stop[0], usbc_stop[1]]);
+            translate([bay_x1, ys - usbc_stop[0] - (bay_x1 - x0), z0]) cube([eps, eps, usbc_stop[1]]);
         }
         // electronics shelf, also stops the battery upwards
         translate([bay_x0 - eps, front_t - eps, shelf_z]) cube([bay_x1 - bay_x0 + 2 * eps, shelf_d + eps, shelf_t]);
@@ -885,7 +890,7 @@ else if (part == "exploded") assembly(40);
 else if (part == "metrics") echo("PROJECT_METRICS", [
     ["wall", wall], ["front_t", front_t], ["back_t", back_t], ["corner_r", corner_r], ["body_mm", [body_w, body_d, body_h]],
     ["fan_size", fan_size], ["fan_pad", fan_pad], ["fan_t", fan_t], ["fan_pitch", fan_pitch], ["fan_hole_d", fan_hole_d],
-    ["fan_blade_d", fan_blade_d], ["pot_shaft_len", pot_shaft[2]], ["pwm_pcb", pwm_pcb], ["pot_axis_h", pot_axis_h], ["knob_shaft_engagement", pot_shaft[2] - knob_stem_z], ["knob_top_skin", knob_len - knob_bore_top], ["knob_protrusion", knob_cap_z + knob_h - cover_out], ["handle_clearance", handle_h - handle_bar], ["handle_open_top", handle_open[1]], ["handle_mount_wall", wall + handle_pad[0]], ["foot_clearance", foot_cl], ["foot_lift", foot_lift], ["fan_axis", [fan_cx, fan_cz]], ["fan_y", fan_y], ["shroud_r", [open_r, open_r + shroud_t]], ["shroud_gap", shroud_gap], ["open_d", 2 * open_r], ["grille_gap", grille_gap],
+    ["fan_blade_d", fan_blade_d], ["pot_shaft_len", pot_shaft[2]], ["pwm_pcb", pwm_pcb], ["pot_axis_h", pot_axis_h], ["knob_shaft_engagement", pot_shaft[2] - knob_stem_z], ["knob_top_skin", knob_len - knob_bore_top], ["knob_protrusion", knob_cap_z + knob_h - cover_out], ["handle_clearance", handle_h - handle_bar], ["handle_open_top", handle_open[1]], ["handle_mount_wall", wall + handle_pad[0]], ["foot_clearance", foot_cl], ["dedication_lines", len(dedication)], ["foot_lift", foot_lift], ["fan_axis", [fan_cx, fan_cz]], ["fan_y", fan_y], ["shroud_r", [open_r, open_r + shroud_t]], ["shroud_gap", shroud_gap], ["open_d", 2 * open_r], ["grille_gap", grille_gap],
     ["bat_mm", [bat_d, bat_l]], ["bat_bms", bat_bms], ["bat_clear", bat_clear], ["saddle_gap", saddle_gap], ["cradle_rings", len(cradle_z)], ["shelf_gap", shelf_gap],
     ["lip_clearance", lip_cl], ["spigot_clearance", spigot_cl],
     ["insert_hole_d", insert_hole_d], ["insert_w_min", insert_w_min], ["mount_insert", mount_insert], ["mount_floor", mount_floor], ["insert_len", insert_len], ["insert_depth", insert_depth],
