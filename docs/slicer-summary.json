@@ -1,0 +1,189 @@
+{
+  "profile": "Bambu Lab H2S 0.4 nozzle / 0.20mm Standard @BBL H2S, 4 walls, 5/5 top/bottom, no supports; 25 % gyroid, 100 % zig-zag: none",
+  "parts": [
+    {
+      "part": "body",
+      "quantity": 1,
+      "material": "PETG-weiss",
+      "passed": true,
+      "source_sha256": "f3b943a9f2abc7284a99dac140920ca492f7e3bfaddc08836e36c56df54050ea",
+      "exit_code": 0,
+      "result_code": 0,
+      "warnings": "",
+      "hours": 6.037,
+      "grams": 257.228,
+      "wall_loops": 4,
+      "infill_percent": 25.0,
+      "layer_height": 0.20000000298023224,
+      "effective_settings": {
+        "sparse_infill_pattern": "gyroid",
+        "enable_support": "0",
+        "curr_bed_type": "Textured PEI Plate",
+        "top_shell_layers": "5",
+        "bottom_shell_layers": "5"
+      },
+      "start_gcode_diagnostic": true
+    },
+    {
+      "part": "back",
+      "quantity": 1,
+      "material": "PETG-weiss",
+      "passed": true,
+      "source_sha256": "dbb46cddc4eed8fd30f2aff6f7fd631ab93fcfbb572b297d4a6e3e66982eb259",
+      "exit_code": 0,
+      "result_code": 0,
+      "warnings": "",
+      "hours": 3.353,
+      "grams": 85.496,
+      "wall_loops": 4,
+      "infill_percent": 25.0,
+      "layer_height": 0.20000000298023224,
+      "effective_settings": {
+        "sparse_infill_pattern": "gyroid",
+        "enable_support": "0",
+        "curr_bed_type": "Textured PEI Plate",
+        "top_shell_layers": "5",
+        "bottom_shell_layers": "5"
+      },
+      "start_gcode_diagnostic": true
+    },
+    {
+      "part": "grille",
+      "quantity": 1,
+      "material": "PETG-grau",
+      "passed": true,
+      "source_sha256": "f1dd7b7268875fca8230907b036132f644b3308d47fb693a98b6b79f17b666ec",
+      "exit_code": 0,
+      "result_code": 0,
+      "warnings": "",
+      "hours": 1.206,
+      "grams": 37.479,
+      "wall_loops": 4,
+      "infill_percent": 25.0,
+      "layer_height": 0.20000000298023224,
+      "effective_settings": {
+        "sparse_infill_pattern": "gyroid",
+        "enable_support": "0",
+        "curr_bed_type": "Textured PEI Plate",
+        "top_shell_layers": "5",
+        "bottom_shell_layers": "5"
+      },
+      "start_gcode_diagnostic": true
+    },
+    {
+      "part": "cover",
+      "quantity": 1,
+      "material": "PETG-grau",
+      "passed": true,
+      "source_sha256": "32077654b8402b7bf4bf69be4bfe35caec54911dfd57c24c5ff4834f35d3d2cf",
+      "exit_code": 0,
+      "result_code": 0,
+      "warnings": "",
+      "hours": 0.396,
+      "grams": 10.842,
+      "wall_loops": 4,
+      "infill_percent": 25.0,
+      "layer_height": 0.20000000298023224,
+      "effective_settings": {
+        "sparse_infill_pattern": "gyroid",
+        "enable_support": "0",
+        "curr_bed_type": "Textured PEI Plate",
+        "top_shell_layers": "5",
+        "bottom_shell_layers": "5"
+      },
+      "start_gcode_diagnostic": true
+    },
+    {
+      "part": "foot",
+      "quantity": 2,
+      "material": "PETG-grau",
+      "passed": true,
+      "source_sha256": "d8e25bd2c94d8ce07da998acc4ff57d8009b7bb59b2c023ef59290c61ccc93bb",
+      "exit_code": 0,
+      "result_code": 0,
+      "warnings": "",
+      "hours": 0.386,
+      "grams": 9.293,
+      "wall_loops": 4,
+      "infill_percent": 25.0,
+      "layer_height": 0.20000000298023224,
+      "effective_settings": {
+        "sparse_infill_pattern": "gyroid",
+        "enable_support": "0",
+        "curr_bed_type": "Textured PEI Plate",
+        "top_shell_layers": "5",
+        "bottom_shell_layers": "5"
+      },
+      "start_gcode_diagnostic": true
+    }
+  ],
+  "total_parts": 6,
+  "total_grams_individual_plates": 409.6,
+  "total_hours_individual_plates": 11.8,
+  "production_gcode": false,
+  "project_3mf": {
+    "file": "stl/leo_ac1_all_parts.3mf",
+    "parts": 6,
+    "plates": 3,
+    "layout": [
+      {
+        "plate": 1,
+        "name": "Gehäuse",
+        "parts": [
+          "body"
+        ],
+        "size_mm": [
+          225.0,
+          155.0
+        ],
+        "prime_tower_xy": [
+          253.0,
+          130.0
+        ]
+      },
+      {
+        "plate": 2,
+        "name": "Rückwand",
+        "parts": [
+          "back"
+        ],
+        "size_mm": [
+          225.0,
+          155.0
+        ]
+      },
+      {
+        "plate": 3,
+        "name": "Graue Teile",
+        "parts": [
+          "cover",
+          "foot",
+          "foot",
+          "grille"
+        ],
+        "size_mm": [
+          172.0,
+          192.3
+        ]
+      }
+    ],
+    "multicolour_parts": {
+      "body": [
+        "label"
+      ]
+    },
+    "multicolour_slices": {
+      "Gehäuse": {
+        "plate": 1,
+        "hours": 6.19,
+        "grams_by_filament": {
+          "1": 258.12,
+          "3": 0.71
+        },
+        "warnings": ""
+      }
+    },
+    "own_infill_parts": 0,
+    "sha256": "b63656021436ca89df61053dd17c76e50fc2010365a8642f00c241642a3a4861"
+  }
+}

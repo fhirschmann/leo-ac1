@@ -1,0 +1,910 @@
+{
+  "source_sha256": "4d6ac37d4137e5257881713c6dfb666fe2dfedbef741613526f13cfee97ca405",
+  "software": {
+    "numpy": "2.5.3",
+    "trimesh": "5.1.0",
+    "manifold3d": "3.5.3",
+    "scipy": "1.18.1",
+    "rtree": "1.4.1",
+    "networkx": "3.6.1"
+  },
+  "print_parts": 5,
+  "print_quantity": 6,
+  "print_meshes": {
+    "body": {
+      "size_mm": [
+        225.0,
+        155.0,
+        77.6
+      ],
+      "bounds_mm": [
+        [
+          0.0,
+          -155.0,
+          0.0
+        ],
+        [
+          225.0,
+          0.0,
+          77.6
+        ]
+      ],
+      "volume_mm3": 224064.8922,
+      "triangles": 9776,
+      "watertight": true,
+      "consistent_winding": true,
+      "degenerate_faces": 0,
+      "components": 1,
+      "backend": "CGAL",
+      "sha256": "f3b943a9f2abc7284a99dac140920ca492f7e3bfaddc08836e36c56df54050ea",
+      "quantity": 1,
+      "material": "PETG-weiss",
+      "committed_sha256": "f3b943a9f2abc7284a99dac140920ca492f7e3bfaddc08836e36c56df54050ea"
+    },
+    "back": {
+      "size_mm": [
+        225.0,
+        155.0,
+        40.6
+      ],
+      "bounds_mm": [
+        [
+          0.0,
+          0.0,
+          0.0
+        ],
+        [
+          225.0,
+          155.0,
+          40.6
+        ]
+      ],
+      "volume_mm3": 76728.0626,
+      "triangles": 9732,
+      "watertight": true,
+      "consistent_winding": true,
+      "degenerate_faces": 0,
+      "components": 1,
+      "backend": "Manifold",
+      "sha256": "dbb46cddc4eed8fd30f2aff6f7fd631ab93fcfbb572b297d4a6e3e66982eb259",
+      "quantity": 1,
+      "material": "PETG-weiss",
+      "committed_sha256": "dbb46cddc4eed8fd30f2aff6f7fd631ab93fcfbb572b297d4a6e3e66982eb259"
+    },
+    "grille": {
+      "size_mm": [
+        136.0,
+        136.0,
+        6.0
+      ],
+      "bounds_mm": [
+        [
+          16.0,
+          -145.5,
+          0.0
+        ],
+        [
+          152.0,
+          -9.5,
+          6.0
+        ]
+      ],
+      "volume_mm3": 34143.0828,
+      "triangles": 13944,
+      "watertight": true,
+      "consistent_winding": true,
+      "degenerate_faces": 0,
+      "components": 1,
+      "backend": "Manifold",
+      "sha256": "f1dd7b7268875fca8230907b036132f644b3308d47fb693a98b6b79f17b666ec",
+      "quantity": 1,
+      "material": "PETG-grau",
+      "committed_sha256": "f1dd7b7268875fca8230907b036132f644b3308d47fb693a98b6b79f17b666ec"
+    },
+    "cover": {
+      "size_mm": [
+        84.0,
+        34.0,
+        9.0
+      ],
+      "bounds_mm": [
+        [
+          28.0,
+          40.0,
+          0.0
+        ],
+        [
+          112.0,
+          74.0,
+          9.0
+        ]
+      ],
+      "volume_mm3": 9160.3148,
+      "triangles": 908,
+      "watertight": true,
+      "consistent_winding": true,
+      "degenerate_faces": 0,
+      "components": 1,
+      "backend": "Manifold",
+      "sha256": "32077654b8402b7bf4bf69be4bfe35caec54911dfd57c24c5ff4834f35d3d2cf",
+      "quantity": 1,
+      "material": "PETG-grau",
+      "committed_sha256": "32077654b8402b7bf4bf69be4bfe35caec54911dfd57c24c5ff4834f35d3d2cf"
+    },
+    "foot": {
+      "size_mm": [
+        18.0,
+        96.0,
+        10.0
+      ],
+      "bounds_mm": [
+        [
+          -9.0,
+          -8.0,
+          0.0
+        ],
+        [
+          9.0,
+          88.0,
+          10.0
+        ]
+      ],
+      "volume_mm3": 8102.3131,
+      "triangles": 766,
+      "watertight": true,
+      "consistent_winding": true,
+      "degenerate_faces": 0,
+      "components": 1,
+      "backend": "Manifold",
+      "sha256": "d8e25bd2c94d8ce07da998acc4ff57d8009b7bb59b2c023ef59290c61ccc93bb",
+      "quantity": 2,
+      "material": "PETG-grau",
+      "committed_sha256": "d8e25bd2c94d8ce07da998acc4ff57d8009b7bb59b2c023ef59290c61ccc93bb"
+    }
+  },
+  "color_meshes": {
+    "body_base": {
+      "size_mm": [
+        225.0,
+        155.0,
+        77.6
+      ],
+      "bounds_mm": [
+        [
+          0.0,
+          -155.0,
+          0.0
+        ],
+        [
+          225.0,
+          0.0,
+          77.6
+        ]
+      ],
+      "volume_mm3": 223887.5307,
+      "triangles": 11108,
+      "watertight": true,
+      "consistent_winding": true,
+      "degenerate_faces": 0,
+      "components": 1,
+      "backend": "CGAL",
+      "sha256": "6913da9b1066b0aef2a3c52df880e20dfd72840f94dd78718d3fb192a93a9ecb"
+    },
+    "body_label": {
+      "size_mm": [
+        46.0,
+        22.0,
+        0.6
+      ],
+      "bounds_mm": [
+        [
+          166.5,
+          -135.0,
+          0.0
+        ],
+        [
+          212.5,
+          -113.0,
+          0.6
+        ]
+      ],
+      "volume_mm3": 177.3617,
+      "triangles": 1324,
+      "watertight": true,
+      "consistent_winding": true,
+      "degenerate_faces": 0,
+      "components": 4,
+      "backend": "Manifold",
+      "sha256": "eae31c990b876881f3850b87fd9bd6bc36e558fe4c7d16ca4c07ba8952fb42fd"
+    }
+  },
+  "color_parts": {
+    "body": {
+      "overlap_mm3": 0.0001,
+      "union_delta_mm3": 0.0,
+      "label": {
+        "mm3": 177.36,
+        "depth_mm": 0.6,
+        "bodies": 4
+      }
+    }
+  },
+  "assembly_bodies": 12,
+  "assembly_pairs": 66,
+  "metrics": {
+    "wall": 2.4,
+    "front_t": 2.4,
+    "back_t": 2.4,
+    "body_mm": [
+      225,
+      80,
+      155
+    ],
+    "fan_size": 120,
+    "fan_t": 25,
+    "fan_pitch": 105,
+    "fan_hole_d": 4.3,
+    "fan_blade_d": 116,
+    "open_d": 118,
+    "grille_gap": 5.21429,
+    "bat_mm": [
+      35,
+      72
+    ],
+    "bat_clear": 0.5,
+    "bat_retain_gap": 1,
+    "shelf_gap": 3,
+    "lip_clearance": 0.25,
+    "spigot_clearance": 0.3,
+    "insert_hole_d": 4,
+    "insert_len": 5.7,
+    "insert_depth": 6.5,
+    "screws": [
+      [
+        "grille",
+        10,
+        4.7,
+        1
+      ],
+      [
+        "fan",
+        30,
+        5,
+        1.5
+      ],
+      [
+        "back",
+        8,
+        5.6,
+        0.9
+      ],
+      [
+        "foot",
+        8,
+        5.6,
+        0.9
+      ],
+      [
+        "cover",
+        8,
+        5.6,
+        0.9
+      ]
+    ],
+    "inserts": [
+      [
+        "body",
+        [
+          142.666,
+          8,
+          101.8
+        ],
+        [
+          0,
+          -1,
+          0
+        ],
+        6.5
+      ],
+      [
+        "body",
+        [
+          59.6996,
+          8,
+          136.166
+        ],
+        [
+          0,
+          -1,
+          0
+        ],
+        6.5
+      ],
+      [
+        "body",
+        [
+          25.3336,
+          8,
+          53.1996
+        ],
+        [
+          0,
+          -1,
+          0
+        ],
+        6.5
+      ],
+      [
+        "body",
+        [
+          108.3,
+          8,
+          18.8336
+        ],
+        [
+          0,
+          -1,
+          0
+        ],
+        6.5
+      ],
+      [
+        "body",
+        [
+          31.5,
+          8.4,
+          25
+        ],
+        [
+          0,
+          -1,
+          0
+        ],
+        6.5
+      ],
+      [
+        "body",
+        [
+          31.5,
+          8.4,
+          130
+        ],
+        [
+          0,
+          -1,
+          0
+        ],
+        6.5
+      ],
+      [
+        "body",
+        [
+          136.5,
+          8.4,
+          25
+        ],
+        [
+          0,
+          -1,
+          0
+        ],
+        6.5
+      ],
+      [
+        "body",
+        [
+          136.5,
+          8.4,
+          130
+        ],
+        [
+          0,
+          -1,
+          0
+        ],
+        6.5
+      ],
+      [
+        "body",
+        [
+          6.5,
+          77.6,
+          6.5
+        ],
+        [
+          0,
+          -1,
+          0
+        ],
+        6.5
+      ],
+      [
+        "body",
+        [
+          6.5,
+          77.6,
+          148.5
+        ],
+        [
+          0,
+          -1,
+          0
+        ],
+        6.5
+      ],
+      [
+        "body",
+        [
+          218.5,
+          77.6,
+          6.5
+        ],
+        [
+          0,
+          -1,
+          0
+        ],
+        6.5
+      ],
+      [
+        "body",
+        [
+          218.5,
+          77.6,
+          148.5
+        ],
+        [
+          0,
+          -1,
+          0
+        ],
+        6.5
+      ],
+      [
+        "body",
+        [
+          153,
+          77.6,
+          6.5
+        ],
+        [
+          0,
+          -1,
+          0
+        ],
+        6.5
+      ],
+      [
+        "body",
+        [
+          153,
+          77.6,
+          148.5
+        ],
+        [
+          0,
+          -1,
+          0
+        ],
+        6.5
+      ],
+      [
+        "feet",
+        [
+          20,
+          44,
+          0
+        ],
+        [
+          0,
+          0,
+          -1
+        ],
+        6.5
+      ],
+      [
+        "feet",
+        [
+          20,
+          66,
+          0
+        ],
+        [
+          0,
+          0,
+          -1
+        ],
+        6.5
+      ],
+      [
+        "feet",
+        [
+          205,
+          44,
+          0
+        ],
+        [
+          0,
+          0,
+          -1
+        ],
+        6.5
+      ],
+      [
+        "feet",
+        [
+          205,
+          66,
+          0
+        ],
+        [
+          0,
+          0,
+          -1
+        ],
+        6.5
+      ],
+      [
+        "cover",
+        [
+          225,
+          57,
+          42
+        ],
+        [
+          1,
+          0,
+          0
+        ],
+        6.5
+      ],
+      [
+        "cover",
+        [
+          225,
+          57,
+          98
+        ],
+        [
+          1,
+          0,
+          0
+        ],
+        6.5
+      ]
+    ]
+  },
+  "intersections": [],
+  "standard_screws": {
+    "grille": {
+      "length": 10,
+      "engagement_mm": 4.7,
+      "tip_margin_mm": 1
+    },
+    "fan": {
+      "length": 30,
+      "engagement_mm": 5,
+      "tip_margin_mm": 1.5
+    },
+    "back": {
+      "length": 8,
+      "engagement_mm": 5.6,
+      "tip_margin_mm": 0.9
+    },
+    "foot": {
+      "length": 8,
+      "engagement_mm": 5.6,
+      "tip_margin_mm": 0.9
+    },
+    "cover": {
+      "length": 8,
+      "engagement_mm": 5.6,
+      "tip_margin_mm": 0.9
+    }
+  },
+  "contact_volumes_mm3": {
+    "grille@body": 177.726,
+    "fan@body": 10.211,
+    "back@body": 102.103,
+    "feet@body": 135.449,
+    "cover@body": 26.055,
+    "battery@body": 48.095
+  },
+  "stops": [
+    {
+      "name": "battery_back",
+      "first_contact_mm": 1.25,
+      "limit_mm": 1.5
+    },
+    {
+      "name": "battery_up",
+      "first_contact_mm": 3.25,
+      "limit_mm": 3.5
+    },
+    {
+      "name": "battery_side",
+      "first_contact_mm": 0.75,
+      "limit_mm": 1.0
+    }
+  ],
+  "sampled_paths": [
+    {
+      "name": "grille_front",
+      "collisions": 0,
+      "first_mm": null,
+      "max_volume_mm3": 0
+    },
+    {
+      "name": "back_off",
+      "collisions": 0,
+      "first_mm": null,
+      "max_volume_mm3": 0
+    },
+    {
+      "name": "battery_out",
+      "collisions": 0,
+      "first_mm": null,
+      "max_volume_mm3": 0
+    },
+    {
+      "name": "fan_out",
+      "collisions": 0,
+      "first_mm": null,
+      "max_volume_mm3": 0
+    },
+    {
+      "name": "cover_off",
+      "collisions": 0,
+      "first_mm": null,
+      "max_volume_mm3": 0
+    },
+    {
+      "name": "feet_off",
+      "collisions": 0,
+      "first_mm": null,
+      "max_volume_mm3": 0
+    }
+  ],
+  "insert_probes": [
+    {
+      "body": "body",
+      "at": [
+        142.67,
+        8,
+        101.8
+      ],
+      "empty_mm3": 0.0,
+      "ring_fill": 1.0,
+      "floor_fill": 1.0
+    },
+    {
+      "body": "body",
+      "at": [
+        59.7,
+        8,
+        136.17
+      ],
+      "empty_mm3": 0.0,
+      "ring_fill": 1.0,
+      "floor_fill": 1.0
+    },
+    {
+      "body": "body",
+      "at": [
+        25.33,
+        8,
+        53.2
+      ],
+      "empty_mm3": 0.0,
+      "ring_fill": 1.0,
+      "floor_fill": 1.0
+    },
+    {
+      "body": "body",
+      "at": [
+        108.3,
+        8,
+        18.83
+      ],
+      "empty_mm3": 0.0,
+      "ring_fill": 1.0,
+      "floor_fill": 1.0
+    },
+    {
+      "body": "body",
+      "at": [
+        31.5,
+        8.4,
+        25
+      ],
+      "empty_mm3": 0.0,
+      "ring_fill": 1.0,
+      "floor_fill": 1.0
+    },
+    {
+      "body": "body",
+      "at": [
+        31.5,
+        8.4,
+        130
+      ],
+      "empty_mm3": 0.0,
+      "ring_fill": 1.0,
+      "floor_fill": 1.0
+    },
+    {
+      "body": "body",
+      "at": [
+        136.5,
+        8.4,
+        25
+      ],
+      "empty_mm3": 0.0,
+      "ring_fill": 1.0,
+      "floor_fill": 1.0
+    },
+    {
+      "body": "body",
+      "at": [
+        136.5,
+        8.4,
+        130
+      ],
+      "empty_mm3": 0.0,
+      "ring_fill": 1.0,
+      "floor_fill": 1.0
+    },
+    {
+      "body": "body",
+      "at": [
+        6.5,
+        77.6,
+        6.5
+      ],
+      "empty_mm3": 0.0,
+      "ring_fill": 1.0,
+      "floor_fill": 1.0
+    },
+    {
+      "body": "body",
+      "at": [
+        6.5,
+        77.6,
+        148.5
+      ],
+      "empty_mm3": 0.0,
+      "ring_fill": 1.0,
+      "floor_fill": 1.0
+    },
+    {
+      "body": "body",
+      "at": [
+        218.5,
+        77.6,
+        6.5
+      ],
+      "empty_mm3": 0.0,
+      "ring_fill": 1.0,
+      "floor_fill": 1.0
+    },
+    {
+      "body": "body",
+      "at": [
+        218.5,
+        77.6,
+        148.5
+      ],
+      "empty_mm3": 0.0,
+      "ring_fill": 1.0,
+      "floor_fill": 1.0
+    },
+    {
+      "body": "body",
+      "at": [
+        153,
+        77.6,
+        6.5
+      ],
+      "empty_mm3": 0.0,
+      "ring_fill": 1.0,
+      "floor_fill": 1.0
+    },
+    {
+      "body": "body",
+      "at": [
+        153,
+        77.6,
+        148.5
+      ],
+      "empty_mm3": 0.0,
+      "ring_fill": 1.0,
+      "floor_fill": 1.0
+    },
+    {
+      "body": "feet",
+      "at": [
+        20,
+        44,
+        0
+      ],
+      "empty_mm3": 0.0,
+      "ring_fill": 1.0,
+      "floor_fill": 1.0
+    },
+    {
+      "body": "feet",
+      "at": [
+        20,
+        66,
+        0
+      ],
+      "empty_mm3": 0.0,
+      "ring_fill": 1.0,
+      "floor_fill": 1.0
+    },
+    {
+      "body": "feet",
+      "at": [
+        205,
+        44,
+        0
+      ],
+      "empty_mm3": 0.0,
+      "ring_fill": 1.0,
+      "floor_fill": 1.0
+    },
+    {
+      "body": "feet",
+      "at": [
+        205,
+        66,
+        0
+      ],
+      "empty_mm3": 0.0,
+      "ring_fill": 1.0,
+      "floor_fill": 1.0
+    },
+    {
+      "body": "cover",
+      "at": [
+        225,
+        57,
+        42
+      ],
+      "empty_mm3": 0.0,
+      "ring_fill": 1.0,
+      "floor_fill": 1.0
+    },
+    {
+      "body": "cover",
+      "at": [
+        225,
+        57,
+        98
+      ],
+      "empty_mm3": 0.0,
+      "ring_fill": 1.0,
+      "floor_fill": 1.0
+    }
+  ],
+  "stl_difference_mm3": {
+    "body": 0.0,
+    "back": 0.0,
+    "grille": 0.0,
+    "cover": 0.0,
+    "foot": 0.0,
+    "multicolour/body_base": 0.0,
+    "multicolour/body_label": 0.0
+  },
+  "open_measurements": [
+    "Akku messen (Durchmesser, Länge mit Schutzplatine, Kabelabgang); Modell: Ø35 × 72 mm",
+    "Lüfter messen (Rahmen 120 × 120 × 25, Lochabstand 105, Kabelabgang)",
+    "Elektronik (Wandler, Laden, Schalter) fehlt noch: Lage im Elektronikfach und Durchbrüche"
+  ],
+  "limitations": [
+    "Bought parts as envelopes (fan block, battery cylinder), no vendor CAD",
+    "Screws without threads, heads simplified",
+    "Sampled motion, no continuous swept-volume proof",
+    "No flexible deformation, physical fit, strength, airflow or thermal validation"
+  ]
+}
