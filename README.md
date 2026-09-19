@@ -4,6 +4,8 @@ Kleiner Akku-Ventilator für das Kinderzimmer, gestaltet wie die Außeneinheit e
 
 ![Baugruppe](img/01_assembly.png)
 
+3D-Viewer (Artifact, wird nach jeder Modelländerung unter derselben URL erneuert): a private Claude viewer artifact
+
 | Rückseite | Explosionsansicht |
 |---|---|
 | ![Rückseite](img/02_back.png) | ![Explosion](img/03_exploded.png) |
