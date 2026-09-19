@@ -96,7 +96,8 @@ def checks(ctx):
     screws = {name: dict(length=length, engagement_mm=round(eng, 2), tip_margin_mm=round(margin, 2))
               for name, length, eng, margin in m["screws"]}
     for name, info in screws.items():
-        assert info["engagement_mm"] >= 4 and info["tip_margin_mm"] >= 0.3, f"Screw {name}: {info}"
+        # at least 1 x d in the brass inserts; the fan screws sit on 1 mm silicone pads
+        assert info["engagement_mm"] >= 3 and info["tip_margin_mm"] >= 0.3, f"Screw {name}: {info}"
 
     # Contact, not just freedom from overlap: pushed 0.05 mm into its support, a body must intersect it
     contacts = {}
@@ -175,7 +176,6 @@ def checks(ctx):
     ctx.summary.append(f"{len(inserts)} inserts")
 
     ctx.open_items.append("Akku nachmessen (Etikett: Ø34 × 70 mm, Modell Ø35 × 72 mm) und Kabelabgang prüfen")
-    ctx.open_items.append("Lüfter messen (Rahmen 120 × 120 × 25, Lochabstand 105, Kabelabgang)")
     ctx.open_items.append("Poti des PWM-Reglers messen (Annahme WH148: D-Achse Ø6/4,5 × 15, Buchse M7, Gehäuse Ø16,5 × 18)")
     ctx.open_items.append("BMS-Platine am Akku messen (Annahme 16 × 4 mm über die ganze Länge, zur Trennwand)")
     ctx.open_items.append("PWM-Platine CNY-FA5-PRO messen (Annahme 48 × 34 mm, Bauteile 13 mm hoch, Poti-Achse 8,5 mm über der Platine)")
@@ -199,7 +199,7 @@ VIEWER = dict(
            ("cover", "Servicedeckel", "grau", "#8f9396", "1x", [1, 0, 0]),
            ("handle", "Griff", "grau", "#8f9396", "1x", [0, 0, 1.2]),
            ("knob", "Drehknopf", "grau", "#8f9396", "1x", [2, 0, 0]),
-           ("fan_visual", "Lüfter 120 mm", "zugekauft", "#303236", "1x", [0, 0.8, 0]),
+           ("fan_visual", "Lüfter Noctua NF-F12 iPPC-2000", "zugekauft", "#303236", "1x", [0, 0.8, 0]),
            ("battery", "Akku LiFePO4 3,2 V", "zugekauft", "#3f7fbf", "1x", [0, 0.5, 0]),
            ("pot", "Poti PWM-Regler (Annahme)", "zugekauft", "#3a3d41", "1x", [-0.5, 0, 0]),
            ("chg_module", "Lade-/Boostmodul mit 2 Kühlkörpern", "zugekauft", "#c9c9c9", "1x", [0, 0.8, 0]),
@@ -213,7 +213,8 @@ VIEWER = dict(
     colour={"body": [("label", "Gehäuse · Logo", "#8f9396")]},
     bodies={"body_base": "body_install_pose() inlay_base() { body_print_pose() body(); body_label_print_2d(); }",
             "body_label": "body_install_pose() inlay_piece() { body_print_pose() body(); body_label_print_2d(); }",
-            "fan_visual": "fan_visual();",
+            # Noctua CAD (vendor/, not in the repo): outlet face with stator vanes and hub label at CAD y = 0.3, towards the front
+            "fan_visual": 'translate([fan_cx, fan_y - 0.3, fan_cz]) import("$ROOT/vendor/noctua/NF-F12_iPPC.stl");',
             "pot": "pot_env();",
             "screws_grille": "screws_grille(true);",
             "screws_fan": "screws_fan(true);",

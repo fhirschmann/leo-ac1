@@ -1,5 +1,5 @@
 {
-  "source_sha256": "a25fa9ea954717f0478fbf69287dedae982c975ed2e1991e81a67508b727e6c8",
+  "source_sha256": "5249ba4b7366069b10ebfd49fe7bde803e99f9bdd65bf3c1e6903f5c338f399d",
   "software": {
     "numpy": "2.5.3",
     "trimesh": "5.1.0",
@@ -29,17 +29,17 @@
           76.0
         ]
       ],
-      "volume_mm3": 321355.019,
+      "volume_mm3": 321101.2762,
       "triangles": 12390,
       "watertight": true,
       "consistent_winding": true,
       "degenerate_faces": 0,
       "components": 1,
       "backend": "CGAL",
-      "sha256": "a18c5395ef2c5d1cebe1683e61de14cd414cbb42486d2b97fd2182ecb7454ce0",
+      "sha256": "8e2971bc164c1cbee677016a00d2e114f1fd2ae66d42e591b9ff0298ab00a3ca",
       "quantity": 1,
       "material": "PETG-weiss",
-      "committed_sha256": "a18c5395ef2c5d1cebe1683e61de14cd414cbb42486d2b97fd2182ecb7454ce0"
+      "committed_sha256": "8e2971bc164c1cbee677016a00d2e114f1fd2ae66d42e591b9ff0298ab00a3ca"
     },
     "back": {
       "size_mm": [
@@ -211,14 +211,14 @@
           76.0
         ]
       ],
-      "volume_mm3": 321045.0166,
+      "volume_mm3": 320791.2737,
       "triangles": 13578,
       "watertight": true,
       "consistent_winding": true,
       "degenerate_faces": 0,
       "components": 1,
       "backend": "CGAL",
-      "sha256": "60f52a3e8941be5c7d31b39aebe7632d6773cd4427320ba243507fa286c72d92"
+      "sha256": "7c452cc7892684ab12175a509a4bd1b4e862b52ca8083a555dfac6aaeed40481"
     },
     "body_label": {
       "size_mm": [
@@ -272,6 +272,7 @@
       155
     ],
     "fan_size": 120,
+    "fan_pad": 1,
     "fan_t": 25,
     "fan_pitch": 105,
     "fan_hole_d": 4.3,
@@ -334,8 +335,8 @@
       [
         "fan",
         30,
-        5,
-        2
+        3,
+        4
       ],
       [
         "back",
@@ -425,7 +426,7 @@
         "body",
         [
           31.5,
-          11.2,
+          10.2,
           25
         ],
         [
@@ -441,7 +442,7 @@
         "body",
         [
           31.5,
-          11.2,
+          10.2,
           130
         ],
         [
@@ -457,7 +458,7 @@
         "body",
         [
           136.5,
-          11.2,
+          10.2,
           25
         ],
         [
@@ -473,7 +474,7 @@
         "body",
         [
           136.5,
-          11.2,
+          10.2,
           130
         ],
         [
@@ -704,8 +705,8 @@
     },
     "fan": {
       "length": 30,
-      "engagement_mm": 5,
-      "tip_margin_mm": 2
+      "engagement_mm": 3,
+      "tip_margin_mm": 4
     },
     "back": {
       "length": 8,
@@ -856,7 +857,7 @@
       "body": "body",
       "at": [
         31.5,
-        11.2,
+        10.2,
         25
       ],
       "empty_mm3": 0.0,
@@ -867,7 +868,7 @@
       "body": "body",
       "at": [
         31.5,
-        11.2,
+        10.2,
         130
       ],
       "empty_mm3": 0.0,
@@ -878,7 +879,7 @@
       "body": "body",
       "at": [
         136.5,
-        11.2,
+        10.2,
         25
       ],
       "empty_mm3": 0.0,
@@ -889,7 +890,7 @@
       "body": "body",
       "at": [
         136.5,
-        11.2,
+        10.2,
         130
       ],
       "empty_mm3": 0.0,
@@ -1057,7 +1058,6 @@
   },
   "open_measurements": [
     "Akku nachmessen (Etikett: Ø34 × 70 mm, Modell Ø35 × 72 mm) und Kabelabgang prüfen",
-    "Lüfter messen (Rahmen 120 × 120 × 25, Lochabstand 105, Kabelabgang)",
     "Poti des PWM-Reglers messen (Annahme WH148: D-Achse Ø6/4,5 × 15, Buchse M7, Gehäuse Ø16,5 × 18)",
     "BMS-Platine am Akku messen (Annahme 16 × 4 mm über die ganze Länge, zur Trennwand)",
     "PWM-Platine CNY-FA5-PRO messen (Annahme 48 × 34 mm, Bauteile 13 mm hoch, Poti-Achse 8,5 mm über der Platine)",

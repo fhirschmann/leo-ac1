@@ -23,7 +23,7 @@ Kleiner Akku-Ventilator für das Kinderzimmer, gestaltet wie die Außeneinheit e
 
 Alle Teile liegen als Bambu-Studio-Projekt in [`stl/leo_ac1_all_parts.3mf`](stl/leo_ac1_all_parts.3mf): Platte 1 Gehäuse (mit Wischturm), Platte 2 Rückwand, Platte 3 graue Teile (Gitter, Servicedeckel, Griff, Drehknopf). Filament 1 PETG Basic Weiß, Filament 2 PETG Basic Grau, Filament 3 Grau für das Typenschild (im AMS dieselbe Spule wie Filament 2). Wer das Gehäuse einfarbig druckt, nimmt `stl/body.stl`.
 
-Rechnerisch **ca. 0,64 kg und 17,7 Stunden** (diagnostisches Slicen, jede Instanz als eigener Druck; Gehäuse allein 361 g / 8,4 h).
+Rechnerisch **ca. 0,64 kg und 17,7 Stunden** (diagnostisches Slicen, jede Instanz als eigener Druck; Gehäuse allein 360 g / 8,4 h).
 
 ## Druck und Stabilität
 
@@ -42,7 +42,7 @@ Alle Teile drucken ohne Stützen (geprüft mit `analyze.py islands`, `overhangs`
 
 | Teil | Menge | Hinweis |
 |---|---|---|
-| PC-Lüfter 120 × 120 × 25 mm | 1 | Lochabstand 105 mm; 12-V-Lüfter brauchen einen Step-up-Wandler |
+| Lüfter Noctua NF-F12 industrialPPC-2000 PWM | 1 | 120 × 25 mm, Lochabstand 105 mm, 12 V, max. 0,1 A / 1,2 W, 2000 U/min, 122 m³/h; Silikon-Eckpads 1 mm über beiden Rahmenflächen (aus dem Noctua-CAD); die Pads liegen auf den Domen, M3 × 30 greift 3 mm, nur handfest anziehen |
 | Akku 3,2 V 6000 mAh LiFePO4 mit Schutzplatine, JST-PH 2.0 (32700-Zelle, Ø 34 × 70 mm) | 1 | Nur mit LiFePO4-Ladegerät laden (3,65 V), **kein** TP4056 (4,2 V) |
 | Lade-/Boostmodul „2-in-1 3,2 V LiFePO4“, Variante 12 V | 1 | 35,4 × 11 × 3,6 mm; Pads IN± (5 V laden), B± (Akku), O± (12 V, max. ca. 0,32 A); klebt an der Trennwand im Luftstrom hinter dem Lüfter auf zwei Stegen, Unterkante auf einer Leiste (Pads und Bauteile an den Kanten bleiben frei) |
 | PWM-Lüfterregler DC 8–24 V 5 A mit Drehpoti und Schalter | 1 | 4-Pin-Lüfter; Platine CNY-FA5-PRO mit liegendem Poti an der Kante: Sie liegt waagerecht auf zwei Rippen über dem Elektronikboden, Poti-Kante an der rechten Wand, gehalten von der Poti-Mutter; Knopf über dem Akku, mittig in der Tiefe (angenommen: Platine 48 × 34 mm, Bauteile 13 mm hoch, Poti-Achse 8,5 mm über der Platine, Poti WH148 mit D-Achse Ø 6 × 15, M7) |
@@ -67,7 +67,8 @@ Akku (JST-PH, mit eingebautem BMS) ──► B+ / B−
 - Das Modul lädt den Akku mit bis zu 1 A auf 3,6 V und liefert gleichzeitig 12 V (USV-Betrieb): Der Lüfter läuft auch beim Laden. Netzteil mit mindestens 2 A verwenden.
 - Das BMS im Akku bleibt als zweite Schutzebene dazwischen (Überladung, Tiefentladung, Kurzschluss); das Modul schaltet bei 2,6 V vorher ab.
 - Das Modul sitzt direkt hinter dem Lüfter im angesaugten Luftstrom, 2 mm vor der Trennwand, mit zwei Kühlkörpern. Beim Laden mit 1 A wird der Chip laut einer Käuferbewertung ohne Kühlung bis ca. 70 °C warm; mit R3 = 2,4 kΩ lädt es mit 0,5 A und entsprechend kühler.
-- Stromaufnahme prüfen: 12 V × Lüfterstrom (Typenschild) darf die ca. 0,32 A des Moduls nicht überschreiten; der Akku liefert dabei gut 1 A.
+- Stromaufnahme: Der NF-F12 industrialPPC-2000 braucht höchstens 1,2 W, das Modul läuft damit bei ca. 31 % seiner 3,84 W. Laufzeit grob 10 h bei Vollgas, 20 h bei 70 % Drehzahl (Akku 19,2 Wh, ca. 85 % Wirkungsgrad).
+- Zusätzliche Absicherung: selbstrückstellende PTC-Sicherung (z. B. Bourns MF-R160, 1,6 A halten / 3,2 A auslösen; Datenblatt prüfen) zwischen Akku-Plus und B+.
 
 ## Zusammenbau
 
@@ -100,4 +101,4 @@ python3 -m venv .venv
 .venv/bin/python scripts/render_views.py           # img/
 ```
 
-Geprüft werden: Teileliste gegen die `part`-Zweige, geschlossene Netze, Bettlage, Bauraum, keine Überschneidung zwischen 17 Baugruppenkörpern (136 Paare, inklusive angenommener PWM-Platine, inklusive Schrauben, Lüfter- und Akku-Hüllkörper), Auflagekontakt von Gitter, Lüfter, Rückwand, Deckel, Griff, Poti und Akku, Anschläge des Akkus (hinten 0,75 mm, oben 3,25 mm, seitlich 0,75 mm), 9 Ein- und Ausbauwege (inklusive Lademodul nach hinten, vor dem Lüfter, und PWM-Platine: erst 19 mm von der Wand weg, dann nach hinten) in realistischer Reihenfolge, 21 Insert-Aufnahmen (20 × M3, 1 × M5; Achse frei, volle Mindestwand laut Ruthex-Datenblatt, Boden voll), Einschraubtiefen (≥ 4,7 mm, Spitze ≥ 0,9 mm vor dem Taschenende), Normmaße (120-mm-Lüfter, Ruthex M3), Gitterspalt ≤ 6 mm (Fingerschutz), Mehrfarb-Deckung des Logos. Druckbarkeit: keine schwebenden Bereiche, Einlage auf Schicht 1 ohne zu schmale Stellen, Stege zwischen den Rillen ≥ 1,1 mm. Keine Festigkeits-, Luftstrom- oder Passungsprüfung am echten Teil.
+Geprüft werden: Teileliste gegen die `part`-Zweige, geschlossene Netze, Bettlage, Bauraum, keine Überschneidung zwischen 17 Baugruppenkörpern (136 Paare, inklusive angenommener PWM-Platine, inklusive Schrauben, Lüfter- und Akku-Hüllkörper), Auflagekontakt von Gitter, Lüfter, Rückwand, Deckel, Griff, Poti und Akku, Anschläge des Akkus (hinten 0,75 mm, oben 3,25 mm, seitlich 0,75 mm), 9 Ein- und Ausbauwege (inklusive Lademodul nach hinten, vor dem Lüfter, und PWM-Platine: erst 19 mm von der Wand weg, dann nach hinten) in realistischer Reihenfolge, 21 Insert-Aufnahmen (20 × M3, 1 × M5; Achse frei, volle Mindestwand laut Ruthex-Datenblatt, Boden voll), Einschraubtiefen (≥ 3 mm = 1 × d im Messing, Lüfter auf Silikonpads 3 mm, übrige ≥ 4,8 mm; Spitze ≥ 0,9 mm vor dem Taschenende), Normmaße (120-mm-Lüfter, Ruthex M3), Gitterspalt ≤ 6 mm (Fingerschutz), Mehrfarb-Deckung des Logos. Druckbarkeit: keine schwebenden Bereiche, Einlage auf Schicht 1 ohne zu schmale Stellen, Stege zwischen den Rillen ≥ 1,1 mm. Keine Festigkeits-, Luftstrom- oder Passungsprüfung am echten Teil.

@@ -6,12 +6,12 @@
       "quantity": 1,
       "material": "PETG-weiss",
       "passed": true,
-      "source_sha256": "a18c5395ef2c5d1cebe1683e61de14cd414cbb42486d2b97fd2182ecb7454ce0",
+      "source_sha256": "8e2971bc164c1cbee677016a00d2e114f1fd2ae66d42e591b9ff0298ab00a3ca",
       "exit_code": 0,
       "result_code": 0,
       "warnings": "",
       "hours": 8.441,
-      "grams": 360.584,
+      "grams": 360.285,
       "wall_loops": 6,
       "infill_percent": 30.0,
       "layer_height": 0.20000000298023224,
@@ -141,7 +141,7 @@
     }
   ],
   "total_parts": 6,
-  "total_grams_individual_plates": 644.6,
+  "total_grams_individual_plates": 644.3,
   "total_hours_individual_plates": 17.7,
   "production_gcode": false,
   "project_3mf": {
@@ -198,9 +198,9 @@
     "multicolour_slices": {
       "Gehäuse": {
         "plate": 1,
-        "hours": 8.64,
+        "hours": 8.62,
         "grams_by_filament": {
-          "1": 359.97,
+          "1": 359.68,
           "3": 0.84
         },
         "warnings": ""
@@ -208,6 +208,6 @@
     },
     "pause_slices": {},
     "own_infill_parts": 0,
-    "sha256": "6116884d83b610f8b3118ee1da49a1f3b79bafa36231e86fa24918c34f96c323"
+    "sha256": "f8a206fc43a6a7ad4240d8227db9c6a53b47d581a53236777ae60e594f8e87a0"
   }
 }

@@ -22,7 +22,7 @@ part_x = 150;        // left face of the partition between fan section and elect
 part_t = 2.4;
 inner_c = 4;         // 45 degree fillet between front plate and walls (stiffness, printable)
 
-/* [Fan, 120 mm PC fan] */
+/* [Fan: Noctua NF-F12 industrialPPC-2000 PWM, 120 x 25 mm, 12 V, max. 1.2 W] */
 fan_size = 120;
 fan_t = 25;
 fan_pitch = 105;     // mounting hole spacing
@@ -32,6 +32,8 @@ fan_cx = 84;         // fan axis x
 fan_cz = body_h / 2; // fan axis z
 fan_standoff = 8;    // bosses between front plate and fan frame
 fan_boss_d = 9;
+fan_pad = 1;         // silicone corner pads, proud of both frame faces (Noctua CAD NF-F12 industrialPPC)
+fan_pad_leg = 35.2;  // pads cover the corner triangle (fan_size/2, leg) - (fan_size/2, fan_size/2) - (leg, fan_size/2) (CAD)
 shroud_t = 3.2;      // round duct front plate -> fan frame, bore = grille opening: air leaves only through the grille
 shroud_gap = 0.2;    // duct end to the fan frame face
 
@@ -227,8 +229,8 @@ screw_table = [
     // name, length, engagement, tip margin
     ["grille", len_grille, (-grille_t + head_pocket[1] + len_grille) - (front_t + grille_boss_h - insert_len),
      (front_t + grille_boss_h) - (-grille_t + head_pocket[1] + len_grille)],
-    ["fan", len_fan, fan_y - max(fan_y + fan_t - len_fan, fan_y - insert_len),
-     (fan_y + fan_t - len_fan) - (fan_y - insert_depth)],
+    ["fan", len_fan, (fan_y - fan_pad) - max(fan_y + fan_t + fan_pad - len_fan, fan_y - fan_pad - insert_len),
+     (fan_y + fan_t + fan_pad - len_fan) - (fan_y - fan_pad - insert_depth)],
     ["back", len_back, (body_d - back_t) - max(body_d - head_pocket[1] - len_back, body_d - back_t - insert_len),
      (body_d - head_pocket[1] - len_back) - (body_d - back_t - insert_depth)],
     ["cover", len_cover, body_w - max(body_w + cover_out - head_pocket[1] - len_cover, body_w - insert_len),
@@ -238,7 +240,7 @@ screw_table = [
 assert(wall >= 3.2 && front_t >= 3.2 && back_t >= 3 && corner_r >= 5, "Drop resistance: walls >= 3.2 mm (back 3 mm), corner radius >= 5 mm");
 // heat-set inserts need material between pocket and visible face, otherwise the face deforms when pressing
 assert(front_t + grille_boss_h - insert_depth >= 3, "Grille insert pocket too close to the front face");
-assert(fan_y - insert_depth >= 3, "Fan insert pocket too close to the front face");
+assert(fan_y - fan_pad - insert_depth >= 3, "Fan insert pocket too close to the front face");
 assert(front_t + grille_boss_h <= fan_y - 0.3, "Grille bosses touch the fan");
 assert(grille_depth <= fan_y - 2, "Grille bars too close to the fan");
 assert(grille_gap <= 6, "Grille openings wider than 6 mm (finger safety)");
@@ -279,7 +281,8 @@ assert(big_gap >= 2, "Big letters too wide for the second line");
 assert(sub_stroke >= 1.2 && stencil_gap >= 1.2, "Logo lines or gaps below 1.2 mm");
 assert(front_t - groove_depth >= 1.2 && groove_pitch - groove_w >= 1.1, "Grooves too deep or webs too thin");
 assert(groove_z0 + (groove_count - 1) * groove_pitch + groove_w < logo_bottom - 3, "Grooves run into the logo");
-for (s = screw_table) assert(s[2] >= 4 && s[3] >= 0.3, str("Screw ", s[0], ": engagement ", s[2], ", tip margin ", s[3]));
+// thread engagement at least 1 x d in the brass inserts (the fan screws sit on 1 mm silicone pads)
+for (s = screw_table) assert(s[2] >= 3 - 0.01 && s[3] >= 0.3, str("Screw ", s[0], ": engagement ", s[2], ", tip margin ", s[3]));
 
 // ---------- helpers ----------
 module rrect(size, r) offset(r = r) offset(delta = -r) square(size, center = true);
@@ -353,7 +356,7 @@ module body() difference() {
         }
         // partition between fan section and electronics bay
         translate([part_x, front_t - eps, wall - eps]) cube([part_t, part_y1 - front_t + eps, body_h - 2 * wall + 2 * eps]);
-        for (p = fan_holes()) cyl_y(p, front_t - eps, fan_y, fan_boss_d / 2);
+        for (p = fan_holes()) cyl_y(p, front_t - eps, fan_y - fan_pad, fan_boss_d / 2);   // the corner pads rest on them
         for (p = grille_screws()) cyl_y(p, front_t - eps, front_t + grille_boss_h, grille_boss_d / 2);
         for (b = back_bosses()) back_boss(b);
         // battery cradle ribs, open towards the back
@@ -408,7 +411,7 @@ module body() difference() {
         cyl_y(p, -1, front_t + grille_boss_h, screw_clear_d / 2);
         cyl_y(p, front_t + grille_boss_h - insert_depth, front_t + grille_boss_h + 1, insert_hole_d / 2);
     }
-    for (p = fan_holes()) cyl_y(p, fan_y - insert_depth, fan_y + 1, insert_hole_d / 2);
+    for (p = fan_holes()) cyl_y(p, fan_y - fan_pad - insert_depth, fan_y + 1, insert_hole_d / 2);
     for (b = back_bosses()) cyl_y(b[0], body_d - back_t - insert_depth, body_d + 1, insert_hole_d / 2);
     // cable notch at the back edge of the partition
     translate([part_x - 1, part_y1 - 14, 120]) cube([part_t + 2, 15, 12]);
@@ -636,7 +639,11 @@ module handle() translate([handle_cx, 0, body_h]) difference() {   // side profi
 module handle_print_pose() translate([0, 0, -(handle_cy - handle_d / 2)]) rotate([90, 0, 0]) children();   // front face on the bed
 
 // ---------- bought parts: envelopes for the checks ----------
-module fan_env() translate([fan_cx - fan_size / 2, fan_y, fan_cz - fan_size / 2]) cube([fan_size, fan_t, fan_size]);
+module fan_env() {                  // frame block plus the silicone corner pads on both faces
+    translate([fan_cx - fan_size / 2, fan_y, fan_cz - fan_size / 2]) cube([fan_size, fan_t, fan_size]);
+    for (sx = [-1, 1], sz = [-1, 1], y = [fan_y - fan_pad, fan_y + fan_t - eps]) translate([fan_cx, 0, fan_cz]) scale([sx, 1, sz])
+        along_y(y, y + fan_pad + eps) polygon([[fan_size / 2, fan_pad_leg], [fan_size / 2, fan_size / 2], [fan_pad_leg, fan_size / 2]]);
+}
 module fan_visual() translate([fan_cx, fan_y, fan_cz]) rotate([-90, 0, 0]) {   // local z along +y
     difference() {
         translate([-fan_size / 2, -fan_size / 2, 0]) cube([fan_size, fan_size, fan_t]);
@@ -662,7 +669,7 @@ module screw(len, socket = false) difference() {   // ISO 7380 button head, head
     if (socket) translate([0, 0, -screw_head_h - eps]) cylinder(d = 2.5 / cos(30), h = 1, $fn = 6);   // drive recess, viewer only
 }
 module screws_grille(socket = false) for (p = grille_screws()) translate([p[0], -grille_t + head_pocket[1], p[1]]) orient([0, 1, 0]) screw(len_grille, socket);
-module screws_fan(socket = false) for (p = fan_holes()) translate([p[0], fan_y + fan_t, p[1]]) orient([0, -1, 0]) screw(len_fan, socket);
+module screws_fan(socket = false) for (p = fan_holes()) translate([p[0], fan_y + fan_t + fan_pad, p[1]]) orient([0, -1, 0]) screw(len_fan, socket);
 module screws_back(socket = false) for (b = back_bosses()) translate([b[0][0], body_d - head_pocket[1], b[0][1]]) orient([0, -1, 0]) screw(len_back, socket);
 module screws_cover(socket = false) for (p = cover_screws()) translate([body_w + cover_out - head_pocket[1], p[0], p[1]]) orient([-1, 0, 0]) screw(len_cover, socket);
 module screws_handle(socket = false) for (p = handle_screws()) translate([p[0], p[1], body_h - wall]) orient([0, 0, 1]) screw(len_handle, socket);
@@ -689,7 +696,7 @@ if      (part == "assembly") assembly();
 else if (part == "exploded") assembly(40);
 else if (part == "metrics") echo("PROJECT_METRICS", [
     ["wall", wall], ["front_t", front_t], ["back_t", back_t], ["corner_r", corner_r], ["body_mm", [body_w, body_d, body_h]],
-    ["fan_size", fan_size], ["fan_t", fan_t], ["fan_pitch", fan_pitch], ["fan_hole_d", fan_hole_d],
+    ["fan_size", fan_size], ["fan_pad", fan_pad], ["fan_t", fan_t], ["fan_pitch", fan_pitch], ["fan_hole_d", fan_hole_d],
     ["fan_blade_d", fan_blade_d], ["pot_shaft_len", pot_shaft[2]], ["pwm_pcb", pwm_pcb], ["pot_axis_h", pot_axis_h], ["knob_shaft_engagement", pot_shaft[2] - knob_stem_z], ["knob_top_skin", knob_len - knob_bore_top], ["knob_protrusion", knob_cap_z + knob_h - cover_out], ["handle_clearance", handle_h - handle_bar], ["handle_open_top", handle_open[1]], ["fan_axis", [fan_cx, fan_cz]], ["fan_y", fan_y], ["shroud_r", [open_r, open_r + shroud_t]], ["shroud_gap", shroud_gap], ["open_d", 2 * open_r], ["grille_gap", grille_gap],
     ["bat_mm", [bat_d, bat_l]], ["bat_bms", bat_bms], ["bat_clear", bat_clear], ["saddle_gap", saddle_gap], ["cradle_rings", len(cradle_z)], ["shelf_gap", shelf_gap],
     ["lip_clearance", lip_cl], ["spigot_clearance", spigot_cl],
@@ -698,7 +705,7 @@ else if (part == "metrics") echo("PROJECT_METRICS", [
     // insert pockets: [assembly body, opening point, direction into the material, depth]
     ["inserts", concat(
         [for (p = grille_screws()) ["body", [p[0], front_t + grille_boss_h, p[1]], [0, -1, 0], insert_depth, insert_hole_d, insert_w_min]],
-        [for (p = fan_holes()) ["body", [p[0], fan_y, p[1]], [0, -1, 0], insert_depth, insert_hole_d, insert_w_min]],
+        [for (p = fan_holes()) ["body", [p[0], fan_y - fan_pad, p[1]], [0, -1, 0], insert_depth, insert_hole_d, insert_w_min]],
         [for (b = back_bosses()) ["body", [b[0][0], body_d - back_t, b[0][1]], [0, -1, 0], insert_depth, insert_hole_d, insert_w_min]],
         [for (p = cover_screws()) ["body", [body_w, p[0], p[1]], [-1, 0, 0], cover_ins_depth, insert_hole_d, insert_w_min]],
         [for (p = handle_screws()) ["handle", [p[0], p[1], body_h], [0, 0, 1], insert_depth, insert_hole_d, insert_w_min]],
