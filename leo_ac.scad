@@ -103,12 +103,25 @@ len_cover = 8;       // M3 x 8 socket head, from inside the body
 
 /* [Decor] */
 inlay_t = 0.6;       // multicolour inlay depth: the first three 0.2 mm layers
-label = "LEO";
-label_font = "Liberation Sans:style=Bold";
-label_size = 11;
-label_pos = [189.5, 124];   // front view (x, z)
-label_frame = [46, 22];
-label_line = 1.2;
+brand = "LEO";             // big stencil letters
+brand_sub = "INDUSTRIES";  // small letters below
+plate_pos = [160, 100];    // lower left corner of the name plate, front view (x, z)
+plate_size = [59, 46];
+plate_cut = [6, 1.5];      // corner chamfers: top left and bottom right / the other two
+plate_line = 1.2;
+big_size = [13, 18];       // letter box
+big_stroke = 3;
+big_gap = 3.5;
+sub_size = [4, 6];
+sub_stroke = 1.2;          // >= 3 lines, also the gaps inside E and S
+sub_gap = 1.5;
+stencil_gap = 1.2;         // bridges in the big letters
+hazard = [12, 4, 2];       // warning stripes: count, band height, stripe width along x (pitch 2x)
+groove_count = 12;         // decorative grooves right of the grille, as on Mitsubishi outdoor units
+groove_pitch = 6;
+groove_w = 1.2;
+groove_depth = 0.8;        // open to the bed in print
+groove_z0 = 19;            // axis of the lowest groove; x range = name plate width
 
 // ---------- derived values ----------
 fan_y = front_t + fan_standoff;                       // front face of the fan frame
@@ -159,6 +172,11 @@ assert(grille_r - (grille_screw_r + csk_d / 2) >= 1.2, "Grille ring too narrow o
 assert(fan_blade_d / 2 < open_r, "Front opening smaller than the fan blades");
 assert(cover_out - cover_t - insert_depth >= 0.5, "Cover insert pocket breaks through");
 assert(shelf_z + shelf_t < body_h - wall, "Shelf above the top wall");
+assert(plate_pos[0] > fan_cx + grille_r + 3 && plate_pos[0] + plate_size[0] < body_w - corner_r - 2
+       && plate_pos[1] + plate_size[1] < body_h - corner_r - 2, "Name plate outside the free front area");
+assert(sub_stroke >= 1.2 && stencil_gap >= 1.2, "Name plate lines or gaps below 1.2 mm");
+assert(front_t - groove_depth >= 1.2 && groove_pitch - groove_w >= 1.1, "Grooves too deep or webs too thin");
+assert(groove_z0 + (groove_count - 1) * groove_pitch + groove_w < plate_pos[1] - 3, "Grooves run into the name plate");
 for (s = screw_table) assert(s[2] >= 4 && s[3] >= 0.3, str("Screw ", s[0], ": engagement ", s[2], ", tip margin ", s[3]));
 
 // ---------- helpers ----------
@@ -232,6 +250,8 @@ module body() difference() {
         translate([bay_x0 - eps, front_t - eps, shelf_z]) cube([bay_x1 - bay_x0 + 2 * eps, shelf_d + eps, shelf_t]);
     }
     cyl_y([fan_cx, fan_cz], -1, front_t + 1, open_r);
+    for (i = [0:groove_count - 1]) let (z = groove_z0 + i * groove_pitch)
+        along_y(-1, groove_depth) slot2d([plate_pos[0] + groove_w, z], [plate_pos[0] + plate_size[0] - groove_w, z], groove_w);
     for (p = grille_screws()) {
         cyl_y(p, -1, front_t + grille_boss_h, screw_clear_d / 2);
         cyl_y(p, front_t + grille_boss_h - insert_depth, front_t + grille_boss_h + 1, insert_hole_d / 2);
@@ -246,12 +266,68 @@ module body() difference() {
     for (p = cover_screws()) cyl_x(p, body_w - wall - 1, body_w + 1, screw_clear_d / 2);
 }
 
-// Front view (x, z) of the name plate; in print xy it is mirrored in y (pose below)
-module label_front_2d() translate(label_pos) {
-    text(label, size = label_size, font = label_font, halign = "center", valign = "center");
+// ---------- name plate: block letters in industrial / cyberpunk style ----------
+// Glyphs on a 4 x 6 grid as polylines, stroked with octagons (45 degree chamfers). Corner cuts top left /
+// bottom right like the plate. No font dependency and a guaranteed stroke width for the inlay.
+function glyph(c) =
+    c == "L" ? [[[0, 6], [0, 0], [4, 0]]] :
+    c == "E" ? [[[4, 6], [0, 6], [0, 0], [4, 0]], [[0, 3], [3, 3]]] :
+    c == "O" ? [[[0, 0], [3, 0], [4, 1], [4, 6], [1, 6], [0, 5], [0, 0]]] :
+    c == "I" ? [[[0, 0], [0, 6]]] :
+    c == "N" ? [[[0, 0], [0, 6], [4, 0], [4, 6]]] :
+    c == "D" ? [[[0, 0], [0, 6], [3, 6], [4, 5], [4, 1], [3, 0], [0, 0]]] :
+    c == "U" ? [[[0, 6], [0, 0], [3, 0], [4, 1], [4, 6]]] :
+    c == "S" ? [[[4, 6], [1, 6], [0, 5], [0, 3], [4, 3], [4, 1], [3, 0], [0, 0]]] :
+    c == "T" ? [[[0, 6], [4, 6]], [[2, 6], [2, 0]]] :
+    c == "R" ? [[[0, 0], [0, 6], [3, 6], [4, 5], [4, 4], [3, 3], [0, 3]], [[2, 3], [4, 0]]] :
+    assert(false, str("No glyph for ", c)) [];
+// stencil bridges: [grid x, grid y, "v" = vertical band through x, "h" = horizontal band through y]
+function stencil(c) = c == "L" || c == "E" ? [[1.2, 0, "v"]] : c == "O" ? [[0, 3, "h"]] : [];
+function glyph_w(c, size, stroke) = c == "I" ? stroke : size[0];
+function text_w(s, size, stroke, gap, i = 0) =
+    i >= len(s) ? -gap : glyph_w(s[i], size, stroke) + gap + text_w(s, size, stroke, gap, i + 1);
+function text_x(s, size, stroke, gap, i) =
+    i == 0 ? 0 : text_x(s, size, stroke, gap, i - 1) + glyph_w(s[i - 1], size, stroke) + gap;
+
+module oct_dot(w) rotate(22.5) circle(r = w / 2 / cos(22.5), $fn = 8);   // flat to flat = w
+module glyph_2d(c, size, stroke, cut = false) {
+    k = [(size[0] - stroke) / 4, (size[1] - stroke) / 6];
+    function at(g) = [g[0] * k[0] + stroke / 2, g[1] * k[1] + stroke / 2];
     difference() {
-        rrect(label_frame, 3);
-        rrect([label_frame[0] - 2 * label_line, label_frame[1] - 2 * label_line], 3 - label_line);
+        for (path = glyph(c)) for (i = [0:len(path) - 2]) hull() {
+            translate(at(path[i])) oct_dot(stroke);
+            translate(at(path[i + 1])) oct_dot(stroke);
+        }
+        if (cut) for (s = stencil(c))
+            if (s[2] == "v") translate([at(s)[0] - stencil_gap / 2, -1]) square([stencil_gap, size[1] + 2]);
+            else translate([-1, at(s)[1] - stencil_gap / 2]) square([size[0] + 2, stencil_gap]);
+    }
+}
+module block_text(s, size, stroke, gap, cut = false) {   // centred on x = 0, baseline y = 0
+    x0 = -text_w(s, size, stroke, gap) / 2;
+    for (i = [0:len(s) - 1]) translate([x0 + text_x(s, size, stroke, gap, i), 0]) glyph_2d(s[i], size, stroke, cut);
+}
+function plate_outline() = let (w = plate_size[0], h = plate_size[1], a = plate_cut[0], b = plate_cut[1])
+    [[b, 0], [w - a, 0], [w, a], [w, h - b], [w - b, h], [a, h], [0, h - a], [0, b]];
+
+// Front view (x, z) of the name plate; in print xy it is mirrored in y (pose below)
+module label_front_2d() translate(plate_pos) {
+    w = plate_size[0];
+    h = plate_size[1];
+    difference() {
+        polygon(plate_outline());
+        offset(delta = -plate_line) polygon(plate_outline());
+    }
+    translate([0, 13]) square([2.8, 12]);                                    // reinforced frame section
+    translate([w / 2, 23]) block_text(brand, big_size, big_stroke, big_gap, cut = true);
+    translate([4, 19.2]) square([w - 18, plate_line]);                        // broken divider
+    translate([w - 11, 19.2]) square([6, plate_line]);
+    translate([w / 2, 11]) block_text(brand_sub, sub_size, sub_stroke, sub_gap);
+    // warning stripes at 45 degrees, octagon caps instead of acute corners
+    s = hazard[2] / sqrt(2);
+    for (i = [0:hazard[0] - 1]) let (x = 4.5 + i * 2 * hazard[2]) hull() {
+        translate([x + s / 2, 4 + s / 2]) oct_dot(s);
+        translate([x + hazard[1] - s / 2, 4 + hazard[1] - s / 2]) oct_dot(s);
     }
 }
 module body_print_pose() rotate([90, 0, 0]) children();       // front face on the bed: (x, y, z) -> (x, -z, y)

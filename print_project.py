@@ -173,4 +173,7 @@ VIEWER = dict(
 
 VIEWS = {"01_assembly": ("assembly();", "-160,-330,230,112,40,70"),
          "02_back": ("assembly();", "420,380,230,112,40,70"),
-         "03_exploded": ("assembly(40);", "-200,-380,260,112,40,70")}
+         "03_exploded": ("assembly(40);", "-200,-380,260,112,40,70"),
+         # front turned up (OpenSCAD renders faces towards -y dark), oblique so the grooves show
+         "04_front_right": ("rotate([-90, 0, 0]) intersection() { assembly(); translate([150, -10, 0]) cube([80, 20, 155]); }",
+                            "189,-260,420,189,78,0")}

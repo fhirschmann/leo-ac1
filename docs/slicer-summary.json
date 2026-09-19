@@ -6,12 +6,12 @@
       "quantity": 1,
       "material": "PETG-weiss",
       "passed": true,
-      "source_sha256": "682b906593701000adfe28523988417f37820aeeeca2eea19725b1495a0b61a3",
+      "source_sha256": "86f6860dca2f792f82a3e3eb1589b75b8f1372ff9a3a3051c395b08e38b0fe34",
       "exit_code": 0,
       "result_code": 0,
       "warnings": "",
-      "hours": 6.037,
-      "grams": 256.267,
+      "hours": 6.168,
+      "grams": 256.355,
       "wall_loops": 4,
       "infill_percent": 25.0,
       "layer_height": 0.20000000298023224,
@@ -95,8 +95,8 @@
     }
   ],
   "total_parts": 4,
-  "total_grams_individual_plates": 390.1,
-  "total_hours_individual_plates": 11.0,
+  "total_grams_individual_plates": 390.2,
+  "total_hours_individual_plates": 11.1,
   "production_gcode": false,
   "project_3mf": {
     "file": "stl/leo_ac1_all_parts.3mf",
@@ -150,15 +150,15 @@
     "multicolour_slices": {
       "Gehäuse": {
         "plate": 1,
-        "hours": 6.18,
+        "hours": 6.39,
         "grams_by_filament": {
-          "1": 257.16,
-          "3": 0.71
+          "1": 256.59,
+          "3": 1.08
         },
         "warnings": ""
       }
     },
     "own_infill_parts": 0,
-    "sha256": "c7e93e4fd7406a06176e03c0c265fb738f2805e10b9a193b7368902f6ba593d3"
+    "sha256": "d1d0e9ea3991bf8cc6be2c9113b9a79b10558aed985aeeb8f6f188af6a92fa51"
   }
 }
