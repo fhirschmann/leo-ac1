@@ -73,12 +73,10 @@ cable_slot_w = 10;   // slot in the shelf above the battery, open towards the ba
 bat_cx = 180;
 bat_clear = 0.5;     // radial clearance in the cradle
 bat_front_gap = 4.5; // front plate to battery, clears the inner fillet
-bat_retain_gap = 1;  // retaining ribs on the back cover to battery
-cradle_z = [12, 52]; // lower faces of the two cradle ribs
-cradle_t = 3;
-retain_z = [22, 46]; // lower faces of the two retaining ribs
-retain_t = 3;
-retain_w = 24;
+// three closed rings around the battery for drops: front half as ribs in the body, back half as saddles on the back cover
+cradle_z = [14, 28, 56];  // lower faces of the rings, clear of the corner bosses (z <= 10.5) and the cover bosses (z 34-42)
+cradle_t = 4;
+saddle_gap = 0.3;    // rib end to saddle along y
 shelf_gap = 3;       // battery top to electronics shelf (cable, protection board)
 shelf_t = 3;
 shelf_d = 60;        // shelf depth from the front plate, carries the PWM board
@@ -527,8 +525,13 @@ module back() difference() {
             body_inner(lip_cl + lip_t);
             for (b = back_bosses()) offset(r = 0.8) boss_footprint(b);
         }
-        for (z = retain_z) translate([bat_cx - retain_w / 2, bat_cy + bat_d / 2 + bat_retain_gap, z])
-            cube([retain_w, y1 - (bat_cy + bat_d / 2 + bat_retain_gap) + eps, retain_t]);
+        // saddles closing the cradle rings around the battery, across the whole bay, with the BMS cut-out
+        for (z = cradle_z) difference() {
+            translate([bay_x0 + 0.5, bat_cy + saddle_gap, z]) cube([bay_x1 - bay_x0 - 1, y1 - bat_cy - saddle_gap + eps, cradle_t]);
+            translate([bat_cx, bat_cy, z - 1]) cylinder(r = bat_d / 2 + bat_clear, h = cradle_t + 2);
+            translate([bat_cx - bat_d / 2 - bat_bms[1] - bat_clear, bat_cy - 1, z - 1])
+                cube([bat_bms[1] + bat_clear + bat_d / 2, bat_bms[0] / 2 + bat_clear + 1, cradle_t + 2]);
+        }
     }
     along_y(y1 - 1, body_d + 1) intake_slots_back();
     for (b = back_bosses()) {
@@ -688,7 +691,7 @@ else if (part == "metrics") echo("PROJECT_METRICS", [
     ["wall", wall], ["front_t", front_t], ["back_t", back_t], ["corner_r", corner_r], ["body_mm", [body_w, body_d, body_h]],
     ["fan_size", fan_size], ["fan_t", fan_t], ["fan_pitch", fan_pitch], ["fan_hole_d", fan_hole_d],
     ["fan_blade_d", fan_blade_d], ["pot_shaft_len", pot_shaft[2]], ["pwm_pcb", pwm_pcb], ["pot_axis_h", pot_axis_h], ["knob_shaft_engagement", pot_shaft[2] - knob_stem_z], ["knob_top_skin", knob_len - knob_bore_top], ["knob_protrusion", knob_cap_z + knob_h - cover_out], ["handle_clearance", handle_h - handle_bar], ["handle_open_top", handle_open[1]], ["fan_axis", [fan_cx, fan_cz]], ["fan_y", fan_y], ["shroud_r", [open_r, open_r + shroud_t]], ["shroud_gap", shroud_gap], ["open_d", 2 * open_r], ["grille_gap", grille_gap],
-    ["bat_mm", [bat_d, bat_l]], ["bat_bms", bat_bms], ["bat_clear", bat_clear], ["bat_retain_gap", bat_retain_gap], ["shelf_gap", shelf_gap],
+    ["bat_mm", [bat_d, bat_l]], ["bat_bms", bat_bms], ["bat_clear", bat_clear], ["saddle_gap", saddle_gap], ["cradle_rings", len(cradle_z)], ["shelf_gap", shelf_gap],
     ["lip_clearance", lip_cl], ["spigot_clearance", spigot_cl],
     ["insert_hole_d", insert_hole_d], ["insert_w_min", insert_w_min], ["mount_insert", mount_insert], ["mount_floor", mount_floor], ["insert_len", insert_len], ["insert_depth", insert_depth],
     ["screws", screw_table],

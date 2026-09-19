@@ -15,7 +15,7 @@ Kleiner Akku-Ventilator für das Kinderzimmer, gestaltet wie die Außeneinheit e
 | Teil | Menge | Material | Maße (mm) | Drucklage |
 |---|---|---|---|---|
 | `body` Gehäuse | 1 | PETG weiß + grau (Typenschild) | 225 × 155 × 77,6 | Front aufs Bett, Logo als Einlage in den ersten 0,6 mm, Zierrillen 0,8 mm tief zur Bettseite offen |
-| `back` Rückwand | 1 | PETG weiß | 225 × 155 × 40,6 | Außenseite aufs Bett, Akku-Halterippen stehen senkrecht |
+| `back` Rückwand | 1 | PETG weiß | 225 × 155 × 55 | Außenseite aufs Bett, die drei Akku-Sättel stehen senkrecht |
 | `grille` Lüftergitter | 1 | PETG grau | Ø 136 × 6 | Vorderseite aufs Bett |
 | `cover` Servicedeckel | 1 | PETG grau | 116 × 34 × 11 | Außenseite aufs Bett; rechte Seite, mittig in der Tiefe, Drehknopf oben; von außen verschraubt (Köpfe versenkt) |
 | `knob` Drehknopf | 1 | PETG grau | Ø 28 × 13,7 (flache Kappe, steht 7 mm vor dem Servicedeckel) | Oberseite aufs Bett, Schaft mit D-Bohrung zeigt nach oben |
@@ -23,7 +23,7 @@ Kleiner Akku-Ventilator für das Kinderzimmer, gestaltet wie die Außeneinheit e
 
 Alle Teile liegen als Bambu-Studio-Projekt in [`stl/leo_ac1_all_parts.3mf`](stl/leo_ac1_all_parts.3mf): Platte 1 Gehäuse (mit Wischturm), Platte 2 Rückwand, Platte 3 graue Teile (Gitter, Servicedeckel, Griff, Drehknopf). Filament 1 PETG Basic Weiß, Filament 2 PETG Basic Grau, Filament 3 Grau für das Typenschild (im AMS dieselbe Spule wie Filament 2). Wer das Gehäuse einfarbig druckt, nimmt `stl/body.stl`.
 
-Rechnerisch **ca. 0,6 kg und 17,1 Stunden** (diagnostisches Slicen, jede Instanz als eigener Druck; Gehäuse allein 354 g / 8,3 h).
+Rechnerisch **ca. 0,64 kg und 17,7 Stunden** (diagnostisches Slicen, jede Instanz als eigener Druck; Gehäuse allein 361 g / 8,4 h).
 
 ## Druck und Stabilität
 
@@ -35,6 +35,7 @@ Alle Teile drucken ohne Stützen (geprüft mit `analyze.py islands`, `overhangs`
 - Einschmelzmuttern haben mindestens 3 mm Material bis zur Sichtfläche (Gitter 3,5 mm, Lüfter 3,9 mm, Servicedeckel 4,5 mm), damit sich die Front beim Eindrücken nicht verzieht.
 - Gitterspalt 4,9 mm (Fingerschutz).
 - M5-Halterung: Die Mutter wird von außen in ein Sackloch gepresst (10,5 mm = L + 1 laut Datenblatt), darüber 2,5 mm Boden; das Gewicht auf der Halterung drückt sie gegen diesen Boden. Der Dom ist bewusst nur Ø 15 mm: 4,3 mm Wand werden mit 6 Wandlinien komplett massiv gedruckt statt mit Füllung. Dazu eine Rippe nach hinten, 45°-Anlauf zur Front und innen eine 3 mm dicke Bodenverdopplung von der Front bis zur Trennwand (60 × 56 mm), die Hebelkräfte in Front und Trennwand leitet. Für echtes Kamerazubehör gäbe es auch Ruthex RX-1/4x12.7 (1/4"-20, Loch Ø 8,0, Wand ≥ 3,3).
+- Akku sturzfest: drei geschlossene Ringe (4 mm) um die Zelle, vorn als Rippen im Gehäuse, hinten als Sättel über die ganze Fachbreite an der Rückwand, 0,5 mm Luft rundum mit Aussparung für die BMS-Platine; oben begrenzt der Elektronikboden. Wer mag, legt einen dünnen Schaumstoffstreifen zwischen Akku und Sättel.
 - Slicer-Profil: 6 Wände, 5 Decken-/Bodenlagen, 30 % Gyroid. PETG ist schlagzäher als PLA.
 
 ## Zukaufteile
@@ -75,7 +76,7 @@ Akku (JST-PH, mit eingebautem BMS) ──► B+ / B−
 3. Gitter von vorn aufsetzen (der Kragen zentriert es in der Öffnung) und mit M3 × 12 anschrauben.
 4. Lüfter von hinten auf die Dome hinter dem Luftkanal setzen, Blasrichtung nach vorn, mit M3 × 30 anschrauben. Kabel durch die Aussparung in der Trennwand ins Elektronikfach führen. Lade-/Boostmodul mit aufgeklebten Kühlkörpern (Bauteilseite zum Lüfter) mit doppelseitigem Klebeband auf die zwei Stege an der Trennwand kleben, Unterkante auf die Leiste; O±-Ende nach hinten zur Kabelaussparung.
 5. Akku stehend von hinten in die Wiege schieben, Kabelende nach oben und BMS-Platine zur Trennwand (rechteckige Aussparung in der Wiege); das Kabel läuft durch den Schlitz im Elektronikboden darüber.
-6. Rückwand aufsetzen (die Rippen halten den Akku mit 1 mm Luft) und mit M3 × 8 verschrauben.
+6. Rückwand aufsetzen (ihre drei Sättel schließen die Akkuwiege zu Ringen, 0,5 mm Luft rundum) und mit M3 × 8 verschrauben.
 
 ## Offen
 
@@ -99,4 +100,4 @@ python3 -m venv .venv
 .venv/bin/python scripts/render_views.py           # img/
 ```
 
-Geprüft werden: Teileliste gegen die `part`-Zweige, geschlossene Netze, Bettlage, Bauraum, keine Überschneidung zwischen 17 Baugruppenkörpern (136 Paare, inklusive angenommener PWM-Platine, inklusive Schrauben, Lüfter- und Akku-Hüllkörper), Auflagekontakt von Gitter, Lüfter, Rückwand, Deckel, Griff, Poti und Akku, Anschläge des Akkus (hinten 1,25 mm, oben 3,25 mm, seitlich 0,75 mm), 9 Ein- und Ausbauwege (inklusive Lademodul nach hinten, vor dem Lüfter, und PWM-Platine: erst 19 mm von der Wand weg, dann nach hinten) in realistischer Reihenfolge, 21 Insert-Aufnahmen (20 × M3, 1 × M5; Achse frei, volle Mindestwand laut Ruthex-Datenblatt, Boden voll), Einschraubtiefen (≥ 4,7 mm, Spitze ≥ 0,9 mm vor dem Taschenende), Normmaße (120-mm-Lüfter, Ruthex M3), Gitterspalt ≤ 6 mm (Fingerschutz), Mehrfarb-Deckung des Logos. Druckbarkeit: keine schwebenden Bereiche, Einlage auf Schicht 1 ohne zu schmale Stellen, Stege zwischen den Rillen ≥ 1,1 mm. Keine Festigkeits-, Luftstrom- oder Passungsprüfung am echten Teil.
+Geprüft werden: Teileliste gegen die `part`-Zweige, geschlossene Netze, Bettlage, Bauraum, keine Überschneidung zwischen 17 Baugruppenkörpern (136 Paare, inklusive angenommener PWM-Platine, inklusive Schrauben, Lüfter- und Akku-Hüllkörper), Auflagekontakt von Gitter, Lüfter, Rückwand, Deckel, Griff, Poti und Akku, Anschläge des Akkus (hinten 0,75 mm, oben 3,25 mm, seitlich 0,75 mm), 9 Ein- und Ausbauwege (inklusive Lademodul nach hinten, vor dem Lüfter, und PWM-Platine: erst 19 mm von der Wand weg, dann nach hinten) in realistischer Reihenfolge, 21 Insert-Aufnahmen (20 × M3, 1 × M5; Achse frei, volle Mindestwand laut Ruthex-Datenblatt, Boden voll), Einschraubtiefen (≥ 4,7 mm, Spitze ≥ 0,9 mm vor dem Taschenende), Normmaße (120-mm-Lüfter, Ruthex M3), Gitterspalt ≤ 6 mm (Fingerschutz), Mehrfarb-Deckung des Logos. Druckbarkeit: keine schwebenden Bereiche, Einlage auf Schicht 1 ohne zu schmale Stellen, Stege zwischen den Rillen ≥ 1,1 mm. Keine Festigkeits-, Luftstrom- oder Passungsprüfung am echten Teil.
