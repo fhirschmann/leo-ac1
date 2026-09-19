@@ -1,5 +1,5 @@
 {
-  "source_sha256": "7d324e1836108cfcac68e0852770702660b743d2f6d53af40cb3fd9d7c1f829a",
+  "source_sha256": "bee572bb920e2ac2137df64ecb3aef6bdd4336cd2456b3af80947357275268f8",
   "software": {
     "numpy": "2.5.3",
     "trimesh": "5.1.0",
@@ -36,10 +36,10 @@
       "degenerate_faces": 0,
       "components": 1,
       "backend": "CGAL",
-      "sha256": "7221824c8d23862fd0c32ba1974851e0114b1012a68fa7c1e0dcca8ff1d4da61",
+      "sha256": "682b906593701000adfe28523988417f37820aeeeca2eea19725b1495a0b61a3",
       "quantity": 1,
       "material": "PETG-weiss",
-      "committed_sha256": "7221824c8d23862fd0c32ba1974851e0114b1012a68fa7c1e0dcca8ff1d4da61"
+      "committed_sha256": "682b906593701000adfe28523988417f37820aeeeca2eea19725b1495a0b61a3"
     },
     "back": {
       "size_mm": [
@@ -158,7 +158,7 @@
       "degenerate_faces": 0,
       "components": 1,
       "backend": "CGAL",
-      "sha256": "afd08c5c61f9954df08a55004a0101c000c41269bf9f5acec5654af6a6ffd126"
+      "sha256": "9798b8ecb6a72a7d2d1090aace1aeeb849d13dd5125204177214cb4b3be9addb"
     },
     "body_label": {
       "size_mm": [

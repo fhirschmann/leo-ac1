@@ -350,16 +350,21 @@ module fan_visual() translate([fan_cx, fan_y, fan_cz]) rotate([-90, 0, 0]) {   /
 }
 module battery_env() translate([bat_cx, bat_cy, wall]) cylinder(d = bat_d, h = bat_l);
 
-module screw(len, countersunk) {   // local +z = screw direction, z = 0 at the surface under the head
-    if (countersunk) cylinder(r1 = screw_head_d / 2, r2 = 1.5, h = screw_head_d / 2 - 1.5);
-    else translate([0, 0, -screw_head_h]) cylinder(d = screw_head_d, h = screw_head_h);
-    cylinder(r = 1.5, h = len);
+// Local +z = screw direction, z = 0 at the surface under the head. socket = hex key recess for the viewer,
+// the checks use the plain envelope.
+module screw(len, countersunk, socket = false) difference() {
+    union() {
+        if (countersunk) cylinder(r1 = screw_head_d / 2, r2 = 1.5, h = screw_head_d / 2 - 1.5);
+        else translate([0, 0, -screw_head_h]) cylinder(d = screw_head_d, h = screw_head_h);
+        cylinder(r = 1.5, h = len);
+    }
+    if (socket) translate([0, 0, (countersunk ? 0 : -screw_head_h) - eps])
+        cylinder(d = (countersunk ? 2 : 2.5) / cos(30), h = countersunk ? 1 : 1.5, $fn = 6);
 }
-module screws_grille() for (p = grille_screws()) translate([p[0], -grille_t, p[1]]) orient([0, 1, 0]) screw(len_grille, true);
-module screws_fan() for (p = fan_holes()) translate([p[0], fan_y + fan_t, p[1]]) orient([0, -1, 0]) screw(len_fan, false);
-module screws_back() for (b = back_bosses()) translate([b[0][0], body_d, b[0][1]]) orient([0, -1, 0]) screw(len_back, true);
-module screws_cover() for (p = cover_screws()) translate([body_w - wall, p[0], p[1]]) orient([1, 0, 0]) screw(len_cover, false);
-module all_screws() { screws_grille(); screws_fan(); screws_back(); screws_cover(); }
+module screws_grille(socket = false) for (p = grille_screws()) translate([p[0], -grille_t, p[1]]) orient([0, 1, 0]) screw(len_grille, true, socket);
+module screws_fan(socket = false) for (p = fan_holes()) translate([p[0], fan_y + fan_t, p[1]]) orient([0, -1, 0]) screw(len_fan, false, socket);
+module screws_back(socket = false) for (b = back_bosses()) translate([b[0][0], body_d, b[0][1]]) orient([0, -1, 0]) screw(len_back, true, socket);
+module screws_cover(socket = false) for (p = cover_screws()) translate([body_w - wall, p[0], p[1]]) orient([1, 0, 0]) screw(len_cover, false, socket);
 
 module assembly(explode = 0) {
     body_install_pose() {

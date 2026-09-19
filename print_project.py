@@ -143,10 +143,11 @@ def checks(ctx):
 VIEWER = dict(
     title="LEO-AC1", page_title="LEO-AC1 Ventilator", eyebrow="Baugruppe · Einbaulage",
     dims=[("Breite", "234"), ("Tiefe", "83"), ("Höhe", "155")],
-    groups=[("weiss", "Gedruckt · PETG weiß"), ("grau", "Gedruckt · PETG grau"), ("zugekauft", "Zugekauft")],
+    groups=[("weiss", "Gedruckt · PETG weiß"), ("grau", "Gedruckt · PETG grau"),
+            ("schrauben", "Schrauben M3"), ("zugekauft", "Zugekauft")],
     hidden_groups=["zugekauft"],
-    outer=["body", "back", "cover", "grille"],
-    cut=["back", "cover"],
+    outer=["body", "back", "cover", "grille", "screws_grille", "screws_back", "screws_cover"],
+    cut=["back", "cover", "screws_back", "screws_cover"],
     # id, label, group, colour, quantity, explode direction (mm per slider mm)
     parts=[("body", "Gehäuse", "weiss", "#f2f2ee", "1x", [0, 0, 0]),
            ("back", "Rückwand", "weiss", "#e6e6e1", "1x", [0, 1.5, 0]),
@@ -154,12 +155,19 @@ VIEWER = dict(
            ("cover", "Servicedeckel", "grau", "#8f9396", "1x", [1, 0, 0]),
            ("fan_visual", "Lüfter 120 mm", "zugekauft", "#303236", "1x", [0, 0.8, 0]),
            ("battery", "Akku LiFePO4 3,2 V", "zugekauft", "#3f7fbf", "1x", [0, 0.5, 0]),
-           ("screws", "Schrauben M3", "zugekauft", "#b8bcc0", "16x", [0, 0, 0])],
+           # screws leave their part: same direction, further out
+           ("screws_grille", "Gitter · M3 × 10 Senkkopf", "schrauben", "#26282b", "4x", [0, -1.6, 0]),
+           ("screws_fan", "Lüfter · M3 × 30 Zylinderkopf", "schrauben", "#26282b", "4x", [0, 1.4, 0]),
+           ("screws_back", "Rückwand · M3 × 8 Senkkopf", "schrauben", "#26282b", "6x", [0, 2.2, 0]),
+           ("screws_cover", "Servicedeckel · M3 × 8 Zylinderkopf", "schrauben", "#26282b", "2x", [-0.5, 0, 0])],
     colour={"body": [("label", "Gehäuse · Typenschild", "#8f9396")]},
     bodies={"body_base": "body_install_pose() inlay_base() { body_print_pose() body(); body_label_print_2d(); }",
             "body_label": "body_install_pose() inlay_piece() { body_print_pose() body(); body_label_print_2d(); }",
             "fan_visual": "fan_visual();",
-            "screws": "all_screws();"},
+            "screws_grille": "screws_grille(true);",
+            "screws_fan": "screws_fan(true);",
+            "screws_back": "screws_back(true);",
+            "screws_cover": "screws_cover(true);"},
     output="build/viewer.html",
 )
 

@@ -6,11 +6,11 @@
       "quantity": 1,
       "material": "PETG-weiss",
       "passed": true,
-      "source_sha256": "7221824c8d23862fd0c32ba1974851e0114b1012a68fa7c1e0dcca8ff1d4da61",
+      "source_sha256": "682b906593701000adfe28523988417f37820aeeeca2eea19725b1495a0b61a3",
       "exit_code": 0,
       "result_code": 0,
       "warnings": "",
-      "hours": 6.031,
+      "hours": 6.037,
       "grams": 256.267,
       "wall_loops": 4,
       "infill_percent": 25.0,
@@ -150,7 +150,7 @@
     "multicolour_slices": {
       "Gehäuse": {
         "plate": 1,
-        "hours": 6.19,
+        "hours": 6.18,
         "grams_by_filament": {
           "1": 257.16,
           "3": 0.71
@@ -159,6 +159,6 @@
       }
     },
     "own_infill_parts": 0,
-    "sha256": "75a512c2b7b38b1661f2aa62417d6d875b9349f18c6bbf1a492b471a9e8a7b02"
+    "sha256": "c7e93e4fd7406a06176e03c0c265fb738f2805e10b9a193b7368902f6ba593d3"
   }
 }
