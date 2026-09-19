@@ -32,6 +32,9 @@ fan_cx = 84;         // fan axis x
 fan_cz = body_h / 2; // fan axis z
 fan_standoff = 8;    // bosses between front plate and fan frame
 fan_boss_d = 9;
+shroud_t = 1.6;      // square duct front plate -> fan frame: the air leaves only through the grille
+shroud_cl = 0.3;     // clearance to the fan frame per side, also centres the fan
+shroud_overlap = 3;  // the duct reaches this far over the sides of the fan frame
 
 /* [Grille] */
 open_r = 59;         // opening in the front plate
@@ -104,27 +107,30 @@ len_cover = 8;       // M3 x 8 socket head, from inside the body
 
 /* [Decor] */
 inlay_t = 0.6;       // multicolour inlay depth: the first three 0.2 mm layers
-brand = "LEO";             // big stencil letters
-brand_sub = "INDUSTRIES";  // small letters below
-plate_pos = [160, 100];    // lower left corner of the name plate, front view (x, z)
-plate_size = [59, 46];
-plate_cut = [6, 1.5];      // corner chamfers: top left and bottom right / the other two
-plate_line = 1.2;
+brand = "LEO";             // big stencil letters, as wide as the second line
+brand_sub = "INDUSTRIES";  // second line, sets the block width
+brand_model = "AC-1";      // third line
+logo_cx = 189.5;           // centre of the left-aligned block, front view x (right of the grille)
+logo_top = 144;            // top of the big letters, front view z
+line_gap = 3;
 big_size = [13, 18];       // letter box
 big_stroke = 3;
-big_gap = 3.5;
 sub_size = [4, 6];
-sub_stroke = 1.2;          // >= 3 lines, also the gaps inside E and S
+sub_stroke = 1.2;          // >= 3 lines, also the gaps inside A, E and S
 sub_gap = 1.5;
 stencil_gap = 1.2;         // bridges in the big letters
-hazard = [12, 4, 2];       // warning stripes: count, band height, stripe width along x (pitch 2x)
-groove_count = 12;         // decorative grooves right of the grille, as on Mitsubishi outdoor units
+groove_count = 14;         // decorative grooves right of the grille, as on Mitsubishi outdoor units
 groove_pitch = 6;
 groove_w = 1.2;
 groove_depth = 0.8;        // open to the bed in print
-groove_z0 = 19;            // axis of the lowest groove; x range = name plate width
+groove_z0 = 19;            // axis of the lowest groove
+groove_x = [160, 219];
 
 // ---------- derived values ----------
+logo_w = text_w(brand_sub, sub_size, sub_stroke, sub_gap);
+big_gap = (logo_w - text_w(brand, big_size, big_stroke, 0)) / (len(brand) - 1);
+logo_x0 = logo_cx - logo_w / 2;
+logo_bottom = logo_top - big_size[1] - 2 * (line_gap + sub_size[1]);
 fan_y = front_t + fan_standoff;                       // front face of the fan frame
 bat_cy = front_t + bat_front_gap + bat_d / 2;         // battery axis y
 shelf_z = wall + bat_l + shelf_gap;
@@ -172,13 +178,17 @@ assert(ring_in - spigot_w > grille_hub_r + grille_rings * grille_bar, "Grille co
 assert(grille_screw_r - grille_boss_d / 2 > open_r, "Grille bosses reach into the opening");
 assert(grille_r - (grille_screw_r + csk_d / 2) >= 1.2, "Grille ring too narrow outside the countersinks");
 assert(fan_blade_d / 2 < open_r, "Front opening smaller than the fan blades");
+assert(fan_cx - fan_size / 2 - shroud_cl - shroud_t > wall + inner_c && fan_cx + fan_size / 2 + shroud_cl + shroud_t < part_x
+       && fan_cz - fan_size / 2 - shroud_cl - shroud_t > wall + inner_c && fan_cz + fan_size / 2 + shroud_cl + shroud_t < body_h - wall - inner_c,
+       "Air duct hits the walls or the partition");
 assert(cover_out - insert_depth >= 3, "Cover insert pocket too close to the visible face");
 assert(shelf_z + shelf_t < body_h - wall, "Shelf above the top wall");
-assert(plate_pos[0] > fan_cx + grille_r + 3 && plate_pos[0] + plate_size[0] < body_w - corner_r - 2
-       && plate_pos[1] + plate_size[1] < body_h - corner_r - 2, "Name plate outside the free front area");
-assert(sub_stroke >= 1.2 && stencil_gap >= 1.2, "Name plate lines or gaps below 1.2 mm");
+assert(logo_x0 > fan_cx + grille_r + 3 && logo_x0 + logo_w < body_w - corner_r - 2 && logo_top < body_h - corner_r - 2,
+       "Logo outside the free front area");
+assert(big_gap >= 2, "Big letters too wide for the second line");
+assert(sub_stroke >= 1.2 && stencil_gap >= 1.2, "Logo lines or gaps below 1.2 mm");
 assert(front_t - groove_depth >= 1.2 && groove_pitch - groove_w >= 1.1, "Grooves too deep or webs too thin");
-assert(groove_z0 + (groove_count - 1) * groove_pitch + groove_w < plate_pos[1] - 3, "Grooves run into the name plate");
+assert(groove_z0 + (groove_count - 1) * groove_pitch + groove_w < logo_bottom - 3, "Grooves run into the logo");
 for (s = screw_table) assert(s[2] >= 4 && s[3] >= 0.3, str("Screw ", s[0], ": engagement ", s[2], ", tip margin ", s[3]));
 
 // ---------- helpers ----------
@@ -246,6 +256,11 @@ module body() difference() {
                 along_y(front_t + inner_c, front_t + inner_c + eps) body_inner();
             }
         }
+        // air duct from the front plate over the fan frame
+        let (s0 = fan_size + 2 * shroud_cl, s1 = s0 + 2 * shroud_t) translate([fan_cx, 0, fan_cz]) difference() {
+            translate([-s1 / 2, front_t - eps, -s1 / 2]) cube([s1, fan_y + shroud_overlap - front_t + eps, s1]);
+            translate([-s0 / 2, front_t - 1, -s0 / 2]) cube([s0, fan_y + shroud_overlap, s0]);
+        }
         // partition between fan section and electronics bay
         translate([part_x, front_t - eps, wall - eps]) cube([part_t, part_y1 - front_t + eps, body_h - 2 * wall + 2 * eps]);
         for (p = fan_holes()) cyl_y(p, front_t - eps, fan_y, fan_boss_d / 2);
@@ -261,7 +276,7 @@ module body() difference() {
     }
     cyl_y([fan_cx, fan_cz], -1, front_t + 1, open_r);
     for (i = [0:groove_count - 1]) let (z = groove_z0 + i * groove_pitch)
-        along_y(-1, groove_depth) slot2d([plate_pos[0] + groove_w, z], [plate_pos[0] + plate_size[0] - groove_w, z], groove_w);
+        along_y(-1, groove_depth) slot2d([groove_x[0] + groove_w, z], [groove_x[1] - groove_w, z], groove_w);
     for (p = grille_screws()) {
         cyl_y(p, -1, front_t + grille_boss_h, screw_clear_d / 2);
         cyl_y(p, front_t + grille_boss_h - insert_depth, front_t + grille_boss_h + 1, insert_hole_d / 2);
@@ -276,9 +291,9 @@ module body() difference() {
     for (p = cover_screws()) cyl_x(p, body_w - wall - 1, body_w + 1, screw_clear_d / 2);
 }
 
-// ---------- name plate: block letters in industrial / cyberpunk style ----------
-// Glyphs on a 4 x 6 grid as polylines, stroked with octagons (45 degree chamfers). Corner cuts top left /
-// bottom right like the plate. No font dependency and a guaranteed stroke width for the inlay.
+// ---------- logo: block letters in industrial / cyberpunk style ----------
+// Glyphs on a 4 x 6 grid as polylines, stroked with octagons (45 degree chamfers), corner cuts top left /
+// bottom right. No font dependency and a guaranteed stroke width for the inlay.
 function glyph(c) =
     c == "L" ? [[[0, 6], [0, 0], [4, 0]]] :
     c == "E" ? [[[4, 6], [0, 6], [0, 0], [4, 0]], [[0, 3], [3, 3]]] :
@@ -290,10 +305,17 @@ function glyph(c) =
     c == "S" ? [[[4, 6], [1, 6], [0, 5], [0, 3], [4, 3], [4, 1], [3, 0], [0, 0]]] :
     c == "T" ? [[[0, 6], [4, 6]], [[2, 6], [2, 0]]] :
     c == "R" ? [[[0, 0], [0, 6], [3, 6], [4, 5], [4, 4], [3, 3], [0, 3]], [[2, 3], [4, 0]]] :
+    c == "A" ? [[[0, 0], [0, 5], [1, 6], [4, 6], [4, 0]], [[0, 3], [4, 3]]] :
+    c == "C" ? [[[4, 6], [1, 6], [0, 5], [0, 0], [4, 0]]] :
+    c == "-" ? [[[0, 3], [3, 3]]] :
+    c == "1" ? [[[0, 6], [1.5, 6], [1.5, 0]]] :
+    c == " " ? [] :
     assert(false, str("No glyph for ", c)) [];
 // stencil bridges: [grid x, grid y, "v" = vertical band through x, "h" = horizontal band through y]
 function stencil(c) = c == "L" || c == "E" ? [[1.2, 0, "v"]] : c == "O" ? [[0, 3, "h"]] : [];
-function glyph_w(c, size, stroke) = c == "I" ? stroke : size[0];
+// advance width from the widest grid point; a space is half a letter
+function glyph_w(c, size, stroke) = c == " " ? size[0] / 2 :
+    max([for (path = glyph(c)) for (p = path) p[0]]) / 4 * (size[0] - stroke) + stroke;
 function text_w(s, size, stroke, gap, i = 0) =
     i >= len(s) ? -gap : glyph_w(s[i], size, stroke) + gap + text_w(s, size, stroke, gap, i + 1);
 function text_x(s, size, stroke, gap, i) =
@@ -313,32 +335,15 @@ module glyph_2d(c, size, stroke, cut = false) {
             else translate([-1, at(s)[1] - stencil_gap / 2]) square([size[0] + 2, stencil_gap]);
     }
 }
-module block_text(s, size, stroke, gap, cut = false) {   // centred on x = 0, baseline y = 0
-    x0 = -text_w(s, size, stroke, gap) / 2;
-    for (i = [0:len(s) - 1]) translate([x0 + text_x(s, size, stroke, gap, i), 0]) glyph_2d(s[i], size, stroke, cut);
+module block_text(s, size, stroke, gap, cut = false) {   // starts at x = 0, baseline y = 0
+    for (i = [0:len(s) - 1]) translate([text_x(s, size, stroke, gap, i), 0]) glyph_2d(s[i], size, stroke, cut);
 }
-function plate_outline() = let (w = plate_size[0], h = plate_size[1], a = plate_cut[0], b = plate_cut[1])
-    [[b, 0], [w - a, 0], [w, a], [w, h - b], [w - b, h], [a, h], [0, h - a], [0, b]];
 
-// Front view (x, z) of the name plate; in print xy it is mirrored in y (pose below)
-module label_front_2d() translate(plate_pos) {
-    w = plate_size[0];
-    h = plate_size[1];
-    difference() {
-        polygon(plate_outline());
-        offset(delta = -plate_line) polygon(plate_outline());
-    }
-    translate([0, 13]) square([2.8, 12]);                                    // reinforced frame section
-    translate([w / 2, 23]) block_text(brand, big_size, big_stroke, big_gap, cut = true);
-    translate([4, 19.2]) square([w - 18, plate_line]);                        // broken divider
-    translate([w - 11, 19.2]) square([6, plate_line]);
-    translate([w / 2, 11]) block_text(brand_sub, sub_size, sub_stroke, sub_gap);
-    // warning stripes at 45 degrees, octagon caps instead of acute corners
-    s = hazard[2] / sqrt(2);
-    for (i = [0:hazard[0] - 1]) let (x = 4.5 + i * 2 * hazard[2]) hull() {
-        translate([x + s / 2, 4 + s / 2]) oct_dot(s);
-        translate([x + hazard[1] - s / 2, 4 + hazard[1] - s / 2]) oct_dot(s);
-    }
+// Front view (x, z) of the logo, three left-aligned lines; in print xy it is mirrored in y (pose below)
+module label_front_2d() {
+    translate([logo_x0, logo_top - big_size[1]]) block_text(brand, big_size, big_stroke, big_gap, cut = true);
+    translate([logo_x0, logo_top - big_size[1] - line_gap - sub_size[1]]) block_text(brand_sub, sub_size, sub_stroke, sub_gap);
+    translate([logo_x0, logo_bottom]) block_text(brand_model, sub_size, sub_stroke, sub_gap);
 }
 module body_print_pose() rotate([90, 0, 0]) children();       // front face on the bed: (x, y, z) -> (x, -z, y)
 module body_install_pose() rotate([-90, 0, 0]) children();
@@ -470,7 +475,7 @@ else if (part == "exploded") assembly(40);
 else if (part == "metrics") echo("PROJECT_METRICS", [
     ["wall", wall], ["front_t", front_t], ["back_t", back_t], ["body_mm", [body_w, body_d, body_h]],
     ["fan_size", fan_size], ["fan_t", fan_t], ["fan_pitch", fan_pitch], ["fan_hole_d", fan_hole_d],
-    ["fan_blade_d", fan_blade_d], ["open_d", 2 * open_r], ["grille_gap", grille_gap],
+    ["fan_blade_d", fan_blade_d], ["shroud_clearance", shroud_cl], ["shroud_overlap", shroud_overlap], ["open_d", 2 * open_r], ["grille_gap", grille_gap],
     ["bat_mm", [bat_d, bat_l]], ["bat_clear", bat_clear], ["bat_retain_gap", bat_retain_gap], ["shelf_gap", shelf_gap],
     ["lip_clearance", lip_cl], ["spigot_clearance", spigot_cl],
     ["insert_hole_d", insert_hole_d], ["insert_len", insert_len], ["insert_depth", insert_depth],

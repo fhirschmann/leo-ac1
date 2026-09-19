@@ -97,7 +97,11 @@ def checks(ctx):
     stops = []
     for name, moving, fixed, direction, limit in (("battery_back", ["battery"], ["back"], [0, 1, 0], 1.5),
                                                   ("battery_up", ["battery"], ["body"], [0, 0, 1], m["shelf_gap"] + 0.5),
-                                                  ("battery_side", ["battery"], ["body"], [1, 0, 0], 1.0)):
+                                                  ("battery_side", ["battery"], ["body"], [1, 0, 0], 1.0),
+                                                  # air duct: the fan frame is enclosed on all four sides
+                                                  *((f"fan_duct_{axis}", ["fan"], ["body"], d, m["shroud_clearance"] + 0.25)
+                                                    for axis, d in (("left", [-1, 0, 0]), ("right", [1, 0, 0]),
+                                                                    ("down", [0, 0, -1]), ("up", [0, 0, 1])))):
         count, first, _ = ctx.sweep(moving, fixed, direction, limit, 0.25)
         stops.append(dict(name=name, first_contact_mm=first, limit_mm=limit))
         assert count > 0, f"Stop {name}: no contact within {limit} mm"
@@ -160,7 +164,7 @@ VIEWER = dict(
            ("screws_fan", "Lüfter · M3 × 30 Zylinderkopf", "schrauben", "#26282b", "4x", [0, 1.4, 0]),
            ("screws_back", "Rückwand · M3 × 8 Senkkopf", "schrauben", "#26282b", "6x", [0, 2.2, 0]),
            ("screws_cover", "Servicedeckel · M3 × 8 Zylinderkopf", "schrauben", "#26282b", "2x", [-0.5, 0, 0])],
-    colour={"body": [("label", "Gehäuse · Typenschild", "#8f9396")]},
+    colour={"body": [("label", "Gehäuse · Logo", "#8f9396")]},
     bodies={"body_base": "body_install_pose() inlay_base() { body_print_pose() body(); body_label_print_2d(); }",
             "body_label": "body_install_pose() inlay_piece() { body_print_pose() body(); body_label_print_2d(); }",
             "fan_visual": "fan_visual();",
@@ -176,4 +180,7 @@ VIEWS = {"01_assembly": ("assembly();", "-160,-330,230,112,40,70"),
          "03_exploded": ("assembly(40);", "-200,-380,260,112,40,70"),
          # front turned up (OpenSCAD renders faces towards -y dark), oblique so the grooves show
          "04_front_right": ("rotate([-90, 0, 0]) intersection() { assembly(); translate([150, -10, 0]) cube([80, 20, 155]); }",
-                            "189,-260,420,189,78,0")}
+                            "189,-260,420,189,78,0"),
+         # air duct from behind: body cut at 30 mm depth, fan hidden
+         "05_duct": ("intersection() { body(); translate([-1, -1, -1]) cube([body_w + 2, 30, body_h + 2]); }",
+                     "112,420,300,112,0,77")}

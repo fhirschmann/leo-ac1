@@ -1,5 +1,5 @@
 {
-  "source_sha256": "9abb432dde40a3f13055a086e83e443855e51d3942ecf3829e7a9959c5950b4d",
+  "source_sha256": "e68c0a99576b4ec775a4be6d643b1584192cea4c43e8e55dd130f86d1b0133b7",
   "software": {
     "numpy": "2.5.3",
     "trimesh": "5.1.0",
@@ -29,17 +29,17 @@
           77.6
         ]
       ],
-      "volume_mm3": 227592.2418,
-      "triangles": 9980,
+      "volume_mm3": 235757.9564,
+      "triangles": 10052,
       "watertight": true,
       "consistent_winding": true,
       "degenerate_faces": 0,
       "components": 1,
       "backend": "CGAL",
-      "sha256": "b6b9670028182cdda9fdb08ca2be0f5a05c2d0e6cd9620533906f7795f22e34d",
+      "sha256": "48cf40172c54776e2387bcff5bc4df0a54c8472d0e206359739b9a9829811742",
       "quantity": 1,
       "material": "PETG-weiss",
-      "committed_sha256": "b6b9670028182cdda9fdb08ca2be0f5a05c2d0e6cd9620533906f7795f22e34d"
+      "committed_sha256": "48cf40172c54776e2387bcff5bc4df0a54c8472d0e206359739b9a9829811742"
     },
     "back": {
       "size_mm": [
@@ -151,51 +151,51 @@
           77.6
         ]
       ],
-      "volume_mm3": 227071.1487,
-      "triangles": 11444,
+      "volume_mm3": 235447.9539,
+      "triangles": 11240,
       "watertight": true,
       "consistent_winding": true,
       "degenerate_faces": 0,
       "components": 1,
       "backend": "CGAL",
-      "sha256": "34b4c347a90059828973880a450b1b8e9993a59a0ce7bd203dbc18b0723693fe"
+      "sha256": "b55f6c1a3465c0a99e6069de587a104e84a8c407fc2668f65fd5b58183a1ee81"
     },
     "body_label": {
       "size_mm": [
-        59.0,
-        46.0,
+        47.9,
+        36.0,
         0.6
       ],
       "bounds_mm": [
         [
-          160.0,
-          -146.0,
+          165.55,
+          -144.0,
           0.0
         ],
         [
-          219.0,
-          -100.0,
+          213.45,
+          -108.0,
           0.6
         ]
       ],
-      "volume_mm3": 521.0935,
-      "triangles": 1344,
+      "volume_mm3": 310.0027,
+      "triangles": 1116,
       "watertight": true,
       "consistent_winding": true,
       "degenerate_faces": 0,
-      "components": 33,
+      "components": 22,
       "backend": "Manifold",
-      "sha256": "139be1621b7db7dc89f4104f3d3a0ace6b0e3bb0ef666217a9ae2dcf6661160f"
+      "sha256": "c72ac8def3449f268a4b8148c2f1ee3a9bb91dc7729c3713384cf5a99c4618aa"
     }
   },
   "color_parts": {
     "body": {
-      "overlap_mm3": 0.0002,
+      "overlap_mm3": 0.0001,
       "union_delta_mm3": 0.0,
       "label": {
-        "mm3": 521.09,
+        "mm3": 310.0,
         "depth_mm": 0.6,
-        "bodies": 33
+        "bodies": 22
       }
     }
   },
@@ -215,6 +215,8 @@
     "fan_pitch": 105,
     "fan_hole_d": 4.3,
     "fan_blade_d": 116,
+    "shroud_clearance": 0.3,
+    "shroud_overlap": 3,
     "open_d": 118,
     "grille_gap": 5.21429,
     "bat_mm": [
@@ -527,6 +529,26 @@
       "name": "battery_side",
       "first_contact_mm": 0.75,
       "limit_mm": 1.0
+    },
+    {
+      "name": "fan_duct_left",
+      "first_contact_mm": 0.5,
+      "limit_mm": 0.55
+    },
+    {
+      "name": "fan_duct_right",
+      "first_contact_mm": 0.5,
+      "limit_mm": 0.55
+    },
+    {
+      "name": "fan_duct_down",
+      "first_contact_mm": 0.5,
+      "limit_mm": 0.55
+    },
+    {
+      "name": "fan_duct_up",
+      "first_contact_mm": 0.5,
+      "limit_mm": 0.55
     }
   ],
   "sampled_paths": [
