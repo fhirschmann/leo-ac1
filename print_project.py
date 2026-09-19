@@ -34,6 +34,7 @@ ASSEMBLY = {
     "pot": "pot_env(nut = false);",
     "pot_nut": "pot_nut_env();",
     "pwm_board": "pwm_board_env();",
+    "chg_module": "chg_module_env();",
     "fan": "fan_env();",
     "battery": "battery_env();",
     "screws_grille": "screws_grille();",
@@ -101,7 +102,7 @@ def checks(ctx):
     contacts = {}
     for name, base, shift in (("grille", "body", [0, 0.05, 0]), ("fan", "body", [0, -0.05, 0]),
                               ("back", "body", [0, -0.05, 0]), ("cover", "body", [-0.05, 0, 0]), ("battery", "body", [0, 0, -0.05]),
-                              ("handle", "body", [0, 0, -0.05]), ("pot", "body", [0.05, 0, 0]), ("pot_nut", "body", [-0.05, 0, 0])):
+                              ("handle", "body", [0, 0, -0.05]), ("pot", "body", [0.05, 0, 0]), ("pot_nut", "body", [-0.05, 0, 0]), ("chg_module", "body", [0, -0.05, 0])):
         volume = (ctx.solids[name].translate(shift) ^ ctx.solids[base]).volume()
         assert volume > 0.1, f"{name} does not rest on {base}"
         contacts[f"{name}@{base}"] = round(volume, 3)
@@ -136,7 +137,8 @@ def checks(ctx):
             ("grille_front", ["grille", "screws_grille"], ["body", "fan", "screws_fan"], [0, -1, 0], 12, 0.25),
             ("back_off", ["back", "screws_back"], others("back", "screws_back"), [0, 1, 0], 12, 0.25),
             ("battery_out", ["battery"], others("battery", "back", "screws_back"), [0, 1, 0], 90, 1),
-            ("fan_out", ["fan", "screws_fan"], others("fan", "screws_fan", "battery", "back", "screws_back"), [0, 1, 0], 90, 1),
+            ("chg_module_out", ["chg_module"], others("chg_module", "back", "screws_back"), [0, 1, 0], 45, 1),
+            ("fan_out", ["fan", "screws_fan"], others("fan", "screws_fan", "battery", "chg_module", "back", "screws_back"), [0, 1, 0], 90, 1),
             ("knob_off", ["knob"], others("knob"), [1, 0, 0], 25, 0.5),
             ("cover_off", ["cover"], ["body", "pot", "pot_nut", "pwm_board"], [1, 0, 0], 30, 0.5),
             ("handle_up", ["handle"], ["body"], [0, 0, 1], 15, 0.5)):
@@ -200,6 +202,7 @@ VIEWER = dict(
            ("fan_visual", "Lüfter 120 mm", "zugekauft", "#303236", "1x", [0, 0.8, 0]),
            ("battery", "Akku LiFePO4 3,2 V", "zugekauft", "#3f7fbf", "1x", [0, 0.5, 0]),
            ("pot", "Poti PWM-Regler (Annahme)", "zugekauft", "#3a3d41", "1x", [-0.5, 0, 0]),
+           ("chg_module", "Lade-/Boostmodul mit 2 Kühlkörpern", "zugekauft", "#c9c9c9", "1x", [0, 0.8, 0]),
            ("pwm_board", "PWM-Platine CNY-FA5-PRO (Annahme 48 × 34)", "zugekauft", "#2e6b3f", "1x", [-0.5, 0, 0]),
            # screws leave their part: same direction, further out
            ("screws_grille", "Gitter · M3 × 12 Linsenkopf", "schrauben", "#26282b", "4x", [0, -1.6, 0]),
@@ -232,5 +235,7 @@ VIEWS = {"01_assembly": ("assembly();", "-160,-330,230,112,40,70"),
          # service cover with the speed knob, from the right
          "06_knob": ("intersection() { assembly(); translate([165, 0, 20]) cube([100, 80, 140]); }",
                      "420,-120,200,230,40,90"),
+         # charge/boost module on the partition in the air stream, from the back with the back cover removed
+         "08_charge_module": ("intersection() { union() { color(\"#f2f2ee\") body(); color(\"#c9c9c9\") chg_module_env(); color(\"#303236\") fan_visual(); } translate([95, 30, 85]) cube([60, 45, 55]); }", "20,260,220,140,55,110"),
          # underside with the M5 mount insert
          "07_underside": ("body();", "40,-160,-260,112,40,40")}

@@ -1,5 +1,5 @@
 {
-  "source_sha256": "4533176dc7d01053af81f529425e1c4e6e2bd86515e8b13ce5360a0ddef1edeb",
+  "source_sha256": "a72b5fbd54153aaeea6d555dc810a9ea56dc41a4cd9b3d3d2669fdba64d64507",
   "software": {
     "numpy": "2.5.3",
     "trimesh": "5.1.0",
@@ -29,17 +29,17 @@
           76.0
         ]
       ],
-      "volume_mm3": 315132.1596,
-      "triangles": 12006,
+      "volume_mm3": 316498.0418,
+      "triangles": 12070,
       "watertight": true,
       "consistent_winding": true,
       "degenerate_faces": 0,
       "components": 1,
       "backend": "CGAL",
-      "sha256": "9e3a5196e956e70390a1a4686c99fd973ae56dacf7eaff18fc76efe1eed028a9",
+      "sha256": "943a253f13a3cd5680e1829267e1e2ab10fe7dcb4ada4d79e3a91881af27681a",
       "quantity": 1,
       "material": "PETG-weiss",
-      "committed_sha256": "9e3a5196e956e70390a1a4686c99fd973ae56dacf7eaff18fc76efe1eed028a9"
+      "committed_sha256": "943a253f13a3cd5680e1829267e1e2ab10fe7dcb4ada4d79e3a91881af27681a"
     },
     "back": {
       "size_mm": [
@@ -211,14 +211,14 @@
           76.0
         ]
       ],
-      "volume_mm3": 314822.1572,
-      "triangles": 13194,
+      "volume_mm3": 316188.0394,
+      "triangles": 13258,
       "watertight": true,
       "consistent_winding": true,
       "degenerate_faces": 0,
       "components": 1,
       "backend": "CGAL",
-      "sha256": "5ade22a2e79e6ace57c54df5138be316add09d50c997009005315daeb0fa4534"
+      "sha256": "dfa14d0ac1e247254c381008bbb374f38402d7d8ab9c17f238d2bfac339a5a67"
     },
     "body_label": {
       "size_mm": [
@@ -259,8 +259,8 @@
       }
     }
   },
-  "assembly_bodies": 16,
-  "assembly_pairs": 120,
+  "assembly_bodies": 17,
+  "assembly_pairs": 136,
   "metrics": {
     "wall": 3.2,
     "front_t": 3.2,
@@ -730,7 +730,8 @@
     "battery@body": 47.791,
     "handle@body": 54.674,
     "pot@body": 8.541,
-    "pot_nut@body": 2.601
+    "pot_nut@body": 2.601,
+    "chg_module@body": 0.16
   },
   "stops": [
     {
@@ -764,6 +765,12 @@
     },
     {
       "name": "battery_out",
+      "collisions": 0,
+      "first_mm": null,
+      "max_volume_mm3": 0
+    },
+    {
+      "name": "chg_module_out",
       "collisions": 0,
       "first_mm": null,
       "max_volume_mm3": 0
