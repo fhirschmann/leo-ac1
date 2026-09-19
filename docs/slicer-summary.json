@@ -6,12 +6,12 @@
       "quantity": 1,
       "material": "PETG-white",
       "passed": true,
-      "source_sha256": "3f22c4eab5de09dd5eef6de32477fbca8f5a2f77260902901b0390d747f6d63a",
+      "source_sha256": "1f2c7a699d2078d195444c0be3fb9ee76a071d1b2bb192c685081c47fcd05f02",
       "exit_code": 0,
       "result_code": 0,
       "warnings": "",
-      "hours": 10.116,
-      "grams": 396.39,
+      "hours": 10.11,
+      "grams": 396.255,
       "wall_loops": 6,
       "infill_percent": 30.0,
       "layer_height": 0.20000000298023224,
@@ -33,7 +33,7 @@
       "exit_code": 0,
       "result_code": 0,
       "warnings": "",
-      "hours": 5.244,
+      "hours": 5.243,
       "grams": 160.714,
       "wall_loops": 6,
       "infill_percent": 30.0,
@@ -121,12 +121,12 @@
       "quantity": 1,
       "material": "PETG-grey",
       "passed": true,
-      "source_sha256": "7d5f636fa55ba30d48116c713007d5030305cd6c29f6d14ead563673ff0b5461",
+      "source_sha256": "68309633a9f702697392f7da91b4158335f94114c51292d7a537ea91b0ee56e3",
       "exit_code": 0,
       "result_code": 0,
       "warnings": "",
       "hours": 0.411,
-      "grams": 4.07,
+      "grams": 4.051,
       "wall_loops": 6,
       "infill_percent": 30.0,
       "layer_height": 0.20000000298023224,
@@ -164,7 +164,7 @@
     }
   ],
   "total_parts": 8,
-  "total_grams_individual_plates": 697.3,
+  "total_grams_individual_plates": 697.1,
   "total_hours_individual_plates": 20.6,
   "production_gcode": false,
   "project_3mf": {
@@ -236,14 +236,49 @@
         "plate": 1,
         "hours": 10.44,
         "grams_by_filament": {
-          "1": 396.64,
+          "1": 396.51,
           "3": 1.73
         },
         "warnings": ""
       }
     },
     "pause_slices": {},
+    "plate_slices": {
+      "Housing": {
+        "plate": 1,
+        "hours": 10.44,
+        "grams_by_filament": {
+          "1": 396.51,
+          "3": 1.73
+        },
+        "warnings": ""
+      },
+      "Back cover": {
+        "plate": 2,
+        "hours": 5.24,
+        "grams_by_filament": {
+          "1": 160.71
+        },
+        "warnings": ""
+      },
+      "Grey parts": {
+        "plate": 3,
+        "hours": 3.72,
+        "grams_by_filament": {
+          "2": 127.85
+        },
+        "warnings": ""
+      },
+      "TPU feet": {
+        "plate": 4,
+        "hours": 1.05,
+        "grams_by_filament": {
+          "4": 12.55
+        },
+        "warnings": ""
+      }
+    },
     "own_infill_parts": 2,
-    "sha256": "caa78650317f18ff0611d1090aea2124d9f6b6d943d57b19a708d5aa7e52c198"
+    "sha256": "a0747e06078ee90f4f80d41de21636557a716d78ed5ed5aabcf9fbb2ec639075"
   }
 }

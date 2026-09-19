@@ -133,6 +133,7 @@ def checks(ctx):
     # inner 2 mm of the wall: closed all around (the grille insert pockets may reach into the outer part of a thick wall)
     wall_probe = ring(fy - gap - 1.2, 0.8, r0 + 0.2, min(r1 - 0.2, r0 + 2))
     gap_probe = ring(fy - gap + 0.02, gap - 0.04, r0 + 0.2, r1 - 0.2)
+    # the fan is a solid frame envelope: this checks the tube end against the envelope, not against the real frame contour
     face_probe = ring(fy + 0.1, 0.5, r0, min(r1, m["fan_size"] / 2 - 0.1))
     duct = dict(wall_fill=round((wall_probe ^ ctx.solids["body"]).volume() / wall_probe.volume(), 4),
                 gap_mm3=round((gap_probe ^ ctx.solids["body"]).volume(), 4),
@@ -187,7 +188,7 @@ def checks(ctx):
         assert empty < 0.01 and filled > 0.95 and bottom > 0.95, f"Insert pocket {inserts[-1]}"
     ctx.summary.append(f"{len(inserts)} inserts")
 
-    ctx.open_items.append("Measure the battery (label Ø34 × 70 mm, model Ø35 × 72 mm) and its cable exit")
+    ctx.open_items.append("Measure the battery (label Ø34 × 70 mm; model: cell Ø33.5 × 72 mm, holder rings Ø34.5 mm) and its cable exit")
     ctx.open_items.append("Measure the potentiometer of the PWM controller (assumed WH148: D shaft Ø6/4.5 × 15, bushing M7, housing Ø16.5 × 18)")
     ctx.open_items.append("Measure the BMS board on the battery (assumed 16 × 4 mm over the full length, facing the partition)")
     ctx.open_items.append("Measure the PWM board CNY-FA5-PRO (assumed 48 × 34 mm, parts 13 mm high, potentiometer axis 8.5 mm above the board)")

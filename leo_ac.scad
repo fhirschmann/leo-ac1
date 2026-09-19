@@ -115,7 +115,8 @@ knob_h = 6.5;
 knob_gap = 0.5;           // cap to the cover face
 knob_stem_d = 10;         // stem through the cover, ends just above the bushing
 knob_stem_cl = 0.5;       // stem end to the bushing end, and radial clearance in the cover hole
-knob_bore_cl = 0.1;       // D bore clearance per side, press fit
+knob_bore_cl = 0.02;      // D bore nominally line-to-line: printed holes come out slightly small, the slotted stem springs open and clamps
+knob_slit = [1, 6];       // slit through the stem from its end, parallel to the flat: width, depth
 knob_flutes = 30;
 knob_c = 1.2;
 
@@ -125,6 +126,7 @@ chg_comp_h = 2;                // parts on the top side
 chg_sink = [8.8, 8.8, 5, 6];   // two stick-on aluminium heatsinks: y, z, height, gap between them
 chg_z = 95;                    // centre height on the partition, board upright (long axis along z), at the fan rim
 chg_gap = 2;                   // air gap between board and partition; parts stay clear of the fan frame
+chg_tape = 1.1;                // double-sided tape between board and pads (3M VHB 1.1 mm); thinner tape moves the board further onto the ledge
 chg_fan_gap = 5;               // free space from the fan's back pads to the front edge of the upright board (intake air)
 // solder pads (IN, B, O) and parts reach the long edges: no grooves. The board back sits on two pads with heat-resistant
 // double-sided tape, its lower edge on a ledge that stays behind the part side.
@@ -309,6 +311,7 @@ assert(part_x - chg_gap - chg_pcb[2] - chg_comp_h > fan_cx + fan_size / 2 + 0.3
        && chg_fan_gap >= 5
        && chg_y0 + chg_pcb[1] < body_d - back_t - 1 && chg_z + chg_pcb[0] / 2 < 118,
        "Charge module reaches the fan frame, the back or the cable notch");
+assert(chg_gap - chg_tape >= 0.5 && chg_pcb[2] - chg_ledge[1] >= 1, "Charge module: pads too thin for the tape, or too little board on the ledge");
 assert(bat_cx - bat_d / 2 - bat_bms[1] - bat_clear > bay_x0 + 1, "BMS board of the battery hits the partition");
 assert(mount_top < fan_cz - fan_size / 2 - 2 && (mount_boss_d - mount_insert[0]) / 2 >= mount_insert[2] + 1.5 && mount_floor >= 2,
        "Mount boss hits the fan, is thinner than the datasheet wall + 1.5 mm, or its floor is too thin");
@@ -337,6 +340,7 @@ assert(pot_yz[0] - pwm_pcb[1] / 2 > front_t + inner_c && pot_yz[0] + pwm_pcb[1] 
        "PWM board: beyond the shelf, no room to pull it off the wall, or too high");
 assert(pot_shaft[2] - knob_stem_z >= 8 && knob_len - knob_bore_top >= 2 && knob_stem_z > pot_nut[1] + 0.5,
        "Knob: shaft engagement, top skin or stem end");
+assert(knob_slit[1] <= knob_cap_z - knob_stem_z - 1, "Knob slit reaches the cap");
 assert(handle_end[1] > handle_ins_depth - handle_key[0] && handle_open[2] > handle_ins_depth - handle_key[0] && handle_ins_depth >= insert_len + 1,
        "Handle insert pockets reach the slants or are shorter than L + 1");
 assert(handle_pad[1] - screw_head_d / 2 >= 3 && (handle_screw_dx[1] - handle_screw_dx[0] - handle_rib[0] - screw_head_d) / 2 >= 3,
@@ -477,8 +481,8 @@ module body() difference() {
         // part side; 45 degree cones towards the front (printable)
         let (xb = part_x - chg_gap - chg_pcb[2], zb = chg_z - chg_pcb[0] / 2) {
             for (pd = chg_pads) hull() {
-                translate([xb + chg_pcb[2], chg_y0 + 1, zb + pd[0]]) cube([chg_gap + eps, chg_pcb[1] - 2, pd[1]]);
-                translate([part_x, chg_y0 + 1 - chg_gap, zb + pd[0]]) cube([1, eps, pd[1]]);
+                translate([xb + chg_pcb[2] + chg_tape, chg_y0 + 1, zb + pd[0]]) cube([chg_gap - chg_tape + eps, chg_pcb[1] - 2, pd[1]]);
+                translate([part_x, chg_y0 + 1 - (chg_gap - chg_tape), zb + pd[0]]) cube([1, eps, pd[1]]);
             }
             let (x0 = xb + chg_ledge[1], reach = part_x - x0) hull() {
                 translate([x0, chg_y0 - 1, zb - chg_ledge[0]]) cube([reach + eps, chg_pcb[1] + 2, chg_ledge[0]]);
@@ -725,6 +729,7 @@ module knob_local() difference() {   // z = 0 at the stem end, cap top face at k
     for (i = [0:knob_flutes - 1]) rotate(i * 360 / knob_flutes)   // fine grip flutes, open at the underside of the cap
         translate([knob_d / 2 - 0.5, -0.5, s - 1]) cube([2, 1, knob_h - knob_c]);
     translate([0, 0, -eps]) linear_extrude(knob_bore_top + eps) offset(delta = knob_bore_cl) d_profile(pot_shaft[0], pot_shaft[1]);
+    translate([-knob_slit[0] / 2, -knob_stem_d / 2 - 1, -eps]) cube([knob_slit[0], knob_stem_d + 2, knob_slit[1] + eps]);   // clamping slit
     translate([knob_d / 2 - knob_c - 7, -0.6, knob_len - 0.6]) cube([6, 1.2, 1]);   // short pointer near the edge, towards the flat
 }
 module knob() translate([body_w + knob_stem_z, pot_yz[0], pot_yz[1]]) orient([1, 0, 0]) knob_local();
@@ -754,6 +759,7 @@ module chg_module_env() {            // board upright on the partition, parts an
     x0 = part_x - chg_gap - chg_pcb[2];
     z0 = chg_z - chg_pcb[0] / 2;
     translate([x0, chg_y0, z0]) cube([chg_pcb[2], chg_pcb[1], chg_pcb[0]]);
+    for (pd = chg_pads) translate([x0 + chg_pcb[2] - eps, chg_y0 + 1, z0 + pd[0]]) cube([chg_tape + eps, chg_pcb[1] - 2, pd[1]]);   // tape on the pads
     translate([x0 - chg_comp_h, chg_y0, z0]) cube([chg_comp_h + eps, chg_pcb[1], chg_pcb[0]]);   // parts up to the edges
     for (i = [0, 1]) translate([x0 - chg_comp_h - chg_sink[2], chg_y0 + (chg_pcb[1] - chg_sink[1]) / 2,
                                 z0 + (chg_pcb[0] - 2 * chg_sink[0] - chg_sink[3]) / 2 + i * (chg_sink[0] + chg_sink[3])])

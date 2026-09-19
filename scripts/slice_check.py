@@ -5,7 +5,7 @@
    print_project.py): no supports, default infill, solid for FULL_INFILL parts and FULL_INFILL_MATERIALS.
 2. Builds PROJECT_3MF: every part of the full build on the fixed PLATES, each plate centred; multicolour
    parts as one object per copy with their inlay filaments, parts at the left edge and the prime tower
-   to their right. The multicolour plates are sliced to prove there is no conflict and the inlays print.
+   to their right. Every plate is sliced (layout, instances, effective settings); multicolour plates also prove the inlays print.
 
 Generated G-code and 3MF files under build/ are diagnostics, NOT print releases.
 Writes build/slicer-diagnostic/summary.json and SLICER_SUMMARY (default docs/slicer-summary.json).
@@ -312,11 +312,9 @@ def build_project_3mf():
     assert placed == sum(PARTS[n][0] for n in listed), f"Project 3MF places {placed} parts"
     assert own_infill == expected_own, f"Project 3MF: {own_infill} parts with own infill, expected {expected_own}"
     print(f"Project 3MF: {placed} parts on {len(plate_ids)} plates -> {PROJECT_3MF.relative_to(ROOT)}", flush=True)
-    multicolour, pauses = {}, {}
+    multicolour, pauses, plate_slices = {}, {}, {}
     for index, (title, group) in enumerate(PLATES, 1):
         coloured = set(group) & set(COLOR_PARTS)
-        if not coloured and index - 1 not in pause_plates:
-            continue
         plate_dir = folder / f"slice-plate-{index}"
         plate_dir.mkdir(exist_ok=True)
         (plate_dir / "result.json").unlink(missing_ok=True)
@@ -340,7 +338,10 @@ def build_project_3mf():
                 f"Plate {title}: pauses {found} (layer, extruded before), wanted at the start of {wanted}"
             pauses[title] = dict(plate=index, pause_before_layer_mm=wanted)
             print(f"Slice pause plate {title}: PASS, pause before layer {wanted} mm", flush=True)
+        plate_slices[title] = dict(plate=index, hours=round(plate.get("total_predication", 0) / 3600, 2),
+                                   grams_by_filament=grams, warnings=plate.get("warning_message"))
         if not coloured:
+            print(f"Slice plate {title}: PASS, filament use {grams} g", flush=True)
             continue
         needed = {base_filament(PARTS[part][1]) for part in group} | \
                  {INLAY_FILAMENT[inlay] for part in group if part in COLOR_PARTS for inlay in COLOR_PARTS[part]}
@@ -349,7 +350,7 @@ def build_project_3mf():
                                   grams_by_filament=grams, warnings=plate.get("warning_message"))
         print(f"Slice multicolour plate {title}: PASS, filament use {grams} g", flush=True)
     return dict(file=str(PROJECT_3MF.relative_to(ROOT)), parts=placed, plates=len(plate_ids), layout=layout,
-                multicolour_parts=COLOR_PARTS, multicolour_slices=multicolour, pause_slices=pauses,
+                multicolour_parts=COLOR_PARTS, multicolour_slices=multicolour, pause_slices=pauses, plate_slices=plate_slices,
                 own_infill_parts=own_infill, sha256=hashlib.sha256(PROJECT_3MF.read_bytes()).hexdigest())
 
 

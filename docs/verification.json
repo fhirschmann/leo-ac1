@@ -1,5 +1,5 @@
 {
-  "source_sha256": "89911393b7f6e1c7e375739ec98637da162d5ffc16bc670befe988663431a055",
+  "source_sha256": "84a4a33632e6fd48443a2c9a79188db22f48bc8a66ad338fdb6249142fa53f46",
   "software": {
     "numpy": "2.5.3",
     "trimesh": "5.1.0",
@@ -29,17 +29,17 @@
           76.0
         ]
       ],
-      "volume_mm3": 355833.9575,
+      "volume_mm3": 355719.0069,
       "triangles": 24902,
       "watertight": true,
       "consistent_winding": true,
       "degenerate_faces": 0,
       "components": 1,
       "backend": "CGAL",
-      "sha256": "3f22c4eab5de09dd5eef6de32477fbca8f5a2f77260902901b0390d747f6d63a",
+      "sha256": "1f2c7a699d2078d195444c0be3fb9ee76a071d1b2bb192c685081c47fcd05f02",
       "quantity": 1,
       "material": "PETG-white",
-      "committed_sha256": "3f22c4eab5de09dd5eef6de32477fbca8f5a2f77260902901b0390d747f6d63a"
+      "committed_sha256": "1f2c7a699d2078d195444c0be3fb9ee76a071d1b2bb192c685081c47fcd05f02"
     },
     "back": {
       "size_mm": [
@@ -179,17 +179,17 @@
           13.7
         ]
       ],
-      "volume_mm3": 4149.3241,
-      "triangles": 1972,
+      "volume_mm3": 4142.399,
+      "triangles": 2004,
       "watertight": true,
       "consistent_winding": true,
       "degenerate_faces": 0,
       "components": 1,
       "backend": "Manifold",
-      "sha256": "7d5f636fa55ba30d48116c713007d5030305cd6c29f6d14ead563673ff0b5461",
+      "sha256": "68309633a9f702697392f7da91b4158335f94114c51292d7a537ea91b0ee56e3",
       "quantity": 1,
       "material": "PETG-grey",
-      "committed_sha256": "7d5f636fa55ba30d48116c713007d5030305cd6c29f6d14ead563673ff0b5461"
+      "committed_sha256": "68309633a9f702697392f7da91b4158335f94114c51292d7a537ea91b0ee56e3"
     },
     "foot": {
       "size_mm": [
@@ -241,14 +241,14 @@
           76.0
         ]
       ],
-      "volume_mm3": 355162.854,
+      "volume_mm3": 355047.9034,
       "triangles": 26090,
       "watertight": true,
       "consistent_winding": true,
       "degenerate_faces": 0,
       "components": 1,
       "backend": "CGAL",
-      "sha256": "0ceec2b3a8e0684f4467cfaa35fef8883702c83be4302a2b4f999e568974df27"
+      "sha256": "b03506ed3a08c02e2d4669636b15a50f0293e8084f03021f7156720cbb555162"
     },
     "body_label": {
       "size_mm": [
@@ -881,7 +881,7 @@
     "handle@body": 12.376,
     "pot@body": 8.541,
     "pot_nut@body": 2.601,
-    "chg_module@body": 5.255,
+    "chg_module@body": 5.198,
     "led@body": 0.165,
     "feet@body": 93.604,
     "usb_trigger@back": 0.443
@@ -1271,7 +1271,7 @@
     "multicolour/body_dedication": 0.0
   },
   "open_measurements": [
-    "Measure the battery (label Ø34 × 70 mm, model Ø35 × 72 mm) and its cable exit",
+    "Measure the battery (label Ø34 × 70 mm; model: cell Ø33.5 × 72 mm, holder rings Ø34.5 mm) and its cable exit",
     "Measure the potentiometer of the PWM controller (assumed WH148: D shaft Ø6/4.5 × 15, bushing M7, housing Ø16.5 × 18)",
     "Measure the BMS board on the battery (assumed 16 × 4 mm over the full length, facing the partition)",
     "Measure the PWM board CNY-FA5-PRO (assumed 48 × 34 mm, parts 13 mm high, potentiometer axis 8.5 mm above the board)",
