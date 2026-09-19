@@ -1,5 +1,5 @@
 {
-  "source_sha256": "e69d8af9fea006cb2d9a3db7ad3d9c1160585dbc52669337835cdb8db1be31cb",
+  "source_sha256": "eff323fb7712b1d200ff5dcb547aa3aa529360f6f796e7bcd903c2ab5442c3af",
   "software": {
     "numpy": "2.5.3",
     "trimesh": "5.1.0",
@@ -29,23 +29,23 @@
           76.0
         ]
       ],
-      "volume_mm3": 306868.0052,
-      "triangles": 11870,
+      "volume_mm3": 311810.4479,
+      "triangles": 11974,
       "watertight": true,
       "consistent_winding": true,
       "degenerate_faces": 0,
       "components": 1,
       "backend": "CGAL",
-      "sha256": "40ea9b1a5f485b3c77456789c23c99bc70b12cacf9929083f6bd2ff632fe1592",
+      "sha256": "8f2b44ce4307c693c88cf1cb15f380115f1ac468bbf2ce133af974f315ac7d0d",
       "quantity": 1,
       "material": "PETG-weiss",
-      "committed_sha256": "40ea9b1a5f485b3c77456789c23c99bc70b12cacf9929083f6bd2ff632fe1592"
+      "committed_sha256": "8f2b44ce4307c693c88cf1cb15f380115f1ac468bbf2ce133af974f315ac7d0d"
     },
     "back": {
       "size_mm": [
         225.0,
         155.0,
-        36.3
+        37.8
       ],
       "bounds_mm": [
         [
@@ -56,20 +56,20 @@
         [
           225.0,
           155.0,
-          36.3
+          37.8
         ]
       ],
-      "volume_mm3": 121673.9513,
+      "volume_mm3": 121889.9513,
       "triangles": 9266,
       "watertight": true,
       "consistent_winding": true,
       "degenerate_faces": 0,
       "components": 1,
       "backend": "Manifold",
-      "sha256": "392541f83d5a96c6ed2039493296cd3854c9f292093bc59499570b385fa271a3",
+      "sha256": "8a6328017d2c2d284b8c6579196cf6c4c6cef6e9e9d75f60ffff0c226a843834",
       "quantity": 1,
       "material": "PETG-weiss",
-      "committed_sha256": "392541f83d5a96c6ed2039493296cd3854c9f292093bc59499570b385fa271a3"
+      "committed_sha256": "8a6328017d2c2d284b8c6579196cf6c4c6cef6e9e9d75f60ffff0c226a843834"
     },
     "grille": {
       "size_mm": [
@@ -119,17 +119,17 @@
           11.0
         ]
       ],
-      "volume_mm3": 15460.97,
-      "triangles": 1088,
+      "volume_mm3": 15580.5779,
+      "triangles": 1392,
       "watertight": true,
       "consistent_winding": true,
       "degenerate_faces": 0,
       "components": 1,
       "backend": "Manifold",
-      "sha256": "4ebe5a053236fc974496e26f5af33d5aa475b24ba74564087de455b0bdf4a126",
+      "sha256": "e81bef8155917ec55a3d7004597ee53e0f65061c7b7f1a021f5a24ac429256da",
       "quantity": 1,
       "material": "PETG-grau",
-      "committed_sha256": "4ebe5a053236fc974496e26f5af33d5aa475b24ba74564087de455b0bdf4a126"
+      "committed_sha256": "e81bef8155917ec55a3d7004597ee53e0f65061c7b7f1a021f5a24ac429256da"
     },
     "handle": {
       "size_mm": [
@@ -211,14 +211,14 @@
           76.0
         ]
       ],
-      "volume_mm3": 306558.0028,
-      "triangles": 13058,
+      "volume_mm3": 311500.4455,
+      "triangles": 13162,
       "watertight": true,
       "consistent_winding": true,
       "degenerate_faces": 0,
       "components": 1,
       "backend": "CGAL",
-      "sha256": "60ddfc65bae6a49171c82548e6d900d9cf89a5dfb2d98a5d09571538d63df6bb"
+      "sha256": "0baaa0cee1958cbef7abdb3e95d527864559c5acdc19fc3da9386728bee1d9c3"
     },
     "body_label": {
       "size_mm": [
@@ -289,14 +289,18 @@
     "fan_y": 11.2,
     "shroud_r": [
       59,
-      60.6
+      62.2
     ],
     "shroud_gap": 0.2,
     "open_d": 118,
     "grille_gap": 4.87143,
     "bat_mm": [
-      35,
+      33.5,
       72
+    ],
+    "bat_bms": [
+      16,
+      4
     ],
     "bat_clear": 0.5,
     "bat_retain_gap": 1,
@@ -334,9 +338,9 @@
       ],
       [
         "cover",
-        8,
-        4.8,
-        2.2
+        16,
+        5.7,
+        0.6
       ],
       [
         "handle",
@@ -571,34 +575,34 @@
         1.6
       ],
       [
-        "cover",
+        "body",
         [
           225,
           40,
           38
         ],
         [
-          1,
+          -1,
           0,
           0
         ],
-        7,
+        7.5,
         4,
         1.6
       ],
       [
-        "cover",
+        "body",
         [
           225,
           40,
           138
         ],
         [
-          1,
+          -1,
           0,
           0
         ],
-        7,
+        7.5,
         4,
         1.6
       ],
@@ -702,9 +706,9 @@
       "tip_margin_mm": 1.1
     },
     "cover": {
-      "length": 8,
-      "engagement_mm": 4.8,
-      "tip_margin_mm": 2.2
+      "length": 16,
+      "engagement_mm": 5.7,
+      "tip_margin_mm": 0.6
     },
     "handle": {
       "length": 8,
@@ -716,8 +720,8 @@
     "grille@body": 177.726,
     "fan@body": 10.211,
     "back@body": 128.348,
-    "cover@body": 38.041,
-    "battery@body": 48.096,
+    "cover@body": 39.376,
+    "battery@body": 47.791,
     "handle@body": 54.674,
     "pot@body": 8.541,
     "pot_nut@body": 2.601
@@ -945,7 +949,7 @@
       "floor_fill": 1.0
     },
     {
-      "body": "cover",
+      "body": "body",
       "at": [
         225,
         40,
@@ -956,7 +960,7 @@
       "floor_fill": 1.0
     },
     {
-      "body": "cover",
+      "body": "body",
       "at": [
         225,
         40,
@@ -1041,6 +1045,7 @@
     "Akku nachmessen (Etikett: Ø34 × 70 mm, Modell Ø35 × 72 mm) und Kabelabgang prüfen",
     "Lüfter messen (Rahmen 120 × 120 × 25, Lochabstand 105, Kabelabgang)",
     "Poti des PWM-Reglers messen (Annahme WH148: D-Achse Ø6/4,5 × 15, Buchse M7, Gehäuse Ø16,5 × 18)",
+    "BMS-Platine am Akku messen (Annahme 16 × 4 mm über die ganze Länge, zur Trennwand)",
     "PWM-Platine und USB-C-Buchse messen: Lage im Elektronikfach, Durchbruch für USB-C im Servicedeckel"
   ],
   "limitations": [

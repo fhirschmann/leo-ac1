@@ -119,7 +119,8 @@ def checks(ctx):
     (ax, az), fy, (r0, r1), gap = m["fan_axis"], m["fan_y"], m["shroud_r"], m["shroud_gap"]
     ring = lambda y, length, ra, rb: (axis_cylinder([ax, y, az], (0, 1, 0), length, rb)
                                       - axis_cylinder([ax, y, az], (0, 1, 0), length, ra))
-    wall_probe = ring(fy - gap - 1.2, 0.8, r0 + 0.2, r1 - 0.2)
+    # inner 2 mm of the wall: closed all around (the grille insert pockets may reach into the outer part of a thick wall)
+    wall_probe = ring(fy - gap - 1.2, 0.8, r0 + 0.2, min(r1 - 0.2, r0 + 2))
     gap_probe = ring(fy - gap + 0.02, gap - 0.04, r0 + 0.2, r1 - 0.2)
     face_probe = ring(fy + 0.1, 0.5, r0, min(r1, m["fan_size"] / 2 - 0.1))
     duct = dict(wall_fill=round((wall_probe ^ ctx.solids["body"]).volume() / wall_probe.volume(), 4),
@@ -174,6 +175,7 @@ def checks(ctx):
     ctx.open_items.append("Akku nachmessen (Etikett: Ø34 × 70 mm, Modell Ø35 × 72 mm) und Kabelabgang prüfen")
     ctx.open_items.append("Lüfter messen (Rahmen 120 × 120 × 25, Lochabstand 105, Kabelabgang)")
     ctx.open_items.append("Poti des PWM-Reglers messen (Annahme WH148: D-Achse Ø6/4,5 × 15, Buchse M7, Gehäuse Ø16,5 × 18)")
+    ctx.open_items.append("BMS-Platine am Akku messen (Annahme 16 × 4 mm über die ganze Länge, zur Trennwand)")
     ctx.open_items.append("PWM-Platine und USB-C-Buchse messen: Lage im Elektronikfach, Durchbruch für USB-C im Servicedeckel")
     return dict(standard_screws=screws, contact_volumes_mm3=contacts, stops=stops, sampled_paths=paths,
                 insert_probes=inserts, air_duct=duct)
@@ -202,7 +204,7 @@ VIEWER = dict(
            ("screws_grille", "Gitter · M3 × 12 Linsenkopf", "schrauben", "#26282b", "4x", [0, -1.6, 0]),
            ("screws_fan", "Lüfter · M3 × 30 Linsenkopf", "schrauben", "#26282b", "4x", [0, 1.4, 0]),
            ("screws_back", "Rückwand · M3 × 8 Linsenkopf", "schrauben", "#26282b", "6x", [0, 2.2, 0]),
-           ("screws_cover", "Servicedeckel · M3 × 8 Linsenkopf", "schrauben", "#26282b", "2x", [-0.5, 0, 0]),
+           ("screws_cover", "Servicedeckel · M3 × 16 Linsenkopf, von außen", "schrauben", "#26282b", "2x", [1.6, 0, 0]),
            ("screws_handle", "Griff · M3 × 8 Linsenkopf", "schrauben", "#26282b", "4x", [0, 0, -0.5])],
     colour={"body": [("label", "Gehäuse · Logo", "#8f9396")]},
     bodies={"body_base": "body_install_pose() inlay_base() { body_print_pose() body(); body_label_print_2d(); }",

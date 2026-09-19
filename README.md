@@ -17,20 +17,20 @@ Kleiner Akku-Ventilator für das Kinderzimmer, gestaltet wie die Außeneinheit e
 | `body` Gehäuse | 1 | PETG weiß + grau (Typenschild) | 225 × 155 × 77,6 | Front aufs Bett, Logo als Einlage in den ersten 0,6 mm, Zierrillen 0,8 mm tief zur Bettseite offen |
 | `back` Rückwand | 1 | PETG weiß | 225 × 155 × 40,6 | Außenseite aufs Bett, Akku-Halterippen stehen senkrecht |
 | `grille` Lüftergitter | 1 | PETG grau | Ø 136 × 6 | Vorderseite aufs Bett |
-| `cover` Servicedeckel | 1 | PETG grau | 116 × 34 × 11 | Außenseite aufs Bett; rechte Seite, mittig in der Tiefe, Drehknopf oben; von innen verschraubt |
+| `cover` Servicedeckel | 1 | PETG grau | 116 × 34 × 11 | Außenseite aufs Bett; rechte Seite, mittig in der Tiefe, Drehknopf oben; von außen verschraubt (Köpfe versenkt) |
 | `knob` Drehknopf | 1 | PETG grau | Ø 28 × 13,7 (flache Kappe, steht 7 mm vor dem Servicedeckel) | Oberseite aufs Bett, Schaft mit D-Bohrung zeigt nach oben |
 | `handle` Griff | 1 | PETG grau | 170 × 42 × 24 (30 mm Luft unter dem Balken, Öffnung oben 90 mm) | auf der Seite liegend (Schichten in Zugrichtung), Fasen 45° |
 
 Alle Teile liegen als Bambu-Studio-Projekt in [`stl/leo_ac1_all_parts.3mf`](stl/leo_ac1_all_parts.3mf): Platte 1 Gehäuse (mit Wischturm), Platte 2 Rückwand, Platte 3 graue Teile (Gitter, Servicedeckel, Griff, Drehknopf). Filament 1 PETG Basic Weiß, Filament 2 PETG Basic Grau, Filament 3 Grau für das Typenschild (im AMS dieselbe Spule wie Filament 2). Wer das Gehäuse einfarbig druckt, nimmt `stl/body.stl`.
 
-Rechnerisch **ca. 0,59 kg und 16,7 Stunden** (diagnostisches Slicen, jede Instanz als eigener Druck; Gehäuse allein 343 g / 7,9 h).
+Rechnerisch **ca. 0,6 kg und 16,9 Stunden** (diagnostisches Slicen, jede Instanz als eigener Druck; Gehäuse allein 349 g / 8,1 h).
 
 ## Druck und Stabilität
 
 Alle Teile drucken ohne Stützen (geprüft mit `analyze.py islands`, `overhangs` > 45°, `ridges`, `inlays`):
 
 - Gehäuse mit der Front aufs Bett: Wände, Trennwand, Akkuwiege und Elektronikboden stehen senkrecht; Schrauben-Dome der Rückwand laufen mit 45°-Kegel in die Ecken; Seitenschlitze überbrücken nur 1,6 mm; Zierrillen sind zur Bettseite offen.
-- Luftkanal: rundes Rohr Ø 118 mm (wie die Gitteröffnung), 1,6 mm Wand, von der Front bis 0,2 mm vor den Lüfterrahmen (geprüft: Wand rundum geschlossen, Rohrende liegt vollständig auf dem Rahmen); keine toten Ecken zwischen rundem Gitter und eckigem Rahmen.
+- Luftkanal: rundes Rohr Ø 118 mm (wie die Gitteröffnung), 3,2 mm Wand, von der Front bis 0,2 mm vor den Lüfterrahmen (geprüft: Wand rundum geschlossen, Rohrende liegt vollständig auf dem Rahmen); keine toten Ecken zwischen rundem Gitter und eckigem Rahmen.
 - Sturzfest: Wände und Front 3,2 mm, Rückwand 4 mm (Schraubenköpfe versenkt), Eckradius 6 mm, 4-mm-Hohlkehle innen zwischen Front und Wänden, Gitterring 4 mm mit 2,4 mm Stäben, Versteifungsrippen innen unter den Griff-Füßen, zusätzliche Strebe in den Rückwandschlitzen.
 - Einschmelzmuttern haben mindestens 3 mm Material bis zur Sichtfläche (Gitter 3,5 mm, Lüfter 3,9 mm, Servicedeckel 4,5 mm), damit sich die Front beim Eindrücken nicht verzieht.
 - Gitterspalt 4,9 mm (Fingerschutz).
@@ -51,19 +51,21 @@ Alle Teile drucken ohne Stützen (geprüft mit `analyze.py islands`, `overhangs`
 | M3 × 12, ISO 7380 Torx | 4 | Gitter, von vorn, Kopf 1,9 mm im Gitterring versenkt |
 | **M3 × 30**, ISO 7380 Torx | 4 | Lüfter, von hinten durch den Rahmen (nicht im nas-case-Satz, nachkaufen) |
 | M3 × 8, ISO 7380 Torx | 6 | Rückwand, von außen, Kopf 1,9 mm versenkt |
-| M3 × 8, ISO 7380 Torx | 6 | Servicedeckel (2) und Griff (4), von innen |
+| M3 × 8, ISO 7380 Torx | 4 | Griff, von innen |
+| M3 × 16, ISO 7380 Torx | 2 | Servicedeckel, von außen, Kopf 1,9 mm versenkt |
 
 ## Zusammenbau
 
-1. Einschmelzmuttern setzen: 4 Gitter- und 4 Lüfterdome innen an der Front, 6 Dome am hinteren Rand des Gehäuses, 2 im Servicedeckel, 4 in den Griff-Füßen; die M5-Mutter von unten in das Sackloch in der Unterseite.
-2. PWM-Platine mit dem Poti von hinten über den Elektronikboden führen, Poti von innen durch die rechte Seitenwand stecken und außen mit seiner Mutter festziehen; Servicedeckel und Griff von innen mit M3 × 8 anschrauben; Drehknopf durch das Loch im Servicedeckel auf die Achse drücken (Zeigerstrich zur Achsabflachung).
+1. Einschmelzmuttern setzen: 4 Gitter- und 4 Lüfterdome innen an der Front, 6 Dome am hinteren Rand des Gehäuses, 2 von außen in die rechte Seitenwand unter dem Servicedeckel, 4 in den Griff-Füßen; die M5-Mutter von unten in das Sackloch in der Unterseite.
+2. PWM-Platine mit dem Poti von hinten über den Elektronikboden führen, Poti von innen durch die rechte Seitenwand stecken und außen mit seiner Mutter festziehen; Griff von innen mit M3 × 8 anschrauben, Servicedeckel von außen mit M3 × 16; Drehknopf durch das Loch im Servicedeckel auf die Achse drücken (Zeigerstrich zur Achsabflachung).
 3. Gitter von vorn aufsetzen (der Kragen zentriert es in der Öffnung) und mit M3 × 12 anschrauben.
 4. Lüfter von hinten auf die Dome hinter dem Luftkanal setzen, Blasrichtung nach vorn, mit M3 × 30 anschrauben. Kabel durch die Aussparung in der Trennwand ins Elektronikfach führen.
-5. Akku stehend von hinten in die Wiege schieben, Kabelende nach oben; das Kabel läuft durch den Schlitz im Elektronikboden darüber.
+5. Akku stehend von hinten in die Wiege schieben, Kabelende nach oben und BMS-Platine zur Trennwand (rechteckige Aussparung in der Wiege); das Kabel läuft durch den Schlitz im Elektronikboden darüber.
 6. Rückwand aufsetzen (die Rippen halten den Akku mit 1 mm Luft) und mit M3 × 8 verschrauben.
 
 ## Offen
 
+- BMS-Platine am Akku messen (Annahme 16 × 4 mm über die ganze Länge, zur Trennwand).
 - Poti des PWM-Reglers, PWM-Platine und USB-C-Buchse messen (Lage im Elektronikfach, USB-C-Durchbruch).
 - Akku und Lüfter nachmessen (Akku laut Etikett Ø 34 × 70 mm, im Modell Ø 35 × 72 mm; Lüfter nach Norm).
 - Elektronik (Wandler, Laden, Schalter, Drehzahl) festlegen: Lage im Elektronikfach, Durchbrüche für Ladebuchse und Schalter (z. B. im Servicedeckel).
