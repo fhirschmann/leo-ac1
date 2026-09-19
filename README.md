@@ -23,7 +23,7 @@ Kleiner Akku-Ventilator für das Kinderzimmer, gestaltet wie die Außeneinheit e
 
 Alle Teile liegen als Bambu-Studio-Projekt in [`stl/leo_ac1_all_parts.3mf`](stl/leo_ac1_all_parts.3mf): Platte 1 Gehäuse (mit Wischturm), Platte 2 Rückwand, Platte 3 graue Teile (Gitter, Servicedeckel, Griff, Drehknopf). Filament 1 PETG Basic Weiß, Filament 2 PETG Basic Grau, Filament 3 Grau für das Typenschild (im AMS dieselbe Spule wie Filament 2). Wer das Gehäuse einfarbig druckt, nimmt `stl/body.stl`.
 
-Rechnerisch **ca. 0,56 kg und 15,7 Stunden** (diagnostisches Slicen, jede Instanz als eigener Druck; Gehäuse allein 338 g / 7,8 h).
+Rechnerisch **ca. 0,58 kg und 16,6 Stunden** (diagnostisches Slicen, jede Instanz als eigener Druck; Gehäuse allein 343 g / 7,9 h).
 
 ## Druck und Stabilität
 
@@ -31,9 +31,10 @@ Alle Teile drucken ohne Stützen (geprüft mit `analyze.py islands`, `overhangs`
 
 - Gehäuse mit der Front aufs Bett: Wände, Trennwand, Akkuwiege und Elektronikboden stehen senkrecht; Schrauben-Dome der Rückwand laufen mit 45°-Kegel in die Ecken; Seitenschlitze überbrücken nur 1,6 mm; Zierrillen sind zur Bettseite offen.
 - Luftkanal: rundes Rohr Ø 118 mm (wie die Gitteröffnung), 1,6 mm Wand, von der Front bis 0,2 mm vor den Lüfterrahmen (geprüft: Wand rundum geschlossen, Rohrende liegt vollständig auf dem Rahmen); keine toten Ecken zwischen rundem Gitter und eckigem Rahmen.
-- Sturzfest: Wände und Front 3,2 mm, Rückwand 3 mm, Eckradius 6 mm, 4-mm-Hohlkehle innen zwischen Front und Wänden, Gitterring 4 mm mit 2,4 mm Stäben, Versteifungsrippen innen unter den Griff-Füßen, zusätzliche Strebe in den Rückwandschlitzen.
+- Sturzfest: Wände und Front 3,2 mm, Rückwand 4 mm (Schraubenköpfe versenkt), Eckradius 6 mm, 4-mm-Hohlkehle innen zwischen Front und Wänden, Gitterring 4 mm mit 2,4 mm Stäben, Versteifungsrippen innen unter den Griff-Füßen, zusätzliche Strebe in den Rückwandschlitzen.
 - Einschmelzmuttern haben mindestens 3 mm Material bis zur Sichtfläche (Gitter 3,5 mm, Lüfter 3,9 mm, Servicedeckel 4,5 mm), damit sich die Front beim Eindrücken nicht verzieht.
 - Gitterspalt 4,9 mm (Fingerschutz).
+- M5-Halterung: Die Mutter wird von innen eingepresst und stützt sich auf einem 2-mm-Absatz ab; Zug an der Halterung drückt sie gegen den Absatz statt sie herauszuziehen. Dom Ø 20 mm mit 45°-Anlauf, innen eine 3 mm dicke Bodenverdopplung von der Front bis zur Trennwand (60 × 56 mm), die Hebelkräfte in Front und Trennwand leitet. Für echtes Kamerazubehör gäbe es auch Ruthex RX-1/4x12.7 (1/4"-20, Loch Ø 8,0, Wand ≥ 3,3).
 - Slicer-Profil: 6 Wände, 5 Decken-/Bodenlagen, 30 % Gyroid. PETG ist schlagzäher als PLA.
 
 ## Zukaufteile
@@ -45,16 +46,16 @@ Alle Teile drucken ohne Stützen (geprüft mit `analyze.py islands`, `overhangs`
 | Lade-/Boostmodul „2-in-1 3,2 V LiFePO4“, Variante 12 V | 1 | 35,4 × 11 × 3,6 mm; Pads IN± (5 V laden), B± (Akku), O± (12 V, max. ca. 0,32 A) |
 | PWM-Lüfterregler DC 8–24 V 5 A mit Drehpoti und Schalter | 1 | 4-Pin-Lüfter; Poti an der rechten Seitenwand unter dem Servicedeckel (Maße angenommen: WH148, D-Achse Ø 6 × 15, M7) |
 | USB-C-Einbaubuchse 5 V | 1 | Zum Laden, Lage im Servicedeckel noch offen |
-| Einschmelzmuttern Ruthex RX-M3x5.7 | 20 | Loch Ø 4,0, Tiefe 7 |
-| Einschmelzmutter Ruthex M5 × 9,5 | 1 | Halterungsgewinde in der Unterseite (wie ein Kamerastativgewinde), Loch Ø 6,4, Tiefe 11 |
+| Einschmelzmuttern Ruthex RX-M3x5.7 | 20 | Loch Ø 4,0, Tiefe 7 (Datenblatt: ≥ L + 1 = 6,7), Wand ≥ 1,6 |
+| Einschmelzmutter Ruthex RX-M5x9.5 | 1 | Halterungsgewinde in der Unterseite (wie ein Stativgewinde): Loch Ø 6,4, Wand ≥ 2,6 (hier 6,8), **von innen eingepresst** auf einen 2-mm-Absatz mit Ø-5,3-Durchgang. Schraube der Halterung: Länge = Halterungsdicke + 2 mm + 5–9 mm Gewinde |
 | M3 × 12, ISO 7380 Torx | 4 | Gitter, von vorn, Kopf 1,9 mm im Gitterring versenkt |
 | **M3 × 30**, ISO 7380 Torx | 4 | Lüfter, von hinten durch den Rahmen (nicht im nas-case-Satz, nachkaufen) |
-| M3 × 8, ISO 7380 Torx | 6 | Rückwand, von außen, Kopf liegt auf |
+| M3 × 8, ISO 7380 Torx | 6 | Rückwand, von außen, Kopf 1,9 mm versenkt |
 | M3 × 8, ISO 7380 Torx | 6 | Servicedeckel (2) und Griff (4), von innen |
 
 ## Zusammenbau
 
-1. Einschmelzmuttern setzen: 4 Gitter- und 4 Lüfterdome innen an der Front, 6 Dome am hinteren Rand des Gehäuses, 2 im Servicedeckel, 4 in den Griff-Füßen; die M5-Mutter von unten in den Dom der Unterseite.
+1. Einschmelzmuttern setzen: 4 Gitter- und 4 Lüfterdome innen an der Front, 6 Dome am hinteren Rand des Gehäuses, 2 im Servicedeckel, 4 in den Griff-Füßen; die M5-Mutter von innen in den Dom am Boden, bis sie auf dem Absatz aufsitzt.
 2. Poti von innen durch die rechte Seitenwand stecken und außen mit seiner Mutter festziehen; Servicedeckel und Griff von innen mit M3 × 8 anschrauben; Drehknopf durch das Loch im Servicedeckel auf die Achse drücken (Zeigerstrich zur Achsabflachung).
 3. Gitter von vorn aufsetzen (der Kragen zentriert es in der Öffnung) und mit M3 × 12 anschrauben.
 4. Lüfter von hinten auf die Dome hinter dem Luftkanal setzen, Blasrichtung nach vorn, mit M3 × 30 anschrauben. Kabel durch die Aussparung in der Trennwand ins Elektronikfach führen.
@@ -82,4 +83,4 @@ python3 -m venv .venv
 .venv/bin/python scripts/render_views.py           # img/
 ```
 
-Geprüft werden: Teileliste gegen die `part`-Zweige, geschlossene Netze, Bettlage, Bauraum, keine Überschneidung zwischen 14 Baugruppenkörpern (91 Paare, inklusive Schrauben, Lüfter- und Akku-Hüllkörper), Auflagekontakt von Gitter, Lüfter, Rückwand, Deckel, Griff, Poti und Akku, Anschläge des Akkus (hinten 1,25 mm, oben 3,25 mm, seitlich 0,75 mm), 7 Ein- und Ausbauwege in realistischer Reihenfolge, 21 Insert-Aufnahmen (20 × M3, 1 × M5; Achse frei, Ring und Boden voll), Einschraubtiefen (≥ 4,7 mm, Spitze ≥ 0,9 mm vor dem Taschenende), Normmaße (120-mm-Lüfter, Ruthex M3), Gitterspalt ≤ 6 mm (Fingerschutz), Mehrfarb-Deckung des Logos. Druckbarkeit: keine schwebenden Bereiche, Einlage auf Schicht 1 ohne zu schmale Stellen, Stege zwischen den Rillen ≥ 1,1 mm. Keine Festigkeits-, Luftstrom- oder Passungsprüfung am echten Teil.
+Geprüft werden: Teileliste gegen die `part`-Zweige, geschlossene Netze, Bettlage, Bauraum, keine Überschneidung zwischen 14 Baugruppenkörpern (91 Paare, inklusive Schrauben, Lüfter- und Akku-Hüllkörper), Auflagekontakt von Gitter, Lüfter, Rückwand, Deckel, Griff, Poti und Akku, Anschläge des Akkus (hinten 1,25 mm, oben 3,25 mm, seitlich 0,75 mm), 7 Ein- und Ausbauwege in realistischer Reihenfolge, 21 Insert-Aufnahmen (20 × M3, 1 × M5; Achse frei, volle Mindestwand laut Ruthex-Datenblatt, Boden voll), Einschraubtiefen (≥ 4,7 mm, Spitze ≥ 0,9 mm vor dem Taschenende), Normmaße (120-mm-Lüfter, Ruthex M3), Gitterspalt ≤ 6 mm (Fingerschutz), Mehrfarb-Deckung des Logos. Druckbarkeit: keine schwebenden Bereiche, Einlage auf Schicht 1 ohne zu schmale Stellen, Stege zwischen den Rillen ≥ 1,1 mm. Keine Festigkeits-, Luftstrom- oder Passungsprüfung am echten Teil.

@@ -84,7 +84,9 @@ def checks(ctx):
     assert m["fan_hole_d"] >= 4.3, "120 mm fan holes are 4.3 mm"
     assert m["open_d"] > m["fan_blade_d"], "Front opening covers the fan blades"
     assert m["insert_hole_d"] == 4.0 and m["insert_len"] == 5.7, "Ruthex M3 insert: hole 4.0 mm, length 5.7 mm"
-    assert m["insert_depth"] >= m["insert_len"] + 0.5, "Insert pocket needs 0.5 mm below the insert"
+    # Ruthex datasheet RX series (08/2022): M3x5.7 hole 4.0, depth >= L + 1, wall >= 1.6; M5x9.5 hole 6.4, L 9.5, wall >= 2.6
+    assert m["insert_depth"] >= m["insert_len"] + 1 and m["insert_w_min"] >= 1.6, "Ruthex M3: hole depth L + 1 mm, wall 1.6 mm"
+    assert m["mount_insert"] == [6.4, 9.5, 2.6] and m["mount_shoulder"] >= 2, "Ruthex M5x9.5: hole 6.4, length 9.5, wall 2.6; shoulder 2 mm"
     assert m["grille_gap"] <= 6, "Grille openings above 6 mm let children's fingers through"
     assert m["knob_shaft_engagement"] >= 8 and m["knob_top_skin"] >= 2 and m["knob_protrusion"] <= 8, "Knob: on the shaft, at most 8 mm in front of the cover"
     assert m["handle_clearance"] >= 30 and m["handle_open_top"] >= 90, "Handle: 30 mm finger clearance, 90 mm hand breadth"
@@ -142,14 +144,15 @@ def checks(ctx):
 
     # Insert pockets: axis empty, ring around it and floor below it filled
     inserts = []
-    for body, start, direction, depth, *hole in m["inserts"]:
+    for body, start, direction, depth, hole, wall in m["inserts"]:
         solid, d, s = ctx.solids[body], np.array(direction, float), np.array(start, float)
-        k = (hole[0] if hole else 4.0) / 4.0          # probe radii scale with the core hole (M3: 4.0, M5: 6.4)
         length = depth - 0.5
-        core = axis_cylinder(s + d * 0.2, d, length, 1.5 * k)
-        ring = axis_cylinder(s + d * 0.2, d, length, 3.1 * k) - axis_cylinder(s + d * 0.2, d, length, 2.3 * k)
-        # ring, not disc: the grille screws pass through the pocket floor
-        floor = axis_cylinder(s + d * (depth + 0.2), d, 0.4, 3.0 * k) - axis_cylinder(s + d * (depth + 0.2), d, 0.4, 1.8 * k)
+        core = axis_cylinder(s + d * 0.2, d, length, 0.375 * hole)
+        # the full datasheet wall around the hole must be material
+        ring = axis_cylinder(s + d * 0.2, d, length, hole / 2 + wall) - axis_cylinder(s + d * 0.2, d, length, hole / 2 + 0.3)
+        # ring, not disc: screws pass through the pocket floor
+        floor = (axis_cylinder(s + d * (depth + 0.2), d, 0.4, hole / 2 + wall)
+                 - axis_cylinder(s + d * (depth + 0.2), d, 0.4, 0.45 * hole))
         empty = (core ^ solid).volume()
         filled = (ring ^ solid).volume() / ring.volume()
         bottom = (floor ^ solid).volume() / floor.volume()
