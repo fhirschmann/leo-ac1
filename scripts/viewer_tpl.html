@@ -1,4 +1,4 @@
-
+<meta charset="utf-8">
 <title>__TITLE__</title>
 <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@400;500&family=IBM+Plex+Sans:wght@400;500;600&display=swap">
 <style>
@@ -190,6 +190,97 @@ canvas{display:block;width:100%;height:100%;touch-action:none}
     root.add(mesh); meshes[p.id]=mesh;
   });
 
+  // ---- screens: drawn content on a plane just in front of a display body (VIEWER["screens"]) ----
+  function rrect(ctx, x, y, w, h, r){
+    r = Math.min(r, w/2, h/2);
+    ctx.beginPath(); ctx.moveTo(x+r, y);
+    ctx.arcTo(x+w, y, x+w, y+h, r); ctx.arcTo(x+w, y+h, x, y+h, r);
+    ctx.arcTo(x, y+h, x, y, r); ctx.arcTo(x, y, x+w, y, r); ctx.closePath();
+  }
+  function drawScreen(ctx, W, H, s){
+    var c = s.content || {}, k = W / s.size[0], pad = Math.round(H*0.07);
+    var acc = c.accent || '#ff6a13', ink = c.ink || '#e6edf1', dim = c.dim || '#7f929e';
+    var mono = '"IBM Plex Mono",ui-monospace,Menlo,monospace';
+    ctx.clearRect(0, 0, W, H);
+    ctx.save();
+    rrect(ctx, 0, 0, W, H, (s.radius || 0)*k); ctx.clip();
+    var bg = ctx.createLinearGradient(0, 0, 0, H);
+    bg.addColorStop(0, c.bg_top || '#101a20'); bg.addColorStop(1, c.bg || '#030506');
+    ctx.fillStyle = bg; ctx.fillRect(0, 0, W, H);
+    var pillsH = c.pills ? H*0.17 : 0;
+    if (c.layout === 'center'){
+      ctx.textAlign = 'center';
+      ctx.fillStyle = ink; ctx.font = '600 '+Math.round(H*0.2)+'px '+mono;
+      ctx.fillText(c.title || '', W/2, H*0.42);
+      ctx.fillStyle = acc; ctx.font = '500 '+Math.round(H*0.1)+'px '+mono;
+      ctx.fillText(c.subtitle || '', W/2, H*0.6);
+      ctx.textAlign = 'left';
+    } else {
+      ctx.fillStyle = acc; ctx.font = '600 '+Math.round(H*0.12)+'px '+mono;
+      ctx.fillText(c.title || '', pad, pad + H*0.1);
+      if (c.subtitle){
+        ctx.fillStyle = dim; ctx.font = Math.round(H*0.065)+'px '+mono; ctx.textAlign = 'right';
+        ctx.fillText(c.subtitle, W - pad, pad + H*0.09); ctx.textAlign = 'left';
+      }
+      var line = pad + H*0.15;
+      ctx.fillStyle = acc; ctx.globalAlpha = 0.45; ctx.fillRect(pad, line, W - 2*pad, Math.max(1, H*0.005)); ctx.globalAlpha = 1;
+      var rows = c.rows || [], top = line + H*0.03, rowH = (H - top - pad - pillsH) / Math.max(rows.length, 1);
+      rows.forEach(function(r, i){
+        var ry = top + i*rowH, fs = Math.round(Math.min(rowH*0.4, H*0.075));
+        ctx.font = fs+'px '+mono;
+        ctx.fillStyle = dim; ctx.fillText(r[0], pad, ry + fs*1.1);
+        ctx.fillStyle = ink; ctx.textAlign = 'right'; ctx.fillText(r[1], W - pad, ry + fs*1.1); ctx.textAlign = 'left';
+        if (r[2] != null){
+          var by = ry + fs*1.45, bh = Math.max(2, rowH*0.16);
+          ctx.fillStyle = 'rgba(255,255,255,0.09)'; ctx.fillRect(pad, by, W - 2*pad, bh);
+          ctx.fillStyle = r[2] > 0.85 ? '#ff453a' : acc;
+          ctx.fillRect(pad, by, (W - 2*pad)*Math.max(0, Math.min(1, r[2])), bh);
+        }
+      });
+    }
+    if (c.pills){
+      var fsP = Math.round(pillsH*0.42), gap = pad*0.5;
+      ctx.font = '500 '+fsP+'px '+mono;
+      var widths = c.pills.map(function(p){ return ctx.measureText(p[0]).width + fsP*2.2; });
+      var total = widths.reduce(function(a, b){ return a + b; }, 0) + gap*(widths.length - 1);
+      var px = c.layout === 'center' ? (W - total)/2 : pad, py = H - pad - pillsH*0.8;
+      c.pills.forEach(function(p, i){
+        rrect(ctx, px, py, widths[i], pillsH*0.8, pillsH*0.4);
+        ctx.fillStyle = 'rgba(255,255,255,0.08)'; ctx.fill();
+        ctx.fillStyle = p[1] || acc; ctx.beginPath(); ctx.arc(px + fsP*0.8, py + pillsH*0.4, fsP*0.28, 0, Math.PI*2); ctx.fill();
+        ctx.fillStyle = ink; ctx.fillText(p[0], px + fsP*1.4, py + pillsH*0.4 + fsP*0.36);
+        px += widths[i] + gap;
+      });
+    }
+    var sheen = ctx.createLinearGradient(0, 0, W*0.6, H);
+    sheen.addColorStop(0, 'rgba(255,255,255,0.08)'); sheen.addColorStop(0.5, 'rgba(255,255,255,0)');
+    ctx.fillStyle = sheen; ctx.fillRect(0, 0, W, H);
+    ctx.restore();
+  }
+  var screens = (M.screens || []).map(function(s){
+    var W = Math.round(s.size[0]*16), H = Math.round(s.size[1]*16);
+    var cvs = document.createElement('canvas'); cvs.width = W; cvs.height = H;
+    var tex = new THREE.CanvasTexture(cvs);
+    tex.anisotropy = renderer.capabilities.getMaxAnisotropy();
+    function paint(){ drawScreen(cvs.getContext('2d'), W, H, s); tex.needsUpdate = true; }
+    paint();
+    if (document.fonts && document.fonts.ready) document.fonts.ready.then(paint);
+    setTimeout(paint, 1500);
+    var mat = new THREE.MeshBasicMaterial({map: tex, transparent: true,
+                                          polygonOffset: true, polygonOffsetFactor: -4, polygonOffsetUnits: -4});
+    var mesh = new THREE.Mesh(new THREE.PlaneGeometry(s.size[0], s.size[1]), mat);
+    var nz = new THREE.Vector3().fromArray(s.normal).normalize(), ny = new THREE.Vector3().fromArray(s.up).normalize();
+    var nx = new THREE.Vector3().crossVectors(ny, nz);
+    mesh.quaternion.setFromRotationMatrix(new THREE.Matrix4().makeBasis(nx, ny, nz));
+    var base = new THREE.Vector3().fromArray(s.center).addScaledVector(nz, 0.15);
+    var owner = P.parts.filter(function(p){ return p.id === s.body; })[0];
+    mesh.position.copy(base); root.add(mesh);
+    return {s: s, mesh: mesh, base: base, dir: new THREE.Vector3().fromArray(owner ? owner.dir : [0, 0, 0])};
+  });
+  function syncScreens(){
+    screens.forEach(function(k){ var b = meshes[k.s.body]; k.mesh.visible = !!b && b.visible; });
+  }
+
   // ---- camera orbit ----
   var rot = {th: -0.62, ph: 1.06}, dist = size*2.9, target = new THREE.Vector3(0,0,0);
   function place(){
@@ -265,6 +356,7 @@ canvas{display:block;width:100%;height:100%;touch-action:none}
   function count(){
     var on=0, tris=0;
     P.parts.forEach(function(p){ if(meshes[p.id].visible){ on++; tris+=p.tris; } });
+    syncScreens();
     ro.innerHTML = '<b>'+on+'</b> von '+P.parts.length+' Teilen<br>'+tris.toLocaleString('de-DE')+' Dreiecke';
   }
 
@@ -292,6 +384,7 @@ canvas{display:block;width:100%;height:100%;touch-action:none}
   ex.addEventListener('input', function(){
     var e = +ex.value; exv.textContent = e+' mm';
     P.parts.forEach(function(p){ meshes[p.id].position.set(p.dir[0]*e, p.dir[1]*e, p.dir[2]*e); });
+    screens.forEach(function(k){ k.mesh.position.copy(k.base).addScaledVector(k.dir, e); });
   });
 
   resize(); place(); count();

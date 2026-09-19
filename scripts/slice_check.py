@@ -43,6 +43,9 @@ FULL_INFILL_MATERIALS = set(getattr(P, "FULL_INFILL_MATERIALS", ("TPU",)))
 FILAMENTS = getattr(P, "FILAMENTS", None) or [dict(material=m, profile=f"Generic {m} @BBL H2S")
                                               for m in sorted({m for _, m, _ in PARTS.values()})]
 PLATES = getattr(P, "PLATES", None) or [(name, [name]) for name in PARTS if PARTS[name][0] > 0]
+# Print pauses (e.g. to embed magnets or lay mesh): part -> print_z of the first layer printed after the pause.
+# A pause stops its whole plate, so give such parts their own plate.
+PAUSES = getattr(P, "PAUSES", {})
 PROJECT_3MF = ROOT / getattr(P, "PROJECT_3MF", f"{STL_DIR.relative_to(ROOT).as_posix()}/{ROOT.name}_all_parts.3mf")
 SUMMARY = ROOT / getattr(P, "SLICER_SUMMARY", "docs/slicer-summary.json")
 INLAY_FILAMENT = {f["inlay"]: i for i, f in enumerate(FILAMENTS, 1) if f.get("inlay")}
@@ -285,23 +288,33 @@ def build_project_3mf():
         for index, (x, y) in towers.items():
             xs[index], ys[index] = f"{x:.1f}", f"{y:.1f}"
         project_settings["wipe_tower_x"], project_settings["wipe_tower_y"] = xs, ys
+        pause_gcode = machine.get("machine_pause_gcode", "M400 U1")
+        pause_gcode = (pause_gcode[0] if isinstance(pause_gcode, list) else pause_gcode).strip()
+        pause_plates = {index: sorted({z for part in group for z in PAUSES.get(part, [])})
+                        for index, (_, group) in enumerate(PLATES) if any(part in PAUSES for part in group)}
+        custom_name = "Metadata/custom_gcode_per_layer.xml"
         PROJECT_3MF.parent.mkdir(parents=True, exist_ok=True)
         with zipfile.ZipFile(PROJECT_3MF, "w", zipfile.ZIP_DEFLATED) as project:
             for item in source.infolist():
+                if item.filename == custom_name:
+                    continue
                 data = (model.encode() if item.filename == "3D/3dmodel.model" else
                         settings.encode() if item.filename == "Metadata/model_settings.config" else
                         json.dumps(project_settings, indent=4).encode() if item.filename == "Metadata/project_settings.config" else
                         source.read(item.filename))
                 project.writestr(item, data)
+            if pause_plates:
+                project.writestr(custom_name, custom_gcode_xml(pause_plates, pause_gcode))
     placed = sum(len(ids) for ids in plate_ids)
     own_infill = len([v for v in re.findall(r'sparse_infill_density" value="(\d+)%"', settings) if int(v) != DEFAULT_INFILL])
     expected_own = sum(PARTS[n][0] for n in PARTS if infill(n, PARTS[n][1]) != DEFAULT_INFILL)
     assert placed == sum(PARTS[n][0] for n in listed), f"Project 3MF places {placed} parts"
     assert own_infill == expected_own, f"Project 3MF: {own_infill} parts with own infill, expected {expected_own}"
     print(f"Project 3MF: {placed} parts on {len(plate_ids)} plates -> {PROJECT_3MF.relative_to(ROOT)}", flush=True)
-    multicolour = {}
+    multicolour, pauses = {}, {}
     for index, (title, group) in enumerate(PLATES, 1):
-        if not set(group) & set(COLOR_PARTS):
+        coloured = set(group) & set(COLOR_PARTS)
+        if not coloured and index - 1 not in pause_plates:
             continue
         plate_dir = folder / f"slice-plate-{index}"
         plate_dir.mkdir(exist_ok=True)
@@ -315,7 +328,19 @@ def build_project_3mf():
         plate = (data.get("sliced_plates") or [{}])[0]
         grams = {f["id"]: round(f["total_used_g"], 2) for f in plate.get("filaments", [])}
         assert result.returncode == 0 and data.get("return_code") == 0 and "slicing result conflict" not in log, \
-            f"Multicolour plate {title} does not slice; see {plate_dir}"
+            f"Plate {title} does not slice; see {plate_dir}"
+        if index - 1 in pause_plates:
+            with zipfile.ZipFile(plate_dir / "sliced.3mf") as sliced:
+                name = next(n for n in sliced.namelist() if re.fullmatch(r"Metadata/plate_\d+\.gcode", n))
+                found = pause_heights(sliced.read(name).decode(errors="replace"), pause_gcode)
+            wanted = pause_plates[index - 1]
+            # Bambu emits the pause at the layer change: in the layer at the requested height, before it extrudes
+            assert [z for z, _ in found] == wanted and not any(e for _, e in found), \
+                f"Plate {title}: pauses {found} (layer, extruded before), wanted at the start of {wanted}"
+            pauses[title] = dict(plate=index, pause_before_layer_mm=wanted)
+            print(f"Slice pause plate {title}: PASS, pause before layer {wanted} mm", flush=True)
+        if not coloured:
+            continue
         needed = {base_filament(PARTS[part][1]) for part in group} | \
                  {INLAY_FILAMENT[inlay] for part in group if part in COLOR_PARTS for inlay in COLOR_PARTS[part]}
         assert all(grams.get(f, 0) > 0 for f in needed), f"Multicolour plate {title}: filament use {grams}, needs {sorted(needed)}"
@@ -323,8 +348,31 @@ def build_project_3mf():
                                   grams_by_filament=grams, warnings=plate.get("warning_message"))
         print(f"Slice multicolour plate {title}: PASS, filament use {grams} g", flush=True)
     return dict(file=str(PROJECT_3MF.relative_to(ROOT)), parts=placed, plates=len(plate_ids), layout=layout,
-                multicolour_parts=COLOR_PARTS, multicolour_slices=multicolour,
+                multicolour_parts=COLOR_PARTS, multicolour_slices=multicolour, pause_slices=pauses,
                 own_infill_parts=own_infill, sha256=hashlib.sha256(PROJECT_3MF.read_bytes()).hexdigest())
+
+
+def custom_gcode_xml(pause_plates, gcode):
+    """Bambu project pauses: Metadata/custom_gcode_per_layer.xml, type 1 = pause print."""
+    lines = ['<?xml version="1.0" encoding="utf-8"?>', "<custom_gcodes_per_layer>"]
+    for index, heights in sorted(pause_plates.items()):
+        lines += ["<plate>", f'<plate_info id="{index + 1}"/>']
+        lines += [f'<layer top_z="{z:g}" type="1" extruder="1" color="" extra="" gcode="{gcode}"/>' for z in heights]
+        lines += ['<mode value="MultiAsSingle"/>', "</plate>"]
+    return "\n".join(lines + ["</custom_gcodes_per_layer>"]) + "\n"
+
+
+def pause_heights(gcode_text, pause_gcode):
+    """For every pause in sliced G-code: (Z_HEIGHT of the layer it sits in, whether that layer extruded before it)."""
+    found, layer, extruded = [], None, False
+    for line in gcode_text.splitlines():
+        if line.startswith("; Z_HEIGHT:"):
+            layer, extruded = float(line.split(":")[1]), False
+        elif line.strip() == pause_gcode and layer is not None:
+            found.append((layer, extruded))
+        elif re.match(r"G[123] .*E\d*\.?\d+", line) and not re.search(r"E-", line):
+            extruded = True
+    return found
 
 
 def write_summary(summary):

@@ -20,6 +20,7 @@ corner_r = 3;        // corner radius seen from the front
 edge_c = 1;          // 45 degree chamfer on the bed edges (front of the body, back of the cover)
 part_x = 152;        // left face of the partition between fan section and electronics bay
 part_t = 2;
+inner_c = 3;         // 45 degree fillet between front plate and walls (stiffness, printable)
 
 /* [Fan, 120 mm PC fan] */
 fan_size = 120;
@@ -29,7 +30,7 @@ fan_hole_d = 4.3;
 fan_blade_d = 116;   // swept blade diameter (typical)
 fan_cx = 84;         // fan axis x
 fan_cz = body_h / 2; // fan axis z
-fan_standoff = 6;    // bosses between front plate and fan frame
+fan_standoff = 8;    // bosses between front plate and fan frame
 fan_boss_d = 9;
 
 /* [Grille] */
@@ -47,7 +48,7 @@ grille_spokes = 8;
 grille_screw_r = 63.5;
 grille_screw_a0 = 22.5;  // screw angles between the spokes
 grille_boss_d = 8.4;
-grille_boss_h = 5.6; // behind the front plate, stays below fan_standoff
+grille_boss_h = 7.6; // behind the front plate, stays below fan_standoff
 
 /* [Back cover] */
 back_t = 2.4;
@@ -67,7 +68,7 @@ bat_l = 72;          // the cable leaves at one end: that end up, through the sh
 cable_slot_w = 10;   // slot in the shelf above the battery, open towards the back
 bat_cx = 180;
 bat_clear = 0.5;     // radial clearance in the cradle
-bat_front_gap = 1;   // front plate to battery
+bat_front_gap = 3.5; // front plate to battery, clears the inner fillet
 bat_retain_gap = 1;  // retaining ribs on the back cover to battery
 cradle_z = [12, 52]; // lower faces of the two cradle ribs
 cradle_t = 2.4;
@@ -83,7 +84,7 @@ cover_y = 57;        // centre
 cover_z = 70;
 cover_w = 34;        // along y
 cover_hgt = 84;      // along z
-cover_out = 9;       // protrusion
+cover_out = 11;      // protrusion
 cover_t = 2;
 cover_r = 4;
 cover_screw_dz = 28;
@@ -96,7 +97,7 @@ screw_clear_d = 3.4;
 csk_d = 6.4;         // countersink at the surface, 90 degrees
 screw_head_d = 5.5;  // pan / socket head
 screw_head_h = 3;
-len_grille = 10;     // M3 x 10 countersunk, from the front
+len_grille = 12;     // M3 x 12 countersunk, from the front
 len_fan = 30;        // M3 x 30 socket head, from behind the fan
 len_back = 8;        // M3 x 8 countersunk, from the back
 len_cover = 8;       // M3 x 8 socket head, from inside the body
@@ -161,8 +162,9 @@ screw_table = [
     ["cover", len_cover, min(len_cover - wall, insert_len), insert_depth - (len_cover - wall)]];
 
 assert(wall >= 3 * 0.4 && front_t >= 3 * 0.4 && back_t >= 3 * 0.4, "Walls need at least three perimeters");
-assert(front_t + grille_boss_h - insert_depth >= 1.2, "Grille insert pocket too close to the front face");
-assert(fan_y - insert_depth >= 1.2, "Fan insert pocket too close to the front face");
+// heat-set inserts need material between pocket and visible face, otherwise the face deforms when pressing
+assert(front_t + grille_boss_h - insert_depth >= 3, "Grille insert pocket too close to the front face");
+assert(fan_y - insert_depth >= 3, "Fan insert pocket too close to the front face");
 assert(front_t + grille_boss_h <= fan_y - 0.3, "Grille bosses touch the fan");
 assert(grille_depth <= fan_y - 2, "Grille bars too close to the fan");
 assert(grille_gap <= 6, "Grille openings wider than 6 mm (finger safety)");
@@ -170,7 +172,7 @@ assert(ring_in - spigot_w > grille_hub_r + grille_rings * grille_bar, "Grille co
 assert(grille_screw_r - grille_boss_d / 2 > open_r, "Grille bosses reach into the opening");
 assert(grille_r - (grille_screw_r + csk_d / 2) >= 1.2, "Grille ring too narrow outside the countersinks");
 assert(fan_blade_d / 2 < open_r, "Front opening smaller than the fan blades");
-assert(cover_out - cover_t - insert_depth >= 0.5, "Cover insert pocket breaks through");
+assert(cover_out - insert_depth >= 3, "Cover insert pocket too close to the visible face");
 assert(shelf_z + shelf_t < body_h - wall, "Shelf above the top wall");
 assert(plate_pos[0] > fan_cx + grille_r + 3 && plate_pos[0] + plate_size[0] < body_w - corner_r - 2
        && plate_pos[1] + plate_size[1] < body_h - corner_r - 2, "Name plate outside the free front area");
@@ -235,6 +237,14 @@ module body() difference() {
                 along_y(edge_c, body_d - back_t) body_outline();
             }
             along_y(front_t, body_d + 1) body_inner();
+        }
+        // 45 degree fillet along the joint of front plate and walls
+        difference() {
+            along_y(front_t - eps, front_t + inner_c) body_inner();
+            hull() {
+                along_y(front_t - 2 * eps, front_t) body_inner(inner_c);
+                along_y(front_t + inner_c, front_t + inner_c + eps) body_inner();
+            }
         }
         // partition between fan section and electronics bay
         translate([part_x, front_t - eps, wall - eps]) cube([part_t, part_y1 - front_t + eps, body_h - 2 * wall + 2 * eps]);
