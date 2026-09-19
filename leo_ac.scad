@@ -14,13 +14,13 @@ eps = 0.01;
 body_w = 225;        // outer width (x); proportions of an 800 x 550 x 285 mm outdoor unit
 body_h = 155;        // outer height (z)
 body_d = 80;         // outer depth (y) without grille and service cover
-wall = 2.4;          // side, top and bottom walls, six 0.4 mm lines
-front_t = 2.4;       // front plate
-corner_r = 3;        // corner radius seen from the front
-edge_c = 1;          // 45 degree chamfer on the bed edges (front of the body, back of the cover)
+wall = 3.2;          // side, top and bottom walls, eight 0.4 mm lines (drop resistance)
+front_t = 3.2;       // front plate
+corner_r = 6;        // corner radius seen from the front, spreads the load of a drop on a corner
+edge_c = 1.5;        // 45 degree chamfer on the bed edges (front of the body, back of the cover)
 part_x = 152;        // left face of the partition between fan section and electronics bay
-part_t = 2;
-inner_c = 3;         // 45 degree fillet between front plate and walls (stiffness, printable)
+part_t = 2.4;
+inner_c = 4;         // 45 degree fillet between front plate and walls (stiffness, printable)
 
 /* [Fan, 120 mm PC fan] */
 fan_size = 120;
@@ -38,24 +38,24 @@ shroud_gap = 0.2;    // duct end to the fan frame face
 /* [Grille] */
 open_r = 59;         // opening in the front plate
 grille_r = 68;       // outer radius of the grille ring
-grille_t = 3;        // ring in front of the front plate
+grille_t = 4;        // ring in front of the front plate, first contact in a drop on the front
 grille_depth = 3;    // bars reach this far behind the front face
 spigot_t = 2;        // locating collar inside the opening
 spigot_w = 2.2;
 spigot_cl = 0.3;     // radial clearance of the collar
-grille_bar = 2;      // ring and spoke width
+grille_bar = 2.4;    // ring and spoke width
 grille_hub_r = 8;
 grille_rings = 6;
 grille_spokes = 8;
 grille_screw_r = 63.5;
 grille_screw_a0 = 22.5;  // screw angles between the spokes
 grille_boss_d = 8.4;
-grille_boss_h = 7.6; // behind the front plate, stays below fan_standoff
+grille_boss_h = 7.2; // behind the front plate, stays below fan_standoff
 
 /* [Back cover] */
-back_t = 2.4;
+back_t = 3;
 lip_h = 4;           // lip reaching into the body
-lip_t = 2.4;
+lip_t = 3;
 lip_cl = 0.25;       // clearance per side between lip and body wall
 boss_d = 8;          // screw bosses for inserts (back, service cover)
 boss_inset = 6.5;    // back bosses: axis distance from the outer edges
@@ -63,6 +63,7 @@ back_boss_len = 12;
 gusset = 14;         // 45 degree cone below the back bosses in print orientation
 slot_w = 1.6;        // intake slots, back and left side
 slot_pitch = 3.2;
+back_bar_x = 80;     // extra vertical bar through the back intake slots
 
 /* [Battery, 3.2 V 6000 mAh LiFePO4 pack] */
 bat_d = 35;          // 32700 cell, label "3,4 x 7 cm" incl. protection board; envelope with tolerance
@@ -70,15 +71,15 @@ bat_l = 72;          // the cable leaves at one end: that end up, through the sh
 cable_slot_w = 10;   // slot in the shelf above the battery, open towards the back
 bat_cx = 180;
 bat_clear = 0.5;     // radial clearance in the cradle
-bat_front_gap = 3.5; // front plate to battery, clears the inner fillet
+bat_front_gap = 4.5; // front plate to battery, clears the inner fillet
 bat_retain_gap = 1;  // retaining ribs on the back cover to battery
 cradle_z = [12, 52]; // lower faces of the two cradle ribs
-cradle_t = 2.4;
+cradle_t = 3;
 retain_z = [22, 46]; // lower faces of the two retaining ribs
 retain_t = 3;
 retain_w = 24;
 shelf_gap = 3;       // battery top to electronics shelf (cable, protection board)
-shelf_t = 2.4;
+shelf_t = 3;
 shelf_d = 50;        // shelf depth from the front plate
 
 /* [Service cover, right side] */
@@ -87,21 +88,36 @@ cover_z = 70;
 cover_w = 34;        // along y
 cover_hgt = 84;      // along z
 cover_out = 11;      // protrusion
-cover_t = 2;
+cover_t = 2.4;
 cover_r = 4;
-cover_screw_dz = 28;
+cover_screw_dz = 34;
+
+/* [Speed knob, potentiometer of the PWM fan controller] */
+pot_yz = [57, 68];        // axis on the service cover (y, z)
+pot_shaft = [6, 4.5, 15]; // D shaft: diameter, across the flat, length from the cover face (WH148 type, to be measured)
+pot_bush = [7, 7];        // threaded bushing M7: diameter, length from the panel inner face
+pot_nut = [11, 2];        // nut as cylinder: diameter across corners, thickness
+pot_body = [16.5, 18];    // housing incl. switch: diameter, depth behind the panel
+knob_d = 22;
+knob_h = 18;
+knob_gap = 1;             // knob skirt to the cover face
+knob_skirt = [12.5, 4];   // recess over nut and bushing: diameter, depth
+knob_bore_cl = 0.1;       // D bore clearance per side, press fit
+knob_flutes = 18;
+knob_c = 1.5;
 
 /* [Handle, top] */
-handle_len = 150;      // along x
-handle_h = 34;         // above the top wall
-handle_d = 20;         // along y
+handle_len = 170;      // along x
+handle_h = 42;         // above the top wall
+handle_d = 24;         // along y
 handle_cx = body_w / 2;
 handle_cy = body_d / 2;
 handle_bar = 12;       // grip thickness (z)
-handle_open = [96, 76, 12];  // opening: width at the bottom, width at the top, height of its vertical sides
+handle_open = [110, 90, 14];  // opening: width at the bottom, width at the top (hand breadth), height of its vertical sides
 handle_end = [15, 8];  // outer ends: slant inset at the top, height of the vertical foot face
 handle_c = 2.5;        // 45 degree bevels on all edges
-handle_screw_dx = [54, 69];  // screw axes from the handle centre, both sides
+handle_screw_dx = [62, 77];  // screw axes from the handle centre, both sides
+handle_rib = [2.4, 12, 55];  // ribs inside the top wall under each handle foot: thickness, height, depth from the front
 
 /* [Screws, M3 heat-set inserts] */
 insert_hole_d = 4.0; // Ruthex M3 x 5.7
@@ -111,7 +127,7 @@ screw_clear_d = 3.4;
 csk_d = 6.4;         // countersink at the surface, 90 degrees
 screw_head_d = 5.5;  // pan / socket head
 screw_head_h = 3;
-len_grille = 12;     // M3 x 12 countersunk, from the front
+len_grille = 14;     // M3 x 14 countersunk, from the front
 len_fan = 30;        // M3 x 30 socket head, from behind the fan
 len_back = 8;        // M3 x 8 countersunk, from the back
 len_cover = 8;       // M3 x 8 socket head, from inside the body
@@ -139,6 +155,8 @@ groove_z0 = 19;            // axis of the lowest groove
 groove_x = [160, 219];
 
 // ---------- derived values ----------
+pot_x = body_w + cover_out;                           // outer face of the service cover (panel)
+knob_bore_top = pot_shaft[2] - knob_gap + 1;          // knob coordinates, 1 mm beyond the shaft end
 logo_w = text_w(brand_sub, sub_size, sub_stroke, sub_gap);
 big_gap = (logo_w - text_w(brand, big_size, big_stroke, 0)) / (len(brand) - 1);
 logo_x0 = logo_cx - logo_w / 2;
@@ -181,7 +199,7 @@ screw_table = [
     ["cover", len_cover, min(len_cover - wall, insert_len), insert_depth - (len_cover - wall)],
     ["handle", len_handle, min(len_handle - wall, insert_len), insert_depth - (len_handle - wall)]];
 
-assert(wall >= 3 * 0.4 && front_t >= 3 * 0.4 && back_t >= 3 * 0.4, "Walls need at least three perimeters");
+assert(wall >= 3.2 && front_t >= 3.2 && back_t >= 3 && corner_r >= 5, "Drop resistance: walls >= 3.2 mm (back 3 mm), corner radius >= 5 mm");
 // heat-set inserts need material between pocket and visible face, otherwise the face deforms when pressing
 assert(front_t + grille_boss_h - insert_depth >= 3, "Grille insert pocket too close to the front face");
 assert(fan_y - insert_depth >= 3, "Fan insert pocket too close to the front face");
@@ -198,7 +216,13 @@ assert(fan_cx - open_r - shroud_t > wall + inner_c && fan_cx + open_r + shroud_t
        "Air duct hits the walls or the partition");
 assert(cover_out - insert_depth >= 3, "Cover insert pocket too close to the visible face");
 assert(shelf_z + shelf_t < body_h - wall, "Shelf above the top wall");
-assert(handle_h - handle_bar >= 20, "Handle opening too low for a hand");
+// hand under the grip: child hand breadth about 55-70 mm, adult 80-90 mm; comfortable finger clearance 30-35 mm
+assert(handle_h - handle_bar >= 30 && handle_open[1] >= 90, "Handle opening too small for a hand");
+assert(abs(pot_yz[0] - cover_y) + pot_body[0] / 2 < cover_w / 2 - cover_t - 0.5
+       && min([for (s = [-1, 1]) abs(pot_yz[1] - cover_z - s * cover_screw_dz)]) > boss_d / 2 + pot_body[0] / 2 + 1,
+       "Potentiometer does not fit between the cover walls and bosses");
+assert(pot_shaft[2] - knob_gap - knob_skirt[1] >= 8 && knob_h - knob_bore_top >= 2 && knob_skirt[1] > pot_nut[1] + 1,
+       "Knob: shaft engagement, top skin or skirt depth");
 assert(handle_end[1] > insert_depth && handle_open[2] > insert_depth, "Handle insert pockets reach the slants");
 assert(handle_screw_dx[0] - insert_hole_d / 2 - handle_open[0] / 2 >= 2 && handle_len / 2 - handle_screw_dx[1] - insert_hole_d / 2 >= 2,
        "Handle feet too thin around the inserts");
@@ -251,7 +275,7 @@ module back_boss(b) {
 
 module intake_slots_back() {
     bars = [[14, 44], [47, 76], [79, 108], [111, 141]];
-    for (x = [14.8:slot_pitch:146], z = bars) slot2d([x, z[0] + slot_w / 2], [x, z[1] - slot_w / 2], slot_w);
+    for (x = [14.8:slot_pitch:146], z = bars) if (abs(x - back_bar_x) > slot_w / 2 + 1.5) slot2d([x, z[0] + slot_w / 2], [x, z[1] - slot_w / 2], slot_w);
 }
 
 module intake_slots_side() {
@@ -290,6 +314,9 @@ module body() difference() {
             translate([bay_x0 - eps, front_t - eps, z]) cube([bay_x1 - bay_x0 + 2 * eps, bat_cy - front_t + eps, cradle_t]);
             translate([bat_cx, bat_cy, z - 1]) cylinder(r = bat_d / 2 + bat_clear, h = cradle_t + 2);
         }
+        // ribs under the handle feet: carry the load of a drop on the handle into the front plate
+        for (sx = [-1, 1]) let (x = handle_cx + sx * (handle_screw_dx[0] + handle_screw_dx[1]) / 2)
+            translate([x - handle_rib[0] / 2, front_t - eps, body_h - wall - handle_rib[1]]) cube([handle_rib[0], handle_rib[2] - front_t, handle_rib[1] + eps]);
         // electronics shelf, also stops the battery upwards
         translate([bay_x0 - eps, front_t - eps, shelf_z]) cube([bay_x1 - bay_x0 + 2 * eps, shelf_d + eps, shelf_t]);
     }
@@ -308,6 +335,7 @@ module body() difference() {
     translate([bat_cx - cable_slot_w / 2, bat_cy - 6, shelf_z - 1]) cube([cable_slot_w, shelf_d + front_t - bat_cy + 7, shelf_t + 2]);
     along_x(-1, wall + 1) intake_slots_side();
     for (p = cover_screws()) cyl_x(p, body_w - wall - 1, body_w + 1, screw_clear_d / 2);
+    cyl_x(pot_yz, body_w - wall - 1, body_w + 1, (pot_body[0] + 1.5) / 2);   // potentiometer housing into the bay
     for (p = handle_screws()) translate([p[0], p[1], body_h - wall - 1]) cylinder(d = screw_clear_d, h = wall + 2);
 }
 
@@ -442,10 +470,32 @@ module cover() difference() {
         for (p = cover_screws()) cyl_x(p, x0, x1 - cover_t + eps, boss_d / 2);
     }
     for (p = cover_screws()) cyl_x(p, x0 - 1, x0 + insert_depth, insert_hole_d / 2);
-    // two grip grooves on the outer face (bed side in print), as on the original valve cover
-    for (s = [-1, 1]) translate([x1 - 0.8, cover_y - cover_w / 2 + 6, cover_z + s * 8 - 1]) cube([1, cover_w - 12, 2]);
+    cyl_x(pot_yz, x1 - cover_t - 1, x1 + 1, (pot_bush[0] + 0.4) / 2);   // potentiometer bushing, held by its nut
 }
 module cover_print_pose() translate([0, 0, body_w + cover_out]) rotate([0, 90, 0]) children();   // outer face on the bed
+
+// ---------- speed knob ----------
+module d_profile(d, flat) intersection() { circle(d = d); translate([-d / 2, -d / 2]) square([flat, d]); }   // flat on +x
+module knob_local() difference() {   // z = 0 at the skirt, z = knob_h at the top face
+    union() {
+        cylinder(d = knob_d, h = knob_h - knob_c);
+        translate([0, 0, knob_h - knob_c - eps]) cylinder(d1 = knob_d, d2 = knob_d - 2 * knob_c, h = knob_c + eps);
+    }
+    for (i = [0:knob_flutes - 1]) rotate(i * 360 / knob_flutes)   // grip flutes, open at the skirt
+        translate([knob_d / 2 - 0.8, -0.6, -1]) cube([2, 1.2, knob_h - 4 + 1]);
+    translate([0, 0, -1]) cylinder(d = knob_skirt[0], h = knob_skirt[1] + 1);
+    translate([0, 0, knob_skirt[1] - eps]) linear_extrude(knob_bore_top - knob_skirt[1] + eps) offset(delta = knob_bore_cl) d_profile(pot_shaft[0], pot_shaft[1]);
+    translate([2, -0.6, knob_h - 0.8]) cube([knob_d / 2, 1.2, 1]);   // pointer groove on the top face, towards the flat
+}
+module knob() translate([pot_x + knob_gap, pot_yz[0], pot_yz[1]]) orient([1, 0, 0]) knob_local();
+module knob_print_pose() translate([0, 0, knob_h]) mirror([0, 0, 1]) children();   // top face on the bed
+module pot_local() {                 // z = 0 at the outer cover face
+    translate([0, 0, -cover_t - pot_body[1]]) cylinder(d = pot_body[0], h = pot_body[1]);
+    translate([0, 0, -cover_t - eps]) cylinder(d = pot_bush[0], h = pot_bush[1] + eps);
+    cylinder(d = pot_nut[0], h = pot_nut[1]);
+    translate([0, 0, -cover_t + pot_bush[1] - 1]) linear_extrude(pot_shaft[2] + cover_t - pot_bush[1] + 1) d_profile(pot_shaft[0], pot_shaft[1]);
+}
+module pot_env() translate([pot_x, pot_yz[0], pot_yz[1]]) orient([1, 0, 0]) pot_local();
 
 // ---------- handle ----------
 function handle_outer() = let (l = handle_len / 2, e = handle_end)
@@ -514,6 +564,8 @@ module assembly(explode = 0) {
     color("#f2f2ee") translate([0, 2 * explode, 0]) back();
     color("#8f9396") translate([explode, 0, 0]) cover();
     color("#8f9396") translate([0, 0, explode]) handle();
+    color("#8f9396") translate([2 * explode, 0, 0]) knob();
+    color("#3a3d41") translate([explode, 0, 0]) pot_env();
     color("#303236") translate([0, explode, 0]) fan_visual();
     color("#3f7fbf") translate([0, explode / 2, 0]) battery_env();
 }
@@ -522,9 +574,9 @@ module assembly(explode = 0) {
 if      (part == "assembly") assembly();
 else if (part == "exploded") assembly(40);
 else if (part == "metrics") echo("PROJECT_METRICS", [
-    ["wall", wall], ["front_t", front_t], ["back_t", back_t], ["body_mm", [body_w, body_d, body_h]],
+    ["wall", wall], ["front_t", front_t], ["back_t", back_t], ["corner_r", corner_r], ["body_mm", [body_w, body_d, body_h]],
     ["fan_size", fan_size], ["fan_t", fan_t], ["fan_pitch", fan_pitch], ["fan_hole_d", fan_hole_d],
-    ["fan_blade_d", fan_blade_d], ["fan_axis", [fan_cx, fan_cz]], ["fan_y", fan_y], ["shroud_r", [open_r, open_r + shroud_t]], ["shroud_gap", shroud_gap], ["open_d", 2 * open_r], ["grille_gap", grille_gap],
+    ["fan_blade_d", fan_blade_d], ["knob_shaft_engagement", pot_shaft[2] - knob_gap - knob_skirt[1]], ["knob_top_skin", knob_h - knob_bore_top], ["handle_clearance", handle_h - handle_bar], ["handle_open_top", handle_open[1]], ["fan_axis", [fan_cx, fan_cz]], ["fan_y", fan_y], ["shroud_r", [open_r, open_r + shroud_t]], ["shroud_gap", shroud_gap], ["open_d", 2 * open_r], ["grille_gap", grille_gap],
     ["bat_mm", [bat_d, bat_l]], ["bat_clear", bat_clear], ["bat_retain_gap", bat_retain_gap], ["shelf_gap", shelf_gap],
     ["lip_clearance", lip_cl], ["spigot_clearance", spigot_cl],
     ["insert_hole_d", insert_hole_d], ["insert_len", insert_len], ["insert_depth", insert_depth],
@@ -544,3 +596,4 @@ else if (part == "back") back_print_pose() back();
 else if (part == "grille") grille_print_pose() grille();
 else if (part == "cover") cover_print_pose() cover();
 else if (part == "handle") handle_print_pose() handle();
+else if (part == "knob") knob_print_pose() knob_local();

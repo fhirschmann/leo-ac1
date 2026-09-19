@@ -18,6 +18,7 @@ PARTS = {
     "grille": (1, "PETG-grau", 1),
     "cover": (1, "PETG-grau", 1),
     "handle": (1, "PETG-grau", 1),
+    "knob": (1, "PETG-grau", 1),
 }
 FULL_INFILL = set()
 FULL_INFILL_MATERIALS = {"TPU"}
@@ -29,6 +30,8 @@ ASSEMBLY = {
     "back": "back();",
     "cover": "cover();",
     "handle": "handle();",
+    "knob": "knob();",
+    "pot": "pot_env();",
     "fan": "fan_env();",
     "battery": "battery_env();",
     "screws_grille": "screws_grille();",
@@ -45,12 +48,12 @@ STL_DIR, COLOR_DIR, ASM_DIR, REPORT = "stl", "stl/multicolour", "asm", "docs/ver
 
 PRINTER = dict(machine="Bambu Lab H2S 0.4 nozzle", process="0.20mm Standard @BBL H2S",
                bed="Textured PEI Plate", envelope_mm=(340, 320, 340))
-PROCESS = dict(wall_loops=4, top_shell_layers=5, bottom_shell_layers=5, infill=25, pattern="gyroid")
+PROCESS = dict(wall_loops=6, top_shell_layers=5, bottom_shell_layers=5, infill=30, pattern="gyroid")   # drop resistant
 # Filament slots of the project 3MF, 1-based in this order; inlay slots name their inlay
 FILAMENTS = [dict(material="PETG-weiss", profile="Bambu PETG Basic @BBL H2S", colour="#FFFFFF"),
              dict(material="PETG-grau", profile="Bambu PETG Basic @BBL H2S", colour="#8E9294"),
              dict(material="PETG-grau", profile="Bambu PETG Basic @BBL H2S", inlay="label", colour="#8E9294")]
-PLATES = [("Gehäuse", ["body"]), ("Rückwand", ["back"]), ("Graue Teile", ["grille", "cover", "handle"])]
+PLATES = [("Gehäuse", ["body"]), ("Rückwand", ["back"]), ("Graue Teile", ["grille", "cover", "handle", "knob"])]
 PROJECT_3MF = "stl/leo_ac1_all_parts.3mf"
 SLICER_SUMMARY = "docs/slicer-summary.json"
 
@@ -74,7 +77,7 @@ def checks(ctx):
     sweep(moving, fixed, direction, length, step), union(names), save(name, data), summary, open_items.
     Assert failures abort the run; the returned dict goes into the report."""
     m = ctx.metrics
-    assert min(m["wall"], m["front_t"], m["back_t"]) >= 1.2, "Walls below three perimeters"
+    assert min(m["wall"], m["front_t"]) >= 3.2 and m["back_t"] >= 3 and m["corner_r"] >= 5, "Drop resistance: walls and corner radius"
 
     # Standard dimensions, independent of the model
     assert (m["fan_size"], m["fan_t"], m["fan_pitch"]) == (120, 25, 105), "120 mm fan: 120 x 120 x 25, holes 105 mm apart"
@@ -83,6 +86,8 @@ def checks(ctx):
     assert m["insert_hole_d"] == 4.0 and m["insert_len"] == 5.7, "Ruthex M3 insert: hole 4.0 mm, length 5.7 mm"
     assert m["insert_depth"] >= m["insert_len"] + 0.5, "Insert pocket needs 0.5 mm below the insert"
     assert m["grille_gap"] <= 6, "Grille openings above 6 mm let children's fingers through"
+    assert m["knob_shaft_engagement"] >= 8 and m["knob_top_skin"] >= 2, "Knob on the shaft"
+    assert m["handle_clearance"] >= 30 and m["handle_open_top"] >= 90, "Handle: 30 mm finger clearance, 90 mm hand breadth"
     screws = {name: dict(length=length, engagement_mm=round(eng, 2), tip_margin_mm=round(margin, 2))
               for name, length, eng, margin in m["screws"]}
     for name, info in screws.items():
@@ -92,7 +97,7 @@ def checks(ctx):
     contacts = {}
     for name, base, shift in (("grille", "body", [0, 0.05, 0]), ("fan", "body", [0, -0.05, 0]),
                               ("back", "body", [0, -0.05, 0]), ("cover", "body", [-0.05, 0, 0]), ("battery", "body", [0, 0, -0.05]),
-                              ("handle", "body", [0, 0, -0.05])):
+                              ("handle", "body", [0, 0, -0.05]), ("pot", "cover", [0.05, 0, 0])):
         volume = (ctx.solids[name].translate(shift) ^ ctx.solids[base]).volume()
         assert volume > 0.1, f"{name} does not rest on {base}"
         contacts[f"{name}@{base}"] = round(volume, 3)
@@ -127,7 +132,8 @@ def checks(ctx):
             ("back_off", ["back", "screws_back"], others("back", "screws_back"), [0, 1, 0], 12, 0.25),
             ("battery_out", ["battery"], others("battery", "back", "screws_back"), [0, 1, 0], 90, 1),
             ("fan_out", ["fan", "screws_fan"], others("fan", "screws_fan", "battery", "back", "screws_back"), [0, 1, 0], 90, 1),
-            ("cover_off", ["cover"], ["body"], [1, 0, 0], 15, 0.5),
+            ("knob_off", ["knob"], others("knob"), [1, 0, 0], 25, 0.5),
+            ("cover_off", ["cover", "pot"], ["body"], [1, 0, 0], 30, 0.5),
             ("handle_up", ["handle"], ["body"], [0, 0, 1], 15, 0.5)):
         count, first, maximum = ctx.sweep(moving, fixed, direction, length, step)
         paths.append(dict(name=name, collisions=count, first_mm=first, max_volume_mm3=round(maximum, 4)))
@@ -153,14 +159,15 @@ def checks(ctx):
 
     ctx.open_items.append("Akku nachmessen (Etikett: Ø34 × 70 mm, Modell Ø35 × 72 mm) und Kabelabgang prüfen")
     ctx.open_items.append("Lüfter messen (Rahmen 120 × 120 × 25, Lochabstand 105, Kabelabgang)")
-    ctx.open_items.append("Elektronik (Wandler, Laden, Schalter) fehlt noch: Lage im Elektronikfach und Durchbrüche")
+    ctx.open_items.append("Poti des PWM-Reglers messen (Annahme WH148: D-Achse Ø6/4,5 × 15, Buchse M7, Gehäuse Ø16,5 × 18)")
+    ctx.open_items.append("PWM-Platine und USB-C-Buchse messen: Lage im Elektronikfach, Durchbruch für USB-C im Servicedeckel")
     return dict(standard_screws=screws, contact_volumes_mm3=contacts, stops=stops, sampled_paths=paths,
                 insert_probes=inserts, air_duct=duct)
 
 
 VIEWER = dict(
     title="LEO-AC1", page_title="LEO-AC1 Ventilator", eyebrow="Baugruppe · Einbaulage",
-    dims=[("Breite", "234"), ("Tiefe", "83"), ("Höhe", "189")],
+    dims=[("Breite", "234"), ("Tiefe", "84"), ("Höhe", "197")],
     groups=[("weiss", "Gedruckt · PETG weiß"), ("grau", "Gedruckt · PETG grau"),
             ("schrauben", "Schrauben M3"), ("zugekauft", "Zugekauft")],
     hidden_groups=["zugekauft"],
@@ -172,8 +179,10 @@ VIEWER = dict(
            ("grille", "Lüftergitter", "grau", "#8f9396", "1x", [0, -1, 0]),
            ("cover", "Servicedeckel", "grau", "#8f9396", "1x", [1, 0, 0]),
            ("handle", "Griff", "grau", "#8f9396", "1x", [0, 0, 1.2]),
+           ("knob", "Drehknopf", "grau", "#8f9396", "1x", [2, 0, 0]),
            ("fan_visual", "Lüfter 120 mm", "zugekauft", "#303236", "1x", [0, 0.8, 0]),
            ("battery", "Akku LiFePO4 3,2 V", "zugekauft", "#3f7fbf", "1x", [0, 0.5, 0]),
+           ("pot", "Poti PWM-Regler (Annahme)", "zugekauft", "#3a3d41", "1x", [1, 0, 0]),
            # screws leave their part: same direction, further out
            ("screws_grille", "Gitter · M3 × 10 Senkkopf", "schrauben", "#26282b", "4x", [0, -1.6, 0]),
            ("screws_fan", "Lüfter · M3 × 30 Zylinderkopf", "schrauben", "#26282b", "4x", [0, 1.4, 0]),
@@ -200,4 +209,7 @@ VIEWS = {"01_assembly": ("assembly();", "-160,-330,230,112,40,70"),
                             "189,-260,420,189,78,0"),
          # air duct from behind: body cut at 30 mm depth, fan hidden
          "05_duct": ("intersection() { body(); translate([-1, -1, -1]) cube([body_w + 2, 30, body_h + 2]); }",
-                     "112,420,300,112,0,77")}
+                     "112,420,300,112,0,77"),
+         # service cover with the speed knob, from the right
+         "06_knob": ("intersection() { assembly(); translate([190, 20, 15]) cube([80, 70, 110]); }",
+                     "420,-120,140,230,57,68")}

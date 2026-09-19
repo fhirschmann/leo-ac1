@@ -1,19 +1,19 @@
 {
-  "profile": "Bambu Lab H2S 0.4 nozzle / 0.20mm Standard @BBL H2S, 4 walls, 5/5 top/bottom, no supports; 25 % gyroid, 100 % zig-zag: none",
+  "profile": "Bambu Lab H2S 0.4 nozzle / 0.20mm Standard @BBL H2S, 6 walls, 5/5 top/bottom, no supports; 30 % gyroid, 100 % zig-zag: none",
   "parts": [
     {
       "part": "body",
       "quantity": 1,
       "material": "PETG-weiss",
       "passed": true,
-      "source_sha256": "f772623ae7d384387369771f9edd45850d1f77700319711ee80c2e18720e5a0b",
+      "source_sha256": "6326933948c8b2f3444afaacb68cc516fd91654d3891c134b908dd9404f2e64f",
       "exit_code": 0,
       "result_code": 0,
       "warnings": "",
-      "hours": 6.438,
-      "grams": 266.52,
-      "wall_loops": 4,
-      "infill_percent": 25.0,
+      "hours": 7.686,
+      "grams": 335.738,
+      "wall_loops": 6,
+      "infill_percent": 30.0,
       "layer_height": 0.20000000298023224,
       "effective_settings": {
         "sparse_infill_pattern": "gyroid",
@@ -29,14 +29,14 @@
       "quantity": 1,
       "material": "PETG-weiss",
       "passed": true,
-      "source_sha256": "e94aee530f68390b60767455d82b9d7f22ea0a64fe06141a3d8a070883d5a3e1",
+      "source_sha256": "bc47e265f30734b15a2b613d7c57c78a974e5aff3af4f2b3692d7447e0560d23",
       "exit_code": 0,
       "result_code": 0,
       "warnings": "",
-      "hours": 3.307,
-      "grams": 85.059,
-      "wall_loops": 4,
-      "infill_percent": 25.0,
+      "hours": 3.884,
+      "grams": 99.724,
+      "wall_loops": 6,
+      "infill_percent": 30.0,
       "layer_height": 0.20000000298023224,
       "effective_settings": {
         "sparse_infill_pattern": "gyroid",
@@ -52,14 +52,14 @@
       "quantity": 1,
       "material": "PETG-grau",
       "passed": true,
-      "source_sha256": "f1dd7b7268875fca8230907b036132f644b3308d47fb693a98b6b79f17b666ec",
+      "source_sha256": "9b2827e1a76be0931328b0e92f8ba580a4aba8cf5d6d25e777c2eba2db7f90cb",
       "exit_code": 0,
       "result_code": 0,
       "warnings": "",
-      "hours": 1.206,
-      "grams": 37.479,
-      "wall_loops": 4,
-      "infill_percent": 25.0,
+      "hours": 1.514,
+      "grams": 50.128,
+      "wall_loops": 6,
+      "infill_percent": 30.0,
       "layer_height": 0.20000000298023224,
       "effective_settings": {
         "sparse_infill_pattern": "gyroid",
@@ -75,14 +75,14 @@
       "quantity": 1,
       "material": "PETG-grau",
       "passed": true,
-      "source_sha256": "786375f7e5f586120fe7b2f2caf5a7b351dca8a4a5a6b91ad4254247754aa09d",
+      "source_sha256": "465091b25b3f2a77a1c41b932b4ac2c8667c27e580cf8c438e3e28e00453ddc0",
       "exit_code": 0,
       "result_code": 0,
       "warnings": "",
-      "hours": 0.436,
-      "grams": 12.097,
-      "wall_loops": 4,
-      "infill_percent": 25.0,
+      "hours": 0.462,
+      "grams": 13.509,
+      "wall_loops": 6,
+      "infill_percent": 30.0,
       "layer_height": 0.20000000298023224,
       "effective_settings": {
         "sparse_infill_pattern": "gyroid",
@@ -98,14 +98,37 @@
       "quantity": 1,
       "material": "PETG-grau",
       "passed": true,
-      "source_sha256": "baa89ac49359fb35c0b65b5b2bed513aa354b4cc11123f1e734ce82eab9c5e2f",
+      "source_sha256": "611002a317e09c6078b2776cc49a8dad54302e363a0c53a61d0c707a93171364",
       "exit_code": 0,
       "result_code": 0,
       "warnings": "",
-      "hours": 0.98,
-      "grams": 30.739,
-      "wall_loops": 4,
-      "infill_percent": 25.0,
+      "hours": 1.615,
+      "grams": 55.219,
+      "wall_loops": 6,
+      "infill_percent": 30.0,
+      "layer_height": 0.20000000298023224,
+      "effective_settings": {
+        "sparse_infill_pattern": "gyroid",
+        "enable_support": "0",
+        "curr_bed_type": "Textured PEI Plate",
+        "top_shell_layers": "5",
+        "bottom_shell_layers": "5"
+      },
+      "start_gcode_diagnostic": true
+    },
+    {
+      "part": "knob",
+      "quantity": 1,
+      "material": "PETG-grau",
+      "passed": true,
+      "source_sha256": "e414076f1c5e7d3618e9fb0ca5bb4b5f19961fc0d8edbacb48ac11924c343ccb",
+      "exit_code": 0,
+      "result_code": 0,
+      "warnings": "",
+      "hours": 0.456,
+      "grams": 5.964,
+      "wall_loops": 6,
+      "infill_percent": 30.0,
       "layer_height": 0.20000000298023224,
       "effective_settings": {
         "sparse_infill_pattern": "gyroid",
@@ -117,13 +140,13 @@
       "start_gcode_diagnostic": true
     }
   ],
-  "total_parts": 5,
-  "total_grams_individual_plates": 431.9,
-  "total_hours_individual_plates": 12.4,
+  "total_parts": 6,
+  "total_grams_individual_plates": 560.3,
+  "total_hours_individual_plates": 15.6,
   "production_gcode": false,
   "project_3mf": {
     "file": "stl/leo_ac1_all_parts.3mf",
-    "parts": 5,
+    "parts": 6,
     "plates": 3,
     "layout": [
       {
@@ -158,10 +181,11 @@
         "parts": [
           "cover",
           "grille",
-          "handle"
+          "handle",
+          "knob"
         ],
         "size_mm": [
-          172.0,
+          180.0,
           172.0
         ]
       }
@@ -174,9 +198,9 @@
     "multicolour_slices": {
       "Gehäuse": {
         "plate": 1,
-        "hours": 6.63,
+        "hours": 7.87,
         "grams_by_filament": {
-          "1": 266.53,
+          "1": 335.09,
           "3": 0.84
         },
         "warnings": ""
@@ -184,6 +208,6 @@
     },
     "pause_slices": {},
     "own_infill_parts": 0,
-    "sha256": "6e06225bc8059bc06e6de64a3e275f435ddeeb5c702c02dae68b4bd728d9ca0c"
+    "sha256": "128d6420c60506c13ec06bccd8dab561ce4a6185e4a4be754b36cffd362d973d"
   }
 }
