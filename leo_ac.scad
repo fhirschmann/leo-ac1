@@ -120,9 +120,9 @@ knob_c = 1.2;
 chg_pcb = [35.4, 11, 1.6];     // 2-in-1 LiFePO4 charge + 12 V boost module: length (y), width (z), thickness
 chg_comp_h = 2;                // parts on the top side
 chg_sink = [8.8, 8.8, 5, 6];   // two stick-on aluminium heatsinks: y, z, height, gap between them
-chg_z = 110;                   // centre height on the partition, near the fan rim where the intake air converges
-chg_gap = 2.5;                 // air gap between board and partition
-chg_y0 = 38.5;                 // front end of the board, behind the fan
+chg_z = 104;                   // centre height on the partition, just outside the fan blades where the intake air converges
+chg_gap = 2;                   // air gap between board and partition; parts stay clear of the fan frame
+chg_y0 = 31;                   // front end of the board: heatsinks end right behind the fan frame
 // solder pads (IN, B, O) and parts reach the long edges: no grooves. The board back sits on two pads with heat-resistant
 // double-sided tape, its lower edge on a ledge that stays behind the part side.
 chg_pads = [[5.5, 4], [21.5, 6]];  // pads behind the board, clear of the through-hole solder pads: start from the front end, length
@@ -253,8 +253,9 @@ assert(fan_cx - open_r - shroud_t > wall + inner_c && fan_cx + open_r + shroud_t
        && fan_cz - open_r - shroud_t > wall + inner_c && fan_cz + open_r + shroud_t < body_h - wall - inner_c,
        "Air duct hits the walls or the partition");
 assert(shelf_z + shelf_t < body_h - wall, "Shelf above the top wall");
-assert(part_x - chg_gap - chg_pcb[2] + chg_ledge[1] > fan_cx + fan_size / 2 + 0.3 && chg_y0 - 1.5 > fan_y + fan_t + 0.3
-       && chg_y0 + chg_pcb[0] < body_d - back_t - 1, "Charge module rails in the fan removal path or module beyond the back");
+assert(part_x - chg_gap - chg_pcb[2] - chg_comp_h > fan_cx + fan_size / 2 + 0.3
+       && chg_y0 + (chg_pcb[0] - 2 * chg_sink[0] - chg_sink[3]) / 2 > fan_y + fan_t + 0.5
+       && chg_y0 + chg_pcb[0] < body_d - back_t - 1, "Charge module reaches the fan frame or beyond the back");
 assert(bat_cx - bat_d / 2 - bat_bms[1] - bat_clear > bay_x0 + 1, "BMS board of the battery hits the partition");
 assert(mount_top < fan_cz - fan_size / 2 - 2 && (mount_boss_d - mount_insert[0]) / 2 >= mount_insert[2] + 1.5 && mount_floor >= 2,
        "Mount boss hits the fan, is thinner than the datasheet wall + 1.5 mm, or its floor is too thin");

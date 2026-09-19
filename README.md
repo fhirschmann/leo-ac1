@@ -65,7 +65,7 @@ Akku (JST-PH, mit eingebautem BMS) ──► B+ / B−
 
 - Das Modul lädt den Akku mit bis zu 1 A auf 3,6 V und liefert gleichzeitig 12 V (USV-Betrieb): Der Lüfter läuft auch beim Laden. Netzteil mit mindestens 2 A verwenden.
 - Das BMS im Akku bleibt als zweite Schutzebene dazwischen (Überladung, Tiefentladung, Kurzschluss); das Modul schaltet bei 2,6 V vorher ab.
-- Das Modul sitzt hinter dem Lüfter im angesaugten Luftstrom, 2,5 mm vor der Trennwand, mit zwei Kühlkörpern. Beim Laden mit 1 A wird der Chip laut einer Käuferbewertung ohne Kühlung bis ca. 70 °C warm; mit R3 = 2,4 kΩ lädt es mit 0,5 A und entsprechend kühler.
+- Das Modul sitzt direkt hinter dem Lüfter im angesaugten Luftstrom, 2 mm vor der Trennwand, mit zwei Kühlkörpern. Beim Laden mit 1 A wird der Chip laut einer Käuferbewertung ohne Kühlung bis ca. 70 °C warm; mit R3 = 2,4 kΩ lädt es mit 0,5 A und entsprechend kühler.
 - Stromaufnahme prüfen: 12 V × Lüfterstrom (Typenschild) darf die ca. 0,32 A des Moduls nicht überschreiten; der Akku liefert dabei gut 1 A.
 
 ## Zusammenbau

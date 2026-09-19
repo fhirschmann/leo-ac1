@@ -236,6 +236,6 @@ VIEWS = {"01_assembly": ("assembly();", "-160,-330,230,112,40,70"),
          "06_knob": ("intersection() { assembly(); translate([165, 0, 20]) cube([100, 80, 140]); }",
                      "420,-120,200,230,40,90"),
          # charge/boost module on the partition in the air stream, from the back with the back cover removed
-         "08_charge_module": ("intersection() { union() { color(\"#f2f2ee\") body(); color(\"#c9c9c9\") chg_module_env(); color(\"#303236\") fan_visual(); } translate([95, 30, 85]) cube([60, 45, 55]); }", "20,260,220,140,55,110"),
+         "08_charge_module": ("intersection() { union() { color(\"#f2f2ee\") body(); color(\"#c9c9c9\") chg_module_env(); color(\"#303236\") fan_visual(); } translate([95, 22, 80]) cube([60, 53, 50]); }", "20,260,220,140,50,104"),
          # underside with the M5 mount insert
          "07_underside": ("body();", "40,-160,-260,112,40,40")}
