@@ -39,6 +39,7 @@ ASSEMBLY = {
     "led": "led_env();",
     "chg_module": "chg_module_env();",
     "usb_trigger": "usbc_env();",
+    "switch": "sw_env();",
     "fan": "fan_env();",
     "battery": "battery_env();",
     "screws_grille": "screws_grille();",
@@ -124,7 +125,7 @@ def checks(ctx):
     contacts = {}
     for name, base, shift in (("grille", "body", [0, 0.05, 0]), ("fan", "body", [0, -0.05, 0]),
                               ("back", "body", [0, -0.05, 0]), ("cover", "body", [-0.05, 0, 0]), ("battery", "body", [0, 0, -0.05]),
-                              ("handle", "body", [0, 0, -0.05]), ("pot", "body", [0.05, 0, 0]), ("pot_nut", "body", [-0.05, 0, 0]), ("chg_module", "body", [0.05, 0, -0.05]), ("led", "body", [0, -0.05, 0]), ("feet", "body", [0, 0, 0.05]), ("usb_trigger", "back", [0, 0.05, 0])):
+                              ("handle", "body", [0, 0, -0.05]), ("pot", "body", [0.05, 0, 0]), ("pot_nut", "body", [-0.05, 0, 0]), ("chg_module", "body", [0.05, 0, -0.05]), ("led", "body", [0, -0.05, 0]), ("feet", "body", [0, 0, 0.05]), ("usb_trigger", "back", [0, 0.05, 0]), ("switch", "back", [0, -0.05, 0])):
         volume = (ctx.solids[name].translate(shift) ^ ctx.solids[base]).volume()
         assert volume > 0.1, f"{name} does not rest on {base}"
         contacts[f"{name}@{base}"] = round(volume, 3)
@@ -159,21 +160,22 @@ def checks(ctx):
     paths = []
     for name, moving, fixed, direction, length, step in (
             ("grille_front", ["grille", "screws_grille"], ["body", "fan", "screws_fan"], [0, -1, 0], 12, 0.25),
-            ("back_off", ["back", "screws_back", "usb_trigger"], others("back", "screws_back", "usb_trigger"), [0, 1, 0], 12, 0.25),
-            ("battery_out", ["battery"], others("battery", "back", "screws_back", "usb_trigger"), [0, 1, 0], 90, 1),
-            ("chg_module_out", ["chg_module"], others("chg_module", "back", "screws_back", "usb_trigger"), [0, 1, 0], 45, 1),
-            ("fan_out", ["fan", "screws_fan"], others("fan", "screws_fan", "battery", "chg_module", "back", "screws_back", "usb_trigger"), [0, 1, 0], 90, 1),
+            ("back_off", ["back", "screws_back", "usb_trigger", "switch"], others("back", "screws_back", "usb_trigger", "switch"), [0, 1, 0], 12, 0.25),
+            ("battery_out", ["battery"], others("battery", "back", "screws_back", "usb_trigger", "switch"), [0, 1, 0], 90, 1),
+            ("chg_module_out", ["chg_module"], others("chg_module", "back", "screws_back", "usb_trigger", "switch"), [0, 1, 0], 45, 1),
+            ("fan_out", ["fan", "screws_fan"], others("fan", "screws_fan", "battery", "chg_module", "back", "screws_back", "usb_trigger", "switch"), [0, 1, 0], 90, 1),
             ("knob_off", ["knob"], others("knob"), [1, 0, 0], 25, 0.5),
             ("cover_off", ["cover"], ["body", "pot", "pot_nut", "pwm_board", "knob"], [1, 0, 0], 30, 0.5),   # glued in; the knob can stay on
             ("handle_up", ["handle"], ["body"], [0, 0, 1], 15, 0.5),
             ("feet_down", ["feet"], ["body"], [0, 0, -1], 6, 0.5),
             # the USB-C module comes off with the back cover (back_off), then out of its channel
-            ("usb_trigger_from_back", ["usb_trigger"], ["back"], [0, -1, 0], 16, 0.5)):
+            ("usb_trigger_from_back", ["usb_trigger"], ["back"], [0, -1, 0], 16, 0.5),
+            ("switch_out", ["switch"], ["back"], [0, 1, 0], 25, 0.5)):
         count, first, maximum = ctx.sweep(moving, fixed, direction, length, step)
         paths.append(dict(name=name, collisions=count, first_mm=first, max_volume_mm3=round(maximum, 4)))
         assert count == 0, f"Path {name} obstructed at {first} mm"
     # PWM board with the potentiometer: after knob, cover and nut, away from the wall until the shaft is clear, then out the back
-    fixed = ctx.union(others("pot", "pot_nut", "pwm_board", "knob", "cover", "back", "screws_back", "usb_trigger"))
+    fixed = ctx.union(others("pot", "pot_nut", "pwm_board", "knob", "cover", "back", "screws_back", "usb_trigger", "switch"))
     moving = ctx.union(["pot", "pwm_board"])
     clear_x = m["pot_shaft_len"] + m["wall"] + 1          # shaft end clear of the inner wall face
     blocked = [("away", float(d)) for d in np.arange(0, clear_x + 0.01, 0.5) if (moving.translate([-d, 0, 0]) ^ fixed).volume() > 0.01]
@@ -232,6 +234,7 @@ VIEWER = dict(
            ("chg_module", "Charge/boost module with 2 heatsinks", "bought", "#c9c9c9", "1x", [0, 0.8, 0]),
            ("led", "Charge indicator LED 3 mm, behind the O", "bought", "#9fd3ff", "1x", [0, 1, 0]),
            ("usb_trigger", "USB-C PD trigger, 5 V (Type A)", "bought", "#4b2a7a", "1x", [0, 1.5, 0]),
+           ("switch", "Power switch KCD11, battery plus", "bought", "#1b1b1b", "1x", [0, 1.8, 0]),
            ("pwm_board", "PWM board CNY-FA5-PRO (assumed 48 × 34)", "bought", "#2e6b3f", "1x", [-0.5, 0, 0]),
            # screws leave their part: same direction, further out
            ("screws_grille", "Grille · M3 × 12 button head", "screws", "#26282b", "4x", [0, -1.6, 0]),

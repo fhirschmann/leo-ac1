@@ -155,11 +155,21 @@ handle_ins_depth = 8.5;      // insert pockets in the feet, from the key face (R
 usbc = [13, 10, 4];          // module incl. receptacle: length (y), width (x), height (z) — listing, to be measured
 usbc_shell = [8.94, 3.26];   // USB-C receptacle shell: width, height (USB-C spec), protrudes beyond the board by >= usbc_plate
 usbc_plate = 2.4;            // back cover thinned to this around the module: receptacle flush with the face, board edge rests on it
-usbc_xz = [213, 44];         // receptacle axis: low right in the electronics bay, between two battery saddles, clear of the back lip
+usbc_xz = [205, 44];         // receptacle axis: low right in the electronics bay, between two battery saddles; its wall stop stays beside the battery path
 usbc_cl = 0.2;               // clearance in channel, plate opening and to the stop
 usbc_wall = 2;               // channel on the inside of the back cover: side walls and floor, open at the top for the wires
 usbc_stop = [4, 6];          // stop on the right wall behind the module end (takes the plug force with the back cover on): thickness, height
                              // (reaches below the module, the wires leave its end at the top)
+
+/* [Power switch: KCD11 mini rocker 10 x 15 mm, snap-in, in the battery plus line] */
+sw_xz = [183, 44];           // axis in the back cover: left of the USB-C socket, between two battery saddles
+sw_cut = [8.6, 13.6];        // panel hole (x, z) — KCD11 typical, to be measured
+sw_bezel = [10.2, 15.2, 2];  // frame on the outside: width, height, thickness
+sw_rocker = 4;               // rocker above the frame
+sw_body = [8.4, 13.4, 11];   // housing behind the frame
+sw_pins = 6;                 // blade terminals behind the housing
+sw_panel = 1.5;              // panel thickness for the snap clips: back cover thinned around the hole from inside
+sw_recess = 3;               // width of the thinned zone around the hole (clips)
 
 /* [Feet: TPU strips, each screwed with two M3 x 8 from below into Ruthex inserts] */
 foot_w = 16;          // width (x)
@@ -326,6 +336,12 @@ assert(mount_top < fan_cz - fan_size / 2 - 2 && (mount_boss_d - mount_insert[0])
        "Mount boss hits the fan, is thinner than the datasheet wall + 1.5 mm, or its floor is too thin");
 assert(mount_xy[0] + mount_doubler[0] / 2 >= part_x - 1, "Mount doubler does not reach the partition");
 assert(back_t - head_pocket[1] >= 2, "Back cover too thin under the recessed screw heads");
+assert(usbc_xz[0] - usbc[1] / 2 - usbc_cl > bat_cx + bat_d / 2 + 2,   // the wall stop stays out of the battery removal path
+       "USB-C module: its stop on the right wall reaches the battery path");
+assert(sw_xz[1] - sw_cut[1] / 2 - sw_recess > cradle_z[1] + cradle_t + 0.5 && sw_xz[1] + sw_cut[1] / 2 + sw_recess < cradle_z[2] - 0.5
+       && sw_xz[0] + sw_cut[0] / 2 + sw_recess + 2 < usbc_xz[0] - usbc[1] / 2 - usbc_cl - usbc_wall && sw_xz[0] - sw_cut[0] / 2 - sw_recess > bay_x0 + 3
+       && back_t - sw_panel >= 2 && sw_body[0] < sw_cut[0] && sw_body[1] < sw_cut[1] && sw_bezel[0] > sw_cut[0] + 1 && sw_bezel[1] > sw_cut[1] + 1,
+       "Power switch: hits a battery saddle, the USB-C channel or the partition, or hole and frame do not match");
 assert(usbc_stop[0] >= 4 && usbc_stop[1] >= usbc[2] && usbc_wall >= 2 && back_t - usbc_plate >= 1 && usbc[0] - usbc_plate >= 8, "USB-C module: back cover recess too shallow or module too short for the channel");
 assert(usbc_xz[0] + usbc[1] / 2 + usbc_cl < bay_x1 - lip_cl - lip_t && usbc_xz[0] - usbc[1] / 2 - usbc_cl - usbc_wall > bay_x0 + 5
        && usbc_xz[1] + usbc[2] / 2 + usbc_cl < body_h - wall - handle_rib[1] - 1
@@ -698,6 +714,10 @@ module back() difference() {
         }
     }
     along_y(y1 - 1, body_d + 1) intake_slots_back();
+    // power switch: hole, back cover thinned around it from inside for the snap clips
+    translate([sw_xz[0] - sw_cut[0] / 2, y1 - 1, sw_xz[1] - sw_cut[1] / 2]) cube([sw_cut[0], back_t + 2, sw_cut[1]]);
+    translate([sw_xz[0] - sw_cut[0] / 2 - sw_recess, y1 - 1, sw_xz[1] - sw_cut[1] / 2 - sw_recess])
+        cube([sw_cut[0] + 2 * sw_recess, 1 + back_t - sw_panel, sw_cut[1] + 2 * sw_recess]);
     // USB-C module: recess from the inside leaves usbc_plate in front of the board, opening for the receptacle
     translate([usbc_xz[0] - usbc[1] / 2 - usbc_cl, y1 - 1, usbc_xz[1] - usbc[2] / 2 - usbc_cl]) cube([usbc[1] + 2 * usbc_cl, 1 + back_t - usbc_plate, usbc[2] + 2 * usbc_cl]);
     usbc_stadium(body_d - usbc_plate - 1, body_d + 1, usbc_cl);
@@ -779,6 +799,12 @@ module led_env() {                   // 3 mm LED: body in the pocket, flange on 
 }
 module usbc_stadium(y0, y1, grow) along_y(y0, y1) translate(usbc_xz) hull()
     for (s = [-1, 1]) translate([s * (usbc_shell[0] - usbc_shell[1]) / 2, 0]) circle(d = usbc_shell[1] + 2 * grow);
+module sw_env() {                  // KCD11 rocker: frame and rocker outside, housing and blades inside
+    translate([sw_xz[0] - sw_bezel[0] / 2, body_d, sw_xz[1] - sw_bezel[1] / 2]) cube([sw_bezel[0], sw_bezel[2], sw_bezel[1]]);
+    translate([sw_xz[0] - sw_bezel[0] / 2 + 1, body_d + sw_bezel[2] - eps, sw_xz[1] - sw_bezel[1] / 2 + 1]) cube([sw_bezel[0] - 2, sw_rocker + eps, sw_bezel[1] - 2]);
+    translate([sw_xz[0] - sw_body[0] / 2, body_d - sw_body[2], sw_xz[1] - sw_body[1] / 2]) cube([sw_body[0], sw_body[2] + eps, sw_body[1]]);
+    translate([sw_xz[0] - 3, body_d - sw_body[2] - sw_pins, sw_xz[1] - 4]) cube([6, sw_pins + eps, 8]);
+}
 module usbc_env() {                 // PD trigger: board with parts up to the thinned back cover, receptacle through it
     translate([usbc_xz[0] - usbc[1] / 2, usbc_y0, usbc_xz[1] - usbc[2] / 2]) cube([usbc[1], usbc[0] - usbc_plate, usbc[2]]);
     usbc_stadium(body_d - usbc_plate - eps, body_d, 0);
@@ -902,6 +928,7 @@ module assembly(explode = 0) {
     color("#2e6b3f") translate([explode, 0, 0]) pwm_board_env();
     color("#c9c9c9") translate([0, explode, 0]) chg_module_env();
     color("#4b2a7a") translate([0, 2 * explode, 0]) usbc_env();
+    color("#1b1b1b") translate([0, 2.5 * explode, 0]) sw_env();
     color("#303236") translate([0, explode, 0]) fan_visual();
     color("#3f7fbf") translate([0, explode / 2, 0]) battery_env();
 }
