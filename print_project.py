@@ -187,9 +187,6 @@ def checks(ctx):
 
 VIEWER = dict(
     title="LEO-AC1", page_title="LEO-AC1 fan", eyebrow="Assembly · installed position",
-    ui=dict(all="All", printed="Printed only", inside="Internals", cut="Cut open", explode="Explode", section="Section",
-            off="off", flip="Show the other side", section_axis="Section axis", section_pos="Section position",
-            hint="Drag = rotate · Wheel = zoom · Shift+drag = pan", of="of", parts="parts", triangles="triangles", locale="en-GB"),
     dims=[("Width", "234"), ("Depth", "84"), ("Height", "197")],
     groups=[("white", "Printed · PETG white"), ("grey", "Printed · PETG grey"),
             ("screws", "Screws M3"), ("bought", "Bought parts")],
