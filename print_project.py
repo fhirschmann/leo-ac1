@@ -44,7 +44,6 @@ ASSEMBLY = {
     "screws_grille": "screws_grille();",
     "screws_fan": "screws_fan();",
     "screws_back": "screws_back();",
-    "screws_cover": "screws_cover();",
     "screws_handle": "screws_handle();",
     "screws_feet": "screws_feet();",
 }
@@ -164,7 +163,7 @@ def checks(ctx):
             ("chg_module_out", ["chg_module"], others("chg_module", "back", "screws_back", "usb_trigger"), [0, 1, 0], 45, 1),
             ("fan_out", ["fan", "screws_fan"], others("fan", "screws_fan", "battery", "chg_module", "back", "screws_back", "usb_trigger"), [0, 1, 0], 90, 1),
             ("knob_off", ["knob"], others("knob"), [1, 0, 0], 25, 0.5),
-            ("cover_off", ["cover"], ["body", "pot", "pot_nut", "pwm_board"], [1, 0, 0], 30, 0.5),
+            ("cover_off", ["cover"], ["body", "pot", "pot_nut", "pwm_board", "knob"], [1, 0, 0], 30, 0.5),   # glued in; the knob can stay on
             ("handle_up", ["handle"], ["body"], [0, 0, 1], 15, 0.5),
             ("feet_down", ["feet"], ["body"], [0, 0, -1], 6, 0.5),
             # the USB-C module comes off with the back cover (back_off), then out of its channel
@@ -173,7 +172,7 @@ def checks(ctx):
         paths.append(dict(name=name, collisions=count, first_mm=first, max_volume_mm3=round(maximum, 4)))
         assert count == 0, f"Path {name} obstructed at {first} mm"
     # PWM board with the potentiometer: after knob, cover and nut, away from the wall until the shaft is clear, then out the back
-    fixed = ctx.union(others("pot", "pot_nut", "pwm_board", "knob", "cover", "screws_cover", "back", "screws_back", "usb_trigger"))
+    fixed = ctx.union(others("pot", "pot_nut", "pwm_board", "knob", "cover", "back", "screws_back", "usb_trigger"))
     moving = ctx.union(["pot", "pwm_board"])
     clear_x = m["pot_shaft_len"] + m["wall"] + 1          # shaft end clear of the inner wall face
     blocked = [("away", float(d)) for d in np.arange(0, clear_x + 0.01, 0.5) if (moving.translate([-d, 0, 0]) ^ fixed).volume() > 0.01]
@@ -216,8 +215,8 @@ VIEWER = dict(
     groups=[("white", "Printed · PETG white"), ("grey", "Printed · PETG grey"),
             ("tpu", "Printed · TPU"), ("screws", "Screws M3"), ("bought", "Bought parts")],
     hidden_groups=["bought"],
-    outer=["body", "back", "cover", "grille", "handle", "feet", "screws_grille", "screws_back", "screws_cover", "screws_handle", "screws_feet"],
-    cut=["back", "cover", "screws_back", "screws_cover"],
+    outer=["body", "back", "cover", "grille", "handle", "feet", "screws_grille", "screws_back", "screws_handle", "screws_feet"],
+    cut=["back", "cover", "screws_back"],
     # id, label, group, colour, quantity, explode direction (mm per slider mm)
     parts=[("body", "Housing", "white", "#f2f2ee", "1x", [0, 0, 0]),
            ("back", "Back cover", "white", "#e6e6e1", "1x", [0, 1.5, 0]),
@@ -237,7 +236,6 @@ VIEWER = dict(
            ("screws_grille", "Grille · M3 × 12 button head", "screws", "#26282b", "4x", [0, -1.6, 0]),
            ("screws_fan", "Fan · M3 × 30 button head", "screws", "#26282b", "4x", [0, 1.4, 0]),
            ("screws_back", "Back cover · M3 × 8 button head", "screws", "#26282b", "6x", [0, 2.2, 0]),
-           ("screws_cover", "Service cover · M3 × 16 button head, from outside", "screws", "#26282b", "2x", [1.6, 0, 0]),
            ("screws_handle", "Handle · M3 × 12 button head", "screws", "#26282b", "4x", [0, 0, -0.5]),
            ("screws_feet", "Feet · M3 × 8 button head, from below", "screws", "#26282b", "4x", [0, 0, -1.4])],
     colour={"body": [("label", "Housing · logo", "#8f9396"), ("dedication", "Housing · dedication", "#8f9396")]},
@@ -250,7 +248,6 @@ VIEWER = dict(
             "screws_grille": "screws_grille(true);",
             "screws_fan": "screws_fan(true);",
             "screws_back": "screws_back(true);",
-            "screws_cover": "screws_cover(true);",
             "screws_handle": "screws_handle(true);",
             "screws_feet": "screws_feet(true);"},
     output="build/viewer.html",
@@ -269,13 +266,13 @@ VIEWS = {"01_assembly": ("assembly();", "-160,-330,230,112,40,70"),
          "06_knob": ("intersection() { assembly(); translate([165, 0, 20]) cube([100, 80, 140]); }",
                      "420,-120,200,230,40,90"),
          # charge/boost module on the partition in the air stream, from the back with the back cover removed
-         "08_charge_module": ("intersection() { union() { color(\"#f2f2ee\") body(); color(\"#c9c9c9\") chg_module_env(); } translate([118, 14, 68]) cube([38, 52, 54]); }", "40,230,190,148,43,95"),
+         "08_charge_module": ("intersection() { union() { color(\"#f2f2ee\") body(); color(\"#c9c9c9\") chg_module_env(); } translate([118, 14, 30]) cube([38, 62, 110]); }", "40,250,170,148,50,85"),
          # LED pocket behind the O, cut through the LED axis and seen from behind: 0.8 mm white skin in front of the LED
          "09_led": ("intersection() { union() { color(\"#f2f2ee\") body(); color(\"#9fd3ff\") led_env(); } translate([led_xz[0] - 9, -1, led_xz[1] - 8]) cube([18, 10, 8]); }",
                     "232,40,178,207,3,131"),
          # dedication on the inside of the front plate: electronics bay, face turned up and read from behind
          "10_dedication": ("rotate([0, 0, 180]) rotate([90, 0, 0]) intersection() { body_install_pose() { color(\"#f2f2ee\") body_piece(\"base\"); color(\"#8f9396\") body_piece(\"dedication\"); } translate([bay_x0 - 1, -1, 95]) cube([bay_x1 - bay_x0 + 2, 12, 50]); }",
-                           "-187,40,160,-187,117,3"),
+                           "-182,48,160,-182,125,3"),
          # handle mount from below: doubler, ribs and screws under the right foot, cut at the screw axis, with the handle keys
          "11_handle_mount": ("rotate([0, 0, 180]) rotate([90, 0, 0]) intersection() { union() { color(\"#f2f2ee\") body(); color(\"#8f9396\") handle(); color(\"#26282b\") screws_handle(); } translate([150, -1, 125]) cube([76, handle_cy + 1, 60]); }",
                              "-185,95,215,-185,150,40"),
@@ -286,7 +283,7 @@ VIEWS = {"01_assembly": ("assembly();", "-160,-330,230,112,40,70"),
          "13_foot_mount": ('intersection() { union() { color("#f2f2ee") body(); color("#222326") place_feet(); color("#26282b") screws_feet(true); } translate([-1, 0, -10]) cube([foot_inset + 1, body_d, 30]); }',
                            "130,40,-35,17,40,2"),
          # USB-C charging socket in the back cover, cut at its axis and seen from above: plate, channel, module, stop on the wall
-         "14_usb_c": ('intersection() { union() { color("#f2f2ee") body(); color("#e6e6e1") back(); color("#4b2a7a") usbc_env(); } translate([196, 48, 100]) cube([30, 36, usbc_xz[1] - 100]); }',
-                      "205,40,230,208,66,118"),
+         "14_usb_c": ('intersection() { union() { color("#f2f2ee") body(); color("#e6e6e1") back(); color("#4b2a7a") usbc_env(); } translate([196, 48, usbc_xz[1] - 20]) cube([30, 36, 20]); }',
+                      "205,40,156,208,66,44"),
          # underside with the M5 mount insert
          "07_underside": ('color("#f2f2ee") body(); color("#222326") place_feet(); color("#26282b") screws_feet(true);', "40,-160,-260,112,40,40")}

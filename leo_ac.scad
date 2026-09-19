@@ -59,7 +59,6 @@ back_t = 4;          // screw heads recessed 1.9 mm, 2.1 mm below
 lip_h = 4;           // lip reaching into the body
 lip_t = 3;
 lip_cl = 0.25;       // clearance per side between lip and body wall
-boss_d = 8;          // screw bosses for inserts (service cover)
 back_boss_d = 10;    // back cover bosses: 3 mm of material around the Ruthex hole (datasheet 1.6)
 boss_inset = 6.5;    // back bosses: axis distance from the outer edges
 back_boss_len = 16;  // solid column behind the insert
@@ -88,15 +87,12 @@ shelf_d = 60;        // shelf depth from the front plate, carries the PWM board
 
 /* [Service cover, right side] */
 cover_y = body_d / 2; // centre, in the middle of the side depth
-cover_z = 88;
-cover_w = 34;        // along y
-cover_hgt = 116;     // along z, reaches up to the speed knob above the battery
+cover_z0 = 30;       // lower edge; the upper edge is at the knob axis, with a half-round notch around the knob
+cover_w = 46;        // along y, wide enough for solid corners beside the notch
 cover_out = 11;      // protrusion
 cover_t = 2.4;
 cover_r = 4;
-cover_screw_dz = 50;
-cover_boss_d = 9;    // screw columns inside the cover, screws from outside
-cover_ins_depth = 7.5;  // insert pocket from the outer wall face, into an inner boss (M3 x 16)
+cover_glue = [1, 1.2, 0.2];  // glued in: rim depth into a groove of the wall, rim width (inner part of the cover wall), clearance per side and at the groove floor
 
 /* [Speed knob, potentiometer of the PWM fan controller] */
 pot_shaft = [6, 4.5, 15]; // D shaft: diameter, across the flat, length from the outer wall face (WH148 type, to be measured)
@@ -107,16 +103,18 @@ pot_body = [16.5, 18];    // housing incl. switch: diameter, depth behind the wa
 // above the shelf, potentiometer edge at the right wall, held there by the potentiometer nut. Estimated from a photo.
 pwm_pcb = [48, 34, 1.6];  // length (x, from the wall inwards), width (y), thickness — to be measured
 pwm_comp_h = 13;          // screw terminals and fan header above the board
-pwm_standoff = 4;         // board underside above the shelf (solder joints)
+pwm_standoff = 15;        // board underside above the shelf: raises the knob into the upper part of the side (ribs from the shelf)
 pwm_wall_gap = 0.5;       // board edge to the inner wall face
 pot_axis_h = 8.5;         // potentiometer axis above the board top — to be measured
-knob_d = 28;              // flat cap in front of the cover
-knob_h = 6.5;
-knob_gap = 0.5;           // cap to the cover face
-knob_stem_d = 10;         // stem through the cover, ends just above the bushing
-knob_stem_cl = 0.5;       // stem end to the bushing end, and radial clearance in the cover hole
-knob_bore_cl = 0.02;      // D bore nominally line-to-line: printed holes come out slightly small, the slotted stem springs open and clamps
-knob_slit = [1, 6];       // slit through the stem from its end, parallel to the flat: width, depth
+knob_d = 28;              // dial on the side wall, sits in the half-round notch of the service cover
+knob_gap = 0.5;           // underside to the wall face
+knob_niche = 1;           // radial gap to the notch of the service cover
+knob_skin = 2;            // closed top above the D bore
+knob_cavity_d = 13;       // recess in the underside over nut and bushing
+knob_stem_d = 10;         // clamping sleeve around the D bore, free in a ring gap
+knob_stem_cl = 0.5;       // sleeve end above the bushing end
+knob_bore_cl = 0.02;      // D bore nominally line-to-line: printed holes come out slightly small, the slotted sleeve springs open and clamps
+knob_slit = [1, 6];       // slit through the sleeve from its end, parallel to the flat: width, length (= length of the ring gap)
 knob_flutes = 30;
 knob_c = 1.2;
 
@@ -124,7 +122,8 @@ knob_c = 1.2;
 chg_pcb = [35.4, 11, 1.6];     // 2-in-1 LiFePO4 charge + 12 V boost module: length (y), width (z), thickness
 chg_comp_h = 2;                // parts on the top side
 chg_sink = [8.8, 8.8, 5, 6];   // two stick-on aluminium heatsinks: y, z, height, gap between them
-chg_z = 95;                    // centre height on the partition, board upright (long axis along z), at the fan rim
+cable_notch = [15, 12];        // cable notches at the back edge of the partition: length (y), height
+cable_notch_z = [44, 126];     // centres: low (USB-C wires, between two battery saddles) and high (fan cable)
 chg_gap = 4.5;                 // board back to partition: pads plus tape; board and heatsinks further in the intake air, but the ledge under
                                // the board must stay beside the fan frame, otherwise the fan cannot be pulled out towards the back
 chg_tape = 1.1;                // double-sided tape between board and pads (3M VHB 1.1 mm); thinner tape moves the board further onto the ledge
@@ -154,7 +153,7 @@ handle_ins_depth = 8.5;      // insert pockets in the feet, from the key face (R
 usbc = [13, 10, 4];          // module incl. receptacle: length (y), width (x), height (z) — listing, to be measured
 usbc_shell = [8.94, 3.26];   // USB-C receptacle shell: width, height (USB-C spec), protrudes beyond the board by >= usbc_plate
 usbc_plate = 2.4;            // back cover thinned to this around the module: receptacle flush with the face, board edge rests on it
-usbc_xz = [213, 118];        // receptacle axis: top right in the electronics bay, clear of the back lip and the handle ribs
+usbc_xz = [213, 44];         // receptacle axis: low right in the electronics bay, between two battery saddles, clear of the back lip
 usbc_cl = 0.2;               // clearance in channel, plate opening and to the stop
 usbc_wall = 2;               // channel on the inside of the back cover: side walls and floor, open at the top for the wires
 usbc_stop = [4, 6];          // stop on the right wall behind the module end (takes the plug force with the back cover on): thickness, height
@@ -195,7 +194,6 @@ head_pocket = [6.4, 1.9];  // head recess in the grille ring: diameter, depth
 len_grille = 12;     // M3 x 12, from the front, head recessed in the grille ring
 len_fan = 30;        // M3 x 30, from behind the fan (not in the nas-case set)
 len_back = 8;        // M3 x 8, from the back, head on the surface
-len_cover = 16;      // M3 x 16, from outside through the service cover, head recessed
 len_handle = 12;     // M3 x 12, from inside the body through top wall and doubler
 len_foot = 8;        // M3 x 8, from below through the TPU feet
 
@@ -224,19 +222,23 @@ led_skin = 0.8;            // white PETG left in front of the LED (four layers)
 led_boss = [7, 5.8];       // boss around the LED pocket: diameter, height from the front face; the LED flange rests on it
 dedication = ["Für Leo", "von Papa", "14.09.2026"];   // raised on the inside of the front plate, readable from behind with the back cover off
 dedication_font = "Liberation Sans:style=Bold";   // bundled with OpenSCAD
-dedication_size = [8, 8, 5.5];   // per line, the date smaller
+dedication_size = [7, 7, 4.5];   // per line, the date smaller
+dedication_w = [35, 44, 31];     // measured line widths (incl. bold) for the LED boss and bay checks
+dedication_x = 182;              // centre of the lines, left of the LED boss
 dedication_bold = 0.15;    // extra stroke per side: thin joints of the font reach two lines (0.8 mm) in grey
 dedication_h = 0.8;        // raised height (four layers)
-dedication_z = [122.4, 112.8, 103.2];   // baselines, between the PWM board and the LED boss; measured glyphs: descender of p 2.46 mm,
-                                        // date 5.48 mm high -> line gaps 1.55 / 1.66 mm, checked on the grey inlay in print_project.py
+dedication_z = [130.2, 121.6, 113.3];   // baselines above the raised PWM board; measured glyphs (size 7: descender of p 2.15 mm,
+                                        // date 4.5: 4.48 mm high) -> line gaps about 1.6 mm, checked on the grey inlay in print_project.py
 
 // ---------- derived values ----------
 pot_yz = [cover_y, wall + bat_l + shelf_gap + shelf_t + pwm_standoff + pwm_pcb[2] + pot_axis_h];   // knob axis above the battery, centred in the depth
 mount_top = mount_insert[1] + 1 + mount_floor;        // boss top inside; blind hole L + 1 from the underside
-knob_stem_z = -wall + pot_bush[1] + knob_stem_cl;     // stem end, from the outer face of the right wall
-knob_cap_z = cover_out + knob_gap;                    // cap underside, same reference
-knob_len = knob_cap_z + knob_h - knob_stem_z;
-knob_bore_top = pot_shaft[2] + 1 - knob_stem_z;       // knob coordinates, 1 mm beyond the shaft end
+knob_sleeve_z = pot_bush[1] - wall + knob_stem_cl - knob_gap;   // knob coordinates, z = 0 at its underside: sleeve end above the bushing
+knob_bore_top = pot_shaft[2] + 1 - knob_gap;                   // 1 mm beyond the shaft end
+knob_len = knob_bore_top + knob_skin;                          // top face
+cover_notch_r = knob_d / 2 + knob_niche;                       // half-round notch of the service cover around the knob
+cover_hgt = pot_yz[1] - cover_z0;                              // upper edge at the knob axis
+cover_z = cover_z0 + cover_hgt / 2;
 logo_w = text_w(brand_sub, sub_size, sub_stroke, sub_gap);
 big_gap = (logo_w - text_w(brand, big_size, big_stroke, 0)) / (len(brand) - 1);
 logo_x0 = logo_cx - logo_w / 2;
@@ -244,6 +246,7 @@ logo_bottom = logo_top - big_size[1] - 2 * (line_gap + sub_size[1]);
 led_xz = [logo_x0 + text_x(brand, big_size, big_stroke, big_gap, 2) + big_size[0] / 2, logo_top - big_size[1] / 2];   // centre of the O
 fan_y = front_t + fan_standoff;                       // front face of the fan frame
 chg_y0 = fan_y + fan_t + fan_pad + chg_fan_gap;       // front edge of the upright charge module
+chg_z = (cable_notch_z[0] + cable_notch_z[1]) / 2;    // charge module centred between the two cable notches
 bat_cy = front_t + bat_front_gap + bat_d / 2;         // battery axis y
 shelf_z = wall + bat_l + shelf_gap;
 bay_x0 = part_x + part_t;
@@ -267,7 +270,6 @@ function back_bosses() = concat(
         w = [part_x, sz ? body_h - wall + 1 : wall - 1],
         t = [part_x + part_t, sz ? body_h - wall : wall])
      [c, w, [part_x + part_t, c[1]], w, t]]);
-function cover_screws() = [for (s = [-1, 1]) [cover_y, cover_z + s * cover_screw_dz]];
 function handle_screws() = [for (sx = [-1, 1], dx = handle_screw_dx) [handle_cx + sx * dx, handle_cy]];
 function handle_pad_u() = [handle_screw_dx[0] - handle_pad[1] - handle_rib[0], handle_screw_dx[1] + handle_pad[1] + handle_rib[0]];   // doubler span from the handle centre
 function handle_key_u() = [handle_open[0] / 2 + 3, handle_len / 2 - 3];   // key span from the handle centre
@@ -288,8 +290,6 @@ screw_table = [
      (fan_y + fan_t + fan_pad - len_fan) - (fan_y - fan_pad - insert_depth)],
     ["back", len_back, (body_d - back_t) - max(body_d - head_pocket[1] - len_back, body_d - back_t - insert_len),
      (body_d - head_pocket[1] - len_back) - (body_d - back_t - insert_depth)],
-    ["cover", len_cover, body_w - max(body_w + cover_out - head_pocket[1] - len_cover, body_w - insert_len),
-     (body_w + cover_out - head_pocket[1] - len_cover) - (body_w - cover_ins_depth)],
     ["handle", len_handle, min(len_handle - handle_screw_skin, insert_len), handle_ins_depth - (len_handle - handle_screw_skin)],
     ["feet", len_foot, min(len_foot - foot_screw_skin, insert_len), insert_depth - (len_foot - foot_screw_skin)]];
 
@@ -313,7 +313,9 @@ assert(front_t + shelf_d - shelf_hold[0] > pot_yz[0] + pwm_pcb[1] / 2 + 0.5, "Sh
 assert(chg_fan_gap >= 5 && chg_gap - chg_tape >= 3
        && max(chg_y0 - 1 - (chg_gap + chg_pcb[2] - chg_ledge[1]), fan_y + fan_t + fan_pad + 0.5) + (chg_gap + chg_pcb[2] - chg_ledge[1]) < chg_y0 + chg_pcb[1] - 4
        && chg_pads[len(chg_pads) - 1][0] + chg_pads[len(chg_pads) - 1][1] <= chg_pcb[0] - 4 && chg_pads[0][0] >= 4
-       && chg_y0 + chg_pcb[1] < body_d - back_t - 1 && chg_z + chg_pcb[0] / 2 < 118,
+       && chg_y0 + chg_pcb[1] < body_d - back_t - 1 && chg_z + chg_pcb[0] / 2 < cable_notch_z[1] - cable_notch[1] / 2 - 2
+       && chg_z - chg_pcb[0] / 2 - chg_ledge[0] > cable_notch_z[0] + cable_notch[1] / 2 + 2
+       && cable_notch_z[0] - cable_notch[1] / 2 > cradle_z[1] + cradle_t + 1 && cable_notch_z[0] + cable_notch[1] / 2 < cradle_z[2] - 1,
        "Charge module reaches the fan frame, the back or the cable notch");
 assert(chg_gap - chg_tape >= 0.5 && (part_x - chg_gap) - max(part_x - chg_gap - chg_pcb[2] + chg_ledge[1], fan_cx + fan_size / 2 + 0.3) >= 1,
        "Charge module: pads too thin for the tape, or less than 1 mm of board on the ledge beside the fan frame");
@@ -325,8 +327,8 @@ assert(back_t - head_pocket[1] >= 2, "Back cover too thin under the recessed scr
 assert(usbc_stop[0] >= 4 && usbc_stop[1] >= usbc[2] && usbc_wall >= 2 && back_t - usbc_plate >= 1 && usbc[0] - usbc_plate >= 8, "USB-C module: back cover recess too shallow or module too short for the channel");
 assert(usbc_xz[0] + usbc[1] / 2 + usbc_cl < bay_x1 - lip_cl - lip_t && usbc_xz[0] - usbc[1] / 2 - usbc_cl - usbc_wall > bay_x0 + 5
        && usbc_xz[1] + usbc[2] / 2 + usbc_cl < body_h - wall - handle_rib[1] - 1
-       && usbc_xz[1] - usbc[2] / 2 - usbc_cl - usbc_wall > shelf_z + shelf_t + pwm_standoff + pwm_pcb[2] + pwm_comp_h + 3,
-       "USB-C module hits the back lip, the handle ribs or the PWM board");
+       && usbc_xz[1] - usbc[2] / 2 - usbc_cl - usbc_wall > cradle_z[1] + cradle_t + 1 && usbc_xz[1] + usbc[2] / 2 + usbc_cl < cradle_z[2] - 1,   // between two saddles
+       "USB-C module hits the back lip, the handle ribs or a battery saddle");
 assert(foot_key <= wall - 2 && foot_screw_skin >= 2.5 && (foot_boss_d - insert_hole_d) / 2 >= insert_w_min + 0.5,
        "Feet: pocket too deep, too little TPU under the screw heads, or boss wall below the Ruthex minimum");
 assert(body_w - foot_inset - max(foot_doubler_hw, foot_boss_d / 2) > bat_cx + bat_d / 2 + 1 && foot_inset - foot_w / 2 > corner_r
@@ -336,16 +338,16 @@ assert((back_boss_d - insert_hole_d) / 2 >= 3 && back_boss_len >= insert_depth +
        "Back bosses: wall around the insert, column length, or reaching the back cover slots");
 // hand under the grip: child hand breadth about 55-70 mm, adult 80-90 mm; comfortable finger clearance 30-35 mm
 assert(handle_h - handle_bar >= 30 && handle_open[1] >= 90, "Handle opening too small for a hand");
-assert(knob_d <= cover_w - 4 && abs(pot_yz[1] - cover_z) + knob_d / 2 < cover_hgt / 2 - 2
-       && min([for (s = [-1, 1]) abs(pot_yz[1] - cover_z - s * cover_screw_dz)]) > max(cover_boss_d / 2 + pot_nut[0] / 2, screw_head_d / 2 + knob_d / 2) + 1,
-       "Knob or nut does not fit between the cover bosses");
+assert(cover_w / 2 - cover_notch_r >= 6 && wall - cover_glue[0] - cover_glue[2] >= 1.8 && cover_glue[1] + cover_glue[2] < cover_t,
+       "Service cover: corners beside the notch too narrow, or the glue groove too deep for the wall or too wide for the cover rim");
 assert(pot_yz[0] - pwm_pcb[1] / 2 > front_t + inner_c && pot_yz[0] + pwm_pcb[1] / 2 < front_t + shelf_d
        && body_w - wall - pwm_wall_gap - pwm_pcb[0] - (pot_shaft[2] + wall + 1) > bay_x0 + 0.5
-       && pot_yz[1] + pwm_comp_h + 2 < body_h - wall - 10,
-       "PWM board: beyond the shelf, no room to pull it off the wall, or too high");
-assert(pot_shaft[2] - knob_stem_z >= 8 && knob_len - knob_bore_top >= 2 && knob_stem_z > pot_nut[1] + 0.5,
-       "Knob: shaft engagement, top skin or stem end");
-assert(knob_slit[1] <= knob_cap_z - knob_stem_z - 1, "Knob slit reaches the cap");
+       && pot_yz[1] + pwm_comp_h + 2 < body_h - wall - 10
+       && (usbc_xz[1] + usbc[2] / 2 < shelf_z || pot_yz[1] - pot_axis_h + pwm_comp_h < usbc_xz[1] + usbc[2] / 2 - usbc_stop[1] - 1),
+       "PWM board: beyond the shelf, no room to pull it off the wall, too high, or its parts reach the USB-C stop");
+assert(pot_shaft[2] - knob_gap - knob_sleeve_z >= 8 && knob_skin >= 2 && knob_cavity_d > pot_nut[0] + 1 && knob_gap + knob_sleeve_z > pot_nut[1] + 0.5
+       && knob_sleeve_z + knob_slit[1] < knob_len - knob_skin - 2 && knob_gap + knob_len - cover_out <= 8,
+       "Knob: shaft engagement, top skin, nut recess, slit length or protrusion");
 assert(handle_end[1] > handle_ins_depth - handle_key[0] && handle_open[2] > handle_ins_depth - handle_key[0] && handle_ins_depth >= insert_len + 1,
        "Handle insert pockets reach the slants or are shorter than L + 1");
 assert(handle_pad[1] - screw_head_d / 2 >= 3 && (handle_screw_dx[1] - handle_screw_dx[0] - handle_rib[0] - screw_head_d) / 2 >= 3,
@@ -360,9 +362,13 @@ assert(logo_x0 > fan_cx + grille_r + 3 && logo_x0 + logo_w < body_w - corner_r -
        "Logo outside the free front area");
 assert(big_gap >= 2, "Big letters too wide for the second line");
 assert(sub_stroke >= 1.2 && stencil_gap >= 1.2, "Logo lines or gaps below 1.2 mm");
-assert(len(dedication_size) == len(dedication) && len(dedication_z) == len(dedication)
-       && dedication_z[len(dedication) - 1] - dedication_size[len(dedication) - 1] / 4 > shelf_z + shelf_t + pwm_standoff + pwm_pcb[2] + pwm_comp_h + 1
-       && dedication_z[0] + dedication_size[0] < led_xz[1] - led_boss[0] / 2 - 1, "Dedication hidden behind the PWM board or runs into the LED boss");
+assert(len(dedication_size) == len(dedication) && len(dedication_z) == len(dedication) && len(dedication_w) == len(dedication)
+       && min(dedication_z) - 0.5 > shelf_z + shelf_t + pwm_standoff + pwm_pcb[2] + pwm_comp_h   // the lowest line (date) has no descenders
+       && max([for (i = [0:len(dedication) - 1]) dedication_z[i] + dedication_size[i]]) < body_h - wall - handle_rib[1] - 1
+       && len([for (i = [0:len(dedication) - 1]) if (!(dedication_z[i] + dedication_size[i] < led_xz[1] - led_boss[0] / 2 - 1
+                                                       || dedication_x + dedication_w[i] / 2 < led_xz[0] - led_boss[0] / 2 - 1)) i]) == 0
+       && dedication_x - max(dedication_w) / 2 > bay_x0 + 2,
+       "Dedication hidden behind the PWM board, under the handle ribs, into the LED boss or into the partition");
 assert(brand[2] == "O" && led_skin > inlay_t && led_d / 2 + 1 < (big_size[0] - 2 * big_stroke) / 2, "LED pocket does not fit into the counter of the O");
 assert(front_t - groove_depth >= 1.2 && groove_pitch - groove_w >= 1.1, "Grooves too deep or webs too thin");
 assert(groove_z0 + (groove_count - 1) * groove_pitch + groove_w < logo_bottom - 3, "Grooves run into the logo");
@@ -465,11 +471,6 @@ module body() difference() {
             translate([mount_xy[0] - mount_doubler[0] / 2, front_t - eps, wall - eps])
                 cube([part_x + eps - (mount_xy[0] - mount_doubler[0] / 2), mount_doubler[1] - front_t + eps, mount_doubler[2] + eps]);
         }
-        // inner bosses for the service cover inserts, 45 degree cone to the wall towards the front (printable)
-        for (p = cover_screws()) let (xb = body_w - cover_ins_depth - 1.5, rise = body_w - wall - xb) hull() {
-            cyl_x(p, xb, body_w - wall + eps, boss_d / 2);
-            translate([body_w - wall, p[0] - boss_d / 2 - rise, p[1] - boss_d / 2]) cube([1, eps, boss_d]);
-        }
         // doubler and three ribs under each handle foot, from the front plate to the back lip: carry drop and pull loads of
         // the handle into the front plate and the walls; 45 degree ends of the doubler towards the top wall
         for (sx = [-1, 1]) let (u = handle_pad_u(), x0 = handle_cx + (sx > 0 ? u[0] : -u[1]), x1 = handle_cx + (sx > 0 ? u[1] : -u[0]),
@@ -480,7 +481,7 @@ module body() difference() {
         }
         // two ribs on the shelf carry the PWM board; they start at the front plate (printable)
         for (x = [body_w - wall - pwm_wall_gap - pwm_pcb[0] + 1, body_w - wall - pwm_wall_gap - 5])
-            translate([x, front_t - eps, shelf_z + shelf_t - eps]) cube([3, pot_yz[0] + pwm_pcb[1] / 2 - front_t, pwm_standoff + eps]);
+            translate([x, front_t - eps, shelf_z + shelf_t - eps]) cube([4, pot_yz[0] + pwm_pcb[1] / 2 - front_t, pwm_standoff + eps]);
         // charge/boost module standing upright: board back on two pads (tape), lower short edge on a ledge behind the
         // part side; 45 degree cones towards the front (printable)
         let (xb = part_x - chg_gap - chg_pcb[2], zb = chg_z - chg_pcb[0] / 2) {
@@ -532,8 +533,8 @@ module body() difference() {
     }
     for (p = fan_holes()) cyl_y(p, fan_y - fan_pad - insert_depth, fan_y + 1, insert_hole_d / 2);
     for (b = back_bosses()) cyl_y(b[0], body_d - back_t - insert_depth, body_d + 1, insert_hole_d / 2);
-    // cable notch at the back edge of the partition
-    translate([part_x - 1, part_y1 - 14, 120]) cube([part_t + 2, 15, 12]);
+    // cable notches at the back edge of the partition: low for the USB-C wires, high for the fan cable
+    for (z = cable_notch_z) translate([part_x - 1, part_y1 - cable_notch[0] + 1, z - cable_notch[1] / 2]) cube([part_t + 2, cable_notch[0], cable_notch[1]]);
     // battery cable slot through the shelf; the shelf rim still stops the battery upwards
     translate([bat_cx + 10 - cable_slot_w / 2, bat_cy - 6, shelf_z - 1]) cube([cable_slot_w, shelf_d + front_t - bat_cy + 7, shelf_t + 2]);
     along_x(-1, wall + 1) intake_slots_side();
@@ -545,7 +546,11 @@ module body() difference() {
         translate([x0, handle_cy - hw + d, body_h - d]) cube([lx, 2 * (hw - d), eps]);
         translate([x0, handle_cy - hw - 1, body_h + 1]) cube([lx, 2 * (hw + 1), eps]);
     }
-    for (p = cover_screws()) cyl_x(p, body_w - cover_ins_depth, body_w + 1, insert_hole_d / 2);   // cover inserts, pressed in from outside
+    // groove for the glued-in service cover: its rim sits in it with a glue gap at the bottom
+    along_x(body_w - cover_glue[0] - cover_glue[2], body_w + 1) difference() {
+        cover_2d(cover_t - cover_glue[1] - cover_glue[2]);
+        cover_2d(cover_t + cover_glue[2]);
+    }
     translate([mount_xy[0], mount_xy[1], -1]) cylinder(d = mount_insert[0], h = mount_insert[1] + 1 + 1);   // M5 insert from the underside
 }
 
@@ -608,7 +613,7 @@ module body_install_pose() rotate([-90, 0, 0]) children();
 module body_label_print_2d() mirror([0, 1]) label_front_2d();
 // dedication in front view coordinates (x, z), mirrored in x so it reads from behind
 module dedication_2d() for (i = [0:len(dedication) - 1])
-    translate([(bay_x0 + bay_x1) / 2, dedication_z[i]]) mirror([1, 0]) offset(delta = dedication_bold)
+    translate([dedication_x, dedication_z[i]]) mirror([1, 0]) offset(delta = dedication_bold)
         text(dedication[i], size = dedication_size[i], font = dedication_font, halign = "center");
 module body_dedication_print_2d() mirror([0, 1]) dedication_2d();
 // multicolour pieces of the body in print orientation: logo inlay on the bed, dedication raised on the inside of the front plate
@@ -698,46 +703,54 @@ module back() difference() {
 module back_print_pose() translate([0, 0, body_d]) rotate([-90, 0, 0]) children();   // back face on the bed
 
 // ---------- service cover ----------
-module cover_2d(inset = 0) translate([cover_y, cover_z]) rrect([cover_w - 2 * inset, cover_hgt - 2 * inset], max(cover_r - inset, 0.5));
-module cover() difference() {
+module cover_panel_2d(inset = 0) translate([cover_y, cover_z]) rrect([cover_w - 2 * inset, cover_hgt - 2 * inset], max(cover_r - inset, 0.5));
+module cover_2d(inset = 0) difference() {   // rounded panel below the knob, half-round notch around it in the upper edge
+    cover_panel_2d(inset);
+    translate([cover_y, pot_yz[1]]) circle(r = cover_notch_r + inset);
+}
+module cover() {   // glued in: the outer part of its wall rests on the side wall, the inner rim sits in the groove
     x0 = body_w;
     x1 = body_w + cover_out;
     union() {
         difference() {
-            hull() {
-                along_x(x0, x1 - edge_c) cover_2d();
-                along_x(x1 - eps, x1) cover_2d(edge_c);
+            intersection() {   // a hull would fill the notch: chamfered convex panel cut to the notched outline
+                hull() {
+                    along_x(x0, x1 - edge_c) cover_panel_2d();
+                    along_x(x1 - eps, x1) cover_panel_2d(edge_c);
+                }
+                along_x(x0 - 1, x1 + 1) cover_2d();
             }
             along_x(x0 - 1, x1 - cover_t) cover_2d(cover_t);
+            translate([x1 - edge_c, cover_y, pot_yz[1]]) rotate([0, 90, 0])   // 45 degree chamfer along the notch at the outer face
+                cylinder(r1 = cover_notch_r, r2 = cover_notch_r + edge_c + eps, h = edge_c + eps);
         }
-        for (p = cover_screws()) cyl_x(p, x0, x1 - cover_t + eps, cover_boss_d / 2);
+        along_x(x0 - cover_glue[0], x0 + eps) difference() {   // rim into the glue groove
+            cover_2d(cover_t - cover_glue[1]);
+            cover_2d(cover_t);
+        }
     }
-    for (p = cover_screws()) {   // screws from outside, heads recessed in the outer face
-        cyl_x(p, x0 - 1, x1 + 1, screw_clear_d / 2);
-        cyl_x(p, x1 - head_pocket[1], x1 + 1, head_pocket[0] / 2);
-    }
-    cyl_x(pot_yz, x1 - cover_t - 1, x1 + 1, knob_stem_d / 2 + knob_stem_cl);   // knob stem
 }
 module cover_print_pose() translate([0, 0, body_w + cover_out]) rotate([0, 90, 0]) children();   // outer face on the bed
 
 // ---------- speed knob ----------
 module d_profile(d, flat) intersection() { circle(d = d); translate([-d / 2, -d / 2]) square([flat, d]); }   // flat on +x
-module knob_local() difference() {   // z = 0 at the stem end, cap top face at knob_len
-    s = knob_cap_z - knob_stem_z;
+module knob_local() difference() {   // z = 0 at the underside (knob_gap off the wall), top face at knob_len
     union() {
-        cylinder(d = knob_stem_d, h = s + eps);
-        translate([0, 0, s]) {
-            cylinder(d = knob_d, h = knob_h - knob_c);
-            translate([0, 0, knob_h - knob_c - eps]) cylinder(d1 = knob_d, d2 = knob_d - 2 * knob_c, h = knob_c + eps);
-        }
+        cylinder(d = knob_d, h = knob_len - knob_c);
+        translate([0, 0, knob_len - knob_c - eps]) cylinder(d1 = knob_d, d2 = knob_d - 2 * knob_c, h = knob_c + eps);
     }
-    for (i = [0:knob_flutes - 1]) rotate(i * 360 / knob_flutes)   // fine grip flutes, open at the underside of the cap
-        translate([knob_d / 2 - 0.5, -0.5, s - 1]) cube([2, 1, knob_h - knob_c]);
-    translate([0, 0, -eps]) linear_extrude(knob_bore_top + eps) offset(delta = knob_bore_cl) d_profile(pot_shaft[0], pot_shaft[1]);
-    translate([-knob_slit[0] / 2, -knob_stem_d / 2 - 1, -eps]) cube([knob_slit[0], knob_stem_d + 2, knob_slit[1] + eps]);   // clamping slit
-    translate([knob_d / 2 - knob_c - 7, -0.6, knob_len - 0.6]) cube([6, 1.2, 1]);   // short pointer near the edge, towards the flat
+    for (i = [0:knob_flutes - 1]) rotate(i * 360 / knob_flutes)   // grip flutes around the dial
+        translate([knob_d / 2 - 0.5, -0.5, 1]) cube([2, 1, knob_len - knob_c - 1]);
+    translate([0, 0, -eps]) cylinder(d = knob_cavity_d, h = knob_sleeve_z + eps);   // over nut and bushing
+    difference() {   // ring gap around the clamping sleeve
+        translate([0, 0, knob_sleeve_z - eps]) cylinder(d = knob_cavity_d, h = knob_slit[1] + eps);
+        translate([0, 0, knob_sleeve_z - 2 * eps]) cylinder(d = knob_stem_d, h = knob_slit[1] + 3 * eps);
+    }
+    translate([0, 0, knob_sleeve_z - eps]) linear_extrude(knob_bore_top - knob_sleeve_z + eps) offset(delta = knob_bore_cl) d_profile(pot_shaft[0], pot_shaft[1]);
+    translate([-knob_slit[0] / 2, -knob_stem_d / 2 - 1, knob_sleeve_z - eps]) cube([knob_slit[0], knob_stem_d + 2, knob_slit[1] + eps]);   // clamping slit
+    translate([knob_d / 2 - knob_c - 7, -0.6, knob_len - 0.6]) cube([6, 1.2, 1]);   // pointer on the top face, towards the flat
 }
-module knob() translate([body_w + knob_stem_z, pot_yz[0], pot_yz[1]]) orient([1, 0, 0]) knob_local();
+module knob() translate([body_w + knob_gap, pot_yz[0], pot_yz[1]]) orient([1, 0, 0]) knob_local();
 module knob_print_pose() translate([0, 0, knob_len]) mirror([0, 0, 1]) children();   // top face on the bed
 module pot_local(nut = true) {       // z = 0 at the outer face of the right wall
     translate([0, 0, -wall - pot_body[1]]) cylinder(d = pot_body[0], h = pot_body[1]);
@@ -859,7 +872,6 @@ module screw(len, socket = false) difference() {   // ISO 7380 button head, head
 module screws_grille(socket = false) for (p = grille_screws()) translate([p[0], -grille_t + head_pocket[1], p[1]]) orient([0, 1, 0]) screw(len_grille, socket);
 module screws_fan(socket = false) for (p = fan_holes()) translate([p[0], fan_y + fan_t + fan_pad, p[1]]) orient([0, -1, 0]) screw(len_fan, socket);
 module screws_back(socket = false) for (b = back_bosses()) translate([b[0][0], body_d - head_pocket[1], b[0][1]]) orient([0, -1, 0]) screw(len_back, socket);
-module screws_cover(socket = false) for (p = cover_screws()) translate([body_w + cover_out - head_pocket[1], p[0], p[1]]) orient([-1, 0, 0]) screw(len_cover, socket);
 module screws_feet(socket = false) for (p = foot_screws()) translate([p[0], p[1], -foot_lift + foot_head_recess + screw_head_h]) orient([0, 0, 1]) screw(len_foot, socket);
 module screws_handle(socket = false) for (p = handle_screws()) translate([p[0], p[1], body_h - wall - handle_pad[0]]) orient([0, 0, 1]) screw(len_handle, socket);
 
@@ -890,7 +902,7 @@ else if (part == "exploded") assembly(40);
 else if (part == "metrics") echo("PROJECT_METRICS", [
     ["wall", wall], ["front_t", front_t], ["back_t", back_t], ["corner_r", corner_r], ["body_mm", [body_w, body_d, body_h]],
     ["fan_size", fan_size], ["fan_pad", fan_pad], ["fan_t", fan_t], ["fan_pitch", fan_pitch], ["fan_hole_d", fan_hole_d],
-    ["fan_blade_d", fan_blade_d], ["pot_shaft_len", pot_shaft[2]], ["pwm_pcb", pwm_pcb], ["pot_axis_h", pot_axis_h], ["knob_shaft_engagement", pot_shaft[2] - knob_stem_z], ["knob_top_skin", knob_len - knob_bore_top], ["knob_protrusion", knob_cap_z + knob_h - cover_out], ["handle_clearance", handle_h - handle_bar], ["handle_open_top", handle_open[1]], ["handle_mount_wall", wall + handle_pad[0]], ["foot_clearance", foot_cl], ["dedication_lines", len(dedication)], ["foot_lift", foot_lift], ["fan_axis", [fan_cx, fan_cz]], ["fan_y", fan_y], ["shroud_r", [open_r, open_r + shroud_t]], ["shroud_gap", shroud_gap], ["open_d", 2 * open_r], ["grille_gap", grille_gap],
+    ["fan_blade_d", fan_blade_d], ["pot_shaft_len", pot_shaft[2]], ["pwm_pcb", pwm_pcb], ["pot_axis_h", pot_axis_h], ["knob_shaft_engagement", pot_shaft[2] - knob_gap - knob_sleeve_z], ["knob_top_skin", knob_len - knob_bore_top], ["knob_protrusion", knob_gap + knob_len - cover_out], ["handle_clearance", handle_h - handle_bar], ["handle_open_top", handle_open[1]], ["handle_mount_wall", wall + handle_pad[0]], ["foot_clearance", foot_cl], ["dedication_lines", len(dedication)], ["foot_lift", foot_lift], ["fan_axis", [fan_cx, fan_cz]], ["fan_y", fan_y], ["shroud_r", [open_r, open_r + shroud_t]], ["shroud_gap", shroud_gap], ["open_d", 2 * open_r], ["grille_gap", grille_gap],
     ["bat_mm", [bat_d, bat_l]], ["bat_bms", bat_bms], ["bat_clear", bat_clear], ["saddle_gap", saddle_gap], ["cradle_rings", len(cradle_z)], ["shelf_gap", shelf_gap],
     ["lip_clearance", lip_cl], ["spigot_clearance", spigot_cl],
     ["insert_hole_d", insert_hole_d], ["insert_w_min", insert_w_min], ["mount_insert", mount_insert], ["mount_floor", mount_floor], ["insert_len", insert_len], ["insert_depth", insert_depth],
@@ -900,7 +912,6 @@ else if (part == "metrics") echo("PROJECT_METRICS", [
         [for (p = grille_screws()) ["body", [p[0], front_t + grille_boss_h, p[1]], [0, -1, 0], insert_depth, insert_hole_d, insert_w_min]],
         [for (p = fan_holes()) ["body", [p[0], fan_y - fan_pad, p[1]], [0, -1, 0], insert_depth, insert_hole_d, insert_w_min]],
         [for (b = back_bosses()) ["body", [b[0][0], body_d - back_t, b[0][1]], [0, -1, 0], insert_depth, insert_hole_d, insert_w_min]],
-        [for (p = cover_screws()) ["body", [body_w, p[0], p[1]], [-1, 0, 0], cover_ins_depth, insert_hole_d, insert_w_min]],
         [for (p = handle_screws()) ["handle", [p[0], p[1], body_h - handle_key[0]], [0, 0, 1], handle_ins_depth, insert_hole_d, insert_w_min]],
         [for (p = foot_screws()) ["body", [p[0], p[1], foot_key], [0, 0, 1], insert_depth, insert_hole_d, insert_w_min]],
         [["body", [mount_xy[0], mount_xy[1], 0], [0, 0, 1], mount_insert[1] + 1, mount_insert[0], mount_insert[2]]])]]);
