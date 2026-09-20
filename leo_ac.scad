@@ -23,7 +23,7 @@ part_x = 164;        // left face of the partition between fan section and elect
 part_t = 2.4;
 inner_c = 4;         // 45 degree fillet between front plate and walls (stiffness, printable)
 
-/* [Fan: 140 x 25 mm PWM, e.g. Noctua NF-A14 PWM (user: the 120 mm industrialPPC was too loud)] */
+/* [Fan: 140 x 25 mm PWM, e.g. Noctua NF-A14x25 G2 PWM (user: the 120 mm industrialPPC was too loud)] */
 fan_size = 140;
 fan_t = 25;
 fan_pitch = 124.5;   // mounting hole spacing (140 mm fans)
@@ -33,7 +33,7 @@ fan_cx = 88;         // fan axis x
 fan_cz = 85.5;       // fan axis z: just above the feet and mount bosses, just below the bail steps
 fan_standoff = 8;    // bosses between front plate and fan frame
 fan_boss_d = 9;
-fan_pad = 1;         // anti-vibration pads, proud of both frame faces (141 x 141 x 27 mm with pads for the NF-A14 PWM, Noctua)
+fan_pad = 1;         // anti-vibration pads, proud of both frame faces (140 x 140 x 27 mm with pads for the NF-A14x25 G2 PWM, Noctua)
 fan_pad_side = 0.5;  // pads stand out of the frame sides by this much
 fan_pad_leg = 41;    // pads cover the corner triangle (fan_size/2, leg) - (fan_size/2, fan_size/2) - (leg, fan_size/2), scaled from the 120 mm fan
 shroud_t = 3.2;      // round duct front plate -> fan frame, bore = grille opening: air leaves only through the grille

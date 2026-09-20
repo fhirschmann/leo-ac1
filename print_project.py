@@ -227,7 +227,7 @@ VIEWER = dict(
            ("bail_up", "Folding bail · carrying position", "carry", "#8f9396", "1x", [0, 0, 1.2]),
            ("knob", "Speed knob", "grey", "#8f9396", "1x", [2, 0, 0]),
            ("feet", "Feet · TPU", "tpu", "#222326", "2x", [0, 0, -0.8]),
-           ("fan_visual", "Fan 140 mm · placeholder (e.g. Noctua NF-A14 PWM)", "bought", "#303236", "1x", [0, 0.8, 0]),
+           ("fan_visual", "Fan 140 mm · placeholder (e.g. Noctua NF-A14x25 G2 PWM)", "bought", "#303236", "1x", [0, 0.8, 0]),
            ("battery", "Battery LiFePO4 3.2 V 6000 mAh", "bought", "#3f7fbf", "1x", [0, 0.5, 0]),
            ("pot", "Potentiometer · housing in the wall pocket, washer and nut outside", "bought", "#3a3d41", "1x", [-0.5, 0, 0]),
            ("chg_holder", "Charge module holder · taped onto the housing pads", "grey", "#8f9396", "1x", [0, 0.8, 0]),

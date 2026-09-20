@@ -53,7 +53,7 @@ Check with the real parts: the PWM controller lies flat on its pads, the potenti
 
 | Part | Qty | Link | Notes |
 |---|---|---|---|
-| Fan Noctua NF-A14 PWM | 1 | [noctua.at](https://noctua.at/en/nf-a14-pwm) | 140 × 25 mm (141 × 141 × 27 with its anti-vibration pads), 12 V, 1.19 W typical, holes 124.5 mm apart; mounted from behind with M3 × 32, tighten by hand only |
+| Fan Noctua NF-A14x25 G2 PWM | 1 | [noctua.at](https://noctua.at/en/nf-a14x25-g2-pwm) | 140 × 25 mm (140 × 140 × 27 with its anti-vibration pads), 225 g, 12 V, 2.28 W at most, 0–1500 rpm, holes 124.5 mm apart; mounted from behind with M3 × 32, tighten by hand only |
 | Battery 3.2 V 6000 mAh LiFePO4 pack with protection board (BMS), JST-PH 2.0 | 1 | [eremit.de](https://www.eremit.de/p/3-2v-6000mah-pack-mit-schutz-arduino-aio-jst-ph-2-0-stecker) | cell Ø 32.5 × 71.6 mm; charge only with a LiFePO4 charger (3.65 V), **no** TP4056 |
 | Charge/boost module "2-in-1 3.2 V LiFePO4", **12 V variant** | 1 | [AliExpress](https://de.aliexpress.com/item/1005008094801881.html) | eletechsup LFUPSMA, board 32.2 × 11 × 1.0 mm (3.7 mm with parts); IN± 5 V charging, B± battery, O± 12 V; clipped IN end up into the printed holder on the partition behind the fan |
 | Aluminium heatsink 14 × 14 × 6 mm with an insulating silicone thermal pad, about 1 mm | 1 | – | on the metal pad on the back of the charge module, behind the charger IC; the pad must cover the whole heatsink face, because the heatsink overhangs the board edges and the IN end |
@@ -89,7 +89,7 @@ battery (JST-PH, built-in BMS) ──► (PTC) ──► power switch ──► 
 - The module cuts off at 2.6 V; the BMS in the battery stays as a second protection layer.
 - With the switch in the battery line, off really disconnects the battery, and the battery only charges with the switch on. To charge without the fan running, turn the knob down until it clicks. Alternatively the switch can go between O+ and the PWM controller; then charging always works, but the boost converter draws its idle current from the battery.
 - The LED shows that the charging cable is plugged in, not the charge state.
-- The NF-A14 PWM draws 1.19 W typical and 1.56 W at most (Noctua); with the converter losses that is roughly 10 h of runtime at full speed and much longer at low speed.
+- The NF-A14x25 G2 PWM draws 2.28 W at most and turns from 0 to 1500 rpm (Noctua); with the converter losses that is roughly 7 h of runtime at full speed and much longer at low speed.
 - The charger on the module is a CN3058E, a linear charger: at 1 A from 5 V it turns about 1.7 W into heat and gets too hot to touch. Its charge current is 1218 V / R_ISET; the fitted resistor next to IN is marked 122 (1.2 kΩ, 1.0 A). A 2.4 kΩ resistor (0805, marked 242) halves the current to 0.5 A and the heat to about 0.85 W; a full charge then takes about 12–13 hours. Before swapping it, check that it is the ISET resistor: about 1.2 kΩ between pins 2 (ISET) and 3 (GND) of the IC with the board unpowered.
 - The heatsink on the back and the holder, which only touches the cool OUT end, keep that heat away from the housing.
 
