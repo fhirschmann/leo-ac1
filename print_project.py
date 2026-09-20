@@ -97,8 +97,8 @@ def checks(ctx):
     assert m["mount_insert"] == [6.4, 9.5, 2.6] and m["mount_floor"] >= 2, "Ruthex M5x9.5: hole 6.4, length 9.5, wall 2.6; 2 mm floor"
     assert m["grille_gap"] <= 6, "Grille openings above 6 mm let children's fingers through"
     assert m["knob_shaft_engagement"] >= 8 and m["knob_top_skin"] >= 2 and m["knob_protrusion"] <= 8, "Knob: on the shaft, at most 8 mm in front of the cover"
-    # bail pivots at mid-depth (user: level carrying): about 20 mm for the fingers, a hand breadth between the arms
-    assert m["bail_clearance"] >= 18 and m["bail_grip"] >= 90, "Bail: 18 mm finger clearance, 90 mm hand breadth"
+    # bail pivots at mid-depth (user: level carrying); folded behind the back cover, so the arms are not limited by the depth
+    assert m["bail_clearance"] >= 30 and m["bail_grip"] >= 90, "Bail: 30 mm finger clearance, 90 mm hand breadth"
     assert m["bail_insert"][0] == 5.6, "Ruthex M4 insert: hole 5.6 mm"
     assert m["foot_clearance"] >= 0.2 and m["foot_lift"] >= 3, "TPU feet: clearance 0.2 mm in the pockets, housing at least 3 mm above the ground"
     # dedication: the lines must stay apart (descenders!); letters of the grey inlay in print orientation, merged by their y spans
@@ -157,7 +157,7 @@ def checks(ctx):
     clear_x = m["pot_shaft_len"] + m["wall"] + 1
     paths = ctx.paths([
             ("grille_front", ["grille", "screws_grille"], ["body", "fan", "screws_fan"], [0, -1, 0], 12, 0.25),
-            ("back_off", ["back", "screws_back", "usb_trigger", "switch"], others("back", "screws_back", "usb_trigger", "switch"), [0, 1, 0], 12, 0.25),
+            ("back_off", ["back", "screws_back", "usb_trigger", "switch"], others("back", "screws_back", "usb_trigger", "switch", "bail"), [0, 1, 0], 12, 0.25),   # bail swung up first
             ("battery_out", ["battery"], others("battery", "back", "screws_back", "usb_trigger", "switch"), [0, 1, 0], 90, 1),
             ("chg_module_out", ["chg_module"], others("chg_module", "back", "screws_back", "usb_trigger", "switch"), [0, 1, 0], 45, 1),
             ("fan_out", ["fan", "screws_fan"], others("fan", "screws_fan", "battery", "chg_module", "back", "screws_back", "usb_trigger", "switch"), [0, 1, 0], 90, 1),
@@ -189,7 +189,7 @@ def checks(ctx):
 
 VIEWER = dict(
     title="LEO-AC1", page_title="LEO-AC1 fan", eyebrow="Assembly · installed position",
-    dims=[("Width", "239.8"), ("Depth", "84"), ("Height", "159.5")],
+    dims=[("Width", "239.8"), ("Depth", "97.5"), ("Height", "159.5")],
     groups=[("white", "Printed · PETG white"), ("grey", "Printed · PETG grey"),
             ("tpu", "Printed · TPU"), ("screws", "Screws M3"), ("bought", "Bought parts")],
     hidden_groups=["bought"],
@@ -252,7 +252,7 @@ VIEWS = {"01_assembly": ("assembly();", "-160,-330,230,112,40,70"),
          # LED pocket behind the O, cut through the LED axis and seen from behind: 0.8 mm white skin in front of the LED
          "09_led": ("intersection() { union() { color(\"#f2f2ee\") body(); color(\"#9fd3ff\") led_env(); } translate([led_xz[0] - 9, -1, led_xz[1] - 8]) cube([18, 10, 8]); }",
                     "232,40,178,207,3,131"),
-         # folding bail raised: pivots at mid-depth in the step of the top edge, finger groove behind the bar recess
+         # folding bail raised: arms in the side steps of the top edge, pivots at mid-depth
          "11_bail": ("assembly(bail_angle = 90);", "-150,-300,330,112,40,90"),
          # back cover insert boss in the top left corner from behind and below, back cover off: column and cone into the corner
          "12_back_bosses": ('color("#f2f2ee") intersection() { body(); translate([-1, 30, 105]) cube([45, body_d, 60]); }',

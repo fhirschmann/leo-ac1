@@ -60,7 +60,7 @@ lip_h = 4;           // lip reaching into the body
 lip_t = 3;
 lip_cl = 0.25;       // clearance per side between lip and body wall
 back_boss_d = 10;    // back cover bosses: 3 mm of material around the Ruthex hole (datasheet 1.6)
-boss_inset = 6.5;    // back bosses: axis distance from the outer edges
+boss_inset = 6.5;    // back bosses: axis distance from the outer edges (top corners: from the top only, see boss_top_x)
 back_boss_len = 16;  // solid column behind the insert
 gusset = 20;         // cone below the back bosses into the wall corner (print orientation), flatter than 45 degrees
 slot_w = 1.6;        // intake slots, back and left side
@@ -153,19 +153,15 @@ chg_fan_gap = 5;               // free space from the fan's back pads to the fro
 chg_pads = [[4, 7], [chg_pcb[0] - 4 - 7, 7]]; // supports from the board's lower end: start, height; keep 4 mm free at both ends
 chg_ledge = [2, 0.3];          // ledge under the lower board edge: height, set back from the part side
 
-/* [Folding bail on top: concept of the leoino case, a flat U bail in a step of the top edge, pivots at mid-depth] */
-bail_bar = [13, 9];         // grip bar when folded: width along y, height (z); as high as the arms
-bail_arm = [8.8, 9];        // arms: width (x), height (z)
-bail_eye = 12;              // eye around the pivot: diameter (top flush with the top face)
-bail_rim = corner_r;        // side-wall rim outside the arm pockets: keeps the rounded top edges
-bail_cl = 0.5;              // clearance of the bail in its pockets
-bail_front = 1;             // folded bar: gap to the front face
-bail_y = body_d / 2;        // pivot axis at mid-depth: the fan hangs level (user; costs finger room, about 20 mm)
+/* [Folding bail on top, like the leoino case: steps along both top side edges over the full depth, pivots at mid-depth] */
+bail_bar = [13, 12];        // grip bar: width, height; folded it lies behind the back cover
+bail_arm = [8.8, 12];       // arms: width (x), height (z) = eye diameter; they lie in the side steps
+bail_cl = 0.5;              // clearance of the bail in the steps and behind the back cover
+bail_y = body_d / 2;        // pivot axis at mid-depth: the fan hangs level (user)
 bail_sleeve = [7, 4.2];     // pivot sleeve as on the leoino bail (bought tube): outside diameter, minimum bore; the eye turns on it
 bail_eye_cl = 0.15;         // radial clearance of the eye on the sleeve
 bail_cb = [9, 2.5];         // counterbore for the M4 head in the outer arm face: diameter, depth
 bail_c = 1;                 // 45 degree chamfers on the bar and arm edges
-bail_access_d = 9.5;        // hole through the rim for the screw head and the insert tool
 m4_insert = [5.6, 8.1, 2.2];   // Ruthex RX-M4x8.1: hole (as in the leoino case), length, minimum wall (check against the datasheet)
 m4_head = [7.6, 2.2];       // ISO 7380 M4 button head: diameter, height
 
@@ -303,22 +299,27 @@ function grille_screws() = [for (i = [0:3]) let (a = grille_screw_a0 + 90 * i)
 function fan_holes() = [for (sx = [-1, 1], sz = [-1, 1]) [fan_cx + sx * fan_pitch / 2, fan_cz + sz * fan_pitch / 2]];
 // back bosses: [axis (x, z), footprint rectangle corner a, corner b, gusset tip corner a, corner b]
 function back_bosses() = concat(
-    [for (sx = [0, 1], sz = [0, 1]) let (
-        c = [sx ? body_w - boss_inset : boss_inset, sz ? body_h - boss_inset : boss_inset],
-        w = [sx ? body_w - wall + 1 : wall - 1, sz ? body_h - wall + 1 : wall - 1],
-        t = [sx ? body_w - wall : wall, sz ? body_h - wall : wall])
+    [for (sx = [0, 1]) let (   // bottom corners: into the wall corner
+        c = [sx ? body_w - boss_inset : boss_inset, boss_inset],
+        w = [sx ? body_w - wall + 1 : wall - 1, wall - 1],
+        t = [sx ? body_w - wall : wall, wall])
+     [c, w, c, w, t]],
+    [for (sx = [0, 1]) let (   // top: beside the bail steps, into the top wall
+        c = [sx ? body_w - boss_top_x : boss_top_x, body_h - boss_inset],
+        w = [c[0] - back_boss_d / 2, body_h - wall + 1],
+        t = [c[0] + back_boss_d / 2, body_h - wall])
      [c, w, c, w, t]],
     [for (sz = [0, 1]) let (
         c = [part_x + part_t / 2, sz ? body_h - boss_inset : boss_inset],
         w = [part_x, sz ? body_h - wall + 1 : wall - 1],
         t = [part_x + part_t, sz ? body_h - wall : wall])
      [c, w, [part_x + part_t, c[1]], w, t]]);
-bail_z = body_h - bail_eye / 2;                        // pivot axis height
-bail_floor = body_h - bail_arm[1];                     // floor of the bar recess and the arm pockets
-bail_x = [bail_rim + bail_cl, bail_rim + bail_cl + bail_arm[0]];   // left arm: outer and inner face (right arm mirrored)
-bail_pocket_x = [bail_rim, bail_rim + bail_arm[0] + 2 * bail_cl];  // left arm pocket; its inner face carries the M4 insert
-bail_bar_y = [bail_front, bail_front + bail_bar[0]];   // folded bar along y
-function bail_sleeve_len() = bail_pocket_x[1] - (bail_x[0] + bail_cb[1]) + 0.1;   // insert face to the screw head, which stays 0.1 mm off the counterbore floor
+bail_z = body_h - bail_arm[1] / 2;                     // pivot axis height
+bail_floor = body_h - bail_arm[1];                     // floor of the side steps
+bail_band = bail_arm[0] + 2 * bail_cl;                 // width of a side step from the side face; its inner wall carries the M4 insert
+bail_bar_y = [body_d + bail_cl, body_d + bail_cl + bail_bar[0]];   // folded bar behind the back cover
+boss_top_x = bail_band + wall + back_boss_d / 2 + 1;   // top back-cover bosses moved inwards beside the steps
+function bail_sleeve_len() = bail_band - (bail_cl + bail_cb[1]) + 0.1;   // insert face to the screw head, which stays 0.1 mm off the counterbore floor
 usbc_y0 = body_d - usbc[0];                             // inner end of the module, in the bay
 function foot_x() = [foot_inset, body_w - foot_inset];
 function foot_screws() = [for (fx = foot_x(), dy = [-1, 1]) [fx, foot_y0 + foot_len / 2 + dy * foot_screw_dy]];
@@ -391,8 +392,8 @@ assert(body_w - foot_inset - max(foot_doubler_hw, foot_boss_d / 2) > bat_cx + ba
        "Feet: doubler or boss reaches the battery, the fan or the cradle, or foot in the corner radius or beyond the body");
 assert((back_boss_d - insert_hole_d) / 2 >= 3 && back_boss_len >= insert_depth + 6 && boss_inset + back_boss_d / 2 + 1 < 14,
        "Back bosses: wall around the insert, column length, or reaching the back cover slots");
-// hand under the raised bail: the pivots at mid-depth limit the arms (user chose level carrying over more finger room)
-assert(bail_y - bail_bar_y[1] - (body_h - bail_z) >= 18 && body_w - 2 * bail_x[1] >= 90, "Bail: too little room for the fingers or the hand");
+// hand under the raised bail: child hand breadth about 55-70 mm, adult 80-90 mm; comfortable finger clearance 30-35 mm
+assert(bail_bar_y[0] - bail_y - (body_h - bail_z) >= 30 && body_w - 2 * (bail_cl + bail_arm[0]) >= 90, "Bail: too little room for the fingers or the hand");
 assert(cover_w / 2 - cover_notch_r >= 6 && wall - cover_glue[0] - cover_glue[2] >= 1.8 && cover_glue[1] + cover_glue[2] < cover_t
        && cover_t - cover_glue[1] - cover_glue[2] >= cover_glue[0] + cover_glue[2] && cover_notch_c < 2 * cover_t,
        "Service cover: corners beside the notch too narrow, or the glue groove too deep for the wall or too wide for the cover rim");
@@ -412,14 +413,14 @@ assert(pwm_pad < pwm_edge_free && pwm_standoff > pwm_pins + pwm_pin_cl + 3 && pw
 assert(pot_shaft_tip - knob_gap - knob_sleeve_z >= 8 && knob_skin >= 2 && knob_cavity_d > pot_nut[0] + 1 && knob_gap + knob_sleeve_z > pot_washer[1] + pot_nut[1] + 0.3   // recess over washer and nut on the outer face
        && knob_sleeve_z + knob_slit[1] < knob_len - knob_skin - 2 && knob_gap + knob_len - cover_out <= 8,
        "Knob: shaft engagement, top skin, nut recess, slit length or protrusion");
-assert(bail_bar[1] == bail_arm[1] && (bail_eye - bail_sleeve[0] - 2 * bail_eye_cl) / 2 >= 2.2 && bail_eye > bail_arm[1]
+assert(bail_bar[1] == bail_arm[1] && (bail_arm[1] - bail_sleeve[0] - 2 * bail_eye_cl) / 2 >= 2.2
        && bail_cb[0] >= m4_head[0] + 1 && bail_cb[1] <= bail_arm[0] / 3 && len_bail - bail_sleeve_len() >= 4
-       && len_bail - bail_sleeve_len() <= m4_insert[1] && bail_eye / 2 - m4_insert[0] / 2 >= m4_insert[2]
-       && bail_access_d >= m4_head[0] + 1.5 && bail_access_d / 2 < body_h - bail_z && bail_rim >= wall + 2,
-       "Bail: eye wall, counterbore, screw engagement in the M4 insert, insert boss wall, access hole or rim");
-assert(bail_floor - wall > fan_cz + open_r + shroud_t + 0.5 && bail_floor - wall > grille_screws()[0][1] + grille_boss_d / 2 + 0.5
-       && bail_z - bail_eye / 2 - bail_cl - wall > led_xz[1] + led_boss[0] / 2 + 0.3 && logo_top < bail_floor - 1.5,
-       "Bail recess shells reach the air duct, a grille boss or the LED boss, or the bar recess cuts into the logo");
+       && len_bail - bail_sleeve_len() <= m4_insert[1] && bail_arm[1] / 2 - m4_insert[0] / 2 >= m4_insert[2],
+       "Bail: eye wall, counterbore, screw engagement in the M4 insert or insert boss wall");
+assert(bail_floor - wall > fan_cz + fan_size / 2 + 1 && bail_floor - wall > sw_xz[1] + sw_bezel[1] / 2 + sw_well[1] + sw_well[2] + sw_well[0] - back_t + 1
+       && bail_floor - wall > 137 + slot_w && logo_x0 + logo_w < body_w - bail_band - 1 && led_xz[0] + led_boss[0] / 2 < body_w - bail_band - wall - 1
+       && boss_top_x - back_boss_d / 2 > bail_band + wall,
+       "Bail steps reach the fan, the switch well, the side intake slots, the logo or the LED boss, or the top back bosses reach a step");
 assert(logo_x0 > fan_cx + grille_r + 3 && logo_x0 + logo_w < body_w - corner_r - 2 && logo_top < body_h - corner_r - 2,
        "Logo outside the free front area");
 assert(big_gap >= 2, "Big letters too wide for the second line");
@@ -533,16 +534,13 @@ module body(dedication = true) difference() {   // dedication = false for public
             translate([mount_xy[0] - mount_doubler[0] / 2, front_t - eps, wall - eps])
                 cube([part_x + eps - (mount_xy[0] - mount_doubler[0] / 2), mount_doubler[1] - front_t + eps, mount_doubler[2] + eps]);
         }
-        // folding bail: shells around the bar recess and the arm/eye pockets, from the front plate (printable), and bosses for the
-        // M4 pivot inserts with a 45 degree underside towards the front
-        along_x(bail_rim, body_w - bail_rim) polygon([[front_t - eps, bail_floor - wall], [bail_bar_y[1] + bail_cl + wall * sqrt(2), bail_floor - wall],
-            [bail_bar_y[1] + bail_cl + wall * sqrt(2) + body_h - bail_floor + wall, body_h - eps], [front_t - eps, body_h - eps]]);
+        // folding bail: floor and inner wall of both side steps from the front plate to the back edge (printable), and bosses for
+        // the M4 pivot inserts with a 45 degree underside towards the front
         bail_sides() {
-            let (z0 = bail_z - bail_eye / 2 - bail_cl - wall)
-                translate([wall - eps, front_t - eps, z0]) cube([bail_pocket_x[1] + eps, bail_y + (bail_eye / 2 + bail_cl) * sqrt(2) + wall - front_t + eps, body_h - eps - z0]);
-            along_x(bail_pocket_x[1] - eps, bail_pocket_x[1] + m4_insert[1] + 2.5) hull() {
-                translate([bail_y, bail_z]) circle(d = bail_eye);
-                translate([bail_y - bail_eye / 2 / sqrt(2) - (body_h - wall - bail_z + bail_eye / 2 / sqrt(2)), body_h - wall]) square([0.01, wall - eps]);
+            translate([wall - eps, front_t - eps, bail_floor - wall]) cube([bail_band + eps, body_d - back_t - front_t + eps, bail_arm[1] + wall - eps]);
+            along_x(bail_band - eps, bail_band + m4_insert[1] + 2.5) hull() {
+                translate([bail_y, bail_z]) circle(d = bail_arm[1]);
+                translate([bail_y - bail_arm[1] / 2 / sqrt(2) - (body_h - wall - bail_z + bail_arm[1] / 2 / sqrt(2)), body_h - wall]) square([0.01, wall - eps]);
             }
         }
         // two ribs on the shelf carry the PWM board on pads under its pin-free long edges, the solder pins in between stay
@@ -615,19 +613,11 @@ module body(dedication = true) difference() {   // dedication = false for public
     cyl_x(pot_yz, body_w - wall - 1, body_w - pot_mount_t, pot_recess_r);
     translate([body_w - wall - 1, pot_yz[0] - pwm_pcb[1] / 2 - pot_pcb_cl, pot_yz[1] - pot_axis_h - pwm_pcb[2] - pot_pcb_cl])
         cube([1 + pwm_pcb_slot, pwm_pcb[1] + 2 * pot_pcb_cl, pwm_pcb[2] + 2 * pot_pcb_cl]);
-    // folding bail: bar recess along the front top edge with a 45 degree back face (printable, a finger groove behind the bar),
-    // arm pockets beside the rims, eye pockets as teardrops pointing backwards and open to the top, screw access through the rims,
-    // M4 insert holes in the inner pocket walls
-    along_x(bail_rim, body_w - bail_rim) polygon([[-1, bail_floor], [bail_bar_y[1] + bail_cl, bail_floor],
-        [bail_bar_y[1] + bail_cl + body_h + 1 - bail_floor, body_h + 1], [-1, body_h + 1]]);
+    // folding bail: steps along both top side edges over the full depth (open to the side, the front and the back) and the M4
+    // insert holes in their inner walls
     bail_sides() {
-        translate([bail_pocket_x[0], -1, bail_floor]) cube([bail_pocket_x[1] - bail_pocket_x[0], bail_y + 1, body_h + 1 - bail_floor]);
-        along_x(bail_pocket_x[0], bail_pocket_x[1]) let (r = bail_eye / 2 + bail_cl) {
-            hull() { translate([bail_y, bail_z]) circle(r = r); translate([bail_y + r * sqrt(2), bail_z]) square(0.01, center = true); }
-            translate([bail_y - r, bail_z]) square([2 * r, body_h + 1 - bail_z]);
-        }
-        cyl_x([bail_y, bail_z], -1, bail_pocket_x[0] + eps, bail_access_d / 2);
-        cyl_x([bail_y, bail_z], bail_pocket_x[1] - eps, bail_pocket_x[1] + m4_insert[1] + 1, m4_insert[0] / 2);
+        translate([-1, -1, bail_floor]) cube([bail_band + 1, body_d + 2, bail_arm[1] + 1]);
+        cyl_x([bail_y, bail_z], bail_band - eps, bail_band + m4_insert[1] + 1, m4_insert[0] / 2);
     }
     // groove for the glued-in service cover with 45 degree flanks, printable in every direction (the side wall stands upright in
     // print, vertical flanks would leave overhanging groove ceilings); 0.2 mm steps, the rim sits on the floor with a glue gap
@@ -760,6 +750,7 @@ module back() difference() {
             body_inner(lip_cl);
             body_inner(lip_cl + lip_t);
             for (b = back_bosses()) offset(r = 0.8) boss_footprint(b);
+            bail_sides() translate([-1, bail_floor - wall - lip_cl]) square([bail_band + wall + lip_cl + 1, body_h]);   // clear of the step walls
         }
         // hold-down plate over the free back edge of the battery shelf
         translate([bay_x0 + shelf_fillet + 0.5, front_t + shelf_d - shelf_hold[0], shelf_z + shelf_t + shelf_hold[2]])
@@ -789,6 +780,7 @@ module back() difference() {
         }
     }
     along_y(y1 - 1, body_d + 1) intake_slots_back();
+    bail_sides() translate([-1, lip_y0 - 1, bail_floor]) cube([bail_band + 1, body_d - lip_y0 + 2, bail_arm[1] + 1]);   // the bail steps run through
     // power switch: well from outside with 45 degree walls (printable on the back face), hole in its thin floor
     sw_funnel(body_d - sw_well[0], body_d + 1, 0);
     translate([sw_xz[0] - sw_cut[0] / 2, body_d - sw_well[0] - sw_panel - 1, sw_xz[1] - sw_cut[1] / 2]) cube([sw_cut[0], sw_panel + 2, sw_cut[1]]);
@@ -916,24 +908,24 @@ module pwm_board_env() {             // board on the rib pads: parts above, sold
 }
 
 // ---------- folding bail (concept of the leoino case) ----------
-// Flat U bail: folded it lies flush in the step along the front top edge and beside both rims, raised it hangs from the pivots
-// at mid-depth. Built folded (angle 0) and turned about the pivot axis; 90 = raised.
+// Flat U bail: its arms lie in the side steps of the top edge and turn on sleeves at mid-depth. Folded (angle 0) the arms point
+// backwards and the bar lies behind the back cover; raised (90) it carries the fan level. Swing it up before removing the back cover.
 module bail_sides() { children(); translate([body_w, 0, 0]) mirror([1, 0, 0]) children(); }
 module chamfered_rect_2d(size, c) polygon([[c, 0], [size[0] - c, 0], [size[0], c], [size[0], size[1] - c], [size[0] - c, size[1]], [c, size[1]], [0, size[1] - c], [0, c]]);
-module bail(angle = 0) translate([0, bail_y, bail_z]) rotate([-angle, 0, 0]) translate([0, -bail_y, -bail_z]) difference() {
+module bail(angle = 0) translate([0, bail_y, bail_z]) rotate([angle, 0, 0]) translate([0, -bail_y, -bail_z]) difference() {
     union() {
-        along_x(bail_x[0], body_w - bail_x[0]) translate([bail_bar_y[0], bail_floor]) chamfered_rect_2d(bail_bar, bail_c);   // bar
+        along_x(bail_cl, body_w - bail_cl) translate([bail_bar_y[0], bail_floor]) chamfered_rect_2d(bail_bar, bail_c);   // bar
         bail_sides() {
-            along_y(bail_bar_y[0], bail_y) translate([bail_x[0], bail_floor]) chamfered_rect_2d(bail_arm, bail_c);   // arm
-            cyl_x([bail_y, bail_z], bail_x[0], bail_x[1], bail_eye / 2);                                         // eye
+            along_y(bail_y, bail_bar_y[0] + bail_c + eps) translate([bail_cl, bail_floor]) chamfered_rect_2d(bail_arm, bail_c);   // arm
+            cyl_x([bail_y, bail_z], bail_cl, bail_cl + bail_arm[0], bail_arm[1] / 2);                                        // rounded eye
         }
     }
     bail_sides() {
-        cyl_x([bail_y, bail_z], bail_x[0] - 1, bail_x[1] + 1, bail_sleeve[0] / 2 + bail_eye_cl);   // turns on the sleeve
-        cyl_x([bail_y, bail_z], bail_x[0] - 1, bail_x[0] + bail_cb[1], bail_cb[0] / 2);           // screw head, outer face
+        cyl_x([bail_y, bail_z], bail_cl - 1, bail_cl + bail_arm[0] + 1, bail_sleeve[0] / 2 + bail_eye_cl);   // turns on the sleeve
+        cyl_x([bail_y, bail_z], bail_cl - 1, bail_cl + bail_cb[1], bail_cb[0] / 2);                         // screw head, outer face
     }
 }
-module bail_print_pose() translate([body_w, 0, body_h]) rotate([0, 180, 0]) children();   // top face on the bed
+module bail_print_pose() translate([0, 0, -bail_floor]) children();   // flat underside on the bed
 
 // ---------- bought parts: envelopes for the checks ----------
 module fan_env() {                  // frame block plus the silicone corner pads on both faces
@@ -991,8 +983,8 @@ module screw_m4(len, socket = false) difference() {   // ISO 7380 M4 button head
     if (socket) translate([0, 0, -m4_head[1] - eps]) cylinder(d = 3.5 / cos(30), h = 1.2, $fn = 6);   // drive recess, viewer only
 }
 module screws_bail(socket = false) bail_sides() {   // M4 x 12 from the side through the sleeve (part of this envelope) into the insert
-    translate([bail_pocket_x[1] - bail_sleeve_len(), bail_y, bail_z]) orient([1, 0, 0]) screw_m4(len_bail, socket);
-    cyl_x([bail_y, bail_z], bail_pocket_x[1] - bail_sleeve_len(), bail_pocket_x[1], bail_sleeve[0] / 2);
+    translate([bail_band - bail_sleeve_len(), bail_y, bail_z]) orient([1, 0, 0]) screw_m4(len_bail, socket);
+    cyl_x([bail_y, bail_z], bail_band - bail_sleeve_len(), bail_band, bail_sleeve[0] / 2);
 }
 
 module assembly(explode = 0, bail_angle = 0) {
@@ -1035,7 +1027,7 @@ else if (part == "exploded") assembly(40);
 else if (part == "metrics") echo("PROJECT_METRICS", [
     ["wall", wall], ["front_t", front_t], ["back_t", back_t], ["corner_r", corner_r], ["body_mm", [body_w, body_d, body_h]],
     ["fan_size", fan_size], ["fan_pad", fan_pad], ["fan_t", fan_t], ["fan_pitch", fan_pitch], ["fan_hole_d", fan_hole_d],
-    ["fan_blade_d", fan_blade_d], ["pot_shaft_len", pot_shaft_tip], ["pot_shaft_d", pot_shaft_d], ["pot_shaft_free", pot_shaft_free], ["pot_bush", pot_bush], ["pot_mount_t", pot_mount_t], ["pwm_total_h", pwm_total_h], ["pwm_total_len", pwm_total_len], ["pwm_pcb", pwm_pcb], ["pot_axis_h", pot_axis_h], ["pwm_lift", pwm_pins + pwm_pin_cl + 0.5], ["knob_shaft_engagement", pot_shaft_tip - knob_gap - knob_sleeve_z], ["knob_top_skin", knob_len - knob_bore_top], ["knob_protrusion", knob_gap + knob_len - cover_out], ["bail_clearance", bail_y - bail_bar_y[1] - (body_h - bail_z)], ["bail_grip", body_w - 2 * bail_x[1]], ["bail_insert", m4_insert], ["foot_clearance", foot_cl], ["dedication_lines", len(dedication)], ["foot_lift", foot_lift], ["fan_axis", [fan_cx, fan_cz]], ["fan_y", fan_y], ["shroud_r", [open_r, open_r + shroud_t]], ["shroud_gap", shroud_gap], ["open_d", 2 * open_r], ["grille_gap", grille_gap],
+    ["fan_blade_d", fan_blade_d], ["pot_shaft_len", pot_shaft_tip], ["pot_shaft_d", pot_shaft_d], ["pot_shaft_free", pot_shaft_free], ["pot_bush", pot_bush], ["pot_mount_t", pot_mount_t], ["pwm_total_h", pwm_total_h], ["pwm_total_len", pwm_total_len], ["pwm_pcb", pwm_pcb], ["pot_axis_h", pot_axis_h], ["pwm_lift", pwm_pins + pwm_pin_cl + 0.5], ["knob_shaft_engagement", pot_shaft_tip - knob_gap - knob_sleeve_z], ["knob_top_skin", knob_len - knob_bore_top], ["knob_protrusion", knob_gap + knob_len - cover_out], ["bail_clearance", bail_bar_y[0] - bail_y - (body_h - bail_z)], ["bail_grip", body_w - 2 * (bail_cl + bail_arm[0])], ["bail_insert", m4_insert], ["foot_clearance", foot_cl], ["dedication_lines", len(dedication)], ["foot_lift", foot_lift], ["fan_axis", [fan_cx, fan_cz]], ["fan_y", fan_y], ["shroud_r", [open_r, open_r + shroud_t]], ["shroud_gap", shroud_gap], ["open_d", 2 * open_r], ["grille_gap", grille_gap],
     ["bat_mm", [bat_d, bat_l]], ["bat_bms", bat_bms], ["bat_clear", bat_clear], ["saddle_gap", saddle_gap], ["cradle_rings", len(cradle_z)], ["shelf_gap", shelf_gap],
     ["lip_clearance", lip_cl], ["spigot_clearance", spigot_cl],
     ["usbc_board_mm", usbc_board], ["usbc_protrusion", usbc_protrusion], ["usbc_total_mm", usbc], ["usbc_plate", usbc_plate], ["usbc_clearance", usbc_cl],
@@ -1048,7 +1040,7 @@ else if (part == "metrics") echo("PROJECT_METRICS", [
         [for (p = grille_screws()) ["body", [p[0], front_t + grille_boss_h, p[1]], [0, -1, 0], insert_depth, insert_hole_d, insert_w_min]],
         [for (p = fan_holes()) ["body", [p[0], fan_y - fan_pad, p[1]], [0, -1, 0], insert_depth, insert_hole_d, insert_w_min]],
         [for (b = back_bosses()) ["body", [b[0][0], body_d - back_t, b[0][1]], [0, -1, 0], insert_depth, insert_hole_d, insert_w_min]],
-        [for (s = [0, 1]) ["body", [s ? body_w - bail_pocket_x[1] : bail_pocket_x[1], bail_y, bail_z], [s ? -1 : 1, 0, 0], m4_insert[1] + 1, m4_insert[0], m4_insert[2]]],
+        [for (s = [0, 1]) ["body", [s ? body_w - bail_band : bail_band, bail_y, bail_z], [s ? -1 : 1, 0, 0], m4_insert[1] + 1, m4_insert[0], m4_insert[2]]],
         [for (p = foot_screws()) ["body", [p[0], p[1], foot_key], [0, 0, 1], insert_depth, insert_hole_d, insert_w_min]],
         [["body", [mount_xy[0], mount_xy[1], 0], [0, 0, 1], mount_insert[1] + 1, mount_insert[0], mount_insert[2]]])]]);
 else if (part == "none") {}
