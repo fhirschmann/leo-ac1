@@ -124,6 +124,7 @@ pwm_edge_free = 1.5;      // pin-free strips on the underside along both long PC
 pwm_pad = 1.2;            // rib pads under those strips, 0.3 mm inside their border
 pwm_pin_cl = 0.5;         // clearance below the pins
 pwm_rib = 3;              // support ribs on the shelf: thickness (the left one stays beside the battery cable slot)
+pwm_rib_hole = [16, 7, 2];   // cable passage through both ribs under the board (user): length (y), height (z), web below it; pointed at 45 degrees towards the back (printable)
 knob_d = 28;              // dial on the side wall, sits in the half-round notch of the service cover
 knob_gap = 0.5;           // underside to the wall face
 knob_niche = 3;           // radial gap to the notch of the service cover: room for fingertips
@@ -438,8 +439,9 @@ assert(pot_mount_t >= 1.6 && pot_thread_reserve >= 0.1 && pot_nose_len > 0 && pw
        && cover_groove_gap(norm([pwm_pcb[1] / 2 + pot_pcb_cl, pot_axis_h + pwm_pcb[2] + pot_pcb_cl]), wall - pwm_pcb_slot) >= 1.2,
        "Potentiometer: wall under the nut too thin, no thread reserve, housing pocket too small or too shallow for the PCB slot, knob recess misses the nut, or a pocket comes within 1.2 mm of the cover glue groove");
 assert(pwm_pad < pwm_edge_free && pwm_standoff > pwm_pins + pwm_pin_cl + 3 && pwm_rib >= 2.4
+       && pwm_standoff - pwm_pins - pwm_pin_cl - pwm_rib_hole[2] - pwm_rib_hole[1] >= 2 && pwm_rib_hole[0] + pwm_rib_hole[1] / 2 < pwm_pcb[1] - 2 * pwm_pad
        && pwm_rib_x()[0] + pwm_rib <= bat_cx + 10 - cable_slot_w / 2 - 0.2 && pwm_rib_x()[1] + pwm_rib < body_w - wall - 0.2,
-       "PWM supports: pads wider than the pin-free edges, no rib left under the pin clearance, rib too thin, left rib over the battery cable slot, or right rib in the wall");
+       "PWM supports: pads wider than the pin-free edges, cable passage leaving less than 2 mm under the pin notch or longer than the notch, no rib left under the pin clearance, rib too thin, left rib over the battery cable slot, or right rib in the wall");
 assert(pot_shaft_tip - knob_gap - knob_sleeve_z >= 8 && knob_skin >= 2 && knob_cavity_d > pot_nut[0] + 1 && knob_gap + knob_sleeve_z > pot_washer[1] + pot_nut[1] + 0.3   // recess over washer and nut on the outer face
        && knob_sleeve_z + knob_slit[1] < knob_len - knob_skin - 2 && knob_gap + knob_len - cover_out <= 8,
        "Knob: shaft engagement, top skin, nut recess, slit length or protrusion");
@@ -597,6 +599,10 @@ module body(dedication = true) difference() {   // dedication = false for public
             translate([x, front_t - eps, shelf_z + shelf_t - eps]) cube([pwm_rib, front_t + shelf_d - shelf_hold[0] - 0.3 - front_t, pwm_standoff + eps]);
             translate([x - 1, pot_yz[0] - pwm_pcb[1] / 2 + pwm_pad, shelf_z + shelf_t + pwm_standoff - pwm_pins - pwm_pin_cl])
                 cube([pwm_rib + 2, pwm_pcb[1] - 2 * pwm_pad, pwm_pins + pwm_pin_cl + 1]);
+            let (h = pwm_rib_hole, z0 = shelf_z + shelf_t + h[2], y0 = pot_yz[0] - h[0] / 2) hull() {   // cable passage below the board
+                translate([x - 1, y0, z0]) cube([pwm_rib + 2, h[0], h[1]]);
+                translate([x - 1, y0 + h[0] + h[1] / 2 - tip, z0 + h[1] / 2 - tip / 2]) cube([pwm_rib + 2, tip, tip]);
+            }
         }
         // charge/boost module standing upright: board back on two pads (tape), lower short edge on a ledge behind the
         // part side; 45 degree cones towards the front (printable)
