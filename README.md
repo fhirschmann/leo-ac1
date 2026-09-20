@@ -1,12 +1,14 @@
 # LEO-AC1 — a fan that looks like an air conditioner
 
+### ▶ [Open the interactive 3D viewer](https://hirschmann.blog/leo-ac1/)
+
+Every part in the browser — exploded view, section plane, the bail in its carrying position and the removal paths.
+
 Small battery fan for a child's room, styled like the outdoor unit of a split air conditioner (proportions of an 800 × 585 × 240 mm unit). A 140 mm PC fan blows forward through the round grille, which is printed in grey right into the front of the housing; air enters through the slots in the back cover and the left side. A round air duct between the front and the fan frame keeps the air from circulating back into the housing. On the right of the front sits the logo "LEO INDUSTRIES AC-1" in custom block letters above horizontal fake grooves like on Mitsubishi outdoor units; a breathing LED behind the O glows through the white PETG while the charger is plugged in. Behind it is a bay for the battery (3.2 V 6000 mAh LiFePO4) and the electronics. The speed knob sits on the right side above a glued-in service cover; USB-C charging socket and power switch are in the back cover.
 
 Designed for a Bambu Lab H2S with AMS in Bambu PETG HF white and grey plus TPU. **Status:** first parts printed; USB-C socket fit confirmed. Remaining fit and functional checks are pending.
 
-**[Open the 3D viewer](https://hirschmann.blog/leo-ac1/)** — the whole assembly in the browser: single parts, exploded view, section plane and the bail in its carrying position.
-
-![Assembly](img/01_assembly.png?v=4b221da66817)
+[![Assembly](img/01_assembly.png?v=4b221da66817)](https://hirschmann.blog/leo-ac1/)
 
 | Back | Exploded |
 |:---:|:---:|
