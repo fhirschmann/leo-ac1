@@ -192,7 +192,7 @@ def checks(ctx):
 
 VIEWER = dict(
     title="LEO-AC1", page_title="LEO-AC1 fan", eyebrow="Assembly · installed position",
-    dims=[("Width", "242"), ("Depth", "96.5"), ("Height", "159.5")],
+    dims=[("Width", "260"), ("Depth", "96.5"), ("Height", "177.5")],
     groups=[("white", "Printed · PETG white"), ("grey", "Printed · PETG grey"),
             ("tpu", "Printed · TPU"), ("screws", "Screws"), ("bought", "Bought parts")],
     hidden_groups=["bought"],
