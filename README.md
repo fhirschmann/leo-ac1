@@ -1,6 +1,6 @@
 # LEO-AC1 — a fan that looks like an air conditioner
 
-[![Open the interactive 3D viewer](img/viewer_button.svg?v=439a39590538)](https://hirschmann.blog/leo-ac1/)
+[![Open the interactive 3D viewer](img/viewer_button.svg?v=439a39590538)](https://fhirschmann.github.io/leo-ac1/)
 
 Every part in the browser — exploded view, section plane, the bail in its carrying position and the removal paths.
 
@@ -8,7 +8,7 @@ Small battery fan for a child's room, styled like the outdoor unit of a split ai
 
 Designed for a Bambu Lab H2S with AMS in Bambu PETG HF white and grey plus TPU.
 
-[![Assembly](img/01_assembly.png?v=4b221da66817)](https://hirschmann.blog/leo-ac1/)
+[![Assembly](img/01_assembly.png?v=4b221da66817)](https://fhirschmann.github.io/leo-ac1/)
 
 | Back | Exploded |
 |:---:|:---:|
