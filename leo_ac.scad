@@ -109,6 +109,8 @@ pot_washer = [11, 0.85];   // washer outside diameter (approx. measured); nut an
 pot_thread_reserve = 0.2;  // thread left beyond the nut
 pot_housing = 13;          // potentiometer housing on the PCB edge: square envelope (12 mm pot assumed)
 pot_recess_r = 10;         // round pocket from inside around the axis: the housing reaches into the wall, shoulder on the pocket floor
+pot_tab = [2.1, 0.8, 1.2, 2.1];   // anti-rotation tab on the housing front below the shaft (measured 2026-09-17): width, height, protrusion, gap to the shaft
+pot_tab_cl = 0.3;          // clearance round the tab slot; the gap may be measured from the shaft or the thread, the slot covers both
 pot_pcb_cl = 0.3;          // clearance around the PCB edge in its shallow slot in the wall
 pot_mount_t = pot_bush[1] - pot_nut[1] - pot_washer[1] - pot_thread_reserve;   // wall under washer and nut; flat outer face, the knob covers them
 // PWM board CNY-FA5-PRO: right-angle potentiometer on its edge, shaft parallel to the board. The board lies on two ribs
@@ -279,6 +281,7 @@ dedication_z = [131.7, 124.2, 116.8];   // baselines above the PWM module; glyph
 pot_nose_len = pwm_total_len - pwm_pcb[0] - pot_shaft_free - pot_bush[1]; // housing shoulder ahead of the PCB edge
 pwm_wall_gap = pot_mount_t + pot_nose_len - wall; // PCB edge to the inner wall face; negative: the edge reaches into the wall slot
 pot_recess = wall - pot_mount_t;                  // depth of the round housing pocket from inside
+function pot_tab_z() = [pot_shaft_d / 2 + pot_tab[3] - pot_tab_cl, pot_bush[0] / 2 + pot_tab[3] + pot_tab[1] + pot_tab_cl];   // tab slot below the axis: from its nearest to its farthest possible edge
 pwm_pcb_slot = max(0, -pwm_wall_gap) + pot_pcb_cl;  // depth of the shallow slot for the PCB edge
 pot_shaft_tip = pot_shaft_free + pot_bush[1] - pot_mount_t; // shaft tip relative to the outer wall
 function pwm_rib_x() = let (x1 = body_w - wall - pwm_wall_gap) [x1 - pwm_pcb[0] + 0.3, x1 - 1 - pwm_rib];   // under both board ends
@@ -433,7 +436,8 @@ assert(pot_yz[0] - pwm_pcb[1] / 2 > front_t + inner_c && pot_yz[0] + pwm_pcb[1] 
        && pot_yz[1] + pwm_comp_h + 2 < body_h - wall - 10
        && (usbc_xz[1] + usbc[2] / 2 < shelf_z || pot_yz[1] - pot_axis_h + pwm_comp_h < usbc_xz[1] + usbc[2] / 2 - usbc_stop[1] - 1),
        "PWM board: beyond the shelf, no room to pull it off the wall, too high, or its parts reach the USB-C stop");
-assert(pot_mount_t >= 1.6 && pot_thread_reserve >= 0.1 && pot_nose_len > 0 && pwm_pcb_slot < pot_recess - 0.2
+assert(pot_tab_z()[1] < pot_axis_h + pwm_pcb[2] && pot_tab[2] < pot_mount_t + 1 && pot_tab_z()[0] > pot_bush[0] / 2 + 0.5 &&
+       pot_mount_t >= 1.6 && pot_thread_reserve >= 0.1 && pot_nose_len > 0 && pwm_pcb_slot < pot_recess - 0.2
        && pot_recess_r >= pot_housing / 2 * sqrt(2) + 0.5 && pot_nut[0] < knob_cavity_d - 1
        && cover_groove_gap(pot_recess_r, pot_mount_t) >= 1.2
        && cover_groove_gap(norm([pwm_pcb[1] / 2 + pot_pcb_cl, pot_axis_h + pwm_pcb[2] + pot_pcb_cl]), wall - pwm_pcb_slot) >= 1.2,
@@ -666,6 +670,10 @@ module body(dedication = true) difference() {   // dedication = false for public
     cyl_x(pot_yz, body_w - wall - 1, body_w - pot_mount_t, pot_recess_r);
     translate([body_w - wall - 1, pot_yz[0] - pwm_pcb[1] / 2 - pot_pcb_cl, pot_yz[1] - pot_axis_h - pwm_pcb[2] - pot_pcb_cl])
         cube([1 + pwm_pcb_slot, pwm_pcb[1] + 2 * pot_pcb_cl, pwm_pcb[2] + 2 * pot_pcb_cl]);
+    // slot through the thin wall for the anti-rotation tab below the shaft (it tilted the potentiometer when tightened, user);
+    // washer, nut and knob cover it outside
+    translate([body_w - pot_mount_t - 1, pot_yz[0] - pot_tab[0] / 2 - pot_tab_cl, pot_yz[1] - pot_tab_z()[1]])
+        cube([pot_mount_t + 2, pot_tab[0] + 2 * pot_tab_cl, pot_tab_z()[1] - pot_tab_z()[0]]);
     // folding bail: steps along both top side edges from the pivot to the back (the bail only folds backwards, the side wall stays
     // full height in front); a ramp in front of the eye stops the bail at the carrying angle; M4 insert holes in the inner walls
     bail_sides() let (r = bail_arm[1] / 2 + bail_cl) {
