@@ -4,23 +4,23 @@ Small battery fan for a child's room, styled like the outdoor unit of a split ai
 
 Designed for a Bambu Lab H2S with AMS in Bambu PETG HF white and grey plus TPU. **Status:** first parts printed; USB-C socket fit confirmed. Remaining fit and functional checks are pending.
 
-![Assembly](img/01_assembly.png?v=a630bae8709d)
+![Assembly](img/01_assembly.png?v=2710bf40d998)
 
 | Back | Exploded |
 |:---:|:---:|
-| ![Back](img/02_back.png?v=2752f7135f92) | ![Exploded](img/03_exploded.png?v=c32912c32a96) |
+| ![Back](img/02_back.png?v=bfd895db8904) | ![Exploded](img/03_exploded.png?v=9a5af6c13666) |
 | **Logo and grooves** | **Air duct from behind** |
-| ![Logo](img/04_front_right.png?v=7458b0aba497) | ![Air duct](img/05_duct.png?v=02eb1c805b35) |
+| ![Logo](img/04_front_right.png?v=7458b0aba497) | ![Air duct](img/05_duct.png?v=dc507d45fef4) |
 | **Knob and service cover** | **Underside with M5 thread and TPU feet** |
-| ![Knob](img/06_knob.png?v=c60beaeab29e) | ![Underside](img/07_underside.png?v=75a72fc166f0) |
+| ![Knob](img/06_knob.png?v=fa5f1665c26d) | ![Underside](img/07_underside.png?v=5e0575c71218) |
 | **Charge module in the air stream** | **LED pocket behind the O** |
 | ![Charge module](img/08_charge_module.png?v=1a8a31b5cb32) | ![LED pocket](img/09_led.png?v=5c52239f3472) |
 | **Folding bail, carrying position** | **Back cover bosses** |
-| ![Folding bail](img/11_bail.png?v=169a28152571) | ![Back cover bosses](img/12_back_bosses.png?v=3f8a9fb70af8) |
+| ![Folding bail](img/11_bail.png?v=f09462a9b7ec) | ![Back cover bosses](img/12_back_bosses.png?v=61cc80008f1e) |
 | **TPU foot mount** | **USB-C socket** |
-| ![TPU foot mount](img/13_foot_mount.png?v=8be62b67c0ae) | ![USB-C socket](img/14_usb_c.png?v=3ea143f617c1) |
+| ![TPU foot mount](img/13_foot_mount.png?v=8be62b67c0ae) | ![USB-C socket](img/14_usb_c.png?v=b4a05f4b9155) |
 | **Power switch well** | **Battery saddles** |
-| ![Power switch](img/15_switch.png?v=a984b5986e4c) | ![Battery saddles](img/16_saddles.png?v=4c90051842e7) |
+| ![Power switch](img/15_switch.png?v=6b849d508072) | ![Battery saddles](img/16_saddles.png?v=d743c9ef0d9c) |
 
 ## Printed parts
 
@@ -67,7 +67,7 @@ Check with the real parts: the PWM controller lies flat on its pads, the potenti
 | Small cable ties, up to 5 mm wide | 2 | – | strain relief for the USB-C and switch wires on the inside of the back cover |
 | Silicone wire 24 AWG, red and black | about 1 m | – | USB-C module, switch, LED, 12 V to the PWM controller |
 | Heat-shrink tubing 2–3 mm | – | – | every solder joint |
-| M4 shoulder screw, head Ø 8.8 × 3 mm, shoulder Ø 5 × 11 mm, thread 8 mm | 2 | – | bail pivots, the shoulder is clamped against the step wall |
+| M4 shoulder screw, head Ø 8.8 × 3 mm, shoulder Ø 5 × 12 mm, thread 8 mm | 2 | – | bail pivots, the shoulder is clamped against the step wall |
 | Flanged brass bushing Ø 7 / 5 × 10 mm, flange Ø 10 × 1 mm | 2 | – | pressed into the bail eyes, turns on the screw shoulder |
 | Foam tape, self-adhesive, 1–2 mm | – | – | battery: a strip above and below keeps it from rattling |
 

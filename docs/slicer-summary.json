@@ -6,12 +6,12 @@
       "quantity": 1,
       "material": "PETG-white",
       "passed": true,
-      "source_sha256": "f05f617d5b072d234cff491c6c865f4ca30d59cf828c9709560a225e1bdbe735",
+      "source_sha256": "b69761537b55c9560a43c29b2b320a5cb21f35b952a279a85f6136460f861b4e",
       "exit_code": 0,
       "result_code": 0,
       "warnings": "",
-      "hours": 9.285,
-      "grams": 388.652,
+      "hours": 9.24,
+      "grams": 388.162,
       "wall_loops": 5,
       "infill_percent": 15.0,
       "layer_height": 0.20000000298023224,
@@ -29,12 +29,12 @@
       "quantity": 1,
       "material": "PETG-white",
       "passed": true,
-      "source_sha256": "47396c64ffdf51353a8f5f98d10406a2bc024a7897c4cb3b0165a1b9cdfd562d",
+      "source_sha256": "3b7bc7a1ee5f6836556d03ce2eb8edc1d3b04b4c2055154091238b2c82cab336",
       "exit_code": 0,
       "result_code": 0,
       "warnings": "",
-      "hours": 5.492,
-      "grams": 161.174,
+      "hours": 5.49,
+      "grams": 161.043,
       "wall_loops": 5,
       "infill_percent": 15.0,
       "layer_height": 0.20000000298023224,
@@ -52,7 +52,7 @@
       "quantity": 1,
       "material": "PETG-grey",
       "passed": true,
-      "source_sha256": "c1748440ea35457933690e7695d0a383beaf356e0d438e4af202f1f3756a6e24",
+      "source_sha256": "9e12bd9a4c5db4bc1d65709b56d05831b9f628e482023700785ab8a4c7888b2c",
       "exit_code": 0,
       "result_code": 0,
       "warnings": "",
@@ -75,12 +75,12 @@
       "quantity": 1,
       "material": "PETG-grey",
       "passed": true,
-      "source_sha256": "68be83879a014e972a3e53a6d8016e0e99b84e0c1c38911fc0dd64154d1ee1d6",
+      "source_sha256": "467dea0dad005ca71ef89d26290434365567f20c784e5031ca00d4542af9aaaf",
       "exit_code": 0,
       "result_code": 0,
       "warnings": "",
-      "hours": 1.34,
-      "grams": 38.729,
+      "hours": 1.348,
+      "grams": 39.475,
       "wall_loops": 5,
       "infill_percent": 15.0,
       "layer_height": 0.20000000298023224,
@@ -144,12 +144,12 @@
       "quantity": 0,
       "material": "PETG-white",
       "passed": true,
-      "source_sha256": "b17c49e515debd02485d346056c105eca37408b002afcf50cc0e6128aea85f18",
+      "source_sha256": "12b302cacbf12d016f3fd5a377e774c3968b3badc981f616216a282f96de1671",
       "exit_code": 0,
       "result_code": 0,
       "warnings": "",
-      "hours": 2.172,
-      "grams": 95.779,
+      "hours": 2.109,
+      "grams": 95.475,
       "wall_loops": 5,
       "infill_percent": 15.0,
       "layer_height": 0.20000000298023224,
@@ -167,12 +167,12 @@
       "quantity": 0,
       "material": "PETG-white",
       "passed": true,
-      "source_sha256": "b442fae5ad17900b7d3c0ca6a56dc0c93a3a8319656de487afa2a4686e5f84d1",
+      "source_sha256": "193d77422a0501ff50c71dc4409a8f14a1a5a1fed6de29d4886ad490e1429dbf",
       "exit_code": 0,
       "result_code": 0,
       "warnings": "",
-      "hours": 0.714,
-      "grams": 23.648,
+      "hours": 0.713,
+      "grams": 23.598,
       "wall_loops": 5,
       "infill_percent": 15.0,
       "layer_height": 0.20000000298023224,
@@ -187,7 +187,7 @@
     }
   ],
   "total_parts": 7,
-  "total_grams_individual_plates": 620.3,
+  "total_grams_individual_plates": 620.4,
   "total_hours_individual_plates": 18.0,
   "production_gcode": false,
   "project_3mf": {
@@ -255,8 +255,8 @@
         ]
       }
     ],
-    "total_hours_plates": 18.5,
-    "total_grams_plates": 628.8,
+    "total_hours_plates": 18.4,
+    "total_grams_plates": 628.9,
     "multicolour_parts": {
       "body": [
         "label",
@@ -273,9 +273,9 @@
     "multicolour_slices": {
       "Housing": {
         "plate": 1,
-        "hours": 9.87,
+        "hours": 9.82,
         "grams_by_filament": {
-          "1": 374.11,
+          "1": 373.62,
           "3": 21.18
         },
         "warnings": ""
@@ -284,16 +284,16 @@
         "plate": 2,
         "hours": 5.67,
         "grams_by_filament": {
-          "1": 160.96,
+          "1": 160.86,
           "3": 0.82
         },
         "warnings": ""
       },
       "Grey parts": {
         "plate": 3,
-        "hours": 2.05,
+        "hours": 2.06,
         "grams_by_filament": {
-          "2": 60.31,
+          "2": 61.06,
           "5": 0.94
         },
         "warnings": ""
@@ -303,9 +303,9 @@
     "plate_slices": {
       "Housing": {
         "plate": 1,
-        "hours": 9.87,
+        "hours": 9.82,
         "grams_by_filament": {
-          "1": 374.11,
+          "1": 373.62,
           "3": 21.18
         },
         "warnings": ""
@@ -314,16 +314,16 @@
         "plate": 2,
         "hours": 5.67,
         "grams_by_filament": {
-          "1": 160.96,
+          "1": 160.86,
           "3": 0.82
         },
         "warnings": ""
       },
       "Grey parts": {
         "plate": 3,
-        "hours": 2.05,
+        "hours": 2.06,
         "grams_by_filament": {
-          "2": 60.31,
+          "2": 61.06,
           "5": 0.94
         },
         "warnings": ""
@@ -338,7 +338,7 @@
       }
     },
     "own_infill_parts": 2,
-    "sha256": "27dfcdc8e30d0d90e0cc2de77884f58a2939d89b80ae2a5dfb6621dcb830b63b"
+    "sha256": "a6df9ddaa99ba7ed3dd070842ee283bfe9205d87e36f8b2c4434f7843c4427f0"
   },
   "test_3mf": {
     "file": "stl/leo_ac1_fit_tests.3mf",
@@ -359,8 +359,8 @@
         ]
       }
     ],
-    "total_hours_plates": 2.5,
-    "total_grams_plates": 88.2,
+    "total_hours_plates": 2.4,
+    "total_grams_plates": 87.3,
     "multicolour_parts": {
       "body": [
         "label",
@@ -379,15 +379,15 @@
     "plate_slices": {
       "Right section fit test": {
         "plate": 1,
-        "hours": 2.47,
+        "hours": 2.42,
         "grams_by_filament": {
-          "1": 88.24
+          "1": 87.29
         },
         "warnings": ""
       }
     },
     "own_infill_parts": 0,
-    "sha256": "69d8654fffbaaab28dbdb5d47f3098d41509cf04a00bfa62c322406dca5b0e23",
+    "sha256": "9bbc1ee6180bd38f9338fa0ea0c901934b75d5d2087c346db478c8509c1a11c3",
     "process": {
       "wall_loops": 2,
       "top_shell_layers": 3,

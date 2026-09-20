@@ -395,6 +395,28 @@ canvas{display:block;width:100%;height:100%;touch-action:none}
     document.getElementById('grouptoggles').appendChild(b);
   });
 
+  // swap buttons from VIEWER["swaps"]: (label, ids shown after the first click, ids hidden then), e.g. a folded and a raised handle
+  (M.swaps || []).forEach(function(s){
+    var ids = P.parts.map(function(p){ return p.id; });
+    if (!s[1].concat(s[2]).every(function(id){ return ids.indexOf(id) >= 0; })) return;
+    var b = document.createElement('button');
+    b.className = 'preset'; b.type = 'button'; b.textContent = s[0];
+    function show(id, v){
+      meshes[id].visible = v;
+      var row = list.querySelector('.row[data-id="' + id + '"]');
+      if (row){ row.querySelector('input').checked = v; row.classList.toggle('off', !v); }
+    }
+    b.addEventListener('click', function(){
+      var on = !meshes[s[1][0]].visible;
+      s[1].forEach(function(id){ show(id, on); });
+      s[2].forEach(function(id){ show(id, !on); });
+      b.classList.toggle('off', !on);
+      count();
+    });
+    b.classList.add('off');
+    document.getElementById('grouptoggles').appendChild(b);
+  });
+
   var ro = document.getElementById('ro');
   function count(){
     var on=0, tris=0;
