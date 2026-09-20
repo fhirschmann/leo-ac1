@@ -36,10 +36,10 @@
       "degenerate_faces": 0,
       "components": 1,
       "backend": "CGAL",
-      "sha256": "eab080d07e04cc18ee7ff24fec3f92eff132459a3e5d553ed0f167336780e6d1",
+      "sha256": "f646e0da42247f24f03d02e8e5d6bb2f9b24c94412b6b0f822a2436f0ea5af8b",
       "quantity": 1,
       "material": "PETG-white",
-      "committed_sha256": "eab080d07e04cc18ee7ff24fec3f92eff132459a3e5d553ed0f167336780e6d1"
+      "committed_sha256": "f646e0da42247f24f03d02e8e5d6bb2f9b24c94412b6b0f822a2436f0ea5af8b"
     },
     "back": {
       "size_mm": [
@@ -126,10 +126,10 @@
       "degenerate_faces": 0,
       "components": 1,
       "backend": "CGAL",
-      "sha256": "87aba3221fd3b13aee1eb951c609bdccb117486b2a63eae0c1364826d40498fb",
+      "sha256": "900b740fd34d61e678ffe54f5a597c42db608e4648792ab1db20b8de698b3502",
       "quantity": 1,
       "material": "PETG-grey",
-      "committed_sha256": "87aba3221fd3b13aee1eb951c609bdccb117486b2a63eae0c1364826d40498fb"
+      "committed_sha256": "900b740fd34d61e678ffe54f5a597c42db608e4648792ab1db20b8de698b3502"
     },
     "handle": {
       "size_mm": [
@@ -246,10 +246,10 @@
       "degenerate_faces": 0,
       "components": 1,
       "backend": "CGAL",
-      "sha256": "2d294e0b67ae2cdb4d7bc0327cc3d55187a9e71333e1f9710839d6fc8a274747",
+      "sha256": "1d9629ee2a5169f3834478ffed90eb70dbda855bb8ad4561e81b4c46f43f63a7",
       "quantity": 0,
       "material": "PETG-white",
-      "committed_sha256": "2d294e0b67ae2cdb4d7bc0327cc3d55187a9e71333e1f9710839d6fc8a274747"
+      "committed_sha256": "1d9629ee2a5169f3834478ffed90eb70dbda855bb8ad4561e81b4c46f43f63a7"
     },
     "test_right_back": {
       "size_mm": [
@@ -308,7 +308,7 @@
       "degenerate_faces": 0,
       "components": 1,
       "backend": "CGAL",
-      "sha256": "3e5fb66c84a4187655e3d9d7a980735cac71e076ee42922e0c7b456e8cf68799"
+      "sha256": "0ac1ef9f1a37f1c2a0879e0c9c4b08b1c1ab7601a71ed22fca2d665af19907b8"
     },
     "body_label": {
       "size_mm": [

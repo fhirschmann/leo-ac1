@@ -385,14 +385,15 @@ def check_committed_stls():
     return differences
 
 
-def replace_folder(folder, group, names, prune=True):
+def replace_folder(folder, group, names, keep=()):
+    """Copy the freshly exported meshes over and drop orphans; meshes from other sources are named in keep."""
     folder.mkdir(parents=True, exist_ok=True)
     for name in names:
         shutil.copy2(BUILD / group / f"{name}.stl", folder / f"{name}.stl")
-    if prune:
-        for path in folder.glob("*.stl"):
-            if path.stem not in names:
-                path.unlink()
+    for path in folder.glob("*.stl"):
+        if path.stem not in names and path.stem not in keep:
+            print(f"Removing orphan {path.relative_to(ROOT)}", flush=True)
+            path.unlink()
 
 
 def software():
@@ -436,8 +437,8 @@ def main():
         replace_folder(STL_DIR, "print", list(PARTS))
         if COLOR_PIECES:
             replace_folder(COLOR_DIR, "color", COLOR_PIECES)
-        # asm/ may also hold meshes from other sources, so nothing is pruned there
-        replace_folder(ASM_DIR, "assembly", list(ASSEMBLY), prune=False)
+        # asm/ also holds vendor meshes that this tool does not export (ASM_KEEP), everything else is pruned
+        replace_folder(ASM_DIR, "assembly", list(ASSEMBLY), keep=getattr(P, "ASM_KEEP", ()))
     consistency = check_committed_stls()
     for name, info in results["print"].items():
         info["committed_sha256"] = hashlib.sha256((STL_DIR / f"{name}.stl").read_bytes()).hexdigest()

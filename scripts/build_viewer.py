@@ -103,7 +103,7 @@ def main():
         else:
             add(pid, pid, ASM_DIR / f"{pid}.stl", label, group, col, qty, direction)
     meta = dict(title=V["title"], eyebrow=V.get("eyebrow", "Assembly · installed position"), dims=V.get("dims", []), ui=V.get("ui", {}),
-                groups=V.get("groups", []), hidden_groups=V.get("hidden_groups", []),
+                groups=V.get("groups", []), hidden_groups=V.get("hidden_groups", []), toggle_groups=V.get("toggle_groups", []),
                 outer=V.get("outer", []), cut=V.get("cut", []), screens=V.get("screens", []),
                 bounds=[low.round(2).tolist(), high.round(2).tolist()],
                 center=((low + high) / 2).round(2).tolist(), size=float(np.max(high - low)))

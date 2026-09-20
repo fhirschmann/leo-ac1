@@ -64,6 +64,7 @@ button.preset:focus-visible{outline:2px solid var(--accent);outline-offset:1px}
   border:1px solid var(--rule-strong);background:var(--surface-2);color:var(--ink-2)}
 .slider button.preset{padding:2px 8px}
 .slider input:disabled,.slider button:disabled{opacity:.4;cursor:default}
+.preset.off{opacity:.45}
 .slider output{font-family:"IBM Plex Mono",ui-monospace,monospace;font-size:11.5px;
   color:var(--ink-2);min-width:34px;text-align:right;font-variant-numeric:tabular-nums}
 .list{overflow-y:auto;flex:1;min-height:0;padding-bottom:8px}
@@ -111,6 +112,7 @@ canvas{display:block;width:100%;height:100%;touch-action:none}
         <button class="preset" data-preset="inside" data-ui="inside">Internals</button>
         <button class="preset" data-preset="cut" data-ui="cut">Cut open</button>
       </div>
+      <div class="presets" id="grouptoggles"></div>
       <div class="slider">
         <label for="ex" data-ui="explode">Explode</label>
         <input id="ex" type="range" min="0" max="60" value="0" step="1">
@@ -371,6 +373,26 @@ canvas{display:block;width:100%;height:100%;touch-action:none}
       });
       list.appendChild(row);
     });
+  });
+
+  // one on/off button per group named in VIEWER["toggle_groups"], next to the presets
+  (M.toggle_groups || []).forEach(function(gid){
+    var g = M.groups.filter(function(x){ return x[0] === gid; })[0];
+    if (!g || !P.parts.some(function(p){ return p.group === gid; })) return;
+    var b = document.createElement('button');
+    b.className = 'preset'; b.type = 'button'; b.textContent = g[1];
+    b.addEventListener('click', function(){
+      var rows = P.parts.filter(function(p){ return p.group === gid; });
+      var on = rows.some(function(p){ return meshes[p.id].visible; });
+      rows.forEach(function(p){
+        meshes[p.id].visible = !on;
+        var row = list.querySelector('.row[data-id="' + p.id + '"]');
+        if (row){ row.querySelector('input').checked = !on; row.classList.toggle('off', on); }
+      });
+      b.classList.toggle('off', on);
+      count();
+    });
+    document.getElementById('grouptoggles').appendChild(b);
   });
 
   var ro = document.getElementById('ro');
