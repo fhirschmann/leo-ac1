@@ -42,7 +42,7 @@ Print profile: 0.20 mm layers, 6 walls, 5 top/bottom layers, 30 % gyroid (feet 1
 
 The upper right section of the housing (from the partition to the right wall, from the electronics shelf up) and the matching part of the back cover, cut from the real parts in their print orientation, so the electronics can be fitted before the 20-hour print. The Bambu Studio project [`stl/leo_ac1_fit_tests.3mf`](stl/leo_ac1_fit_tests.3mf) holds both sections and a knob on one plate with light settings (2 walls, 3 top/bottom layers, 10 % infill): same geometry, less material, about 125 g and 5 hours including the prime tower for the knob.
 
-Check with the real parts: the PWM controller lies flat on its pads, the potentiometer housing sits in its wall pocket and washer and nut tighten from outside, the knob covers them; LED, USB-C socket, power switch, battery with foam tape, handle and foot inserts.
+Check with the real parts: the PWM controller lies flat on its pads, the potentiometer housing sits in its wall pocket and washer and nut tighten from outside, the knob covers them; LED, power switch and handle inserts.
 
 ## Bought parts
 
