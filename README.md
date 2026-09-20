@@ -14,7 +14,7 @@ Designed for a Bambu Lab H2S with AMS in Bambu PETG HF white and grey plus TPU. 
 | **Knob and service cover** | **Underside with M5 thread and TPU feet** |
 | ![Knob](img/06_knob.png?v=31284d6cc598) | ![Underside](img/07_underside.png?v=5d14077ec86d) |
 | **Charge module in the air stream** | **LED pocket behind the O** |
-| ![Charge module](img/08_charge_module.png?v=2ef05f89a581) | ![LED pocket](img/09_led.png?v=e16ed4530b5b) |
+| ![Charge module](img/08_charge_module.png?v=2ef05f89a581) | ![LED pocket](img/09_led.png?v=81cff535601b) |
 | **Folding bail, carrying position** | **Back cover bosses** |
 | ![Folding bail](img/11_bail.png?v=27074d881b12) | ![Back cover bosses](img/12_back_bosses.png?v=1ca5069dfc86) |
 | **TPU foot mount** | **USB-C socket** |
@@ -30,8 +30,8 @@ Designed for a Bambu Lab H2S with AMS in Bambu PETG HF white and grey plus TPU. 
 | `back` back cover | 1 | PETG white | 225 × 155 × 55.8 | outside on the bed; battery saddles and hold-down plate stand upright |
 | `grille` fan grille | 1 | PETG grey | Ø 136 × 7 | front on the bed |
 | `cover` service cover | 1 | PETG grey | 74.4 × 46 × 11.8 | outside on the bed; half-round notch around the knob, glued into a groove of the side wall |
-| `knob` speed knob | 1 | PETG white + grey (pointer) | Ø 28 × 16.5 | top on the bed, pointer as inlay in the first 0.6 mm |
-| `bail` folding bail | 1 | PETG grey | 224 × 61.5 × 58.5 | back faces of the lower legs and the grip on the bed, upper legs upright |
+| `knob` speed knob | 1 | PETG grey + white (pointer) | Ø 28 × 16.5 | top on the bed, pointer as inlay in the first 0.6 mm |
+| `bail` folding bail | 1 | PETG grey | 224 × 36.5 × 58.5 | back faces of the lower legs and the grip on the bed, upper legs upright |
 | `foot` foot | 2 | TPU | 16 × 62 × 5.5 | ground face on the bed, 100 % infill |
 
 All parts are in the Bambu Studio project [`stl/leo_ac1_all_parts.3mf`](stl/leo_ac1_all_parts.3mf): plate 1 housing, plate 2 back cover, plate 3 grey parts (grille, service cover, bail, knob), plate 4 TPU feet. Filaments: 1 PETG white, 2 PETG grey, 3 grey for logo and dedication (same spool as 2), 4 TPU, 5 white for the knob pointer (same spool as 1). All parts print without supports. Bambu Studio estimates about **0.69 kg and 19 hours** in total. Single-colour STLs are in `stl/`, the colour pieces in `stl/multicolour/`.

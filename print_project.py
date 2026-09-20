@@ -191,11 +191,11 @@ def checks(ctx):
 
 VIEWER = dict(
     title="LEO-AC1", page_title="LEO-AC1 fan", eyebrow="Assembly · installed position",
-    dims=[("Width", "239.8"), ("Depth", "96.5"), ("Height", "159.5")],
+    dims=[("Width", "242"), ("Depth", "96.5"), ("Height", "159.5")],
     groups=[("white", "Printed · PETG white"), ("grey", "Printed · PETG grey"),
-            ("tpu", "Printed · TPU"), ("screws", "Screws M3"), ("bought", "Bought parts")],
+            ("tpu", "Printed · TPU"), ("screws", "Screws"), ("bought", "Bought parts")],
     hidden_groups=["bought"],
-    outer=["body", "back", "cover", "grille", "bail", "feet", "screws_grille", "screws_back", "screws_bail", "screws_feet"],
+    outer=["body", "back", "cover", "grille", "bail", "knob", "feet", "screws_grille", "screws_back", "screws_bail", "screws_feet"],
     cut=["back", "cover", "screws_back"],
     # id, label, group, colour, quantity, explode direction (mm per slider mm)
     parts=[("body", "Housing", "white", "#f2f2ee", "1x", [0, 0, 0]),
@@ -250,20 +250,20 @@ VIEWS = {"01_assembly": ("assembly();", "-160,-330,230,112,40,70"),
          "06_knob": ("intersection() { assembly(); translate([165, 0, 20]) cube([100, 80, 140]); }",
                      "420,-120,200,230,40,90"),
          # charge/boost module on the partition in the air stream, from the back with the back cover removed
-         "08_charge_module": ("intersection() { union() { color(\"#f2f2ee\") body(); color(\"#c9c9c9\") chg_module_env(); } translate([118, 14, 30]) cube([38, 62, 110]); }", "40,250,170,148,50,85"),
+         "08_charge_module": ("intersection() { union() { color(\"#f2f2ee\") body(dedication = false); color(\"#c9c9c9\") chg_module_env(); } translate([118, 14, 30]) cube([38, 62, 110]); }", "40,250,170,148,50,85"),
          # LED pocket behind the O, cut through the LED axis and seen from behind: 0.8 mm white skin in front of the LED
-         "09_led": ("intersection() { union() { color(\"#f2f2ee\") body(); color(\"#9fd3ff\") led_env(); } translate([led_xz[0] - 9, -1, led_xz[1] - 8]) cube([18, 10, 8]); }",
+         "09_led": ("intersection() { union() { color(\"#f2f2ee\") body(dedication = false); color(\"#9fd3ff\") led_env(); } translate([led_xz[0] - 9, -1, led_xz[1] - 8]) cube([18, 10, 8]); }",
                     "232,40,178,207,3,131"),
          # L bail at the carrying angle: upper legs on the step ramps, bar above the pivots
          "11_bail": ("assembly(bail_angle = bail_carry);", "-150,-300,330,112,40,90"),
          # back cover insert boss in the top left corner from behind and below, back cover off: column and cone into the corner
-         "12_back_bosses": ('color("#f2f2ee") intersection() { body(); translate([-1, 30, 105]) cube([45, body_d, 60]); }',
+         "12_back_bosses": ('color("#f2f2ee") intersection() { body(dedication = false); translate([-1, 30, 105]) cube([45, body_d, 60]); }',
                             "110,190,60,12,62,142"),
          # left TPU foot cut at its screw axes, seen from the right: pocket, insert boss, screw, recessed head
-         "13_foot_mount": ('intersection() { union() { color("#f2f2ee") body(); color("#222326") place_feet(); color("#26282b") screws_feet(true); } translate([-1, 0, -10]) cube([foot_inset + 1, body_d, 30]); }',
+         "13_foot_mount": ('intersection() { union() { color("#f2f2ee") body(dedication = false); color("#222326") place_feet(); color("#26282b") screws_feet(true); } translate([-1, 0, -10]) cube([foot_inset + 1, body_d, 30]); }',
                            "130,40,-35,17,40,2"),
          # USB-C charging socket in the back cover, cut at its axis and seen from above: plate, channel, module, stop on the wall
-         "14_usb_c": ('intersection() { union() { color("#f2f2ee") body(); color("#e6e6e1") back(); color("#4b2a7a") usbc_env(); } translate([189, 48, usbc_xz[1] - 20]) cube([37, 36, 20]); }',
+         "14_usb_c": ('intersection() { union() { color("#f2f2ee") body(dedication = false); color("#e6e6e1") back(); color("#4b2a7a") usbc_env(); } translate([189, 48, usbc_xz[1] - 20]) cube([37, 36, 20]); }',
                       "198,40,180,201,66,68"),
          # power switch in its well below the USB-C socket, cut at the switch axis and seen from the left
          "15_switch": ('intersection() { union() { color("#e6e6e1") back(); color("#1b1b1b") sw_env(); } translate([sw_xz[0], 40, sw_xz[1] - 20]) cube([30, 45, 40]); }',
@@ -271,4 +271,4 @@ VIEWS = {"01_assembly": ("assembly();", "-160,-330,230,112,40,70"),
          # battery saddles on the inside of the back cover: root fillets and the rib behind the battery, seen from the front
          "16_saddles": ('color("#e6e6e1") intersection() { back(); translate([150, 20, 0]) cube([76, 61, 90]); }', "120,-60,120,186,60,40"),
          # underside with the M5 mount insert
-         "07_underside": ('color("#f2f2ee") body(); color("#222326") place_feet(); color("#26282b") screws_feet(true);', "40,-160,-260,112,40,40")}
+         "07_underside": ('color("#f2f2ee") body(dedication = false); color("#222326") place_feet(); color("#26282b") screws_feet(true);', "40,-160,-260,112,40,40")}
