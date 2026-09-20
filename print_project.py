@@ -73,6 +73,7 @@ PROJECT_3MF = "stl/leo_ac1_all_parts.3mf"
 TEST_PLATES = [("Right section fit test", ["test_right", "test_right_back", "knob"])]
 TEST_PROCESS = dict(wall_loops=2, top_shell_layers=3, bottom_shell_layers=3, infill=10)
 TEST_3MF = "stl/leo_ac1_fit_tests.3mf"
+TEST_FILAMENT = 1   # fit tests single-colour in PETG white (user)
 SLICER_SUMMARY = "docs/slicer-summary.json"
 
 LIMITATIONS = ["Bought parts as envelopes (fan block, battery cylinder), no vendor CAD",

@@ -8,6 +8,7 @@
    to their right. Every plate is sliced (layout, instances, effective settings); multicolour plates also prove the inlays print.
 3. Optional TEST_PLATES (e.g. fit tests; entries are part names or (name, count), one copy by default) become TEST_3MF
    the same way, with TEST_PROCESS overriding PROCESS (e.g. fewer walls and less infill: same geometry, less material).
+   TEST_FILAMENT = slot prints every test part single-colour from that filament slot (no inlays, no prime tower).
 
 Generated G-code and 3MF files under build/ are diagnostics, NOT print releases.
 Writes build/slicer-diagnostic/summary.json and SLICER_SUMMARY (default docs/slicer-summary.json).
@@ -53,6 +54,7 @@ PROJECT_3MF = ROOT / getattr(P, "PROJECT_3MF", f"{STL_DIR.relative_to(ROOT).as_p
 # Test prints (fit tests, samples) as their own project: plates of part names or (name, count), one copy by default
 TEST_PLATES = getattr(P, "TEST_PLATES", [])
 TEST_PROCESS = PROCESS | getattr(P, "TEST_PROCESS", {})
+TEST_FILAMENT = getattr(P, "TEST_FILAMENT", None)
 TEST_3MF = ROOT / getattr(P, "TEST_3MF", f"{STL_DIR.relative_to(ROOT).as_posix()}/{ROOT.name}_test_prints.3mf")
 SUMMARY = ROOT / getattr(P, "SLICER_SUMMARY", "docs/slicer-summary.json")
 INLAY_FILAMENT = {inlay: i for i, f in enumerate(FILAMENTS, 1)
@@ -180,9 +182,11 @@ def plate_counts(group, full_build):
     return dict((entry, PARTS[entry][0] if full_build else 1) if isinstance(entry, str) else tuple(entry) for entry in group)
 
 
-def build_project_3mf(plate_list=None, target=None, folder_name="project-3mf", full_build=True, process_file=None):
+def build_project_3mf(plate_list=None, target=None, folder_name="project-3mf", full_build=True, process_file=None, mono=None):
     """Every part of the full build (no test prints) as one Bambu Studio project on the fixed PLATES; with
-    full_build=False any plate list (test prints) into its own target file, optionally with its own process profile."""
+    full_build=False any plate list (test prints) into its own target file, optionally with its own process profile;
+    mono = filament slot prints every part single-colour from its plain STL."""
+    colour_parts = {} if mono else COLOR_PARTS
     target = target or PROJECT_3MF
     process_file = process_file or profiles / f"process-{DEFAULT_INFILL}.json"
     folder = out / folder_name
@@ -198,7 +202,7 @@ def build_project_3mf(plate_list=None, target=None, folder_name="project-3mf", f
         objects = []
         for name, quantity in group.items():
             material = PARTS[name][1]
-            if name in COLOR_PARTS:
+            if name in colour_parts:
                 # Base and inlays as one object with several parts: all parts of one copy share one assemble_index,
                 # each copy gets its own (a shared index merges every copy into one object)
                 indices = list(range(assembled + 1, assembled + quantity + 1))
@@ -209,7 +213,7 @@ def build_project_3mf(plate_list=None, target=None, folder_name="project-3mf", f
                                         filaments=[filament] * quantity, assemble_index=indices))
                 continue
             entry = dict(path=str(STL_DIR / f"{name}.stl"), count=quantity,
-                         filaments=[base_filament(material)] * quantity)
+                         filaments=[mono or base_filament(material)] * quantity)
             density = infill(name, material)
             if density != DEFAULT_INFILL:
                 entry["print_params"] = dict(sparse_infill_density=f"{density}%", sparse_infill_pattern=pattern(density))
@@ -264,7 +268,7 @@ def build_project_3mf(plate_list=None, target=None, folder_name="project-3mf", f
                 extruder = re.search(r'key="extruder" value="(\d+)"', part) or re.search(r'key="extruder" value="(\d+)"', body)
                 parts[re.sub(r"_\d+$", "", re.search(r'key="name" value="([^"]+)"', part).group(1))] = extruder.group(1)
             name = re.sub(rf"_({piece_names})$", "", next(iter(parts)))
-            if name in COLOR_PARTS:
+            if name in colour_parts:
                 expected = {f"{name}_base": str(base_filament(PARTS[name][1])),
                             **{f"{name}_{inlay}": str(INLAY_FILAMENT[inlay]) for inlay in COLOR_PARTS[name]}}
                 assert parts == expected, f"Multicolour {name}: parts {parts}, expected {expected}"
@@ -294,7 +298,7 @@ def build_project_3mf(plate_list=None, target=None, folder_name="project-3mf", f
             assert size[0] <= width and size[1] <= depth, f"Plate {title} exceeds the bed"
             delta = (width / 2 - (low[0] + high[0]) / 2, depth / 2 - (low[1] + high[1]) / 2)
             entry = dict(plate=index + 1, name=title, parts=got, size_mm=[round(size[0], 1), round(size[1], 1)])
-            if set(group) & set(COLOR_PARTS):
+            if set(group) & set(colour_parts):
                 # Multicolour plate: parts to the left edge, prime tower right next to them. Wide plates first try
                 # tighter margins, then put the parts to the front edge and the tower behind them (its depth grows
                 # with the purge volume; the slicer run itself reports a tower that still collides)
@@ -353,7 +357,7 @@ def build_project_3mf(plate_list=None, target=None, folder_name="project-3mf", f
     print(f"{target.name}: {placed} parts on {len(plate_ids)} plates, slicing every plate before publishing", flush=True)
     multicolour, pauses, plate_slices = {}, {}, {}
     for index, (title, group) in enumerate(resolved, 1):
-        coloured = set(group) & set(COLOR_PARTS)
+        coloured = set(group) & set(colour_parts)
         plate_dir = folder / f"slice-plate-{index}"
         plate_dir.mkdir(exist_ok=True)
         for stale in (plate_dir / "result.json", plate_dir / "sliced.3mf"):
@@ -384,7 +388,7 @@ def build_project_3mf(plate_list=None, target=None, folder_name="project-3mf", f
             print(f"Slice plate {title}: PASS, filament use {grams} g", flush=True)
             continue
         needed = {base_filament(PARTS[part][1]) for part in group} | \
-                 {INLAY_FILAMENT[inlay] for part in group if part in COLOR_PARTS for inlay in COLOR_PARTS[part]}
+                 {INLAY_FILAMENT[inlay] for part in group if part in colour_parts for inlay in colour_parts[part]}
         assert all(grams.get(f, 0) > 0 for f in needed), f"Multicolour plate {title}: filament use {grams}, needs {sorted(needed)}"
         multicolour[title] = dict(plate=index, hours=round(plate.get("total_predication", 0) / 3600, 2),
                                   grams_by_filament=grams, warnings=plate.get("warning_message"))
@@ -447,7 +451,7 @@ assert all(r["effective_settings"]["sparse_infill_pattern"] == pattern(infill(r[
 assert all(r["effective_settings"]["enable_support"] == "0" for r in results)
 summary["project_3mf"] = build_project_3mf()
 if TEST_PLATES:
-    summary["test_3mf"] = build_project_3mf(TEST_PLATES, TEST_3MF, "test-3mf", full_build=False, process_file=profiles / "process-test.json")
+    summary["test_3mf"] = build_project_3mf(TEST_PLATES, TEST_3MF, "test-3mf", full_build=False, process_file=profiles / "process-test.json", mono=TEST_FILAMENT)
     summary["test_3mf"]["process"] = {key: TEST_PROCESS[key] for key in ("wall_loops", "top_shell_layers", "bottom_shell_layers", "infill")}
 write_summary(summary)
 test = summary.get("test_3mf")
