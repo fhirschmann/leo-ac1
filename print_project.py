@@ -262,12 +262,12 @@ VIEWS = {"01_assembly": ("assembly();", "-160,-330,230,112,40,70"),
          # left TPU foot cut at its screw axes, seen from the right: pocket, insert boss, screw, recessed head
          "13_foot_mount": ('intersection() { union() { color("#f2f2ee") body(); color("#222326") place_feet(); color("#26282b") screws_feet(true); } translate([-1, 0, -10]) cube([foot_inset + 1, body_d, 30]); }',
                            "130,40,-35,17,40,2"),
-         # USB-C charging socket in the back cover, cut at its axis and seen from above: plate, channel, module, stop on the wall
-         "14_usb_c": ('intersection() { union() { color("#f2f2ee") body(); color("#e6e6e1") back(); color("#4b2a7a") usbc_env(); } translate([196, 48, usbc_xz[1] - 20]) cube([30, 36, 20]); }',
-                      "205,40,156,208,66,44"),
+         # USB-C charging socket in the back cover, cut at its axis and seen from above: plate, channel, module, stop on the partition
+         "14_usb_c": ('intersection() { union() { color("#f2f2ee") body(); color("#e6e6e1") back(); color("#4b2a7a") usbc_env(); } translate([148, 44, usbc_xz[1] - 20]) cube([30, 40, 20]); }',
+                      "159,40,164,162,64,52"),
          # power switch in its well above the USB-C socket, cut at the switch axis and seen from the left
          "15_switch": ('intersection() { union() { color("#e6e6e1") back(); color("#1b1b1b") sw_env(); } translate([sw_xz[0], 40, sw_xz[1] - 20]) cube([30, 45, 40]); }',
-                       "56,40,146,167,70,101"),
+                       "54,40,146,165,70,101"),
          # battery saddles on the inside of the back cover: root fillets and the rib behind the battery, seen from the front
          "16_saddles": ('color("#e6e6e1") intersection() { back(); translate([150, 20, 0]) cube([76, 61, 90]); }', "120,-60,120,186,60,40"),
          # underside with the M5 mount insert

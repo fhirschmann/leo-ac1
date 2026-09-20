@@ -74,7 +74,7 @@ bat_bms = [20, 4];   // BMS board on one side, facing the partition (-x): width 
 bat_bms_cut = [2, 1];         // extra room around the BMS board in the cradle rings and saddles: per side across (y), in depth (x)
 bat_l = 71.6;        // measured cell-body length; cable end up, through the shelf slot
 cable_slot_w = 10;   // slot in the shelf above the battery, open towards the back
-bat_cx = 180;
+bat_cx = 183;        // 3 mm right of the old 180 so the USB-C stop beside the BMS board reaches under the switch column
 bat_clear = 0.5;     // radial clearance in the cradle
 bat_front_gap = 4.5; // front plate to battery, clears the inner fillet
 // three closed rings around the battery for drops: front half as ribs in the body, back half as saddles on the back cover
@@ -82,7 +82,7 @@ cradle_z = [14, 28, 56];  // lower faces of the rings, clear of the corner bosse
 cradle_t = 4;
 saddle_gap = 0.3;    // rib end to saddle along y
 saddle_gusset = 6;            // 45 degree fillets between the back cover and the battery saddles (not below the lowest: back bosses)
-saddle_rib = [3, 180];         // rib across the three saddles behind the battery: thickness, x position
+saddle_rib = [3, 183];         // rib across the three saddles behind the battery: thickness, x position
 saddle_rib_slot = [12, 12];    // wire passage through the rib at the lower cable notch: height, depth from the back cover (pointed end)
 shelf_gap = 3;       // battery top to electronics shelf (cable, protection board)
 shelf_t = 4;         // stops the battery when the unit falls on its top
@@ -143,7 +143,7 @@ chg_pcb = [32.2, 11, 1.6];     // measured length/width 2026-09-15; PCB thicknes
 chg_total_h = 3.7;             // measured total board height including components; back confirmed clear
 chg_comp_h = chg_total_h - chg_pcb[2]; // height above the assumed PCB thickness
 chg_sink = [8.8, 8.8, 5, 6];   // planned clearance envelopes only: no heatsinks bought/measured yet; y, z, height, gap
-cable_notch = [15, 12];        // cable notches at the back edge of the partition: length (y), height
+cable_notch = [15, 10];        // cable notches at the back edge of the partition: length (y), height
 cable_notch_z = [44, 126];     // centres: low (USB-C wires, between two battery saddles) and high (fan cable)
 chg_gap = 4.5;                 // board back to partition: pads plus tape; board and heatsinks further in the intake air, but the ledge under
                                // the board must stay beside the fan frame, otherwise the fan cannot be pulled out towards the back
@@ -174,14 +174,14 @@ usbc = [usbc_board[0] + usbc_protrusion, usbc_board[1], usbc_board[2]]; // total
 usbc_shell = [8.9, 3.22];    // measured receptacle shell width and height, 2026-09-15
 usbc_shell_bottom = 1.1;     // approximately measured from module underside to shell underside; 1.1 + 3.22 ~= 4.30 overall
 usbc_plate = usbc_protrusion; // local cover thickness: PCB edge rests inside, receptacle face flush outside
-usbc_xz = [205, 44];         // module envelope centre: low right between two battery saddles; shell axis is offset upwards by its measured height
+usbc_xz = [165, 52.5];       // module envelope centre: below the power switch (user), between two battery saddles and just above the lower cable notch; shell axis is offset upwards by its measured height
 usbc_cl = 0.2;               // clearance in channel, plate opening and to the stop
 usbc_wall = 2;               // channel on the inside of the back cover: side walls and floor, open at the top for the wires
-usbc_stop = [4, 6];          // stop on the right wall behind the module end (takes the plug force with the back cover on): thickness, height
+usbc_stop = [4, 6];          // stop from the partition behind the module end (takes the plug force with the back cover on): thickness, height
                              // (reaches below the module, the wires leave its end at the top)
 
 /* [Power switch: measured 14.7 x 20.9 mm rocker, snap-in, in a well of the back cover] */
-sw_xz = [167, 101];          // low (user) beside the PWM module above the battery, below the folded bail grip
+sw_xz = [165, 101];          // low (user) beside the PWM module above the battery, below the folded bail grip; in one column with the USB-C socket (user)
 sw_cut = [19.2, 12.2];       // measured required panel hole; long side horizontal
 sw_bezel = [20.9, 14.7, 2];  // measured outside width/height and bezel thickness
 sw_rocker = 5;               // measured rocker rise above the bezel
@@ -200,7 +200,7 @@ foot_lift = 4.5;      // housing above the ground
 foot_key = 1;         // the foot top sits this deep in a pocket of the bottom wall and takes the shear
 foot_c = 1;           // 45 degree chamfers: ground edges all around, top ends (match the pocket ends)
 foot_cl = 0.2;        // clearance of the TPU in the pocket, per side
-foot_inset = 17;      // foot axis from the side faces
+foot_inset = 15;      // foot axis from the side faces
 foot_screw_dy = 22;   // screw axes from the foot centre along y
 foot_head_recess = 1.2;   // screw heads below the ground face
 foot_boss_d = 9;      // bosses inside the bottom wall for the inserts, pressed in from outside
@@ -330,6 +330,10 @@ function bail_ramp_y() = let (r = bail_arm[1] / 2 - 0.1,   // the upper leg face
     p[0] + (body_h + 1 - p[1]) / sin(bail_carry) * cos(bail_carry);
 boss_top_x = bail_band + wall + back_boss_d / 2 + 1;   // top back-cover bosses moved inwards beside the steps
 usbc_y0 = body_d - usbc[0];                             // inner end of the module, in the bay
+function usbc_channel_x() = [usbc_xz[0] - usbc[1] / 2 - usbc_cl - usbc_wall, usbc_xz[0] + usbc[1] / 2 + usbc_cl + usbc_wall];
+function usbc_channel_z() = [usbc_xz[1] - usbc[2] / 2 - usbc_cl - usbc_wall, usbc_xz[1] + usbc[2] / 2 + usbc_cl];
+function usbc_stop_x1() = bat_cx - bat_d / 2 - bat_bms[1] - bat_clear - 0.25;   // stop end: 0.75 mm beside the battery removal path (BMS board side)
+function usbc_stop_z() = [cable_notch_z[0] + cable_notch[1] / 2 + 0.5, usbc_xz[1] + usbc[2] / 2];   // above the lower cable notch up to the module top
 function foot_x() = [foot_inset, body_w - foot_inset];
 function foot_screws() = [for (fx = foot_x(), dy = [-1, 1]) [fx, foot_y0 + foot_len / 2 + dy * foot_screw_dy]];
 foot_doubler_hw = foot_w / 2 + foot_cl + 1.2;        // half width of the floor doubler over a foot pocket
@@ -381,8 +385,9 @@ assert(mount_top < fan_cz - fan_size / 2 - 2 && (mount_boss_d - mount_insert[0])
        "Mount boss hits the fan, is thinner than the datasheet wall + 1.5 mm, or its floor is too thin");
 assert(mount_xy[0] + mount_doubler[0] / 2 >= part_x - 1, "Mount doubler does not reach the partition");
 assert(back_t - head_pocket[1] >= 2, "Back cover too thin under the recessed screw heads");
-assert(usbc_xz[0] - usbc[1] / 2 - usbc_cl > bat_cx + bat_d / 2 + 2,   // the wall stop stays out of the battery removal path
-       "USB-C module: its stop on the right wall reaches the battery path");
+assert(usbc_stop_x1() - (usbc_xz[0] - usbc[1] / 2) >= 2 && usbc_stop_z()[1] - usbc_stop_z()[0] >= 3
+       && usbc_stop_x1() < bat_cx - bat_d / 2 - bat_bms[1] - bat_clear && usbc_xz[0] - usbc[1] / 2 > bay_x0 + 5,
+       "USB-C module: its stop on the partition overlaps the board edge by less than 2 x 3 mm or reaches the battery removal path");
 assert(sw_bezel[2] + sw_rocker <= sw_well[0] - 1 && sw_body[0] < sw_cut[0] && sw_body[1] < sw_cut[1] && sw_bezel[0] > sw_cut[0] + 1 && sw_bezel[1] > sw_cut[1] + 1
        && sw_xz[1] - (sw_bezel[1] / 2 + sw_well[1] + sw_well[2] + sw_well[0] - back_t) > shelf_z + shelf_t + shelf_hold[2] + shelf_hold[1] + 1
        && sw_xz[1] + (sw_bezel[1] / 2 + sw_well[1] + sw_well[2] + sw_well[0] - back_t) < body_h - wall - 1
@@ -390,7 +395,7 @@ assert(sw_bezel[2] + sw_rocker <= sw_well[0] - 1 && sw_body[0] < sw_cut[0] && sw
        && sw_xz[0] - sw_body[0] / 2 > bay_x0 + 1 && sw_xz[0] - (sw_bezel[0] / 2 + sw_well[1] + sw_well[2] + sw_well[0] - back_t) > 146 + slot_w / 2 + 1.2
        && sw_xz[0] + (sw_bezel[0] / 2 + sw_well[1] + sw_well[2] + sw_well[0] - back_t) < bay_x1 - lip_cl - lip_t,
        "Power switch: well hits the hold-down plate, top wall, back lip or intake slots, housing reaches the PWM module or the partition, or hole and frame do not match");
-assert(usbc_stop[0] >= 4 && usbc_stop[1] >= usbc[2] && usbc_wall >= 2 && usbc_plate >= 1.2 && back_t - usbc_plate >= 1 && usbc_board[0] >= 8, "USB-C module: cover skin too thin, recess too shallow or board too short for the channel");
+assert(usbc_stop[0] >= 4 && usbc_wall >= 2 && usbc_plate >= 1.2 && back_t - usbc_plate >= 1 && usbc_board[0] >= 8, "USB-C module: cover skin too thin, recess too shallow or board too short for the channel");
 assert(usbc_xz[0] + usbc[1] / 2 + usbc_cl < bay_x1 - lip_cl - lip_t && usbc_xz[0] - usbc[1] / 2 - usbc_cl - usbc_wall > bay_x0 + 5
        && usbc_xz[1] + usbc[2] / 2 + usbc_cl < body_h - wall - 1
        && usbc_xz[1] - usbc[2] / 2 - usbc_cl - usbc_wall > cradle_z[1] + cradle_t + 1 && usbc_xz[1] + usbc[2] / 2 + usbc_cl < cradle_z[2] - 1,   // between two saddles
@@ -590,10 +595,11 @@ module body(dedication = true) difference() {   // dedication = false for public
             translate([p[0], p[1], wall - eps]) cylinder(d = foot_boss_d, h = foot_boss_top - wall + eps);
             translate([p[0] - foot_boss_d / 2, p[1] - foot_boss_d / 2 - (foot_boss_top - zf), zf - 1]) cube([foot_boss_d, tip, 1]);
         }
-        // stop on the right wall behind the USB-C module in the back cover, 45 degree wedge towards the front (printable)
-        let (x0 = usbc_xz[0] - usbc[1] / 2, ys = usbc_y0 - usbc_cl, z0 = usbc_xz[1] + usbc[2] / 2 - usbc_stop[1]) hull() {
-            translate([x0, ys - usbc_stop[0], z0]) cube([bay_x1 - x0 + eps, usbc_stop[0], usbc_stop[1]]);
-            translate([bay_x1, ys - usbc_stop[0] - (bay_x1 - x0), z0]) cube([tip, tip, usbc_stop[1]]);
+        // stop from the partition behind the left edge of the USB-C module in the back cover, above the lower cable notch,
+        // ending beside the battery removal path; 45 degree wedge towards the front (printable)
+        let (x1 = usbc_stop_x1(), ys = usbc_y0 - usbc_cl, z = usbc_stop_z()) hull() {
+            translate([bay_x0 - eps, ys - usbc_stop[0], z[0]]) cube([x1 - bay_x0 + eps, usbc_stop[0], z[1] - z[0]]);
+            translate([bay_x0 - 0.5, ys - usbc_stop[0] - (x1 - bay_x0), z[0]]) cube([0.5 + tip, tip, z[1] - z[0]]);
         }
         // electronics shelf, also stops the battery upwards
         translate([bay_x0 - eps, front_t - eps, shelf_z]) cube([bay_x1 - bay_x0 + 2 * eps, shelf_d + eps, shelf_t]);
@@ -796,8 +802,11 @@ module back() difference() {
                 cube([bat_bms[1] + bat_clear + bat_bms_cut[1] + bat_d / 2, bat_bms[0] / 2 + bat_clear + bat_bms_cut[0] + 1, cradle_t + 2]);
         }
         // stiffening against drops: 45 degree fillets at the saddle roots, rib tying the saddles together behind the battery
-        for (i = [0:len(cradle_z) - 1], s = [-1, 1]) if (i > 0 || s > 0) let (z = s > 0 ? cradle_z[i] + cradle_t : cradle_z[i])
+        for (i = [0:len(cradle_z) - 1], s = [-1, 1]) if (i > 0 || s > 0) let (z = s > 0 ? cradle_z[i] + cradle_t : cradle_z[i],
+                zg = [min(z, z + s * saddle_gusset), max(z, z + s * saddle_gusset)], xc = usbc_channel_x(), zc = usbc_channel_z()) difference() {
             along_x(bay_x0 + 0.5, bay_x1 - 0.5) polygon([[y1 + eps, z - s * eps], [y1 - saddle_gusset, z - s * eps], [y1 + eps, z + s * saddle_gusset]]);
+            if (zg[0] < zc[1] && zg[1] > zc[0]) translate([xc[0], y1 - saddle_gusset - 1, zg[0] - 1]) cube([xc[1] - xc[0], saddle_gusset + 2, zg[1] - zg[0] + 1]);   // gap for the USB-C channel
+        }
         let (ry = bat_cy + bat_d / 2 + bat_clear + 1) difference() {
             translate([saddle_rib[1] - saddle_rib[0] / 2, ry, cradle_z[0]])
                 cube([saddle_rib[0], y1 - ry + eps, cradle_z[len(cradle_z) - 1] + cradle_t - cradle_z[0]]);
