@@ -5,7 +5,7 @@
    print_project.py): no supports, default infill, solid for FULL_INFILL parts and FULL_INFILL_MATERIALS.
 2. Builds PROJECT_3MF: every part of the full build on the fixed PLATES, each plate centred; multicolour
    parts as one object per copy with their inlay filaments, parts at the left edge and the prime tower
-   to their right. Every plate is sliced (layout, instances, effective settings); multicolour plates also prove the inlays print.
+   to their right (CENTRE_PLATES: parts centred, tower behind or in front of them). Every plate is sliced (layout, instances, effective settings); multicolour plates also prove the inlays print.
 3. Optional TEST_PLATES (e.g. fit tests; entries are part names or (name, count), one copy by default) become TEST_3MF
    the same way, with TEST_PROCESS overriding PROCESS (e.g. fewer walls and less infill: same geometry, less material).
    TEST_FILAMENT = slot prints every test part single-colour from that filament slot (no inlays, no prime tower).
@@ -39,6 +39,8 @@ files = {path.stem: path for path in profile_root.rglob("*.json")}
 
 PRINTER = dict(machine="Bambu Lab H2S 0.4 nozzle", process="0.20mm Standard @BBL H2S",
                bed="Textured PEI Plate") | getattr(P, "PRINTER", {})
+# PROCESS["settings"]: further Bambu process keys for every part, e.g. {"infill_direction": "0"} (first-layer lines
+# along x, parallel to a long bed face; Bambu alternates solid layers by 90 degrees from there)
 PROCESS = dict(wall_loops=4, top_shell_layers=5, bottom_shell_layers=5, infill=25,
                pattern="gyroid") | getattr(P, "PROCESS", {})
 FULL_INFILL = set(getattr(P, "FULL_INFILL", ()))
@@ -47,6 +49,10 @@ FULL_INFILL_MATERIALS = set(getattr(P, "FULL_INFILL_MATERIALS", ("TPU",)))
 FILAMENTS = getattr(P, "FILAMENTS", None) or [dict(material=m, profile=f"Generic {m} @BBL H2S")
                                               for m in sorted({m for _, m, _ in PARTS.values()})]
 PLATES = getattr(P, "PLATES", None) or [(name, [name]) for name in PARTS if PARTS[name][0] > 0]
+# Multicolour plates (by title) whose parts stay in the middle of the bed, prime tower behind or in front of them
+# instead of parts at the left edge and the tower beside them
+CENTRE_PLATES = set(getattr(P, "CENTRE_PLATES", ()))
+assert CENTRE_PLATES <= {title for title, _ in PLATES}, f"CENTRE_PLATES names unknown plates: {sorted(CENTRE_PLATES - {t for t, _ in PLATES})}"
 # Print pauses (e.g. to embed magnets or lay mesh): part -> print_z of the first layer printed after the pause.
 # A pause stops its whole plate, so give such parts their own plate.
 PAUSES = getattr(P, "PAUSES", {})
@@ -108,6 +114,7 @@ def write_process(name, settings, density):
     process.update(wall_loops=str(settings["wall_loops"]), sparse_infill_density=f"{density}%", enable_support="0",
                    top_shell_layers=str(settings["top_shell_layers"]),
                    bottom_shell_layers=str(settings["bottom_shell_layers"]), sparse_infill_pattern=pattern(density))
+    process.update({key: str(value) for key, value in settings.get("settings", {}).items()})
     (profiles / name).write_text(json.dumps(process, indent=2))
 
 
@@ -298,7 +305,20 @@ def build_project_3mf(plate_list=None, target=None, folder_name="project-3mf", f
             assert size[0] <= width and size[1] <= depth, f"Plate {title} exceeds the bed"
             delta = (width / 2 - (low[0] + high[0]) / 2, depth / 2 - (low[1] + high[1]) / 2)
             entry = dict(plate=index + 1, name=title, parts=got, size_mm=[round(size[0], 1), round(size[1], 1)])
-            if set(group) & set(colour_parts):
+            if set(group) & set(colour_parts) and title in CENTRE_PLATES:
+                # parts stay centred; tower in the strip behind them, else in front (depth about 40 mm, grows
+                # with the purge volume; the slicer run itself reports a tower that still collides)
+                x = width / 2 - tower_width / 2
+                behind = depth / 2 + size[1] / 2 + 8 + tower_brim
+                front = depth / 2 - size[1] / 2 - 8 - tower_brim - 40
+                if behind + 40 + tower_brim <= depth - 5:
+                    towers[index] = (x, behind)
+                else:
+                    assert front >= 5 + tower_brim, \
+                        f"Plate {title}: no room for the prime tower in front of or behind the centred parts ({size[0]:.1f} x {size[1]:.1f} mm)"
+                    towers[index] = (x, front)
+                entry["prime_tower_xy"] = [round(v, 1) for v in towers[index]]
+            elif set(group) & set(colour_parts):
                 # Multicolour plate: parts to the left edge, prime tower right next to them. Wide plates first try
                 # tighter margins, then put the parts to the front edge and the tower behind them (its depth grows
                 # with the purge volume; the slicer run itself reports a tower that still collides)

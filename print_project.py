@@ -58,7 +58,8 @@ STL_DIR, COLOR_DIR, ASM_DIR, REPORT = "stl", "stl/multicolour", "asm", "docs/ver
 
 PRINTER = dict(machine="Bambu Lab H2S 0.4 nozzle", process="0.20mm Standard @BBL H2S",
                bed="Textured PEI Plate", envelope_mm=(340, 320, 340))
-PROCESS = dict(wall_loops=5, top_shell_layers=4, bottom_shell_layers=4, infill=15, pattern="gyroid")   # drop resistant; 5 walls (user: 3 too few), lighter than 6 walls and 30 %
+PROCESS = dict(wall_loops=5, top_shell_layers=4, bottom_shell_layers=4, infill=15, pattern="gyroid",   # drop resistant; 5 walls (user: 3 too few), lighter than 6 walls and 30 %
+               settings=dict(infill_direction=0))   # first-layer lines on the front face parallel to its long edge (user; default 45 degrees)
 # Filament slots of the project 3MF, 1-based in this order; inlay slots name their inlay or a tuple of inlays
 FILAMENTS = [dict(material="PETG-white", profile="Bambu PETG HF @BBL H2S", colour="#FFFFFF"),
              dict(material="PETG-grey", profile="Bambu PETG HF @BBL H2S", colour="#8E9294"),
@@ -66,6 +67,7 @@ FILAMENTS = [dict(material="PETG-white", profile="Bambu PETG HF @BBL H2S", colou
              dict(material="TPU", profile="Generic TPU @BBL H2S", colour="#222326"),
              dict(material="PETG-white", profile="Bambu PETG HF @BBL H2S", inlay=("pointer",), colour="#FFFFFF")]
 PLATES = [("Housing", ["body"]), ("Back cover", ["back"]), ("Grey parts", ["cover", "bail", "knob"]), ("TPU feet", ["foot"])]
+CENTRE_PLATES = ("Housing",)   # housing in the middle of the bed (user), prime tower behind it
 PROJECT_3MF = "stl/leo_ac1_all_parts.3mf"
 # fit test before the full build: right section of housing and back cover with a knob, as little material as possible
 TEST_PLATES = [("Right section fit test", ["test_right", "test_right_back", "knob"])]
