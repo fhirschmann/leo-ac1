@@ -4,23 +4,23 @@ Small battery fan for a child's room, styled like the outdoor unit of a split ai
 
 Designed for a Bambu Lab H2S in PETG Basic white and grey plus TPU. **Status:** designed and checked in CAD and in the slicer, not printed or tested yet.
 
-![Assembly](img/01_assembly.png)
+![Assembly](img/01_assembly.png?v=a4e3abd30cbb)
 
 | Back | Exploded |
 |:---:|:---:|
-| ![Back](img/02_back.png) | ![Exploded](img/03_exploded.png) |
+| ![Back](img/02_back.png?v=33b4f77d8fc0) | ![Exploded](img/03_exploded.png?v=0b2a7f1fbf48) |
 | **Logo and grooves** | **Air duct from behind** |
-| ![Logo](img/04_front_right.png) | ![Air duct](img/05_duct.png) |
+| ![Logo](img/04_front_right.png?v=e090feb60c84) | ![Air duct](img/05_duct.png?v=759e42189cff) |
 | **Knob and service cover** | **Underside with M5 thread and TPU feet** |
-| ![Knob](img/06_knob.png) | ![Underside](img/07_underside.png) |
+| ![Knob](img/06_knob.png?v=53cad2c0ed28) | ![Underside](img/07_underside.png?v=bda2a7e2c801) |
 | **Charge module in the air stream** | **LED pocket behind the O** |
-| ![Charge module](img/08_charge_module.png) | ![LED pocket](img/09_led.png) |
+| ![Charge module](img/08_charge_module.png?v=2ef05f89a581) | ![LED pocket](img/09_led.png?v=e16ed4530b5b) |
 | **Handle mount** | **Back cover bosses** |
-| ![Handle mount](img/11_handle_mount.png) | ![Back cover bosses](img/12_back_bosses.png) |
+| ![Handle mount](img/11_handle_mount.png?v=c25b2dd79557) | ![Back cover bosses](img/12_back_bosses.png?v=3865f924c163) |
 | **TPU foot mount** | **USB-C socket** |
-| ![TPU foot mount](img/13_foot_mount.png) | ![USB-C socket](img/14_usb_c.png) |
+| ![TPU foot mount](img/13_foot_mount.png?v=0d16075905f5) | ![USB-C socket](img/14_usb_c.png?v=a320c0740188) |
 | **Power switch well** | **Battery saddles** |
-| ![Power switch](img/15_switch.png) | ![Battery saddles](img/16_saddles.png) |
+| ![Power switch](img/15_switch.png?v=ba82932dbd47) | ![Battery saddles](img/16_saddles.png?v=f90d4ac26b24) |
 
 ## Printed parts
 
