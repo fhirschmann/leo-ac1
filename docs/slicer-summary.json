@@ -338,7 +338,7 @@
       }
     },
     "own_infill_parts": 2,
-    "sha256": "8d1cadeb74798130b1b9c5807bc0798277db9bef2e0915fd1b78c1e69dc5e6bc"
+    "sha256": "6fd0c2cbd6c828eb907ae5b4b4eb7cde45b0bf3b8f9a9a89d8ea85497f201b18"
   },
   "test_3mf": {
     "file": "stl/leo_ac1_fit_tests.3mf",
@@ -387,7 +387,7 @@
       }
     },
     "own_infill_parts": 0,
-    "sha256": "18f9ca18cc5e78e94bac72196554673715c176af92ffd74a311746c285648bf0",
+    "sha256": "b325fa98df84c5753a17f645f5348759eee251dd553541c5a211a21cd3377059",
     "process": {
       "wall_loops": 2,
       "top_shell_layers": 3,

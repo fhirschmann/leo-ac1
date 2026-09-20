@@ -331,6 +331,17 @@ def build_project_3mf(plate_list=None, target=None, folder_name="project-3mf", f
         for index, (x, y) in towers.items():
             xs[index], ys[index] = f"{x:.1f}", f"{y:.1f}"
         project_settings["wipe_tower_x"], project_settings["wipe_tower_y"] = xs, ys
+        # Bambu Studio (GUI) resets every setting that is not named in different_settings_to_system to the system
+        # preset when it opens a project: print, one entry per filament, printer. The CLI leaves them empty, so the
+        # GUI dropped our walls, shells and infill and showed the default print (the slicer runs here kept them)
+        wanted = [(PRINTER["process"], json.loads(process_file.read_text())),
+                  *((f["profile"], json.loads((profiles / f"filament-{slot}.json").read_text()))
+                    for slot, f in enumerate(FILAMENTS, 1)),
+                  (PRINTER["machine"], machine)]
+        project_settings["different_settings_to_system"] = [
+            ";".join(sorted(key for key, value in own.items() if key not in ("name", "inherits") and resolve(system).get(key) != value))
+            for system, own in wanted]
+        assert len(project_settings["different_settings_to_system"]) == len(FILAMENTS) + 2
         pause_gcode = machine.get("machine_pause_gcode", "M400 U1")
         pause_gcode = (pause_gcode[0] if isinstance(pause_gcode, list) else pause_gcode).strip()
         pause_plates = {index: sorted({z for part in group for z in PAUSES.get(part, [])})
