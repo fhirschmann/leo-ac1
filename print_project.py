@@ -1,7 +1,7 @@
 """Project settings for the openscad-print-project tools in scripts/.
 
-Project-specific settings live here. The local slicer extension preserves painted
-manual supports when regenerating individual diagnostics and the project 3MF.
+Everything project-specific lives here, the scripts stay identical to the skill copies
+(python3 ~/.claude/skills/openscad-print-project/scripts/skill_sync.py status).
 """
 import manifold3d as md
 import numpy as np
@@ -57,16 +57,6 @@ STL_DIR, COLOR_DIR, ASM_DIR, REPORT = "stl", "stl/multicolour", "asm", "docs/ver
 PRINTER = dict(machine="Bambu Lab H2S 0.4 nozzle", process="0.20mm Standard @BBL H2S",
                bed="Textured PEI Plate", envelope_mm=(340, 320, 340))
 PROCESS = dict(wall_loops=6, top_shell_layers=5, bottom_shell_layers=5, infill=30, pattern="gyroid")   # drop resistant
-# Only the switch-well floor needs removable support. Coordinates are in back.stl
-# print pose; selection assertions fail if later CAD changes move or resize it.
-LOCAL_SUPPORTS = {
-    "back": dict(bounds_mm=[[189.5, 116.6, 6.99], [212.5, 133.4, 7.01]], normal=[0, 0, -1],
-                 expected_faces=8, expected_area_mm2=148.19,
-                 settings=dict(enable_support="1", support_type="normal(manual)", support_style="snug",
-                               support_on_build_plate_only="1", support_top_z_distance="0.2",
-                               support_interface_top_layers="3", support_interface_spacing="0.2",
-                               support_base_pattern_spacing="2.5", support_object_xy_distance="0.35"))
-}
 # Filament slots of the project 3MF, 1-based in this order; inlay slots name their inlay or a tuple of inlays
 FILAMENTS = [dict(material="PETG-white", profile="Bambu PETG Basic @BBL H2S", colour="#FFFFFF"),
              dict(material="PETG-grey", profile="Bambu PETG Basic @BBL H2S", colour="#8E9294"),
@@ -214,7 +204,7 @@ def checks(ctx):
     ctx.summary.append(f"{len(inserts)} inserts")
 
     ctx.open_items.append("Battery cell measured Ø32.5 × 71.6 mm on 2026-09-15; verify protection-board envelope and cable exit separately")
-    ctx.open_items.append("PWM potentiometer measured: round split/knurled Ø5.8 shaft, free length 9.5, bushing Ø6.73 × 3.6; nut thickness still assumed 2 mm, verify push-fit and clamp")
+    ctx.open_items.append("PWM potentiometer measured: round split/knurled Ø5.8 shaft, free length 9.5, bushing Ø6.73 × 3.6, nut 2.15 and washer 0.35 thick (outside sizes assumed 11 / 12.5); verify knob push-fit and clamp")
     ctx.open_items.append("Measure the BMS board on the battery (assumed 16 × 4 mm over the full length, facing the partition)")
     ctx.open_items.append("PWM module measured 41.05 × 32 × 15 mm, 56.30 mm to shaft tip, axis about 6 mm above PCB; verify underside datum and plugged connector envelope")
     ctx.open_items.append("USB-C module and shell measured 2026-09-15 (shell bottom approximately 1.1 mm above module underside); verify fit with a plugged cable and soldered wires, and check 5 V at + / - before connecting")

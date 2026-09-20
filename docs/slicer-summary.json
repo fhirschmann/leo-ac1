@@ -1,17 +1,17 @@
 {
-  "profile": "Bambu Lab H2S 0.4 nozzle / 0.20mm Standard @BBL H2S, 6 walls, 5/5 top/bottom, manual local supports: back; 30 % gyroid, 100 % zig-zag: foot",
+  "profile": "Bambu Lab H2S 0.4 nozzle / 0.20mm Standard @BBL H2S, 6 walls, 5/5 top/bottom, no supports; 30 % gyroid, 100 % zig-zag: foot",
   "parts": [
     {
       "part": "body",
       "quantity": 1,
       "material": "PETG-white",
       "passed": true,
-      "source_sha256": "c0a10fdd603ab354f2ea1da173187520c60f01b9b2b5d2e58c3fb2fde59a1c0f",
+      "source_sha256": "af364e8d7e263469df700f62b3e82b5d5817ab40643d28996b4c334e6a9c929f",
       "exit_code": 0,
       "result_code": 0,
       "warnings": "",
-      "hours": 10.36,
-      "grams": 400.36,
+      "hours": 10.326,
+      "grams": 401.529,
       "wall_loops": 6,
       "infill_percent": 30.0,
       "layer_height": 0.20000000298023224,
@@ -29,29 +29,21 @@
       "quantity": 1,
       "material": "PETG-white",
       "passed": true,
-      "source_sha256": "7d7e9e927af4d86d9155d76d17af12bef2fb487cb74ba5acc73c039c169656bc",
+      "source_sha256": "39020327ddbaa20276ed6aaabc1aef3e75692483a504ce37a50803a43a229073",
       "exit_code": 0,
       "result_code": 0,
       "warnings": "",
-      "hours": 5.512,
-      "grams": 167.383,
+      "hours": 5.484,
+      "grams": 166.838,
       "wall_loops": 6,
       "infill_percent": 30.0,
       "layer_height": 0.20000000298023224,
       "effective_settings": {
         "sparse_infill_pattern": "gyroid",
-        "enable_support": "1",
+        "enable_support": "0",
         "curr_bed_type": "Textured PEI Plate",
         "top_shell_layers": "5",
-        "bottom_shell_layers": "5",
-        "support_type": "normal(manual)",
-        "support_style": "snug",
-        "support_on_build_plate_only": "1",
-        "support_top_z_distance": "0.2",
-        "support_interface_top_layers": "3",
-        "support_interface_spacing": "0.2",
-        "support_base_pattern_spacing": "2.5",
-        "support_object_xy_distance": "0.35"
+        "bottom_shell_layers": "5"
       },
       "start_gcode_diagnostic": true
     },
@@ -83,12 +75,12 @@
       "quantity": 1,
       "material": "PETG-grey",
       "passed": true,
-      "source_sha256": "729040b7cf2a1f789e2db5bb4f470b9198306a38c91dbda889cc7ceef6a7ec7b",
+      "source_sha256": "6a0e39869fd2ee4da96b79cd58953da355adeb8d0ea572f4e1de0a5eaf05733d",
       "exit_code": 0,
       "result_code": 0,
       "warnings": "",
-      "hours": 0.455,
-      "grams": 13.654,
+      "hours": 0.456,
+      "grams": 13.676,
       "wall_loops": 6,
       "infill_percent": 30.0,
       "layer_height": 0.20000000298023224,
@@ -129,12 +121,12 @@
       "quantity": 1,
       "material": "PETG-grey",
       "passed": true,
-      "source_sha256": "151c5691a29e33122073cbf677ea3a8b3de611dae0a1977972cc5f3f681501da",
+      "source_sha256": "9c3f5749c86a6d465ce2a0bf9691c44a65728be6e77c2d02a12e9e94103f5b9e",
       "exit_code": 0,
       "result_code": 0,
       "warnings": "",
-      "hours": 0.508,
-      "grams": 7.78,
+      "hours": 0.561,
+      "grams": 8.576,
       "wall_loops": 6,
       "infill_percent": 30.0,
       "layer_height": 0.20000000298023224,
@@ -172,7 +164,7 @@
     }
   ],
   "total_parts": 8,
-  "total_grams_individual_plates": 707.4,
+  "total_grams_individual_plates": 708.8,
   "total_hours_individual_plates": 21.1,
   "production_gcode": false,
   "project_3mf": {
@@ -237,6 +229,8 @@
         ]
       }
     ],
+    "total_hours_plates": 21.1,
+    "total_grams_plates": 712.4,
     "multicolour_parts": {
       "body": [
         "label",
@@ -249,18 +243,18 @@
     "multicolour_slices": {
       "Housing": {
         "plate": 1,
-        "hours": 10.66,
+        "hours": 10.64,
         "grams_by_filament": {
-          "1": 400.7,
+          "1": 401.88,
           "3": 1.63
         },
         "warnings": ""
       },
       "Grey parts": {
         "plate": 3,
-        "hours": 3.87,
+        "hours": 3.92,
         "grams_by_filament": {
-          "2": 127.83,
+          "2": 128.62,
           "5": 0.92
         },
         "warnings": ""
@@ -270,32 +264,29 @@
     "plate_slices": {
       "Housing": {
         "plate": 1,
-        "hours": 10.66,
+        "hours": 10.64,
         "grams_by_filament": {
-          "1": 400.7,
+          "1": 401.88,
           "3": 1.63
         },
-        "warnings": "",
-        "support_sections": 0
+        "warnings": ""
       },
       "Back cover": {
         "plate": 2,
-        "hours": 5.51,
+        "hours": 5.48,
         "grams_by_filament": {
-          "1": 167.38
+          "1": 166.84
         },
-        "warnings": "",
-        "support_sections": 24
+        "warnings": ""
       },
       "Grey parts": {
         "plate": 3,
-        "hours": 3.87,
+        "hours": 3.92,
         "grams_by_filament": {
-          "2": 127.83,
+          "2": 128.62,
           "5": 0.92
         },
-        "warnings": "",
-        "support_sections": 0
+        "warnings": ""
       },
       "TPU feet": {
         "plate": 4,
@@ -303,41 +294,10 @@
         "grams_by_filament": {
           "4": 12.55
         },
-        "warnings": "",
-        "support_sections": 0
+        "warnings": ""
       }
     },
     "own_infill_parts": 2,
-    "local_supports": {
-      "back": {
-        "object_id": "6",
-        "painted_faces": 8,
-        "area_mm2": 148.1898,
-        "bounds_mm": [
-          [
-            189.5,
-            116.6,
-            6.99
-          ],
-          [
-            212.5,
-            133.4,
-            7.01
-          ]
-        ],
-        "settings": {
-          "enable_support": "1",
-          "support_type": "normal(manual)",
-          "support_style": "snug",
-          "support_on_build_plate_only": "1",
-          "support_top_z_distance": "0.2",
-          "support_interface_top_layers": "3",
-          "support_interface_spacing": "0.2",
-          "support_base_pattern_spacing": "2.5",
-          "support_object_xy_distance": "0.35"
-        }
-      }
-    },
-    "sha256": "0ee567abf98ac4440a1be0357ea3ccfb225cc95f359c165e1899738cedab0aa2"
+    "sha256": "fece3e4866a07480b17db243dde7ebe6a8152acb0f7284cc3c1b7f1b3307773d"
   }
 }

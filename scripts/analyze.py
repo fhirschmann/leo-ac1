@@ -7,7 +7,8 @@
            inside engravings that are open to the bed); tiny components below --ignore-area are skipped
   inlays   multicolour inlay pieces on their first layer (bed or a face higher up): bodies, area and features narrower than --min-width
   overhangs  areas of a layer steeper than 45 degrees over the layer below (bridges, rebates and grooves in the
-           bed face, cantilevers), larger than --min-area (default 100 mm2); --max-z limits the height
+           bed face, cantilevers), larger than --min-area (default 100 mm2) and wider than --min-span (default
+           2 mm, narrower strips are short bridges over grooves); --max-z limits the height
 
 Without names all print parts (islands, ridges) or all multicolour pieces (inlays) are analysed.
 Reads build/print and build/color (run print_tools.py build first); --committed reads the STL folders.
@@ -50,7 +51,7 @@ def islands(mesh, solid, layer, min_area):
     return found
 
 
-def overhangs(mesh, solid, layer, min_area, max_z):
+def overhangs(mesh, solid, layer, min_area, max_z, min_span=2.0):
     found = []
     top = min(float(mesh.bounds[1, 2]), max_z or float("inf"))
     below = solid.slice(layer / 2)
@@ -58,7 +59,10 @@ def overhangs(mesh, solid, layer, min_area, max_z):
         z = (k + 0.5) * layer
         section = solid.slice(z)
         supported = below.offset(layer, md.JoinType.Miter)    # 45 degrees per layer
-        for piece in (section - supported).decompose():
+        unsupported = section - supported
+        if min_span:   # drop strips narrower than min_span: short bridges over engravings and slots print fine
+            unsupported = unsupported.offset(-min_span / 2, md.JoinType.Miter).offset(min_span / 2, md.JoinType.Miter)
+        for piece in unsupported.decompose():
             if piece.area() >= min_area:
                 found.append(dict(z_mm=round(z, 3), area_mm2=round(piece.area(), 1), bounds_xy=box(piece)))
         below = section
@@ -85,6 +89,8 @@ def main():
     parser.add_argument("--committed", action="store_true", help="analyse the committed STL folders instead of build/")
     parser.add_argument("--layer", type=float, default=0.2, help="islands, overhangs: layer height")
     parser.add_argument("--max-z", type=float, help="overhangs: only up to this height")
+    parser.add_argument("--min-span", type=float, default=2.0,
+                        help="overhangs: ignore unsupported strips narrower than this (bridges over grooves), 0 = report all")
     parser.add_argument("--min-area", type=float, default=None,
                         help="smallest finding in mm2 (islands 0.05, ridges/inlays 0.1, overhangs 100)")
     parser.add_argument("--z", type=float, nargs="+", default=[0.4], help="ridges: section heights")
@@ -100,7 +106,7 @@ def main():
         if args.command == "islands":
             found = islands(mesh, solid, args.layer, args.min_area or 0.05)
         elif args.command == "overhangs":
-            found = overhangs(mesh, solid, args.layer, args.min_area or 100, args.max_z)
+            found = overhangs(mesh, solid, args.layer, args.min_area or 100, args.max_z, args.min_span)
         elif args.command == "ridges":
             found = [dict(z_mm=z, **item) for z in args.z
                      for item in thin(solid.slice(z), args.min_width or 1.1, args.ignore_area, args.min_area or 0.1)]

@@ -103,9 +103,10 @@ cover_notch_c = 3;           // 45 degree chamfer along the notch at the outer f
 pot_shaft_d = 5.8;        // measured outside the knurling; round split shaft, not a D shaft
 pot_shaft_free = 9.5;     // measured shaft length beyond the threaded bushing
 pot_bush = [6.73, 3.6];   // measured bushing outside diameter and length from its mounting shoulder
-pot_nut = [11, 2];        // nut envelope across corners and thickness STILL ASSUMED; confirm the actual nut
-pot_mount_t = 1.3;        // local mounting skin: leaves 2.3 mm of the short bushing for the assumed 2 mm nut
-pot_pocket_cl = 0.3;      // clearance around the conservative module nose in the inner wall recess
+pot_nut = [11, 2.15];      // nut across corners (assumed) and thickness (measured 2026-09-15)
+pot_washer = [12.5, 0.35]; // washer outside diameter (assumed) and thickness (measured)
+pot_thread_reserve = 0.1;  // thread left beyond the nut
+pot_mount_t = wall;        // the potentiometer shoulder rests on the full inner wall; washer and nut sit in a small counterbore outside
 // PWM board CNY-FA5-PRO: right-angle potentiometer on its edge, shaft parallel to the board. The board lies on two ribs
 // above the shelf and is held by the potentiometer nut. Measured board/module dimensions, 2026-09-15.
 pwm_pcb = [41.05, 32, 1.6]; // measured length/width; PCB thickness remains assumed
@@ -117,7 +118,8 @@ pot_axis_h = 6;           // approximately measured from PCB top to shaft centre
 knob_d = 28;              // dial on the side wall, sits in the half-round notch of the service cover
 knob_gap = 0.5;           // underside to the wall face
 knob_niche = 3;           // radial gap to the notch of the service cover: room for fingertips
-knob_skin = 2;            // closed top above the round shaft bore
+knob_skin = 2;            // closed top above the round shaft bore (at least)
+knob_proud = 6;           // knob top at least this far beyond the service cover face, for grip
 knob_cavity_d = 13;       // recess in the underside over nut and bushing
 knob_stem_d = 10;         // clamping sleeve around the round bore, free in a ring gap
 knob_stem_cl = 0.5;       // sleeve end above the bushing end
@@ -181,7 +183,7 @@ sw_body = [sw_cut[0] - 0.2, sw_cut[1] - 0.2, 11]; // conservative body below the
 sw_total_depth = 23;         // measured overall depth including contacts
 sw_pins = sw_total_depth - sw_bezel[2] - sw_rocker - sw_body[2]; // inferred from the provisional front/body depth split
 sw_panel = 1.5;              // user-confirmed approximate panel thickness for the snap clips
-sw_well = [7, 1, 1.5];       // well: panel below the back face (frame and rocker stay inside when the fan lies on its back), floor margin around the frame, wall
+sw_well = [7, 0.2, 1.5];     // well: panel below the back face (frame and rocker stay inside when the fan lies on its back), floor margin around the frame (small: short overhang, no support), wall
 
 /* [Feet: TPU strips, each screwed with two M3 x 8 from below into Ruthex inserts] */
 foot_w = 16;          // width (x)
@@ -258,11 +260,13 @@ dedication_z = [130.2, 121.6, 113.3];   // baselines above the raised PWM board;
 pot_nose_len = pwm_total_len - pwm_pcb[0] - pot_shaft_free - pot_bush[1]; // 2.15 mm mounting shoulder ahead of PCB
 pwm_wall_gap = pot_mount_t + pot_nose_len - wall; // PCB edge clearance to the normal inner wall, 0.25 mm
 pot_shaft_tip = pot_shaft_free + pot_bush[1] - pot_mount_t; // shaft tip relative to the outer wall
+pot_skin = pot_bush[1] - pot_nut[1] - pot_washer[1] - pot_thread_reserve; // clamped wall under the washer
+pot_cb = [pot_washer[0] + 1, pot_mount_t - pot_skin];        // counterbore from outside under the knob: diameter, depth
 pot_yz = [cover_y, wall + bat_l + shelf_gap + shelf_t + pwm_standoff + pwm_pcb[2] + pot_axis_h];   // knob axis above the battery, centred in the depth
 mount_top = mount_insert[1] + 1 + mount_floor;        // boss top inside; blind hole L + 1 from the underside
 knob_sleeve_z = pot_bush[1] - pot_mount_t + knob_stem_cl - knob_gap; // sleeve end above bushing, relative to knob underside
 knob_bore_top = pot_shaft_tip + 1 - knob_gap;                 // 1 mm beyond the shaft end
-knob_len = knob_bore_top + knob_skin;                          // top face
+knob_len = max(knob_bore_top + knob_skin, cover_out + knob_proud - knob_gap);   // top face
 cover_notch_r = knob_d / 2 + knob_niche;                       // half-round notch of the service cover around the knob
 cover_hgt = pot_yz[1] - cover_z0;                              // upper edge at the knob axis
 cover_z = cover_z0 + cover_hgt / 2;
@@ -384,8 +388,10 @@ assert(pot_yz[0] - pwm_pcb[1] / 2 > front_t + inner_c && pot_yz[0] + pwm_pcb[1] 
        && pot_yz[1] + pwm_comp_h + 2 < body_h - wall - 10
        && (usbc_xz[1] + usbc[2] / 2 < shelf_z || pot_yz[1] - pot_axis_h + pwm_comp_h < usbc_xz[1] + usbc[2] / 2 - usbc_stop[1] - 1),
        "PWM board: beyond the shelf, no room to pull it off the wall, too high, or its parts reach the USB-C stop");
-assert(pot_mount_t >= 1.2 && pot_nose_len > 0 && pwm_wall_gap >= 0.2 && pot_bush[1] - pot_mount_t >= pot_nut[1] + 0.3 - eps, "Potentiometer mounting skin, PCB clearance or exposed thread insufficient");
-assert(pot_shaft_tip - knob_gap - knob_sleeve_z >= 8 && knob_skin >= 2 && knob_cavity_d > pot_nut[0] + 1 && knob_gap + knob_sleeve_z > pot_nut[1] + 0.5
+assert(pot_skin >= 0.9 && pot_cb[1] > 0 && pot_nose_len > 0 && pwm_wall_gap >= 0.2 && pot_nut[0] < knob_cavity_d - 1
+       && pot_bush[1] - pot_skin >= pot_nut[1] + pot_washer[1] + pot_thread_reserve - eps,
+       "Potentiometer: clamped skin under the counterbore too thin, no thread for washer and nut, or the knob recess misses the nut");
+assert(pot_shaft_tip - knob_gap - knob_sleeve_z >= 8 && knob_skin >= 2 && knob_cavity_d > pot_nut[0] + 1 && knob_gap + knob_sleeve_z > pot_washer[1] + pot_nut[1] - pot_cb[1] + 0.3   // above the nut top in the counterbore
        && knob_sleeve_z + knob_slit[1] < knob_len - knob_skin - 2 && knob_gap + knob_len - cover_out <= 8,
        "Knob: shaft engagement, top skin, nut recess, slit length or protrusion");
 assert(handle_end[1] > handle_ins_depth - handle_key[0] && handle_open[2] > handle_ins_depth - handle_key[0] && handle_ins_depth >= insert_len + 1,
@@ -444,10 +450,6 @@ module inlay_piece(d = inlay_t) intersection() { children(0); inlay_zone(d) chil
 module body_outline(inset = 0) translate([body_w / 2, body_h / 2]) rrect([body_w - 2 * inset, body_h - 2 * inset], max(corner_r - inset, 0.5));
 module body_inner(extra = 0) body_outline(wall + extra);
 module boss_footprint(b) hull() { translate(b[0]) circle(d = back_boss_d); rect(b[1], b[2]); }
-// In side-view coordinates (y,z), bound the unknown potentiometer nose by the measured module width/height.
-module pot_pocket_2d(extra = 0) translate([pot_yz[0] - pwm_pcb[1] / 2 - pot_pocket_cl - extra,
-                                        pot_yz[1] - pot_axis_h - pwm_pcb[2] - pot_pocket_cl - extra])
-    square([pwm_pcb[1] + 2 * (pot_pocket_cl + extra), pwm_total_h + 2 * (pot_pocket_cl + extra)]);
 
 module back_boss(b) {
     y1 = body_d - back_t;
@@ -583,10 +585,10 @@ module body() difference() {
     translate([bat_cx + 10 - cable_slot_w / 2, bat_cy - 6, shelf_z - 1]) cube([cable_slot_w, shelf_d + front_t - bat_cy + 7, shelf_t + 2]);
     along_x(-1, wall + 1) intake_slots_side();
     cyl_x(pot_yz, body_w - wall - 1, body_w + 1, (pot_bush[0] + 0.4) / 2);   // potentiometer bushing, nutted to the wall
-    // Inner mounting recess for the short bushing; 45 degree exits keep its rear edge printable.
-    hull() {
-        along_x(body_w - wall - eps, body_w - wall) pot_pocket_2d(wall - pot_mount_t);
-        along_x(body_w - pot_mount_t - eps, body_w - pot_mount_t) pot_pocket_2d();
+    // counterbore from outside for washer and nut, hidden under the knob; pointed towards +y (up in print, printable)
+    along_x(body_w - pot_cb[1], body_w + 1) hull() {
+        translate(pot_yz) circle(d = pot_cb[0]);
+        translate([pot_yz[0] + pot_cb[0] / 2 * sqrt(2), pot_yz[1]]) square(0.01, center = true);
     }
     for (p = handle_screws()) translate([p[0], p[1], body_h - wall - handle_pad[0] - 1]) cylinder(d = screw_clear_d, h = wall + handle_pad[0] + 2);
     // recesses for the keys under the handle feet, 45 degree side walls along y
@@ -602,7 +604,6 @@ module body() difference() {
             along_x(body_w - s, body_w - gd * k / n + (k == 0 ? 1 : eps)) difference() {
                 cover_2d(fo - (gd - s));
                 cover_2d(fi + (gd - s));
-                pot_pocket_2d(wall - pot_mount_t + 1); // preserve the thin mounting skin beneath the outside glue groove
             }
     translate([mount_xy[0], mount_xy[1], -1]) cylinder(d = mount_insert[0], h = mount_insert[1] + 1 + 1);   // M5 insert from the underside
 }
@@ -794,7 +795,6 @@ module cover() {   // glued in: the outer part of its wall rests on the side wal
         along_x(x0 - cover_glue[0], x0) difference() {   // shared face at x0 avoids sliver triangles at the interrupted rim
             cover_2d(cover_t - cover_glue[1]);
             cover_2d(cover_t);
-            pot_pocket_2d(wall - pot_mount_t + 1); // match the omitted groove beside the potentiometer mounting recess
         }
     }
 }
@@ -828,13 +828,19 @@ module pot_local(nut = true) {       // z = 0 at the outer face of the right wal
     translate([pot_axis_h + pwm_pcb[2] - pwm_total_h, -pwm_pcb[1] / 2, -pot_mount_t - pot_nose_len])
         cube([pwm_total_h, pwm_pcb[1], pot_nose_len]);
     translate([0, 0, -pot_mount_t - eps]) cylinder(d = pot_bush[0], h = pot_bush[1] + eps);
-    if (nut) cylinder(d = pot_nut[0], h = pot_nut[1]);
+    if (nut) translate([0, 0, -pot_cb[1]]) {   // washer on the counterbore floor, nut on top
+        cylinder(d = pot_washer[0], h = pot_washer[1]);
+        translate([0, 0, pot_washer[1] - eps]) cylinder(d = pot_nut[0], h = pot_nut[1] + eps);
+    }
     translate([0, 0, -pot_mount_t + pot_bush[1] - eps]) cylinder(d = pot_shaft_d, h = pot_shaft_free + eps); // knurling/shaft slit simplified as outside envelope
 }
 module pot_env(nut = true) translate([body_w, pot_yz[0], pot_yz[1]]) orient([1, 0, 0]) pot_local(nut);
-module pot_nut_env() translate([body_w, pot_yz[0], pot_yz[1]]) orient([1, 0, 0]) difference() {
-    cylinder(d = pot_nut[0], h = pot_nut[1]);
-    translate([0, 0, -1]) cylinder(d = pot_bush[0] + 0.1, h = pot_nut[1] + 2);
+module pot_nut_env() translate([body_w, pot_yz[0], pot_yz[1]]) orient([1, 0, 0]) translate([0, 0, -pot_cb[1]]) difference() {
+    union() {   // washer on the counterbore floor, nut on top
+        cylinder(d = pot_washer[0], h = pot_washer[1]);
+        translate([0, 0, pot_washer[1] - eps]) cylinder(d = pot_nut[0], h = pot_nut[1] + eps);
+    }
+    translate([0, 0, -1]) cylinder(d = pot_bush[0] + 0.1, h = pot_washer[1] + pot_nut[1] + 2);
 }
 module led_env() {                   // 3 mm LED: body in the pocket, flange on the boss
     cyl_y(led_xz, led_skin + 0.3, led_boss[1], led_d / 2);
