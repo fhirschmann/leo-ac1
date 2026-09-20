@@ -47,7 +47,7 @@ Check with the real parts: the PWM controller lies flat on its pads, the potenti
 
 | Part | Qty | Link | Notes |
 |---|---|---|---|
-| Fan Noctua NF-A14 PWM (or another quiet 140 × 25 mm 4-pin PWM fan) | 1 | [noctua.at](https://noctua.at/en/nf-a14-pwm) | 140 × 25 mm, 12 V, holes 124.5 mm apart; mounted from behind with M3 × 30, tighten by hand only |
+| Fan Noctua NF-A14 PWM | 1 | [noctua.at](https://noctua.at/en/nf-a14-pwm) | 140 × 25 mm (141 × 141 × 27 with its anti-vibration pads), 12 V, 1.19 W typical, holes 124.5 mm apart; mounted from behind with M3 × 30, tighten by hand only |
 | Battery 3.2 V 6000 mAh LiFePO4 pack with protection board (BMS), JST-PH 2.0 | 1 | [eremit.de](https://www.eremit.de/p/3-2v-6000mah-pack-mit-schutz-arduino-aio-jst-ph-2-0-stecker) | cell Ø 32.5 × 71.6 mm; charge only with a LiFePO4 charger (3.65 V), **no** TP4056 |
 | Charge/boost module "2-in-1 3.2 V LiFePO4", **12 V variant** | 1 | [AliExpress](https://de.aliexpress.com/item/1005008094801881.html) | 32.2 × 11 × 3.7 mm; IN± 5 V charging, B± battery, O± 12 V; taped upright onto the partition behind the fan |
 | PWM fan controller CNY-FA5-PRO, DC 8–24 V, with potentiometer and switch | 1 | [AliExpress](https://de.aliexpress.com/item/1005010113177510.html) | 41 × 32 × 15 mm; rests on pads under its pin-free long edges, potentiometer housing in a pocket on the inside of the right wall, washer and nut outside under the knob |
