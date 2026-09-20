@@ -165,7 +165,7 @@ def checks(ctx):
             ("fan_out", ["fan", "screws_fan"], others("fan", "screws_fan", "battery", "chg_module", "back", "screws_back", "usb_trigger", "switch", "bail"), [0, 1, 0], 90, 1),
             ("knob_off", ["knob"], others("knob"), [1, 0, 0], 25, 0.5),
             ("cover_off", ["cover"], ["body", "pot", "pot_nut", "pwm_board", "knob"], [1, 0, 0], 30, 0.5),   # glued in; the knob can stay on
-            ("bail_off", ["bail"], ["body", "back"], [0, 1, 0], 60, 1),   # after its pivot screws: backwards out of the steps and the back cover recess
+            ("bail_up", ["bail"], ["body"], [0, 0, 1], 15, 0.5),   # after its pivot screws
             ("feet_down", ["feet"], ["body"], [0, 0, -1], 6, 0.5),
             # the USB-C module comes off with the back cover (back_off), then out of its channel
             ("usb_trigger_from_back", ["usb_trigger"], ["back"], [0, -1, 0], 16, 0.5),
