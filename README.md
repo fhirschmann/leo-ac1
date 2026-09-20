@@ -34,9 +34,9 @@ Designed for a Bambu Lab H2S with AMS in Bambu PETG HF white and grey plus TPU. 
 | `bail` folding bail | 1 | PETG grey | 224 × 36.5 × 58.5 | back faces of the lower legs and the grip on the bed, upper legs upright |
 | `foot` foot | 2 | TPU | 16 × 62 × 5.5 | ground face on the bed, 100 % infill |
 
-All parts are in the Bambu Studio project [`stl/leo_ac1_all_parts.3mf`](stl/leo_ac1_all_parts.3mf): plate 1 housing, plate 2 back cover, plate 3 grey parts (grille, service cover, bail, knob), plate 4 TPU feet. Filaments: 1 PETG white, 2 PETG grey, 3 grey for logo, dedication and QR code (same spool as 2), 4 TPU, 5 white for the knob pointer (same spool as 1). All parts print without supports. Bambu Studio estimates about **0.69 kg and 19 hours** in total. Single-colour STLs are in `stl/`, the colour pieces in `stl/multicolour/`.
+All parts are in the Bambu Studio project [`stl/leo_ac1_all_parts.3mf`](stl/leo_ac1_all_parts.3mf): plate 1 housing, plate 2 back cover, plate 3 grey parts (grille, service cover, bail, knob), plate 4 TPU feet. Filaments: 1 PETG white, 2 PETG grey, 3 grey for logo, dedication and QR code (same spool as 2), 4 TPU, 5 white for the knob pointer (same spool as 1). All parts print without supports. Bambu Studio estimates about **0.65 kg and 18 hours** in total. Single-colour STLs are in `stl/`, the colour pieces in `stl/multicolour/`.
 
-Print profile: 0.20 mm layers, 6 walls, 5 top/bottom layers, 30 % gyroid (feet 100 %).
+Print profile: 0.20 mm layers, 5 walls, 4 top/bottom layers, 15 % gyroid (feet 100 %).
 
 ### Fit tests before the full print
 

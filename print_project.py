@@ -60,7 +60,7 @@ STL_DIR, COLOR_DIR, ASM_DIR, REPORT = "stl", "stl/multicolour", "asm", "docs/ver
 
 PRINTER = dict(machine="Bambu Lab H2S 0.4 nozzle", process="0.20mm Standard @BBL H2S",
                bed="Textured PEI Plate", envelope_mm=(340, 320, 340))
-PROCESS = dict(wall_loops=6, top_shell_layers=5, bottom_shell_layers=5, infill=30, pattern="gyroid")   # drop resistant
+PROCESS = dict(wall_loops=5, top_shell_layers=4, bottom_shell_layers=4, infill=15, pattern="gyroid")   # drop resistant; 5 walls (user: 3 too few), lighter than 6 walls and 30 %
 # Filament slots of the project 3MF, 1-based in this order; inlay slots name their inlay or a tuple of inlays
 FILAMENTS = [dict(material="PETG-white", profile="Bambu PETG HF @BBL H2S", colour="#FFFFFF"),
              dict(material="PETG-grey", profile="Bambu PETG HF @BBL H2S", colour="#8E9294"),

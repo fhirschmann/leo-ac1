@@ -1,5 +1,5 @@
 {
-  "profile": "Bambu Lab H2S 0.4 nozzle / 0.20mm Standard @BBL H2S, 6 walls, 5/5 top/bottom, no supports; 30 % gyroid, 100 % zig-zag: foot",
+  "profile": "Bambu Lab H2S 0.4 nozzle / 0.20mm Standard @BBL H2S, 5 walls, 4/4 top/bottom, no supports; 15 % gyroid, 100 % zig-zag: foot",
   "parts": [
     {
       "part": "body",
@@ -10,17 +10,17 @@
       "exit_code": 0,
       "result_code": 0,
       "warnings": "",
-      "hours": 9.09,
-      "grams": 384.883,
-      "wall_loops": 6,
-      "infill_percent": 30.0,
+      "hours": 8.634,
+      "grams": 367.587,
+      "wall_loops": 5,
+      "infill_percent": 15.0,
       "layer_height": 0.20000000298023224,
       "effective_settings": {
         "sparse_infill_pattern": "gyroid",
         "enable_support": "0",
         "curr_bed_type": "Textured PEI Plate",
-        "top_shell_layers": "5",
-        "bottom_shell_layers": "5"
+        "top_shell_layers": "4",
+        "bottom_shell_layers": "4"
       },
       "start_gcode_diagnostic": true
     },
@@ -33,17 +33,17 @@
       "exit_code": 0,
       "result_code": 0,
       "warnings": "",
-      "hours": 5.215,
-      "grams": 169.806,
-      "wall_loops": 6,
-      "infill_percent": 30.0,
+      "hours": 4.884,
+      "grams": 159.734,
+      "wall_loops": 5,
+      "infill_percent": 15.0,
       "layer_height": 0.20000000298023224,
       "effective_settings": {
         "sparse_infill_pattern": "gyroid",
         "enable_support": "0",
         "curr_bed_type": "Textured PEI Plate",
-        "top_shell_layers": "5",
-        "bottom_shell_layers": "5"
+        "top_shell_layers": "4",
+        "bottom_shell_layers": "4"
       },
       "start_gcode_diagnostic": true
     },
@@ -56,17 +56,17 @@
       "exit_code": 0,
       "result_code": 0,
       "warnings": "",
-      "hours": 1.445,
-      "grams": 51.268,
-      "wall_loops": 6,
-      "infill_percent": 30.0,
+      "hours": 1.373,
+      "grams": 49.109,
+      "wall_loops": 5,
+      "infill_percent": 15.0,
       "layer_height": 0.20000000298023224,
       "effective_settings": {
         "sparse_infill_pattern": "gyroid",
         "enable_support": "0",
         "curr_bed_type": "Textured PEI Plate",
-        "top_shell_layers": "5",
-        "bottom_shell_layers": "5"
+        "top_shell_layers": "4",
+        "bottom_shell_layers": "4"
       },
       "start_gcode_diagnostic": true
     },
@@ -79,17 +79,17 @@
       "exit_code": 0,
       "result_code": 0,
       "warnings": "",
-      "hours": 0.425,
-      "grams": 14.004,
-      "wall_loops": 6,
-      "infill_percent": 30.0,
+      "hours": 0.411,
+      "grams": 13.394,
+      "wall_loops": 5,
+      "infill_percent": 15.0,
       "layer_height": 0.20000000298023224,
       "effective_settings": {
         "sparse_infill_pattern": "gyroid",
         "enable_support": "0",
         "curr_bed_type": "Textured PEI Plate",
-        "top_shell_layers": "5",
-        "bottom_shell_layers": "5"
+        "top_shell_layers": "4",
+        "bottom_shell_layers": "4"
       },
       "start_gcode_diagnostic": true
     },
@@ -102,17 +102,17 @@
       "exit_code": 0,
       "result_code": 0,
       "warnings": "",
-      "hours": 1.574,
-      "grams": 45.063,
-      "wall_loops": 6,
-      "infill_percent": 30.0,
+      "hours": 1.353,
+      "grams": 37.089,
+      "wall_loops": 5,
+      "infill_percent": 15.0,
       "layer_height": 0.20000000298023224,
       "effective_settings": {
         "sparse_infill_pattern": "gyroid",
         "enable_support": "0",
         "curr_bed_type": "Textured PEI Plate",
-        "top_shell_layers": "5",
-        "bottom_shell_layers": "5"
+        "top_shell_layers": "4",
+        "bottom_shell_layers": "4"
       },
       "start_gcode_diagnostic": true
     },
@@ -125,17 +125,17 @@
       "exit_code": 0,
       "result_code": 0,
       "warnings": "",
-      "hours": 0.533,
-      "grams": 8.963,
-      "wall_loops": 6,
-      "infill_percent": 30.0,
+      "hours": 0.498,
+      "grams": 7.805,
+      "wall_loops": 5,
+      "infill_percent": 15.0,
       "layer_height": 0.20000000298023224,
       "effective_settings": {
         "sparse_infill_pattern": "gyroid",
         "enable_support": "0",
         "curr_bed_type": "Textured PEI Plate",
-        "top_shell_layers": "5",
-        "bottom_shell_layers": "5"
+        "top_shell_layers": "4",
+        "bottom_shell_layers": "4"
       },
       "start_gcode_diagnostic": true
     },
@@ -148,17 +148,17 @@
       "exit_code": 0,
       "result_code": 0,
       "warnings": "",
-      "hours": 0.58,
-      "grams": 6.304,
-      "wall_loops": 6,
+      "hours": 0.578,
+      "grams": 6.314,
+      "wall_loops": 5,
       "infill_percent": 100.0,
       "layer_height": 0.20000000298023224,
       "effective_settings": {
         "sparse_infill_pattern": "zig-zag",
         "enable_support": "0",
         "curr_bed_type": "Textured PEI Plate",
-        "top_shell_layers": "5",
-        "bottom_shell_layers": "5"
+        "top_shell_layers": "4",
+        "bottom_shell_layers": "4"
       },
       "start_gcode_diagnostic": true
     },
@@ -171,17 +171,17 @@
       "exit_code": 0,
       "result_code": 0,
       "warnings": "",
-      "hours": 2.358,
-      "grams": 102.06,
-      "wall_loops": 6,
-      "infill_percent": 30.0,
+      "hours": 2.253,
+      "grams": 98.595,
+      "wall_loops": 5,
+      "infill_percent": 15.0,
       "layer_height": 0.20000000298023224,
       "effective_settings": {
         "sparse_infill_pattern": "gyroid",
         "enable_support": "0",
         "curr_bed_type": "Textured PEI Plate",
-        "top_shell_layers": "5",
-        "bottom_shell_layers": "5"
+        "top_shell_layers": "4",
+        "bottom_shell_layers": "4"
       },
       "start_gcode_diagnostic": true
     },
@@ -194,24 +194,24 @@
       "exit_code": 0,
       "result_code": 0,
       "warnings": "",
-      "hours": 0.816,
-      "grams": 24.73,
-      "wall_loops": 6,
-      "infill_percent": 30.0,
+      "hours": 0.722,
+      "grams": 21.841,
+      "wall_loops": 5,
+      "infill_percent": 15.0,
       "layer_height": 0.20000000298023224,
       "effective_settings": {
         "sparse_infill_pattern": "gyroid",
         "enable_support": "0",
         "curr_bed_type": "Textured PEI Plate",
-        "top_shell_layers": "5",
-        "bottom_shell_layers": "5"
+        "top_shell_layers": "4",
+        "bottom_shell_layers": "4"
       },
       "start_gcode_diagnostic": true
     }
   ],
   "total_parts": 8,
-  "total_grams_individual_plates": 686.6,
-  "total_hours_individual_plates": 19.4,
+  "total_grams_individual_plates": 647.3,
+  "total_hours_individual_plates": 18.3,
   "production_gcode": false,
   "project_3mf": {
     "file": "stl/leo_ac1_all_parts.3mf",
@@ -279,8 +279,8 @@
         ]
       }
     ],
-    "total_hours_plates": 19.5,
-    "total_grams_plates": 690.5,
+    "total_hours_plates": 18.3,
+    "total_grams_plates": 651.3,
     "multicolour_parts": {
       "body": [
         "label",
@@ -296,27 +296,27 @@
     "multicolour_slices": {
       "Housing": {
         "plate": 1,
-        "hours": 9.36,
+        "hours": 8.88,
         "grams_by_filament": {
-          "1": 385.35,
+          "1": 368.08,
           "3": 1.6
         },
         "warnings": ""
       },
       "Back cover": {
         "plate": 2,
-        "hours": 5.4,
+        "hours": 5.06,
         "grams_by_filament": {
-          "1": 169.66,
+          "1": 159.61,
           "3": 0.82
         },
         "warnings": ""
       },
       "Grey parts": {
         "plate": 3,
-        "hours": 3.7,
+        "hours": 3.34,
         "grams_by_filament": {
-          "2": 119.61,
+          "2": 107.72,
           "5": 0.94
         },
         "warnings": ""
@@ -326,27 +326,27 @@
     "plate_slices": {
       "Housing": {
         "plate": 1,
-        "hours": 9.36,
+        "hours": 8.88,
         "grams_by_filament": {
-          "1": 385.35,
+          "1": 368.08,
           "3": 1.6
         },
         "warnings": ""
       },
       "Back cover": {
         "plate": 2,
-        "hours": 5.4,
+        "hours": 5.06,
         "grams_by_filament": {
-          "1": 169.66,
+          "1": 159.61,
           "3": 0.82
         },
         "warnings": ""
       },
       "Grey parts": {
         "plate": 3,
-        "hours": 3.7,
+        "hours": 3.34,
         "grams_by_filament": {
-          "2": 119.61,
+          "2": 107.72,
           "5": 0.94
         },
         "warnings": ""
@@ -355,13 +355,13 @@
         "plate": 4,
         "hours": 1.05,
         "grams_by_filament": {
-          "4": 12.55
+          "4": 12.57
         },
         "warnings": ""
       }
     },
     "own_infill_parts": 2,
-    "sha256": "f11a44754586f0d33590201ebed808c6da7e767dc9e8059062dbafd3527c4b5d"
+    "sha256": "75004c3b9f40af22648549b518882d25917acc81b16924d22ade90e637f27332"
   },
   "test_3mf": {
     "file": "stl/leo_ac1_fit_tests.3mf",
@@ -409,7 +409,7 @@
       }
     },
     "own_infill_parts": 0,
-    "sha256": "9ee969e28fd7e6354a1420c6f1312de8655758e485c44b9aa5b3ea9cefb641f2",
+    "sha256": "a48e6b681983c5f5a9d91e51a6c6a9f060c80a8b0fd072368b41fb1d9ef4e9a7",
     "process": {
       "wall_loops": 2,
       "top_shell_layers": 3,
