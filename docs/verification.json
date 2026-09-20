@@ -1,5 +1,5 @@
 {
-  "source_sha256": "cf4572e73c75d97c2322153d7bc21a29096586bef5d1ca49c4f0d94ec392e7d3",
+  "source_sha256": "ef228d27ac6686a18b974666d5b36bf94e21b672606411593dcb8b54e642910f",
   "software": {
     "numpy": "2.5.3",
     "trimesh": "5.1.0",
@@ -126,10 +126,10 @@
       "degenerate_faces": 0,
       "components": 1,
       "backend": "CGAL",
-      "sha256": "f7512f5c38589b4b4bec49264cc809340eb71d565c810dd35f2b1477624225f5",
+      "sha256": "fcfb532a05ae151610cd64a219140e0ac6af66f7357971f45f6cf45dca080f94",
       "quantity": 1,
       "material": "PETG-grey",
-      "committed_sha256": "f7512f5c38589b4b4bec49264cc809340eb71d565c810dd35f2b1477624225f5"
+      "committed_sha256": "fcfb532a05ae151610cd64a219140e0ac6af66f7357971f45f6cf45dca080f94"
     },
     "bail": {
       "size_mm": [
@@ -364,6 +364,60 @@
       "backend": "Manifold",
       "sha256": "9bd869bb74f3f8c64997c4fcd2d5f8f298cec93fceca43563bc430da1b911c97"
     },
+    "back_base": {
+      "size_mm": [
+        225.0,
+        155.0,
+        55.75
+      ],
+      "bounds_mm": [
+        [
+          0.0,
+          0.0,
+          0.0
+        ],
+        [
+          225.0,
+          155.0,
+          55.75
+        ]
+      ],
+      "volume_mm3": 160005.2587,
+      "triangles": 12620,
+      "watertight": true,
+      "consistent_winding": true,
+      "degenerate_faces": 0,
+      "components": 1,
+      "backend": "Manifold",
+      "sha256": "89b7454456e3f50e48e2c1eba45557dca0aa7e3ecad75617ec88441a848734ba"
+    },
+    "back_qr": {
+      "size_mm": [
+        29.1,
+        29.1,
+        0.6
+      ],
+      "bounds_mm": [
+        [
+          173.45,
+          82.45,
+          0.0
+        ],
+        [
+          202.55,
+          111.55,
+          0.6
+        ]
+      ],
+      "volume_mm3": 282.6076,
+      "triangles": 2466,
+      "watertight": true,
+      "consistent_winding": true,
+      "degenerate_faces": 0,
+      "components": 13,
+      "backend": "Manifold",
+      "sha256": "484bf6553a07b7b9cd6bde717f0c144261d24a3a4bdc3252d21f0d0429a0618c"
+    },
     "knob_base": {
       "size_mm": [
         27.9968,
@@ -440,6 +494,19 @@
           4.0
         ],
         "bodies": 24
+      }
+    },
+    "back": {
+      "overlap_mm3": -0.0,
+      "union_delta_mm3": 0.0,
+      "qr": {
+        "mm3": 282.61,
+        "depth_mm": 0.6,
+        "z_mm": [
+          0.0,
+          0.6
+        ],
+        "bodies": 13
       }
     },
     "knob": {
@@ -1402,6 +1469,8 @@
     "multicolour/body_base": 0.0,
     "multicolour/body_label": 0.0,
     "multicolour/body_dedication": 0.0,
+    "multicolour/back_base": 0.0,
+    "multicolour/back_qr": 0.0,
     "multicolour/knob_base": 0.0,
     "multicolour/knob_pointer": 0.0
   },

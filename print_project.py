@@ -55,7 +55,7 @@ ALLOWED_OVERLAPS = [("fan", "screws_fan"),   # the fan is a solid envelope, its 
                     ("bail", "bail_half"), ("bail", "bail_up"), ("bail_half", "bail_up")]   # one bail in three swing positions
 
 # Multicolour: part -> inlay names; SOURCE needs the branches <part>_base and <part>_<inlay>
-COLOR_PARTS = {"body": ("label", "dedication"), "knob": ("pointer",)}   # logo on the front face, dedication raised inside, white knob pointer
+COLOR_PARTS = {"body": ("label", "dedication"), "back": ("qr",), "knob": ("pointer",)}   # logo on the front face, dedication raised inside, QR code on the back (user), white knob pointer
 STL_DIR, COLOR_DIR, ASM_DIR, REPORT = "stl", "stl/multicolour", "asm", "docs/verification.json"
 
 PRINTER = dict(machine="Bambu Lab H2S 0.4 nozzle", process="0.20mm Standard @BBL H2S",
@@ -64,7 +64,7 @@ PROCESS = dict(wall_loops=6, top_shell_layers=5, bottom_shell_layers=5, infill=3
 # Filament slots of the project 3MF, 1-based in this order; inlay slots name their inlay or a tuple of inlays
 FILAMENTS = [dict(material="PETG-white", profile="Bambu PETG HF @BBL H2S", colour="#FFFFFF"),
              dict(material="PETG-grey", profile="Bambu PETG HF @BBL H2S", colour="#8E9294"),
-             dict(material="PETG-grey", profile="Bambu PETG HF @BBL H2S", inlay=("label", "dedication"), colour="#8E9294"),
+             dict(material="PETG-grey", profile="Bambu PETG HF @BBL H2S", inlay=("label", "dedication", "qr"), colour="#8E9294"),
              dict(material="TPU", profile="Generic TPU @BBL H2S", colour="#222326"),
              dict(material="PETG-white", profile="Bambu PETG HF @BBL H2S", inlay=("pointer",), colour="#FFFFFF")]
 PLATES = [("Housing", ["body"]), ("Back cover", ["back"]), ("Grey parts", ["grille", "cover", "bail", "knob"]), ("TPU feet", ["foot"])]
@@ -220,10 +220,12 @@ VIEWER = dict(
            ("screws_back", "Back cover · M3 × 8 button head", "screws", "#26282b", "6x", [0, 2.2, 0]),
            ("screws_bail", "Bail pivots · M4 shoulder screw, flanged brass bushing", "screws", "#26282b", "2x", [0, 0, 1.2]),
            ("screws_feet", "Feet · M3 × 8 button head, from below", "screws", "#26282b", "4x", [0, 0, -1.4])],
-    colour={"body": [("label", "Housing · logo", "#8f9396"), ("dedication", "Housing · dedication", "#8f9396")], "knob": [("pointer", "Speed knob · pointer", "#ffffff")]},
+    colour={"body": [("label", "Housing · logo", "#8f9396"), ("dedication", "Housing · dedication", "#8f9396")], "back": [("qr", "Back cover · QR code to the project", "#8f9396")], "knob": [("pointer", "Speed knob · pointer", "#ffffff")]},
     bodies={"body_base": 'body_install_pose() body_piece("base");',
             "body_label": 'body_install_pose() body_piece("label");',
             "body_dedication": 'body_install_pose() body_piece("dedication");',
+            "back_base": 'back_install_pose() back_piece("base");',
+            "back_qr": 'back_install_pose() back_piece("qr");',
             "knob_base": 'knob_install_pose() knob_piece("base");',
             "knob_pointer": 'knob_install_pose() knob_piece("pointer");',
             # simple fan drawn in the model, no vendor CAD in the viewer (user: placeholder, also for the private viewer)

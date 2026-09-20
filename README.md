@@ -4,37 +4,37 @@ Small battery fan for a child's room, styled like the outdoor unit of a split ai
 
 Designed for a Bambu Lab H2S with AMS in Bambu PETG HF white and grey plus TPU. **Status:** first parts printed; USB-C socket fit confirmed. Remaining fit and functional checks are pending.
 
-![Assembly](img/01_assembly.png?v=d58979d3e8ae)
+![Assembly](img/01_assembly.png?v=0036b8710597)
 
 | Back | Exploded |
 |:---:|:---:|
-| ![Back](img/02_back.png?v=5129e272fa43) | ![Exploded](img/03_exploded.png?v=bc5779d3e40e) |
+| ![Back](img/02_back.png?v=36e5354c6240) | ![Exploded](img/03_exploded.png?v=56e03c6dcaad) |
 | **Logo and grooves** | **Air duct from behind** |
-| ![Logo](img/04_front_right.png?v=951aa9a35efe) | ![Air duct](img/05_duct.png?v=4bb37faa2592) |
+| ![Logo](img/04_front_right.png?v=35e2832e0e1a) | ![Air duct](img/05_duct.png?v=b126fc69f63a) |
 | **Knob and service cover** | **Underside with M5 thread and TPU feet** |
-| ![Knob](img/06_knob.png?v=31284d6cc598) | ![Underside](img/07_underside.png?v=5d14077ec86d) |
+| ![Knob](img/06_knob.png?v=3cf6ecf42851) | ![Underside](img/07_underside.png?v=ddae824c263f) |
 | **Charge module in the air stream** | **LED pocket behind the O** |
-| ![Charge module](img/08_charge_module.png?v=2ef05f89a581) | ![LED pocket](img/09_led.png?v=81cff535601b) |
+| ![Charge module](img/08_charge_module.png?v=52db035c163f) | ![LED pocket](img/09_led.png?v=e12ac1b0c768) |
 | **Folding bail, carrying position** | **Back cover bosses** |
-| ![Folding bail](img/11_bail.png?v=27074d881b12) | ![Back cover bosses](img/12_back_bosses.png?v=1ca5069dfc86) |
+| ![Folding bail](img/11_bail.png?v=9b13292e4fd4) | ![Back cover bosses](img/12_back_bosses.png?v=cabdfaf6e861) |
 | **TPU foot mount** | **USB-C socket** |
-| ![TPU foot mount](img/13_foot_mount.png?v=6cbfac0ba65b) | ![USB-C socket](img/14_usb_c.png?v=68ba476da681) |
+| ![TPU foot mount](img/13_foot_mount.png?v=ee67c8486af0) | ![USB-C socket](img/14_usb_c.png?v=e1bff708972c) |
 | **Power switch well** | **Battery saddles** |
-| ![Power switch](img/15_switch.png?v=8703e073f11f) | ![Battery saddles](img/16_saddles.png?v=57b08142d853) |
+| ![Power switch](img/15_switch.png?v=71bf21d82050) | ![Battery saddles](img/16_saddles.png?v=f59118135585) |
 
 ## Printed parts
 
 | Part | Qty | Material | Size (mm) | Print orientation |
 |---|---|---|---|---|
 | `body` housing | 1 | PETG white + grey (logo, dedication) | 225 × 155 × 76 | front on the bed; logo as inlay in the first 0.6 mm, fake grooves open towards the bed; a dedication is raised in grey on the inside of the front plate |
-| `back` back cover | 1 | PETG white | 225 × 155 × 55.8 | outside on the bed; battery saddles and hold-down plate stand upright |
+| `back` back cover | 1 | PETG white + grey (QR code) | 225 × 155 × 55.8 | outside on the bed; QR code to this project as inlay in the first 0.6 mm; battery saddles and hold-down plate stand upright |
 | `grille` fan grille | 1 | PETG grey | Ø 136 × 7 | front on the bed |
 | `cover` service cover | 1 | PETG grey | 74.4 × 46 × 11.8 | outside on the bed; half-round notch around the knob, glued into a groove of the side wall |
 | `knob` speed knob | 1 | PETG grey + white (pointer) | Ø 28 × 16.5 | top on the bed, pointer as inlay in the first 0.6 mm |
 | `bail` folding bail | 1 | PETG grey | 224 × 36.5 × 58.5 | back faces of the lower legs and the grip on the bed, upper legs upright |
 | `foot` foot | 2 | TPU | 16 × 62 × 5.5 | ground face on the bed, 100 % infill |
 
-All parts are in the Bambu Studio project [`stl/leo_ac1_all_parts.3mf`](stl/leo_ac1_all_parts.3mf): plate 1 housing, plate 2 back cover, plate 3 grey parts (grille, service cover, bail, knob), plate 4 TPU feet. Filaments: 1 PETG white, 2 PETG grey, 3 grey for logo and dedication (same spool as 2), 4 TPU, 5 white for the knob pointer (same spool as 1). All parts print without supports. Bambu Studio estimates about **0.69 kg and 19 hours** in total. Single-colour STLs are in `stl/`, the colour pieces in `stl/multicolour/`.
+All parts are in the Bambu Studio project [`stl/leo_ac1_all_parts.3mf`](stl/leo_ac1_all_parts.3mf): plate 1 housing, plate 2 back cover, plate 3 grey parts (grille, service cover, bail, knob), plate 4 TPU feet. Filaments: 1 PETG white, 2 PETG grey, 3 grey for logo, dedication and QR code (same spool as 2), 4 TPU, 5 white for the knob pointer (same spool as 1). All parts print without supports. Bambu Studio estimates about **0.69 kg and 19 hours** in total. Single-colour STLs are in `stl/`, the colour pieces in `stl/multicolour/`.
 
 Print profile: 0.20 mm layers, 6 walls, 5 top/bottom layers, 30 % gyroid (feet 100 %).
 
