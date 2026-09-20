@@ -4,23 +4,23 @@ Small battery fan for a child's room, styled like the outdoor unit of a split ai
 
 Designed for a Bambu Lab H2S with AMS in Bambu PETG HF white and grey plus TPU. **Status:** first parts printed; USB-C socket fit confirmed. Remaining fit and functional checks are pending.
 
-![Assembly](img/01_assembly.png?v=2710bf40d998)
+![Assembly](img/01_assembly.png?v=c47d54cb91b6)
 
 | Back | Exploded |
 |:---:|:---:|
-| ![Back](img/02_back.png?v=bfd895db8904) | ![Exploded](img/03_exploded.png?v=9a5af6c13666) |
+| ![Back](img/02_back.png?v=d15003424212) | ![Exploded](img/03_exploded.png?v=5e54838e8867) |
 | **Logo and grooves** | **Air duct from behind** |
-| ![Logo](img/04_front_right.png?v=7458b0aba497) | ![Air duct](img/05_duct.png?v=dc507d45fef4) |
+| ![Logo](img/04_front_right.png?v=fedc2e010c7a) | ![Air duct](img/05_duct.png?v=24efae489d31) |
 | **Knob and service cover** | **Underside with M5 thread and TPU feet** |
-| ![Knob](img/06_knob.png?v=fa5f1665c26d) | ![Underside](img/07_underside.png?v=5e0575c71218) |
+| ![Knob](img/06_knob.png?v=fa5f1665c26d) | ![Underside](img/07_underside.png?v=642f54ba61d8) |
 | **Charge module in the air stream** | **LED pocket behind the O** |
-| ![Charge module](img/08_charge_module.png?v=1a8a31b5cb32) | ![LED pocket](img/09_led.png?v=5c52239f3472) |
+| ![Charge module](img/08_charge_module.png?v=e1b5e0f3e6d9) | ![LED pocket](img/09_led.png?v=5c52239f3472) |
 | **Folding bail, carrying position** | **Back cover bosses** |
-| ![Folding bail](img/11_bail.png?v=f09462a9b7ec) | ![Back cover bosses](img/12_back_bosses.png?v=61cc80008f1e) |
+| ![Folding bail](img/11_bail.png?v=f09462a9b7ec) | ![Back cover bosses](img/12_back_bosses.png?v=ca8cbc2f0462) |
 | **TPU foot mount** | **USB-C socket** |
-| ![TPU foot mount](img/13_foot_mount.png?v=8be62b67c0ae) | ![USB-C socket](img/14_usb_c.png?v=b4a05f4b9155) |
+| ![TPU foot mount](img/13_foot_mount.png?v=7bbcfdc8da28) | ![USB-C socket](img/14_usb_c.png?v=4d440bb581d9) |
 | **Power switch well** | **Battery saddles** |
-| ![Power switch](img/15_switch.png?v=6b849d508072) | ![Battery saddles](img/16_saddles.png?v=d743c9ef0d9c) |
+| ![Power switch](img/15_switch.png?v=6b849d508072) | ![Battery saddles](img/16_saddles.png?v=713adbec40c9) |
 
 ## Printed parts
 
@@ -39,7 +39,7 @@ Print profile: 0.20 mm layers, 5 walls, 4 top/bottom layers, 15 % gyroid (feet 1
 
 ### Fit tests before the full print
 
-The upper right section of the housing (from the partition to the right wall, from the electronics shelf up) and the matching part of the back cover, cut from the real parts in their print orientation, so the electronics can be fitted before the 19-hour print. The Bambu Studio project [`stl/leo_ac1_fit_tests.3mf`](stl/leo_ac1_fit_tests.3mf) holds both sections and a knob on one plate with light settings (2 walls, 3 top/bottom layers, 10 % infill): same geometry, less material, all single-colour in PETG white (no knob pointer inlay, no prime tower), about 90 g and 2.5 hours.
+The upper right section of the housing (from the partition to the right wall, from the electronics shelf up) and the matching part of the back cover, cut from the real parts in their print orientation, so the electronics can be fitted before the full print. The Bambu Studio project [`stl/leo_ac1_fit_tests.3mf`](stl/leo_ac1_fit_tests.3mf) holds both sections and a knob on one plate with light settings (2 walls, 3 top/bottom layers, 10 % infill): same geometry, less material, all single-colour in PETG white (no knob pointer inlay, no prime tower), about 90 g and 2.5 hours.
 
 Check with the real parts: the PWM controller lies flat on its pads, the potentiometer housing sits in its wall pocket and washer and nut tighten from outside, the knob covers them; LED and the right bail pivot (M4 insert, flanged bushing and shoulder screw).
 
@@ -56,7 +56,7 @@ Check with the real parts: the PWM controller lies flat on its pads, the potenti
 | LED 3 mm, breathing/fading, 3.3 V, water clear | 1 | [AliExpress](https://de.aliexpress.com/item/1005005336879647.html) | glued from inside behind the O of the logo |
 | Resistor 220 Ω, 1/4 W | 1 | – | series resistor for the LED on the 5 V USB input |
 | Resettable PTC fuse Bourns MF-R160 or RXEF160 (1.6 A hold) | 1 | – | optional, between battery plus and the switch, in heat shrink |
-| Heat-set inserts Ruthex RX-M3x5.7 | 18 | [ruthex.de](https://www.ruthex.de) | – |
+| Heat-set inserts Ruthex RX-M3x5.7 | 14 | [ruthex.de](https://www.ruthex.de) | – |
 | Heat-set inserts Ruthex RX-M4x8.1 | 2 | [ruthex.de](https://www.ruthex.de) | bail pivots, pressed into the inner walls of the top side steps |
 | Heat-set insert Ruthex RX-M5x9.5 | 1 | [ruthex.de](https://www.ruthex.de) | mounting thread in the underside, pressed in from outside |
 | M3 × 30, ISO 7380 Torx | 4 | – | fan |
@@ -79,12 +79,12 @@ USB-C PD trigger 5 V ─┬──► IN+ / IN−   charge/boost module (12 V) �
 battery (JST-PH, built-in BMS) ──► (PTC) ──► power switch ──► B+ / B−
 ```
 
-- The module charges the battery with up to 1 A and delivers 12 V at the same time: the fan keeps running while charging. Use a USB power supply with at least 2 A.
-- The BMS in the battery stays as a second protection layer; the module cuts off earlier at 2.6 V.
+- According to its listing the module charges the battery with up to 1 A and delivers 12 V at the same time, so the fan keeps running while charging. This is not verified on the built unit yet; use a USB power supply with at least 2 A.
+- The BMS in the battery stays as a second protection layer; the listing states a 2.6 V cut-off for the module (not measured yet).
 - With the switch in the battery line, off really disconnects the battery, and the battery only charges with the switch on. To charge without the fan running, turn the knob down until it clicks. Alternatively the switch can go between O+ and the PWM controller; then charging always works, but the boost converter draws its idle current from the battery.
 - The LED shows that the charging cable is plugged in, not the charge state.
-- Runtime depends on the fan; a quiet 140 mm fan draws about as much as the 120 mm industrial fan at full speed, so roughly 10 h at full speed and 20 h at 70 % speed (estimate).
-- Without fan air flow the charge module gets warm while charging; charge with the fan running or reduce the charge current to 0.5 A (R3 = 2.4 kΩ).
+- Runtime is not measured yet. The NF-A14 PWM draws 1.19 W typical and 1.56 W at most (Noctua); with the converter losses a rough estimate is around 10 h at full speed and much longer at low speed.
+- The charge module may get warm while charging without fan air flow; check its temperature in the closed housing. The listing mentions a lower charge current via a resistor change; do not modify the board before its schematic is confirmed.
 
 ## Assembly
 
@@ -108,7 +108,7 @@ battery (JST-PH, built-in BMS) ──► (PTC) ──► power switch ──► 
 
 ## Build from source
 
-Model: [`leo_ac.scad`](leo_ac.scad) (OpenSCAD, parameters at the top), project settings and checks: [`print_project.py`](print_project.py). The scripts in `scripts/` export and check the meshes, slice with the Bambu Studio CLI and build a 3D assembly viewer. The Noctua CAD used in the viewer is not included (licence); download it from Noctua and convert it to `vendor/noctua/NF-F12_iPPC.stl`.
+Model: [`leo_ac.scad`](leo_ac.scad) (OpenSCAD, parameters at the top), project settings and checks: [`print_project.py`](print_project.py). The scripts in `scripts/` export and check the meshes, slice with the Bambu Studio CLI and build a 3D assembly viewer. The fan in the model and viewer is a simple parametric placeholder; no manufacturer CAD is used or needed.
 
 ```sh
 python3 -m venv .venv

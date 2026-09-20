@@ -33,8 +33,9 @@ fan_cx = 88;         // fan axis x
 fan_cz = 85.5;       // fan axis z: just above the feet and mount bosses, just below the bail steps
 fan_standoff = 8;    // bosses between front plate and fan frame
 fan_boss_d = 9;
-fan_pad = 1;         // silicone corner pads, proud of both frame faces (Noctua CAD NF-F12 industrialPPC)
-fan_pad_leg = 41;     // pads cover the corner triangle (fan_size/2, leg) - (fan_size/2, fan_size/2) - (leg, fan_size/2) (CAD)
+fan_pad = 1;         // anti-vibration pads, proud of both frame faces (141 x 141 x 27 mm with pads for the NF-A14 PWM, Noctua)
+fan_pad_side = 0.5;  // pads stand out of the frame sides by this much
+fan_pad_leg = 41;    // pads cover the corner triangle (fan_size/2, leg) - (fan_size/2, fan_size/2) - (leg, fan_size/2), scaled from the 120 mm fan
 shroud_t = 3.2;      // round duct front plate -> fan frame, bore = grille opening: air leaves only through the grille
 shroud_gap = 0.2;    // duct end to the fan frame face
 
@@ -200,7 +201,7 @@ foot_key = 1;         // the foot top sits this deep in a pocket of the bottom w
 foot_c = 1;           // 45 degree chamfers: ground edges all around, top ends (match the pocket ends)
 foot_cl = 0.2;        // clearance of the TPU in the pocket, per side
 foot_inset = 17;      // foot axis from the side faces
-foot_screw_dy = 22;   // screw axes from the foot centre along y
+foot_screw_dy = 17;   // screw axes from the foot centre along y (9 mm from the foot ends, as before the feet got shorter)
 foot_head_recess = 1.2;   // screw heads below the ground face
 foot_boss_d = 9;      // bosses inside the bottom wall for the inserts, pressed in from outside
 
@@ -400,8 +401,8 @@ assert(usbc_xz[0] + usbc[1] / 2 + usbc_cl < bay_x1 - lip_cl - lip_t && usbc_xz[0
        && usbc_xz[1] + usbc[2] / 2 + usbc_cl < body_h - wall - 1
        && len([for (z = cradle_z) if (usbc_channel_z()[1] > z - 1 && usbc_channel_z()[0] < z + cradle_t + 1) z]) == 0 && usbc_channel_z()[1] < shelf_z - 1,   // between saddles, below the shelf
        "USB-C module hits the back lip, the top wall or a battery saddle");
-assert(foot_key <= wall - 2 && foot_screw_skin >= 2.5 && (foot_boss_d - insert_hole_d) / 2 >= insert_w_min + 0.5,
-       "Feet: pocket too deep, too little TPU under the screw heads, or boss wall below the Ruthex minimum");
+assert(foot_key <= wall - 2 && foot_screw_skin >= 2.5 && foot_len / 2 - foot_screw_dy - head_pocket[0] / 2 - foot_c >= 3 && (foot_boss_d - insert_hole_d) / 2 >= insert_w_min + 0.5,
+       "Feet: pocket too deep, too little TPU under the screw heads or beside them at the foot ends, or boss wall below the Ruthex minimum");
 assert(body_w - foot_inset - max(foot_doubler_hw, foot_boss_d / 2) > bat_cx + bat_d / 2 + 1 && foot_inset - foot_w / 2 > corner_r
        && foot_y0 > edge_c + 3 && foot_y0 + foot_len < part_y1 && foot_boss_top < min(fan_cz - fan_size / 2 - 2, cradle_z[0] - 1),
        "Feet: doubler or boss reaches the battery, the fan or the cradle, or foot in the corner radius or beyond the body");
@@ -1043,7 +1044,7 @@ module bail_print_pose() translate([0, 0, bail_leg_y[1]]) rotate([-90, 0, 0]) ch
 module fan_env() {                  // frame block plus the silicone corner pads on both faces
     translate([fan_cx - fan_size / 2, fan_y, fan_cz - fan_size / 2]) cube([fan_size, fan_t, fan_size]);
     for (sx = [-1, 1], sz = [-1, 1], y = [fan_y - fan_pad, fan_y + fan_t - eps]) translate([fan_cx, 0, fan_cz]) scale([sx, 1, sz])
-        along_y(y, y + fan_pad + eps) polygon([[fan_size / 2, fan_pad_leg], [fan_size / 2, fan_size / 2], [fan_pad_leg, fan_size / 2]]);
+        along_y(y, y + fan_pad + eps) let (e = fan_size / 2 + fan_pad_side) polygon([[fan_pad_leg, fan_size / 2 - 1], [e, fan_pad_leg - 1], [e, e], [fan_pad_leg - 1, e]]);
 }
 module fan_visual() translate([fan_cx, fan_y, fan_cz]) rotate([-90, 0, 0]) {   // local z along +y
     difference() {

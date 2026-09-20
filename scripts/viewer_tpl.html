@@ -396,24 +396,35 @@ canvas{display:block;width:100%;height:100%;touch-action:none}
   });
 
   // swap buttons from VIEWER["swaps"]: (label, ids shown after the first click, ids hidden then), e.g. a folded and a raised handle
+  // the chosen alternative survives the presets ("All", "Cut open" ...): enforceSwaps() runs after every preset
+  var swapStates = [];
+  function showPart(id, v){
+    meshes[id].visible = v;
+    var row = list.querySelector('.row[data-id="' + id + '"]');
+    if (row){ row.querySelector('input').checked = v; row.classList.toggle('off', !v); }
+  }
+  function enforceSwaps(){
+    swapStates.forEach(function(st){
+      var any = st.s[1].concat(st.s[2]).some(function(id){ return meshes[id].visible; });
+      if (!any) return;
+      st.s[1].forEach(function(id){ showPart(id, st.on); });
+      st.s[2].forEach(function(id){ showPart(id, !st.on); });
+    });
+  }
   (M.swaps || []).forEach(function(s){
     var ids = P.parts.map(function(p){ return p.id; });
     if (!s[1].concat(s[2]).every(function(id){ return ids.indexOf(id) >= 0; })) return;
+    var st = {s: s, on: false};
+    swapStates.push(st);
     var b = document.createElement('button');
-    b.className = 'preset'; b.type = 'button'; b.textContent = s[0];
-    function show(id, v){
-      meshes[id].visible = v;
-      var row = list.querySelector('.row[data-id="' + id + '"]');
-      if (row){ row.querySelector('input').checked = v; row.classList.toggle('off', !v); }
-    }
+    b.className = 'preset off'; b.type = 'button'; b.textContent = s[0];
     b.addEventListener('click', function(){
-      var on = !meshes[s[1][0]].visible;
-      s[1].forEach(function(id){ show(id, on); });
-      s[2].forEach(function(id){ show(id, !on); });
-      b.classList.toggle('off', !on);
+      st.on = !st.on;
+      s[1].forEach(function(id){ showPart(id, st.on); });
+      s[2].forEach(function(id){ showPart(id, !st.on); });
+      b.classList.toggle('off', !st.on);
       count();
     });
-    b.classList.add('off');
     document.getElementById('grouptoggles').appendChild(b);
   });
 
@@ -432,6 +443,7 @@ canvas{display:block;width:100%;height:100%;touch-action:none}
       var row = list.querySelector('.row[data-id="'+p.id+'"]');
       if (row){ row.querySelector('input').checked = v; row.classList.toggle('off', !v); }
     });
+    enforceSwaps();
     count();
   }
   document.querySelectorAll('.preset').forEach(function(b){
