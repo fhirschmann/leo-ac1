@@ -9,6 +9,7 @@ Internal notes for coding agents (Claude, Codex). The README is public and stays
 - `scripts/` must stay identical to the skill (`python3 ~/.claude/skills/openscad-print-project/scripts/skill_sync.py status -C .`). Improve tools in the skill and adopt/install them; no project-local forks.
 - No painted or scripted local supports. Design geometry so every part prints without supports (45° flanks, short ledges); the user relies on Bambu Studio's own supports if ever needed.
 - Viewer artifact (republish from `build/viewer.html`, keep the URL): a private Claude viewer artifact
+- README images (`img/`, `VIEWS`) are public: transparent renders for dark pages, every body coloured, no image of the dedication (`body(dedication = false)` in views that see the inside of the front plate). Two-column image table in the README.
 - Commits: German message without umlauts, one change per commit, ending with the co-author line.
 - Forgejo remote: `the user's private Forgejo remote`.
 
@@ -43,7 +44,7 @@ Internal notes for coding agents (Claude, Codex). The README is public and stays
 
 - Knob Ø 28 on the right wall at z 107.3 (PWM board on 15 mm ribs); pot shoulder on the full inner wall, washer + nut in an outside counterbore Ø 15 (wrench room) with a 1.0 mm clamped ring (0.1 mm thread reserve); knob ≥ 6 mm proud of the cover, 9 mm on the shaft, slotted clamping sleeve, white pointer inlay.
 - Service cover below the knob with a half-round notch, glued: 1.2 mm rim in a 45° groove.
-- Back cover: USB-C module low right (x 205, z 44) in a channel, 1.5 mm skin for a flush receptacle, 4 × 6 mm wedge stop on the right wall; rocker switch top right (x 201, z 125) in a 7 mm deep 45° well, floor 1.5 mm, 0.2 mm floor margin (no support needed).
+- Back cover: USB-C module low right (x 205, z 44) in a channel, 1.5 mm skin for a flush receptacle, 4 × 6 mm wedge stop on the right wall; rocker switch top right (x 201, z 125) in a 7 mm deep 45° well, floor 1.5 mm, 0.2 mm floor margin (no support needed), well wall 2.2 mm horizontal = 1.56 mm across the flank.
 - Partition with two cable notches (z 44 and 126); charge module centred between them, 5 mm behind the fan, 4.5 mm off the partition.
 - Battery saddles on the back cover with root fillets and a tie rib; BMS cut-out 25 × 5.5 mm for the approx. 20 mm board.
 - Dedication (3 lines, 6/6/4 mm) raised in grey on the inside of the front plate above the PWM module; line gaps are checked on the inlay mesh.
@@ -52,7 +53,7 @@ Internal notes for coding agents (Claude, Codex). The README is public and stays
 ## Open items
 
 - Measure: battery BMS thickness and cable exit; PWM PCB thickness and underside parts; switch depth split; USB-C shell height/centring with a plugged cable; tape thickness; heatsinks if added.
-- Fit tests before the full print: battery ring slice, knob on the real shaft, pot counterbore with washer/nut, USB-C channel with plugged cable, switch well with clips, insert holes.
+- Fit tests before the full print: `test_*` parts (quantity 0, not in the project 3MF) are slices of the real body/back cover made with `slice_box()` — pot counterbore with washer/nut, USB-C channel with plugged cable, switch well with clips, battery ring with BMS, horizontal M3 foot insert and M5 mount insert — plus one knob on the real shaft and one TPU foot. Adjust parameters after the user's results.
 - Wiring: stow the 400 mm fan cable, keep wires out of the fan, saddles and back lip; leave slack at the back-cover modules.
 - Measure the boost converter idle current, then decide the switch position (battery line vs. O+). Check charge-module temperature in the closed housing, also charging with the fan off.
 - Air duct vs. real fan frame: the duct check uses the fan envelope; the real Noctua frame has chamfers, some back-flow is possible (a foam ring could help).
@@ -60,7 +61,7 @@ Internal notes for coding agents (Claude, Codex). The README is public and stays
 ## Verification and known limits
 
 - `print_tools.py export` checks meshes, bed placement, 210 assembly pairs, alignment of round features from the CSG dumps (201 coaxial pairs, none 0.2–2 mm off axis), contacts, stops, clearances (knob ≥ 0.4 running clearance, charge module ≥ 5 mm from the fan), 12 removal paths, 23 insert probes, screw engagement, colour pieces and project checks in `print_project.py` (knob, handle, feet, dedication line gaps). Reports: `docs/verification.json`, `docs/slicer-summary.json`.
-- `analyze.py thickness` finds three walls under 1.2 mm, all from the design: the 1.0 mm clamped ring at the pot (body, right wall), the 0.8 mm skin in front of the LED, and the 45° flanks of the switch well in the back cover (1.5 mm vertical = 1.06 mm across the flank). The switch-well flanks are thinner than intended; not yet decided with the user.
+- `analyze.py thickness` finds two walls under 1.2 mm, both intended: the 1.0 mm clamped ring at the pot (body, right wall) and the 0.8 mm skin in front of the LED. The switch-well wall was raised to 1.56 mm across its 45° flanks.
 - Bought parts are envelopes; no strength, airflow, thermal or physical fit validation. Nothing has been printed.
 - Accepted small overhangs: groove ends, screw-head pocket rings, knob flutes, connector openings, switch-floor ledge.
 - Freshly exported CGAL STLs (body, cover) are not byte-identical to committed ones; compare geometry, re-slice after export.

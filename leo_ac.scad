@@ -184,7 +184,8 @@ sw_body = [sw_cut[0] - 0.2, sw_cut[1] - 0.2, 11]; // conservative body below the
 sw_total_depth = 23;         // measured overall depth including contacts
 sw_pins = sw_total_depth - sw_bezel[2] - sw_rocker - sw_body[2]; // inferred from the provisional front/body depth split
 sw_panel = 1.5;              // user-confirmed approximate panel thickness for the snap clips
-sw_well = [7, 0.2, 1.5];     // well: panel below the back face (frame and rocker stay inside when the fan lies on its back), floor margin around the frame (small: short overhang, no support), wall
+sw_well = [7, 0.2, 2.2];     // well: panel below the back face (frame and rocker stay inside when the fan lies on its back), floor margin around the frame (small: short overhang, no support),
+                             // wall measured horizontally (2.2 = 1.56 mm across the 45 degree flank)
 
 /* [Feet: TPU strips, each screwed with two M3 x 8 from below into Ruthex inserts] */
 foot_w = 16;          // width (x)
@@ -470,7 +471,7 @@ module intake_slots_side() {
     for (z = [18:slot_pitch:137], y = [[12, 37.5], [40.5, 66]]) slot2d([y[0] + slot_w / 2, z], [y[1] - slot_w / 2, z], slot_w);
 }
 
-module body() difference() {
+module body(dedication = true) difference() {   // dedication = false for public images
     union() {
         difference() {
             hull() {
@@ -488,7 +489,7 @@ module body() difference() {
             }
         }
         cyl_y(led_xz, front_t - eps, led_boss[1], led_boss[0] / 2);   // boss for the LED behind the O
-        along_y(front_t - eps, front_t + dedication_h) dedication_2d();   // dedication on the inside of the front plate, grey in print
+        if (dedication) along_y(front_t - eps, front_t + dedication_h) dedication_2d();   // dedication on the inside of the front plate, grey in print
         // round air duct from the front plate to the fan frame face
         difference() {
             cyl_y([fan_cx, fan_cz], front_t - eps, fan_y - shroud_gap, open_r + shroud_t);
@@ -987,6 +988,29 @@ module assembly(explode = 0) {
     color("#3f7fbf") translate([0, explode / 2, 0]) battery_env();
 }
 
+// ---------- fit tests: slices of the real parts, printed before the full build ----------
+module slice_box(lo, hi) intersection() { children(); translate(lo) cube(hi - lo); }
+// body and back cover slices keep the print orientation of their part (same hole shapes and layer direction), moved to the origin
+module test_body_slice(lo, hi) translate([-lo[0], hi[2], 0]) body_print_pose() slice_box(lo, hi) body();
+module test_back_slice(lo, hi) translate([-lo[0], -lo[2], 0]) back_print_pose() slice_box(lo, hi) back();
+// potentiometer bore and counterbore in the right wall with washer and nut, PWM rib and service cover groove; the x range stays clear of the dedication
+module test_pot() test_body_slice([dedication_x + max(dedication_w) / 2 + 3, -1, pot_yz[1] - 16], [body_w + 1, pot_yz[0] + 14, pot_yz[1] + 16]);
+// USB-C channel with the flush receptacle opening, between two battery saddle fillets
+module test_usbc() let (hw = usbc[1] / 2 + usbc_cl + usbc_wall + 3)
+    test_back_slice([usbc_xz[0] - hw, usbc_y0 - 1, cradle_z[1] + cradle_t + saddle_gusset + 0.5], [usbc_xz[0] + hw, body_d + 1, cradle_z[2] - saddle_gusset - 0.5]);
+// switch well with the snap-in panel, clear of the back lip and the corner boss
+module test_switch() let (g = sw_bezel / 2 + [1, 1, 1] * (sw_well[1] + sw_well[2] + sw_well[0] - back_t + 2))
+    test_back_slice([sw_xz[0] - g[0], body_d - sw_well[0] - sw_panel - 1, sw_xz[1] - g[1]], [min(sw_xz[0] + g[0], bay_x1 - lip_cl - lip_t - 0.2), body_d + 1, sw_xz[1] + g[1]]);
+// lowest battery ring lying flat: front half from the body, saddle from the back cover 8 mm behind it (slide the battery with its BMS through)
+module test_ring() translate([-part_x, 0, -cradle_z[0]]) let (x1 = bat_cx + bat_d / 2 + 8, z1 = cradle_z[0] + cradle_t) {
+    slice_box([part_x, -1, cradle_z[0]], [x1, bat_cy + 1, z1]) body();
+    translate([0, 8, 0]) slice_box([part_x, bat_cy, cradle_z[0]], [x1, body_d + 1, z1]) back();
+}
+// foot pocket with an M3 insert pressed in from below (horizontal hole in print)
+module test_foot() let (p = foot_screws()[0]) test_body_slice([p[0] - 10, -1, -1], [p[0] + 10, p[1] + 8, foot_boss_top + 1]);
+// M5 mount insert in the underside (horizontal hole in print)
+module test_mount() test_body_slice([mount_xy[0] - 12, -1, -1], [mount_xy[0] + 12, mount_xy[1] + mount_boss_d / 2 + 3, mount_top + 1]);
+
 // ---------- branches: the tools check that print_project.py PARTS matches them ----------
 if      (part == "assembly") assembly();
 else if (part == "exploded") assembly(40);
@@ -1022,3 +1046,9 @@ else if (part == "knob") knob_print_pose() knob_local();
 else if (part == "knob_base") knob_piece("base");
 else if (part == "knob_pointer") knob_piece("pointer");
 else if (part == "foot") foot_print_pose() foot();
+else if (part == "test_pot") test_pot();
+else if (part == "test_usbc") test_usbc();
+else if (part == "test_switch") test_switch();
+else if (part == "test_ring") test_ring();
+else if (part == "test_foot") test_foot();
+else if (part == "test_mount") test_mount();

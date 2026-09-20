@@ -17,6 +17,13 @@ PARTS = {
     "handle": (1, "PETG-grey", 1),
     "knob": (1, "PETG-grey", 1),
     "foot": (2, "TPU", 1),
+    # fit tests: slices of the real parts, printed before the full build (with one knob and one foot)
+    "test_pot": (0, "PETG-white", 1),
+    "test_usbc": (0, "PETG-white", 1),
+    "test_switch": (0, "PETG-white", 1),
+    "test_ring": (0, "PETG-white", 2),
+    "test_foot": (0, "PETG-white", 1),
+    "test_mount": (0, "PETG-white", 1),
 }
 FULL_INFILL = set()
 FULL_INFILL_MATERIALS = {"TPU"}
@@ -230,7 +237,8 @@ VIEWS = {"01_assembly": ("assembly();", "-160,-330,230,112,40,70"),
          "04_front_right": ("rotate([-90, 0, 0]) intersection() { assembly(); translate([150, -10, 0]) cube([80, 20, 155]); }",
                             "189,-260,420,189,78,0"),
          # air duct from behind: body cut at 30 mm depth, fan hidden
-         "05_duct": ("intersection() { body(); translate([-1, -1, -1]) cube([body_w + 2, 30, body_h + 2]); }",
+         # public images: every body coloured (uncoloured cut faces take the scheme's back-face colour), dedication hidden
+         "05_duct": ('color("#f2f2ee") intersection() { body(dedication = false); translate([-1, -1, -1]) cube([body_w + 2, 30, body_h + 2]); }',
                      "112,420,300,112,0,77"),
          # service cover with the speed knob, from the right
          "06_knob": ("intersection() { assembly(); translate([165, 0, 20]) cube([100, 80, 140]); }",
@@ -240,14 +248,11 @@ VIEWS = {"01_assembly": ("assembly();", "-160,-330,230,112,40,70"),
          # LED pocket behind the O, cut through the LED axis and seen from behind: 0.8 mm white skin in front of the LED
          "09_led": ("intersection() { union() { color(\"#f2f2ee\") body(); color(\"#9fd3ff\") led_env(); } translate([led_xz[0] - 9, -1, led_xz[1] - 8]) cube([18, 10, 8]); }",
                     "232,40,178,207,3,131"),
-         # dedication on the inside of the front plate: electronics bay, face turned up and read from behind
-         "10_dedication": ("rotate([0, 0, 180]) rotate([90, 0, 0]) intersection() { body_install_pose() { color(\"#f2f2ee\") body_piece(\"base\"); color(\"#8f9396\") body_piece(\"dedication\"); } translate([bay_x0 - 1, -1, 95]) cube([bay_x1 - bay_x0 + 2, 12, 50]); }",
-                           "-182,48,160,-182,125,3"),
          # handle mount from below: doubler, ribs and screws under the right foot, cut at the screw axis, with the handle keys
-         "11_handle_mount": ("rotate([0, 0, 180]) rotate([90, 0, 0]) intersection() { union() { color(\"#f2f2ee\") body(); color(\"#8f9396\") handle(); color(\"#26282b\") screws_handle(); } translate([150, -1, 125]) cube([76, handle_cy + 1, 60]); }",
+         "11_handle_mount": ("rotate([0, 0, 180]) rotate([90, 0, 0]) intersection() { union() { color(\"#f2f2ee\") body(dedication = false); color(\"#8f9396\") handle(); color(\"#26282b\") screws_handle(); } translate([150, -1, 125]) cube([76, handle_cy + 1, 60]); }",
                              "-185,95,215,-185,150,40"),
          # back cover insert boss in the top left corner from behind and below, back cover off: column and cone into the corner
-         "12_back_bosses": ("intersection() { body(); translate([-1, 30, 105]) cube([45, body_d, 60]); }",
+         "12_back_bosses": ('color("#f2f2ee") intersection() { body(); translate([-1, 30, 105]) cube([45, body_d, 60]); }',
                             "110,190,60,12,62,142"),
          # left TPU foot cut at its screw axes, seen from the right: pocket, insert boss, screw, recessed head
          "13_foot_mount": ('intersection() { union() { color("#f2f2ee") body(); color("#222326") place_feet(); color("#26282b") screws_feet(true); } translate([-1, 0, -10]) cube([foot_inset + 1, body_d, 30]); }',
@@ -259,6 +264,6 @@ VIEWS = {"01_assembly": ("assembly();", "-160,-330,230,112,40,70"),
          "15_switch": ('intersection() { union() { color("#e6e6e1") back(); color("#1b1b1b") sw_env(); } translate([sw_xz[0], 40, sw_xz[1] - 20]) cube([30, 45, 40]); }',
                        "90,40,170,201,70,125"),
          # battery saddles on the inside of the back cover: root fillets and the rib behind the battery, seen from the front
-         "16_saddles": ('intersection() { back(); translate([150, 20, 0]) cube([76, 61, 90]); }', "120,-60,120,186,60,40"),
+         "16_saddles": ('color("#e6e6e1") intersection() { back(); translate([150, 20, 0]) cube([76, 61, 90]); }', "120,-60,120,186,60,40"),
          # underside with the M5 mount insert
          "07_underside": ('color("#f2f2ee") body(); color("#222326") place_feet(); color("#26282b") screws_feet(true);', "40,-160,-260,112,40,40")}

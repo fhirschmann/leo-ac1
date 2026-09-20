@@ -6,11 +6,11 @@
       "quantity": 1,
       "material": "PETG-white",
       "passed": true,
-      "source_sha256": "6e779fb88c66c56b0a71077731b59d509746a73fe3bc7558bed5e34ed3d088c2",
+      "source_sha256": "77ffb2ed7344da00a872b49be7c8339de8a7a56f5089839b915a6eab6972e4d3",
       "exit_code": 0,
       "result_code": 0,
       "warnings": "",
-      "hours": 10.332,
+      "hours": 10.311,
       "grams": 401.089,
       "wall_loops": 6,
       "infill_percent": 30.0,
@@ -29,12 +29,12 @@
       "quantity": 1,
       "material": "PETG-white",
       "passed": true,
-      "source_sha256": "9337d93842a5c157836fe1d9c0825c4ca4512f0adb9999c34448983ed0e604f6",
+      "source_sha256": "e29edd4607caf958dea493d1ebc0b08654c651d63c5ce73ae7715843c9951bcc",
       "exit_code": 0,
       "result_code": 0,
       "warnings": "",
-      "hours": 5.484,
-      "grams": 166.565,
+      "hours": 5.492,
+      "grams": 166.887,
       "wall_loops": 6,
       "infill_percent": 30.0,
       "layer_height": 0.20000000298023224,
@@ -75,7 +75,7 @@
       "quantity": 1,
       "material": "PETG-grey",
       "passed": true,
-      "source_sha256": "942f21ad5a7768beda0ba981eda44b100fdebde5a5a9d9de580320cad6a121f8",
+      "source_sha256": "17f2c2485931323cfd818514592759883fc97f7f35568655178cddf1aedbe910",
       "exit_code": 0,
       "result_code": 0,
       "warnings": "",
@@ -161,10 +161,148 @@
         "bottom_shell_layers": "5"
       },
       "start_gcode_diagnostic": true
+    },
+    {
+      "part": "test_pot",
+      "quantity": 0,
+      "material": "PETG-white",
+      "passed": true,
+      "source_sha256": "604425cc1a52e7080abadcb98f4b0a794902ac144407f6d604990e84301b9f4e",
+      "exit_code": 0,
+      "result_code": 0,
+      "warnings": "",
+      "hours": 1.076,
+      "grams": 9.986,
+      "wall_loops": 6,
+      "infill_percent": 30.0,
+      "layer_height": 0.20000000298023224,
+      "effective_settings": {
+        "sparse_infill_pattern": "gyroid",
+        "enable_support": "0",
+        "curr_bed_type": "Textured PEI Plate",
+        "top_shell_layers": "5",
+        "bottom_shell_layers": "5"
+      },
+      "start_gcode_diagnostic": true
+    },
+    {
+      "part": "test_usbc",
+      "quantity": 0,
+      "material": "PETG-white",
+      "passed": true,
+      "source_sha256": "ec6823265a30f8786762a77cbd80939ce3559dd2e9ae92ace8e8e04f0672a9fc",
+      "exit_code": 0,
+      "result_code": 0,
+      "warnings": "",
+      "hours": 0.316,
+      "grams": 1.404,
+      "wall_loops": 6,
+      "infill_percent": 30.0,
+      "layer_height": 0.20000000298023224,
+      "effective_settings": {
+        "sparse_infill_pattern": "gyroid",
+        "enable_support": "0",
+        "curr_bed_type": "Textured PEI Plate",
+        "top_shell_layers": "5",
+        "bottom_shell_layers": "5"
+      },
+      "start_gcode_diagnostic": true
+    },
+    {
+      "part": "test_switch",
+      "quantity": 0,
+      "material": "PETG-white",
+      "passed": true,
+      "source_sha256": "b19acc6520d526b00ad737896c5d8d899a5f7a7b9c9999c25155927c2e97886a",
+      "exit_code": 0,
+      "result_code": 0,
+      "warnings": "",
+      "hours": 0.25,
+      "grams": 2.302,
+      "wall_loops": 6,
+      "infill_percent": 30.0,
+      "layer_height": 0.20000000298023224,
+      "effective_settings": {
+        "sparse_infill_pattern": "gyroid",
+        "enable_support": "0",
+        "curr_bed_type": "Textured PEI Plate",
+        "top_shell_layers": "5",
+        "bottom_shell_layers": "5"
+      },
+      "start_gcode_diagnostic": true
+    },
+    {
+      "part": "test_ring",
+      "quantity": 0,
+      "material": "PETG-white",
+      "passed": true,
+      "source_sha256": "f5736884d39df265634d1215953c5b6c499966063f7fdb0cb55280173c482b6f",
+      "exit_code": 0,
+      "result_code": 0,
+      "warnings": "",
+      "hours": 0.393,
+      "grams": 11.608,
+      "wall_loops": 6,
+      "infill_percent": 30.0,
+      "layer_height": 0.20000000298023224,
+      "effective_settings": {
+        "sparse_infill_pattern": "gyroid",
+        "enable_support": "0",
+        "curr_bed_type": "Textured PEI Plate",
+        "top_shell_layers": "5",
+        "bottom_shell_layers": "5"
+      },
+      "start_gcode_diagnostic": true
+    },
+    {
+      "part": "test_foot",
+      "quantity": 0,
+      "material": "PETG-white",
+      "passed": true,
+      "source_sha256": "b5ba5fb0cc4990ad1d677fe01bf1e6031516845bd2fd6d165569fc4687bb3a6d",
+      "exit_code": 0,
+      "result_code": 0,
+      "warnings": "",
+      "hours": 0.536,
+      "grams": 3.134,
+      "wall_loops": 6,
+      "infill_percent": 30.0,
+      "layer_height": 0.20000000298023224,
+      "effective_settings": {
+        "sparse_infill_pattern": "gyroid",
+        "enable_support": "0",
+        "curr_bed_type": "Textured PEI Plate",
+        "top_shell_layers": "5",
+        "bottom_shell_layers": "5"
+      },
+      "start_gcode_diagnostic": true
+    },
+    {
+      "part": "test_mount",
+      "quantity": 0,
+      "material": "PETG-white",
+      "passed": true,
+      "source_sha256": "9cc2d894f8920ae6bfe80d8bdfe93f6abe668cd384996ffaf0cf4cb8f016d80e",
+      "exit_code": 0,
+      "result_code": 0,
+      "warnings": "",
+      "hours": 0.921,
+      "grams": 9.477,
+      "wall_loops": 6,
+      "infill_percent": 30.0,
+      "layer_height": 0.20000000298023224,
+      "effective_settings": {
+        "sparse_infill_pattern": "gyroid",
+        "enable_support": "0",
+        "curr_bed_type": "Textured PEI Plate",
+        "top_shell_layers": "5",
+        "bottom_shell_layers": "5"
+      },
+      "start_gcode_diagnostic": true
     }
   ],
   "total_parts": 8,
-  "total_grams_individual_plates": 708.1,
+  "total_grams_individual_plates": 708.4,
   "total_hours_individual_plates": 21.1,
   "production_gcode": false,
   "project_3mf": {
@@ -230,7 +368,7 @@
       }
     ],
     "total_hours_plates": 21.1,
-    "total_grams_plates": 711.7,
+    "total_grams_plates": 712.0,
     "multicolour_parts": {
       "body": [
         "label",
@@ -243,7 +381,7 @@
     "multicolour_slices": {
       "Housing": {
         "plate": 1,
-        "hours": 10.62,
+        "hours": 10.63,
         "grams_by_filament": {
           "1": 401.5,
           "3": 1.56
@@ -264,7 +402,7 @@
     "plate_slices": {
       "Housing": {
         "plate": 1,
-        "hours": 10.62,
+        "hours": 10.63,
         "grams_by_filament": {
           "1": 401.5,
           "3": 1.56
@@ -273,9 +411,9 @@
       },
       "Back cover": {
         "plate": 2,
-        "hours": 5.48,
+        "hours": 5.49,
         "grams_by_filament": {
-          "1": 166.56
+          "1": 166.89
         },
         "warnings": ""
       },
@@ -298,6 +436,6 @@
       }
     },
     "own_infill_parts": 2,
-    "sha256": "e4c54975f95bdf858def2a25d117989319257451d634465bef3ab5ce0edcd3d1"
+    "sha256": "f3b9df5d101220dfa8e11218ee773df6088c573367617656890a1c049b3038b9"
   }
 }
