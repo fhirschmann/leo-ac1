@@ -1,5 +1,5 @@
 {
-  "source_sha256": "d38e0355bb260b16f19bf13406a24bc4a11816fb71849e6b803a1b6387f1da15",
+  "source_sha256": "ba6069ee9e8d4dedc31cc2cb11616e22c5f8b2865b5eb84edb64330fbea317e5",
   "software": {
     "numpy": "2.5.3",
     "trimesh": "5.1.0",
@@ -36,10 +36,10 @@
       "degenerate_faces": 0,
       "components": 1,
       "backend": "CGAL",
-      "sha256": "6a55546bdf35a5231942b0cce7affd9a9ee3289e2646a73f6f5425f7f5c87b56",
+      "sha256": "cde11d81e40b013aacd8cf84b16d9579232eb8f1bf1a0a21ac65f652bd44ce44",
       "quantity": 1,
       "material": "PETG-white",
-      "committed_sha256": "6a55546bdf35a5231942b0cce7affd9a9ee3289e2646a73f6f5425f7f5c87b56"
+      "committed_sha256": "cde11d81e40b013aacd8cf84b16d9579232eb8f1bf1a0a21ac65f652bd44ce44"
     },
     "back": {
       "size_mm": [
@@ -96,10 +96,10 @@
       "degenerate_faces": 0,
       "components": 1,
       "backend": "CGAL",
-      "sha256": "4739ca458a845cb54130aa7013cc7e1aca424e75dff5b8bf86760a0159fd0230",
+      "sha256": "c2bc1713ce5339264d03022438875f13d168eabfffd69da7d387c41701d3619d",
       "quantity": 1,
       "material": "PETG-grey",
-      "committed_sha256": "4739ca458a845cb54130aa7013cc7e1aca424e75dff5b8bf86760a0159fd0230"
+      "committed_sha256": "c2bc1713ce5339264d03022438875f13d168eabfffd69da7d387c41701d3619d"
     },
     "bail": {
       "size_mm": [
@@ -209,17 +209,17 @@
           14.7
         ]
       ],
-      "volume_mm3": 2539.1093,
-      "triangles": 208,
+      "volume_mm3": 2635.0893,
+      "triangles": 228,
       "watertight": true,
       "consistent_winding": true,
       "degenerate_faces": 0,
       "components": 1,
       "backend": "CGAL",
-      "sha256": "f200d36f8dac3e1bcd39f0341340ed72b6e6d4a0bd9c724c8c93dd1f2b50768b",
+      "sha256": "b011b34bd77b37bc4fe3a4e61160b845447361f7f86a5c1a92975b88ab683341",
       "quantity": 1,
       "material": "PETG-grey",
-      "committed_sha256": "f200d36f8dac3e1bcd39f0341340ed72b6e6d4a0bd9c724c8c93dd1f2b50768b"
+      "committed_sha256": "b011b34bd77b37bc4fe3a4e61160b845447361f7f86a5c1a92975b88ab683341"
     },
     "test_right": {
       "size_mm": [
@@ -389,7 +389,7 @@
       "degenerate_faces": 0,
       "components": 1,
       "backend": "CGAL",
-      "sha256": "4758c4ebf369ac36ba52bc0d95a58f2ab8241ba5fb12b13f5e379b66a0d45608"
+      "sha256": "90052319650756928551832a044572a26c3139a63bc85bc0381981f14917e013"
     },
     "back_base": {
       "size_mm": [
@@ -559,8 +559,8 @@
       }
     }
   },
-  "assembly_bodies": 23,
-  "assembly_pairs": 253,
+  "assembly_bodies": 24,
+  "assembly_pairs": 276,
   "metrics": {
     "wall": 3.2,
     "front_t": 3.2,
@@ -1044,7 +1044,7 @@
     "pot_nut@body": 2.6742,
     "chg_holder@body": 3.4407,
     "chg_holder@body[np.float64(1.0), np.float64(0.0), np.float64(0.0)]": 6.3175,
-    "chg_sink@chg_module": 5.5,
+    "chg_sink@chg_module": 5.225,
     "led@body": 0.1647,
     "feet@body": 77.6041,
     "usb_trigger@back": 0.7675,

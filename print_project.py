@@ -42,6 +42,7 @@ ASSEMBLY = {
     "chg_module": "chg_module_env();",
     "chg_holder": "chg_holder();",
     "chg_sink": "chg_rear_sink_env();",
+    "chg_tie": "chg_tie_env();",
     "usb_trigger": "usbc_env();",
     "switch": "sw_env();",
     "fan": "fan_env();",
@@ -170,11 +171,11 @@ def checks(ctx):
             ("back_off", ["back", "screws_back", "usb_trigger", "switch"], others("back", "screws_back", "usb_trigger", "switch", "bail"), [0, 1, 0], 12, 0.25),   # bail swung up first
             ("battery_out", ["battery"], others("battery", "back", "screws_back", "usb_trigger", "switch", "bail"), [0, 1, 0], 90, 1),
             # the snap hooks spring open (not a rigid path): off the back stops towards the fan section, against everything but the holder
-            ("chg_module_unclip", ["chg_module", "chg_sink"], others("chg_module", "chg_sink", "chg_holder", "back", "screws_back", "usb_trigger", "switch", "bail"), [-1, 0, 0], 4, 0.25),
+            ("chg_module_unclip", ["chg_module", "chg_sink"], others("chg_module", "chg_sink", "chg_tie", "chg_holder", "back", "screws_back", "usb_trigger", "switch", "bail"), [-1, 0, 0], 4, 0.25),
             ("chg_holder_off", ["chg_holder"], ["body"], [-1, 0, 0], 6, 0.25),   # the sockets slide off the pads (before gluing)
             ("screws_fan_out", ["screws_fan"], others("screws_fan", "fan", "back", "screws_back", "usb_trigger", "switch", "bail"), [0, 1, 0], 40, 1),
             # the charge module holder is glued in and stays: off the duct ring, sideways past the holder, then out the back
-            ("fan_out", ["fan"], others("fan", "screws_fan", "battery", "chg_module", "chg_sink", "back", "screws_back", "usb_trigger", "switch", "bail"),
+            ("fan_out", ["fan"], others("fan", "screws_fan", "battery", "chg_module", "chg_sink", "chg_tie", "back", "screws_back", "usb_trigger", "switch", "bail"),
              [([0, 1, 0], 1, 0.5), ([-1, 0, 0], m["fan_side_shift"], 0.5), ([0, 1, 0], 90, 1)]),
             ("knob_off", ["knob"], others("knob"), [1, 0, 0], 25, 0.5),
             ("cover_off", ["cover"], ["body", "pot", "pot_nut", "pwm_board", "knob"], [1, 0, 0], 30, 0.5),   # glued in; the knob can stay on
@@ -186,7 +187,7 @@ def checks(ctx):
             ("pwm_board_out", ["pot", "pwm_board"], others("pot", "pot_nut", "pwm_board", "knob", "cover", "back", "screws_back", "usb_trigger", "switch", "bail"),
              [([-1, 0, 0], clear_x, 0.5), ([0, 0, 1], m["pwm_lift"], 0.5), ([0, 1, 0], 90, 1)])])   # lift the solder pins over the back pads
     # then out the back past the glued holder, from the unclipped position
-    fixed = others("chg_module", "chg_sink", "back", "screws_back", "usb_trigger", "switch", "bail")
+    fixed = others("chg_module", "chg_sink", "chg_tie", "back", "screws_back", "usb_trigger", "switch", "bail")
     ctx.solids["chg_module_unclipped"] = (ctx.solids["chg_module"] + ctx.solids["chg_sink"]).translate([-4, 0, 0])
     paths += ctx.paths([("chg_module_out", ["chg_module_unclipped"], fixed, [0, 1, 0], 45, 1)])
     del ctx.solids["chg_module_unclipped"]
@@ -228,8 +229,9 @@ VIEWER = dict(
            ("battery", "Battery LiFePO4 3.2 V 6000 mAh", "bought", "#3f7fbf", "1x", [0, 0.5, 0]),
            ("pot", "Potentiometer · housing in the wall pocket, washer and nut outside", "bought", "#3a3d41", "1x", [-0.5, 0, 0]),
            ("chg_holder", "Charge module holder · taped onto the housing pads", "grey", "#8f9396", "1x", [0, 0.8, 0]),
-           ("chg_module", "Charge/boost module · IN end up, 2 planned heatsink envelopes in front", "bought", "#c9c9c9", "1x", [0, 0.8, 0]),
+           ("chg_module", "Charge/boost module · IN end up, planned small heatsink on the IC", "bought", "#c9c9c9", "1x", [0, 0.8, 0]),
            ("chg_sink", "Heatsink 14 × 14 × 6 behind the charger IC", "bought", "#b8bcc2", "1x", [0, 0.8, 0]),
+           ("chg_tie", "Cable tie 2.5 mm round the OUT end of the charge module", "bought", "#1b1b1b", "1x", [0, 0.8, 0]),
            ("led", "USB power indicator LED 3 mm, behind the O", "bought", "#9fd3ff", "1x", [0, 1, 0]),
            ("usb_trigger", "USB-C PD trigger, 5 V (Type A)", "bought", "#4b2a7a", "1x", [0, 1.5, 0]),
            ("switch", "Power switch KCD11 · rocker about 2 mm proud of the back face", "bought", "#1b1b1b", "1x", [0, 1.8, 0]),
@@ -272,7 +274,7 @@ VIEWS = {"01_assembly": ("assembly();", "-160,-330,230,112,40,70"),
          "06_knob": ("intersection() { assembly(); translate([165, 0, 20]) cube([100, 80, 140]); }",
                      "420,-120,200,230,40,90"),
          # charge/boost module in its clip holder on the partition, from behind and the fan side with the back cover removed
-         "08_charge_module": ("intersection() { union() { color(\"#f2f2ee\") body(dedication = false); color(\"#8f9396\") chg_holder(); color(\"#2e6b3f\") chg_module_env(); color(\"#d9dcdf\") chg_rear_sink_env(); } translate([part_x - 30, 30, 55]) cube([36, 34, 65]); }", "95,5,130,155,48,86", {"light": "left"}),
+         "08_charge_module": ("intersection() { union() { color(\"#f2f2ee\") body(dedication = false); color(\"#8f9396\") chg_holder(); color(\"#2e6b3f\") chg_module_env(); color(\"#d9dcdf\") chg_rear_sink_env(); color(\"#1b1b1b\") chg_tie_env(); } translate([part_x - 30, 30, 55]) cube([36, 34, 65]); }", "95,5,130,155,48,86", {"light": "left"}),
          # LED pocket behind the O, cut through the LED axis and seen from behind: 0.8 mm white skin in front of the LED
          "09_led": ("intersection() { union() { color(\"#f2f2ee\") body(dedication = false); color(\"#9fd3ff\") led_env(); } translate([led_xz[0] - 9, -1, led_xz[1] - 8]) cube([18, 10, 8]); }",
                     "232,40,178,207,3,131"),
