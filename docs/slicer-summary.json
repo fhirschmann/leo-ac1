@@ -75,7 +75,7 @@
       "quantity": 1,
       "material": "PETG-grey",
       "passed": true,
-      "source_sha256": "fcfb532a05ae151610cd64a219140e0ac6af66f7357971f45f6cf45dca080f94",
+      "source_sha256": "f2de98b9edb8cd19a8f081c2258adf4a04290b3ba0d17dc17755f98e53f4e902",
       "exit_code": 0,
       "result_code": 0,
       "warnings": "",
@@ -361,7 +361,7 @@
       }
     },
     "own_infill_parts": 2,
-    "sha256": "f7c7887b10bddc673422f00eb6d3eee19ea1f016ab652dc7845be15e7d530768"
+    "sha256": "dc3f5eb48c8fb7fb5e3baac48b5fe9d2449e9c5a8033c7c59f38d3944f4ce033"
   },
   "test_3mf": {
     "file": "stl/leo_ac1_fit_tests.3mf",
@@ -409,7 +409,7 @@
       }
     },
     "own_infill_parts": 0,
-    "sha256": "fc430271743a7fcf0dc9d6cfeea0f48014eed96427ee9a117ec3c38f4fe0eb65",
+    "sha256": "90ad0c257e7977a8c1ad6a1d86304e61534e71b2231c715971ac3fe2308aaa99",
     "process": {
       "wall_loops": 2,
       "top_shell_layers": 3,
