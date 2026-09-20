@@ -55,6 +55,7 @@ Internal notes for coding agents (Claude, Codex). The README is public and stays
 
 - Measure: battery cable exit; PWM underside parts; switch body depth behind the panel; USB-C shell height/centring with a plugged cable; tape thickness; heatsinks if added.
 - Fit tests before the full print: `test_*` parts (quantity 0, not in the full project 3MF; `TEST_PLATES` puts them with a knob and one foot into `stl/leo_ac1_fit_tests.3mf`) are slices of the real body/back cover made with `slice_box()` — pot counterbore with washer/nut, USB-C channel with plugged cable, switch well with clips, battery ring with BMS, horizontal M3 foot insert and M5 mount insert — plus one knob on the real shaft and one TPU foot. Adjust parameters after the user's results.
+- USB-C mechanical fit is confirmed (2026-09-16); full cable insertion and fit with soldered wires still need explicit confirmation. Results for the other fit tests are pending.
 - Wiring: stow the 400 mm fan cable, keep wires out of the fan, saddles and back lip; leave slack at the back-cover modules.
 - Measure the boost converter idle current, then decide the switch position (battery line vs. O+). Check charge-module temperature in the closed housing, also charging with the fan off.
 - Air duct vs. real fan frame: the duct check uses the fan envelope; the real Noctua frame has chamfers, some back-flow is possible (a foam ring could help).
@@ -63,6 +64,7 @@ Internal notes for coding agents (Claude, Codex). The README is public and stays
 
 - `print_tools.py export` checks meshes, bed placement, 210 assembly pairs, alignment of round features from the CSG dumps (201 coaxial pairs, none 0.2–2 mm off axis), contacts, stops, clearances (knob ≥ 0.4 running clearance, charge module ≥ 5 mm from the fan), 12 removal paths, 23 insert probes, screw engagement, colour pieces and project checks in `print_project.py` (knob, handle, feet, dedication line gaps). Reports: `docs/verification.json`, `docs/slicer-summary.json`.
 - `analyze.py thickness` finds two walls under 1.2 mm, both intended: the 1.0 mm clamped ring at the pot (body, right wall) and the 0.8 mm skin in front of the LED. The switch-well wall was raised to 1.56 mm across its 45° flanks.
-- Bought parts are envelopes; no strength, airflow, thermal or physical fit validation. Nothing has been printed.
+- Physical feedback (2026-09-16): the user has the printed parts and reports that the USB-C socket fits perfectly. No geometry adjustment is needed for this fit. The exact printed set and full cable insertion were not specified.
+- Bought parts are envelopes; physical fit is confirmed only for the USB-C socket. Strength, airflow, thermal performance and the remaining fits have not been validated.
 - Accepted small overhangs: groove ends, screw-head pocket rings, knob flutes, connector openings, switch-floor ledge.
 - Freshly exported CGAL STLs (body, cover) are not byte-identical to committed ones; compare geometry, re-slice after export.
