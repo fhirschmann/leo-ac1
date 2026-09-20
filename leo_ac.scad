@@ -70,6 +70,7 @@ back_bar_x = 80;     // extra vertical bar through the back intake slots
 /* [Battery, 3.2 V 6000 mAh LiFePO4 pack] */
 bat_d = 33.5;        // 32700 cell with shrink sleeve (label "3,4 x 7 cm" incl. BMS)
 bat_bms = [16, 4];   // BMS board on one side, facing the partition (-x): width (y), thickness (x); full length assumed, to be measured
+bat_bms_cut = [2, 1];         // extra room around the BMS board in the cradle rings and saddles: per side across (y), in depth (x)
 bat_l = 72;          // the cable leaves at one end: that end up, through the shelf slot
 cable_slot_w = 10;   // slot in the shelf above the battery, open towards the back
 bat_cx = 180;
@@ -334,7 +335,7 @@ assert(chg_fan_gap >= 5 && chg_gap - chg_tape >= 3
        "Charge module reaches the fan frame, the back or the cable notch");
 assert(chg_gap - chg_tape >= 0.5 && (part_x - chg_gap) - max(part_x - chg_gap - chg_pcb[2] + chg_ledge[1], fan_cx + fan_size / 2 + 0.3) >= 1,
        "Charge module: pads too thin for the tape, or less than 1 mm of board on the ledge beside the fan frame");
-assert(bat_cx - bat_d / 2 - bat_bms[1] - bat_clear > bay_x0 + 1, "BMS board of the battery hits the partition");
+assert(bat_cx - bat_d / 2 - bat_bms[1] - bat_clear - bat_bms_cut[1] > bay_x0 + 1, "BMS board of the battery or its cut-out hits the partition");
 assert(cable_notch_z[0] - saddle_rib_slot[0] / 2 > cradle_z[1] + cradle_t + saddle_gusset - 0.5 && cable_notch_z[0] + saddle_rib_slot[0] / 2 < cradle_z[2] - saddle_gusset + 0.5
        && body_d - back_t - saddle_rib_slot[1] - saddle_rib_slot[0] / 2 > bat_cy + bat_d / 2 + bat_clear + 5,
        "Saddle stiffening: wire passage in the rib hits a fillet or reaches the battery end of the rib");
@@ -483,8 +484,8 @@ module body() difference() {
             translate([bay_x0 - eps, front_t - eps, z]) cube([bay_x1 - bay_x0 + 2 * eps, bat_cy - front_t + eps, cradle_t]);
             translate([bat_cx, bat_cy, z - 1]) cylinder(r = bat_d / 2 + bat_clear, h = cradle_t + 2);
             // rectangular cut-out for the BMS board, open towards the back like the cradle
-            translate([bat_cx - bat_d / 2 - bat_bms[1] - bat_clear, bat_cy - bat_bms[0] / 2 - bat_clear, z - 1])
-                cube([bat_bms[1] + bat_clear + bat_d / 2, bat_bms[0] + 2 * bat_clear, cradle_t + 2]);
+            translate([bat_cx - bat_d / 2 - bat_bms[1] - bat_clear - bat_bms_cut[1], bat_cy - bat_bms[0] / 2 - bat_clear - bat_bms_cut[0], z - 1])
+                cube([bat_bms[1] + bat_clear + bat_bms_cut[1] + bat_d / 2, bat_bms[0] + 2 * (bat_clear + bat_bms_cut[0]), cradle_t + 2]);
         }
         // boss for the M5 mount insert, with a 45 degree cone to the bottom wall towards the front (printable)
         let (zd = wall + mount_doubler[2]) {
@@ -711,8 +712,8 @@ module back() difference() {
         for (z = cradle_z) difference() {
             translate([bay_x0 + 0.5, bat_cy + saddle_gap, z]) cube([bay_x1 - bay_x0 - 1, y1 - bat_cy - saddle_gap + eps, cradle_t]);
             translate([bat_cx, bat_cy, z - 1]) cylinder(r = bat_d / 2 + bat_clear, h = cradle_t + 2);
-            translate([bat_cx - bat_d / 2 - bat_bms[1] - bat_clear, bat_cy - 1, z - 1])
-                cube([bat_bms[1] + bat_clear + bat_d / 2, bat_bms[0] / 2 + bat_clear + 1, cradle_t + 2]);
+            translate([bat_cx - bat_d / 2 - bat_bms[1] - bat_clear - bat_bms_cut[1], bat_cy - 1, z - 1])
+                cube([bat_bms[1] + bat_clear + bat_bms_cut[1] + bat_d / 2, bat_bms[0] / 2 + bat_clear + bat_bms_cut[0] + 1, cradle_t + 2]);
         }
         // stiffening against drops: 45 degree fillets at the saddle roots, rib tying the saddles together behind the battery
         for (i = [0:len(cradle_z) - 1], s = [-1, 1]) if (i > 0 || s > 0) let (z = s > 0 ? cradle_z[i] + cradle_t : cradle_z[i])
