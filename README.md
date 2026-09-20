@@ -4,6 +4,8 @@ Small battery fan for a child's room, styled like the outdoor unit of a split ai
 
 Designed for a Bambu Lab H2S with AMS in Bambu PETG HF white and grey plus TPU. **Status:** first parts printed; USB-C socket fit confirmed. Remaining fit and functional checks are pending.
 
+**[Open the 3D viewer](https://fhirschmann.github.io/leo-ac1/)** — the whole assembly in the browser: single parts, exploded view, section plane and the bail in its carrying position.
+
 ![Assembly](img/01_assembly.png?v=4b221da66817)
 
 | Back | Exploded |
@@ -111,7 +113,7 @@ battery (JST-PH, built-in BMS) ──► (PTC) ──► power switch ──► 
 
 ## Build from source
 
-Model: [`leo_ac.scad`](leo_ac.scad) (OpenSCAD, parameters at the top), project settings and checks: [`print_project.py`](print_project.py). The scripts in `scripts/` export and check the meshes, slice with the Bambu Studio CLI and build a 3D assembly viewer. The fan in the model and viewer is a simple parametric placeholder; no manufacturer CAD is used or needed.
+Model: [`leo_ac.scad`](leo_ac.scad) (OpenSCAD, parameters at the top), project settings and checks: [`print_project.py`](print_project.py). The scripts in `scripts/` export and check the meshes, slice with the Bambu Studio CLI and build the 3D assembly viewer, which is published from [`docs/index.html`](docs/index.html) on GitHub Pages. The fan in the model and viewer is a simple parametric placeholder; no manufacturer CAD is used or needed.
 
 ```sh
 python3 -m venv .venv
@@ -121,7 +123,7 @@ python3 -m venv .venv
 .venv/bin/python scripts/analyze.py thickness      # walls thinner than 1.2 mm
 .venv/bin/python scripts/analyze.py fins           # slender towers with a free tip
 .venv/bin/python scripts/slice_check.py            # Bambu Studio CLI, project 3MF
-.venv/bin/python scripts/build_viewer.py           # build/viewer.html
+.venv/bin/python scripts/build_viewer.py --copy-to docs/index.html   # viewer page
 .venv/bin/python scripts/render_views.py           # img/, transparent PNGs (needs Pillow or ffmpeg)
 ```
 
