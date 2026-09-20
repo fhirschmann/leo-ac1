@@ -69,7 +69,7 @@ back_bar_x = 80;     // extra vertical bar through the back intake slots
 
 /* [Battery, 3.2 V 6000 mAh LiFePO4 pack] */
 bat_d = 32.5;        // measured cell body, excluding the separate protection board, 2026-09-15
-bat_bms = [16, 4];   // BMS board on one side, facing the partition (-x): width (y), thickness (x); full length assumed, to be measured
+bat_bms = [20, 4];   // BMS board on one side, facing the partition (-x): width approx. 20 measured over the full length (y), thickness assumed (x)
 bat_bms_cut = [2, 1];         // extra room around the BMS board in the cradle rings and saddles: per side across (y), in depth (x)
 bat_l = 71.6;        // measured cell-body length; cable end up, through the shelf slot
 cable_slot_w = 10;   // slot in the shelf above the battery, open towards the back
@@ -103,14 +103,15 @@ cover_notch_c = 3;           // 45 degree chamfer along the notch at the outer f
 pot_shaft_d = 5.8;        // measured outside the knurling; round split shaft, not a D shaft
 pot_shaft_free = 9.5;     // measured shaft length beyond the threaded bushing
 pot_bush = [6.73, 3.6];   // measured bushing outside diameter and length from its mounting shoulder
-pot_nut = [11, 2.15];      // nut across corners (assumed) and thickness (measured 2026-09-15)
-pot_washer = [12.5, 0.35]; // washer outside diameter (assumed) and thickness (measured)
+pot_nut = [11.6, 2.15];    // nut across corners (10 across flats, measured) and thickness (measured)
+pot_washer = [11, 0.35];   // washer outside diameter (approx. measured) and thickness (measured)
+pot_cb_room = 1.7;         // room per side around nut and washer in the counterbore (box wrench / slim socket)
 pot_thread_reserve = 0.1;  // thread left beyond the nut
 pot_mount_t = wall;        // the potentiometer shoulder rests on the full inner wall; washer and nut sit in a small counterbore outside
 // PWM board CNY-FA5-PRO: right-angle potentiometer on its edge, shaft parallel to the board. The board lies on two ribs
 // above the shelf and is held by the potentiometer nut. Measured board/module dimensions, 2026-09-15.
 pwm_pcb = [41.05, 32, 1.6]; // measured length/width; PCB thickness remains assumed
-pwm_total_h = 15;          // measured height without plugged fan connector; underside datum provisionally the PCB underside
+pwm_total_h = 18;          // measured 15 without the fan connector, +3 estimated for the plugged connector and wires
 pwm_total_len = 56.30;     // measured rear PCB edge to shaft tip, including potentiometer
 pwm_comp_h = pwm_total_h - pwm_pcb[2]; // component height above the assumed PCB thickness
 pwm_standoff = 15;        // board underside above the shelf: raises the knob into the upper part of the side (ribs from the shelf)
@@ -248,20 +249,19 @@ led_skin = 0.8;            // white PETG left in front of the LED (four layers)
 led_boss = [7, 5.8];       // boss around the LED pocket: diameter, height from the front face; the LED flange rests on it
 dedication = ["Für Leo", "von Papa", "14.09.2026"];   // raised on the inside of the front plate, readable from behind with the back cover off
 dedication_font = "Liberation Sans:style=Bold";   // bundled with OpenSCAD
-dedication_size = [7, 7, 4.5];   // per line, the date smaller
-dedication_w = [35, 44, 31];     // measured line widths (incl. bold) for the LED boss and bay checks
+dedication_size = [6, 6, 4];     // per line, the date smaller; fits between the PWM module (with plugged connector) and the handle ribs
+dedication_w = [30, 38, 28];     // measured line widths (incl. bold) for the LED boss and bay checks
 dedication_x = 182;              // centre of the lines, left of the LED boss
 dedication_bold = 0.15;    // extra stroke per side: thin joints of the font reach two lines (0.8 mm) in grey
 dedication_h = 0.8;        // raised height (four layers)
-dedication_z = [130.2, 121.6, 113.3];   // baselines above the raised PWM board; measured glyphs (size 7: descender of p 2.15 mm,
-                                        // date 4.5: 4.48 mm high) -> line gaps about 1.6 mm, checked on the grey inlay in print_project.py
+dedication_z = [131.7, 124.2, 116.8];   // baselines above the PWM module; glyphs measured per line, line gaps checked on the grey inlay
 
 // ---------- derived values ----------
 pot_nose_len = pwm_total_len - pwm_pcb[0] - pot_shaft_free - pot_bush[1]; // 2.15 mm mounting shoulder ahead of PCB
 pwm_wall_gap = pot_mount_t + pot_nose_len - wall; // PCB edge clearance to the normal inner wall, 0.25 mm
 pot_shaft_tip = pot_shaft_free + pot_bush[1] - pot_mount_t; // shaft tip relative to the outer wall
 pot_skin = pot_bush[1] - pot_nut[1] - pot_washer[1] - pot_thread_reserve; // clamped wall under the washer
-pot_cb = [pot_washer[0] + 1, pot_mount_t - pot_skin];        // counterbore from outside under the knob: diameter, depth
+pot_cb = [max(pot_washer[0], pot_nut[0]) + 2 * pot_cb_room, pot_mount_t - pot_skin];   // counterbore from outside under the knob: diameter, depth
 pot_yz = [cover_y, wall + bat_l + shelf_gap + shelf_t + pwm_standoff + pwm_pcb[2] + pot_axis_h];   // knob axis above the battery, centred in the depth
 mount_top = mount_insert[1] + 1 + mount_floor;        // boss top inside; blind hole L + 1 from the underside
 knob_sleeve_z = pot_bush[1] - pot_mount_t + knob_stem_cl - knob_gap; // sleeve end above bushing, relative to knob underside
@@ -391,6 +391,7 @@ assert(pot_yz[0] - pwm_pcb[1] / 2 > front_t + inner_c && pot_yz[0] + pwm_pcb[1] 
 assert(pot_skin >= 0.9 && pot_cb[1] > 0 && pot_nose_len > 0 && pwm_wall_gap >= 0.2 && pot_nut[0] < knob_cavity_d - 1
        && pot_bush[1] - pot_skin >= pot_nut[1] + pot_washer[1] + pot_thread_reserve - eps,
        "Potentiometer: clamped skin under the counterbore too thin, no thread for washer and nut, or the knob recess misses the nut");
+assert(pot_cb[0] / 2 * sqrt(2) < knob_d / 2 - 1, "Potentiometer counterbore (with its printable point) is not hidden under the knob");
 assert(pot_shaft_tip - knob_gap - knob_sleeve_z >= 8 && knob_skin >= 2 && knob_cavity_d > pot_nut[0] + 1 && knob_gap + knob_sleeve_z > pot_washer[1] + pot_nut[1] - pot_cb[1] + 0.3   // above the nut top in the counterbore
        && knob_sleeve_z + knob_slit[1] < knob_len - knob_skin - 2 && knob_gap + knob_len - cover_out <= 8,
        "Knob: shaft engagement, top skin, nut recess, slit length or protrusion");
