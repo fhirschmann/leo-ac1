@@ -56,7 +56,7 @@ Check with the real parts: the PWM controller lies flat on its pads, the potenti
 | ON-OFF rocker switch, snap-in, 21 × 15 mm (cut-out 19.2 × 12.2 mm) | 1 | [AliExpress](https://de.aliexpress.com/item/1005008871215158.html) | power switch in a well of the back cover, so it stays off the table when the fan lies on its back |
 | LED 3 mm, breathing/fading, 3.3 V, water clear | 1 | [AliExpress](https://de.aliexpress.com/item/1005005336879647.html) | glued from inside behind the O of the logo |
 | Resistor 220 Ω, 1/4 W | 1 | – | series resistor for the LED on the 5 V USB input |
-| Resettable PTC fuse Bourns MF-R160 | 1 | – | optional, between battery plus and the switch |
+| Resettable PTC fuse Bourns MF-R160 or RXEF160 (1.6 A hold) | 1 | – | optional, between battery plus and the switch, in heat shrink |
 | Heat-set inserts Ruthex RX-M3x5.7 | 18 | [ruthex.de](https://www.ruthex.de) | – |
 | Heat-set inserts Ruthex RX-M4x8.1 | 2 | [ruthex.de](https://www.ruthex.de) | bail pivots, pressed into the inner walls of the top side steps |
 | Heat-set insert Ruthex RX-M5x9.5 | 1 | [ruthex.de](https://www.ruthex.de) | mounting thread in the underside, pressed in from outside |
