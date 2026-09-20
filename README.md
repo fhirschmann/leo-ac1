@@ -4,23 +4,23 @@ Small battery fan for a child's room, styled like the outdoor unit of a split ai
 
 Designed for a Bambu Lab H2S with AMS in Bambu PETG HF white and grey plus TPU. **Status:** first parts printed; USB-C socket fit confirmed. Remaining fit and functional checks are pending.
 
-![Assembly](img/01_assembly.png?v=af9c78859818)
+![Assembly](img/01_assembly.png?v=32da57afb195)
 
 | Back | Exploded |
 |:---:|:---:|
-| ![Back](img/02_back.png?v=edb51dbab22d) | ![Exploded](img/03_exploded.png?v=308a12260a09) |
+| ![Back](img/02_back.png?v=3eb52b29f5ce) | ![Exploded](img/03_exploded.png?v=14d3a83c54fc) |
 | **Logo and grooves** | **Air duct from behind** |
 | ![Logo](img/04_front_right.png?v=35e2832e0e1a) | ![Air duct](img/05_duct.png?v=b126fc69f63a) |
 | **Knob and service cover** | **Underside with M5 thread and TPU feet** |
-| ![Knob](img/06_knob.png?v=3cf6ecf42851) | ![Underside](img/07_underside.png?v=ddae824c263f) |
+| ![Knob](img/06_knob.png?v=3cf6ecf42851) | ![Underside](img/07_underside.png?v=558a07386b2b) |
 | **Charge module in the air stream** | **LED pocket behind the O** |
-| ![Charge module](img/08_charge_module.png?v=236eac8b1b5c) | ![LED pocket](img/09_led.png?v=e12ac1b0c768) |
+| ![Charge module](img/08_charge_module.png?v=0750adfae952) | ![LED pocket](img/09_led.png?v=e12ac1b0c768) |
 | **Folding bail, carrying position** | **Back cover bosses** |
-| ![Folding bail](img/11_bail.png?v=8e9d53e93df1) | ![Back cover bosses](img/12_back_bosses.png?v=cabdfaf6e861) |
+| ![Folding bail](img/11_bail.png?v=a272ac94736e) | ![Back cover bosses](img/12_back_bosses.png?v=cabdfaf6e861) |
 | **TPU foot mount** | **USB-C socket** |
-| ![TPU foot mount](img/13_foot_mount.png?v=ee67c8486af0) | ![USB-C socket](img/14_usb_c.png?v=e1bff708972c) |
+| ![TPU foot mount](img/13_foot_mount.png?v=ee67c8486af0) | ![USB-C socket](img/14_usb_c.png?v=fbd16ec2f065) |
 | **Power switch well** | **Battery saddles** |
-| ![Power switch](img/15_switch.png?v=71bf21d82050) | ![Battery saddles](img/16_saddles.png?v=3d96a91e5e12) |
+| ![Power switch](img/15_switch.png?v=71bf21d82050) | ![Battery saddles](img/16_saddles.png?v=0c72ca42a893) |
 
 ## Printed parts
 

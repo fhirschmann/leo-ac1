@@ -328,11 +328,11 @@ function back_bosses() = concat(
         w = [c[0] - back_boss_d / 2, body_h - wall + 1],
         t = [c[0] + back_boss_d / 2, body_h - wall + 0.5])
      [c, w, c, w, t]],
-    [for (sz = [0, 1]) let (
-        c = [part_x + part_t / 2, sz ? body_h - boss_inset : boss_inset],
-        w = [part_x, sz ? body_h - wall + 1 : wall - 1],
-        t = [part_x + part_t, sz ? body_h - wall + 0.5 : wall - 0.5])
-     [c, w, [part_x + part_t, c[1]], w, t]]);
+    [for (sz = [0, 1]) let (   // middle of the width, top and bottom (user: evenly spread), into the top or bottom wall
+        c = [body_w / 2, sz ? body_h - boss_inset : boss_inset],
+        w = [c[0] - back_boss_d / 2, sz ? body_h - wall + 1 : wall - 1],
+        t = [c[0] + back_boss_d / 2, sz ? body_h - wall + 0.5 : wall - 0.5])
+     [c, w, [c[0] + back_boss_d / 2, c[1]], w, t]]);
 bail_z = body_h - bail_arm[1] / 2;                     // pivot axis height
 bail_floor = body_h - bail_arm[1];                     // floor of the side steps
 bail_x = [(bail_band - bail_arm[0]) / 2, (bail_band + bail_arm[0]) / 2];   // left arm: outer and inner face (right arm mirrored)
