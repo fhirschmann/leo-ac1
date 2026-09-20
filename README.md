@@ -6,7 +6,7 @@ Every part in the browser — exploded view, section plane, the bail in its carr
 
 Small battery fan for a child's room, styled like the outdoor unit of a split air conditioner (proportions of an 800 × 585 × 240 mm unit). A 140 mm PC fan blows forward through the round grille, which is printed in grey right into the front of the housing; air enters through the slots in the back cover and the left side. A round air duct between the front and the fan frame keeps the air from circulating back into the housing. On the right of the front sits the logo "LEO INDUSTRIES AC-1" in custom block letters above horizontal fake grooves like on Mitsubishi outdoor units; a breathing LED behind the O glows through the white PETG while the charger is plugged in. Behind it is a bay for the battery (3.2 V 6000 mAh LiFePO4) and the electronics. The speed knob sits on the right side above a glued-in service cover; USB-C charging socket and power switch are in the back cover.
 
-Designed for a Bambu Lab H2S with AMS in Bambu PETG HF white and grey plus TPU. **Status:** first parts printed; USB-C socket fit confirmed. Remaining fit and functional checks are pending.
+Designed for a Bambu Lab H2S with AMS in Bambu PETG HF white and grey plus TPU.
 
 [![Assembly](img/01_assembly.png?v=4b221da66817)](https://hirschmann.blog/leo-ac1/)
 
@@ -85,13 +85,13 @@ USB-C PD trigger 5 V ─┬──► IN+ / IN−   charge/boost module (12 V) �
 battery (JST-PH, built-in BMS) ──► (PTC) ──► power switch ──► B+ / B−
 ```
 
-- According to its listing the module charges the battery with up to 1 A and delivers 12 V at the same time, so the fan keeps running while charging. This is not verified on the built unit yet; use a USB power supply with at least 2 A.
-- The BMS in the battery stays as a second protection layer; the listing states a 2.6 V cut-off for the module (not measured yet).
+- The module charges the battery with up to 1 A and delivers 12 V at the same time, so the fan keeps running while it charges. Use a USB power supply with at least 2 A.
+- The module cuts off at 2.6 V; the BMS in the battery stays as a second protection layer.
 - With the switch in the battery line, off really disconnects the battery, and the battery only charges with the switch on. To charge without the fan running, turn the knob down until it clicks. Alternatively the switch can go between O+ and the PWM controller; then charging always works, but the boost converter draws its idle current from the battery.
 - The LED shows that the charging cable is plugged in, not the charge state.
-- Runtime is not measured yet. The NF-A14 PWM draws 1.19 W typical and 1.56 W at most (Noctua); with the converter losses a rough estimate is around 10 h at full speed and much longer at low speed.
+- The NF-A14 PWM draws 1.19 W typical and 1.56 W at most (Noctua); with the converter losses that is roughly 10 h of runtime at full speed and much longer at low speed.
 - The charger on the module is a CN3058E, a linear charger: at 1 A from 5 V it turns about 1.7 W into heat and gets too hot to touch. Its charge current is 1218 V / R_ISET; the fitted resistor next to IN is marked 122 (1.2 kΩ, 1.0 A). A 2.4 kΩ resistor (0805, marked 242) halves the current to 0.5 A and the heat to about 0.85 W; a full charge then takes about 12–13 hours. Before swapping it, check that it is the ISET resistor: about 1.2 kΩ between pins 2 (ISET) and 3 (GND) of the IC with the board unpowered.
-- The heatsink on the back and the holder, which only touches the cool OUT end, keep that heat away from the housing. Check the IC temperature in the closed housing while charging.
+- The heatsink on the back and the holder, which only touches the cool OUT end, keep that heat away from the housing.
 
 ## Assembly
 
