@@ -144,7 +144,9 @@ chg_total_h = 3.7;             // measured total board height including componen
 chg_comp_h = chg_total_h - chg_pcb[2]; // height above the assumed PCB thickness
 chg_sink = [8.8, 8.8, 5, 6];   // planned clearance envelopes only: no heatsinks bought/measured yet; y, z, height, gap
 cable_notch = [15, 12];        // cable notches at the back edge of the partition: length (y), height
-cable_notch_z = [44, 126];     // centres: low (USB-C wires, between two battery saddles) and high (fan cable)
+cable_notch_z = [44, 126];     // centres: low (switch wires, between two battery saddles) and high (fan cable); a third notch at the USB-C height (usb_notch_z)
+tie_loop = [8, 6, 6, 5, 2.5];  // cable tie loops on the inside of the back cover (user): width (x), height (z), stand-off (y), tunnel width, tunnel depth next to the plate
+tie_loop_xz = [[176, 68], [170, 44]];   // beside the USB-C channel and beside the switch well, on the way to the partition notches
 chg_gap = 4.5;                 // board back to partition: pads plus tape; board and heatsinks further in the intake air, but the ledge under
                                // the board must stay beside the fan frame, otherwise the fan cannot be pulled out towards the back
 chg_tape = 1.1;                // double-sided tape between board and pads (3M VHB 1.1 mm); thinner tape moves the board further onto the ledge
@@ -298,6 +300,7 @@ led_xz = [logo_x0 + text_x(brand, big_size, big_stroke, big_gap, 2) + big_size[0
 fan_y = front_t + fan_standoff;                       // front face of the fan frame
 chg_y0 = fan_y + fan_t + fan_pad + chg_fan_gap;       // front edge of the upright charge module
 chg_z = (cable_notch_z[0] + cable_notch_z[1]) / 2;    // charge module centred between the two cable notches
+usb_notch_z = usbc_xz[1];                             // USB-C wires to the charge module: the top saddle and the shelf close the bay between the other notches
 bat_cy = front_t + bat_front_gap + bat_d / 2;         // battery axis y
 shelf_z = wall + bat_l + shelf_gap;
 bay_x0 = part_x + part_t;
@@ -452,6 +455,13 @@ assert(let (h = (qr_n / 2 + qr_quiet) * qr_module) qr_module >= 0.8 && qr_xz[0] 
        && qr_xz[1] - h > usbc_xz[1] - usbc[2] / 2 + usbc_shell_bottom + usbc_shell[1] + usbc_cl + 1 && qr_xz[0] + h < body_w - wall - lip_t - 2
        && qr_xz[1] + h < bail_bar_z[0] - bail_cl && qr_xz[1] - h > sw_xz[1] + sw_well_half()[1] + sw_well[0],
        "QR code: modules below the inlay minimum, or code plus quiet zone reaching the intake slots, USB-C socket, switch well, the side edge or the folded grip");
+assert(usb_notch_z - cable_notch[1] / 2 > cradle_z[2] + cradle_t && usb_notch_z + cable_notch[1] / 2 < shelf_z
+       && chg_y0 + chg_pcb[1] < part_y1 - cable_notch[0] + 1 - 2
+       && min([for (p = tie_loop_xz) p[0] - tie_loop[0] / 2]) > part_x + part_t + 5 && tie_loop[2] - tie_loop[4] >= 3
+       && tie_loop_xz[0][0] + tie_loop[0] / 2 < usbc_xz[0] - usbc[1] / 2 - usbc_cl - usbc_wall - 3
+       && tie_loop_xz[1][0] + tie_loop[0] / 2 < saddle_rib[1] - saddle_rib[0] / 2 - 1 && tie_loop_xz[1][0] + tie_loop[0] / 2 < sw_xz[0] - sw_well_half()[0] - 1
+       && abs(tie_loop_xz[1][1] - sw_xz[1]) + tie_loop[1] / 2 < cradle_z[2] - (cradle_z[1] + cradle_t) - saddle_gusset,
+       "Cable routing: USB-C notch outside the bay between top saddle and shelf or at the charge module, or a tie loop hitting the partition, USB-C channel, saddle rib, switch well or saddle fillets, or its bar too thin");
 assert(logo_x0 > fan_cx + grille_r + 3 && logo_x0 + logo_w < body_w - corner_r - 2 && logo_top < body_h - corner_r - 2,
        "Logo outside the free front area");
 assert(big_gap >= 2, "Big letters too wide for the second line");
@@ -640,7 +650,7 @@ module body(dedication = true) difference() {   // dedication = false for public
     for (p = fan_holes()) cyl_y(p, fan_y - fan_pad - insert_depth, fan_y + 1, insert_hole_d / 2);
     for (b = back_bosses()) cyl_y(b[0], body_d - back_t - insert_depth, body_d + 1, insert_hole_d / 2);
     // cable notches at the back edge of the partition: low for the USB-C wires, high for the fan cable
-    for (z = cable_notch_z) translate([part_x - 1, part_y1 - cable_notch[0] + 1, z - cable_notch[1] / 2]) cube([part_t + 2, cable_notch[0], cable_notch[1]]);
+    for (z = concat(cable_notch_z, [usb_notch_z])) translate([part_x - 1, part_y1 - cable_notch[0] + 1, z - cable_notch[1] / 2]) cube([part_t + 2, cable_notch[0], cable_notch[1]]);
     // battery cable slot through the shelf; the shelf rim still stops the battery upwards
     translate([bat_cx + 10 - cable_slot_w / 2, bat_cy - 6, shelf_z - 1]) cube([cable_slot_w, shelf_d + front_t - bat_cy + 7, shelf_t + 2]);
     along_x(-1, wall + 1) intake_slots_side();
@@ -831,6 +841,11 @@ module back() difference() {
         let (x0 = usbc_xz[0] - usbc[1] / 2 - usbc_cl, z0 = usbc_xz[1] - usbc[2] / 2 - usbc_cl) difference() {
             translate([x0 - usbc_wall, usbc_y0 + 2, z0 - usbc_wall]) cube([usbc[1] + 2 * (usbc_cl + usbc_wall), y1 - usbc_y0 - 2 + eps, usbc[2] + 2 * usbc_cl + usbc_wall]);
             translate([x0, usbc_y0 - 1, z0]) cube([usbc[1] + 2 * usbc_cl, y1 - usbc_y0 + 2, usbc[2] + 2 * usbc_cl + 1]);
+        }
+        // cable tie loops: a chamfered block with a tunnel along z next to the plate; the tie runs through it round the wires
+        for (p = tie_loop_xz) difference() {
+            chamfered_box([p[0] - tie_loop[0] / 2, y1 - tie_loop[2], p[1] - tie_loop[1] / 2], [p[0] + tie_loop[0] / 2, y1 + 1, p[1] + tie_loop[1] / 2], 0.8);
+            translate([p[0] - tie_loop[3] / 2, y1 - tie_loop[4], p[1] - tie_loop[1] / 2 - 1]) cube([tie_loop[3], tie_loop[4] + eps, tie_loop[1] + 2]);
         }
     }
     along_y(y1 - 1, body_d + 1) intake_slots_back();

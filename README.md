@@ -4,23 +4,23 @@ Small battery fan for a child's room, styled like the outdoor unit of a split ai
 
 Designed for a Bambu Lab H2S with AMS in Bambu PETG HF white and grey plus TPU. **Status:** first parts printed; USB-C socket fit confirmed. Remaining fit and functional checks are pending.
 
-![Assembly](img/01_assembly.png?v=0036b8710597)
+![Assembly](img/01_assembly.png?v=af9c78859818)
 
 | Back | Exploded |
 |:---:|:---:|
-| ![Back](img/02_back.png?v=edb51dbab22d) | ![Exploded](img/03_exploded.png?v=56e03c6dcaad) |
+| ![Back](img/02_back.png?v=edb51dbab22d) | ![Exploded](img/03_exploded.png?v=35e4ea54bade) |
 | **Logo and grooves** | **Air duct from behind** |
 | ![Logo](img/04_front_right.png?v=35e2832e0e1a) | ![Air duct](img/05_duct.png?v=b126fc69f63a) |
 | **Knob and service cover** | **Underside with M5 thread and TPU feet** |
 | ![Knob](img/06_knob.png?v=3cf6ecf42851) | ![Underside](img/07_underside.png?v=ddae824c263f) |
 | **Charge module in the air stream** | **LED pocket behind the O** |
-| ![Charge module](img/08_charge_module.png?v=52db035c163f) | ![LED pocket](img/09_led.png?v=e12ac1b0c768) |
+| ![Charge module](img/08_charge_module.png?v=236eac8b1b5c) | ![LED pocket](img/09_led.png?v=e12ac1b0c768) |
 | **Folding bail, carrying position** | **Back cover bosses** |
-| ![Folding bail](img/11_bail.png?v=9b13292e4fd4) | ![Back cover bosses](img/12_back_bosses.png?v=cabdfaf6e861) |
+| ![Folding bail](img/11_bail.png?v=8e9d53e93df1) | ![Back cover bosses](img/12_back_bosses.png?v=cabdfaf6e861) |
 | **TPU foot mount** | **USB-C socket** |
 | ![TPU foot mount](img/13_foot_mount.png?v=ee67c8486af0) | ![USB-C socket](img/14_usb_c.png?v=e1bff708972c) |
 | **Power switch well** | **Battery saddles** |
-| ![Power switch](img/15_switch.png?v=71bf21d82050) | ![Battery saddles](img/16_saddles.png?v=f59118135585) |
+| ![Power switch](img/15_switch.png?v=71bf21d82050) | ![Battery saddles](img/16_saddles.png?v=613cbae1f250) |
 
 ## Printed parts
 
@@ -66,6 +66,7 @@ Check with the real parts: the PWM controller lies flat on its pads, the potenti
 | Double-sided, heat-resistant tape, ≤ 1.1 mm | – | – | charge module, e.g. 3M VHB; no hot glue |
 | 2K epoxy or CA gel | – | – | service cover, LED |
 | JST-PH 2.0 cable, 2-pin, mating the battery plug | 1 | – | battery to the switch and B+ / B− |
+| Small cable ties, up to 5 mm wide | 2 | – | strain relief for the USB-C and switch wires on the inside of the back cover |
 | Silicone wire 24 AWG, red and black | about 1 m | – | USB-C module, switch, LED, 12 V to the PWM controller |
 | Heat-shrink tubing 2–3 mm | – | – | every solder joint |
 | M4 shoulder screw, head Ø 8.8 × 3 mm, shoulder Ø 5 × 11 mm, thread 8 mm | 2 | – | bail pivots, the shoulder is clamped against the step wall |
@@ -96,7 +97,7 @@ battery (JST-PH, built-in BMS) ──► (PTC) ──► power switch ──► 
 5. Screw the fan on from behind with M3 × 30 (blowing forward) and route its cable through the upper notch of the partition. Tape the charge module upright onto the two pads on the partition, lower edge on the ledge.
 6. Slide the battery in from behind, cable end up, protection board towards the partition; a strip of foam tape above and below keeps it from rattling.
 7. Screw the TPU feet on with M3 × 8 from below; tighten only until the TPU starts to compress.
-8. Solder about 15 cm of wire to the USB-C module and push it into its channel in the back cover; snap the switch into its well. Route the wires through the lower notch of the partition, leaving slack to lay the back cover aside. Put on the back cover and screw it on with M3 × 8.
+8. Solder about 15 cm of wire to the USB-C module and push it into its channel in the back cover; snap the switch into its well. Fix the USB-C wires and the switch wires each with a small cable tie through the loop beside them on the inside of the back cover (strain relief), then route the USB-C wires through the middle notch of the partition and the switch wires through the lower notch, leaving slack to lay the back cover aside. Put on the back cover and screw it on with M3 × 8.
 9. Press a flanged bushing into each bail eye from outside, lay the bail arms into the steps along the top side edges and screw each pivot on from the side with an M4 shoulder screw; the shoulder clamps against the step wall, the bail swings on the bushings. To carry, swing it forward until the legs rest on the ramps at the front of the steps; swing it up before taking off the back cover.
 
 ## Design notes
