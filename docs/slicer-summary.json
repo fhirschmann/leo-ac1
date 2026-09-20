@@ -6,12 +6,12 @@
       "quantity": 1,
       "material": "PETG-white",
       "passed": true,
-      "source_sha256": "d9a60d6b52092cee8440e3038e88ff35c6061f70fac59f8b61388291ad763cbd",
+      "source_sha256": "b27752a8278922e542313dbe4facde46d63274efeea592d4a36cd5681d5eda31",
       "exit_code": 0,
       "result_code": 0,
       "warnings": "",
-      "hours": 8.931,
-      "grams": 381.719,
+      "hours": 8.979,
+      "grams": 386.253,
       "wall_loops": 6,
       "infill_percent": 30.0,
       "layer_height": 0.20000000298023224,
@@ -29,12 +29,12 @@
       "quantity": 1,
       "material": "PETG-white",
       "passed": true,
-      "source_sha256": "e308a4f49c5a8529991f99db6e08db2b0fbe4686609841348826cc97393a4024",
+      "source_sha256": "56f3df5d39a7ba6402d00e674ec7e0b149c6b5cb5ef4138342d0821d60acf4fd",
       "exit_code": 0,
       "result_code": 0,
-      "warnings": "It seems object back.stl has floating cantilever. Please re-orient the object or enable support generation.",
-      "hours": 5.427,
-      "grams": 189.444,
+      "warnings": "",
+      "hours": 5.224,
+      "grams": 188.344,
       "wall_loops": 6,
       "infill_percent": 30.0,
       "layer_height": 0.20000000298023224,
@@ -75,7 +75,7 @@
       "quantity": 1,
       "material": "PETG-grey",
       "passed": true,
-      "source_sha256": "d15afa8f0dc9dd5f9e1412fcb74b49de1c203e35c22ecbe35e974ee4141a0125",
+      "source_sha256": "d90449779eb98528697ba4b26fbad7f88bcd13caa948f05b7a607c24631b8c75",
       "exit_code": 0,
       "result_code": 0,
       "warnings": "",
@@ -98,12 +98,12 @@
       "quantity": 1,
       "material": "PETG-grey",
       "passed": true,
-      "source_sha256": "ad5720fee948aeda4904f28a4469fd92d642241d9a74ecd1ff3166cd1af7ff5e",
+      "source_sha256": "d6f86fbadce7043a6556e8b8f76d91b8d0ee9eee4655337b9f2af9aa9e7d7880",
       "exit_code": 0,
       "result_code": 0,
       "warnings": "",
-      "hours": 1.439,
-      "grams": 44.266,
+      "hours": 1.397,
+      "grams": 42.904,
       "wall_loops": 6,
       "infill_percent": 30.0,
       "layer_height": 0.20000000298023224,
@@ -167,12 +167,12 @@
       "quantity": 0,
       "material": "PETG-white",
       "passed": true,
-      "source_sha256": "9a1da93552b05c7cd78686e8886a0eb86e23468562a7dc340e90c17ac35302f4",
+      "source_sha256": "a01913add660d120acdd6af1e346377b2a881f28eb8c7fb004c002deeb82acf7",
       "exit_code": 0,
       "result_code": 0,
       "warnings": "",
-      "hours": 2.374,
-      "grams": 99.843,
+      "hours": 2.385,
+      "grams": 102.151,
       "wall_loops": 6,
       "infill_percent": 30.0,
       "layer_height": 0.20000000298023224,
@@ -190,12 +190,12 @@
       "quantity": 0,
       "material": "PETG-white",
       "passed": true,
-      "source_sha256": "ffaf3aa269b5e90fdd07e09b2b92e65defb20dff22fb9c76c728b0349d816f69",
+      "source_sha256": "e28e7a9e012ad6c242d6321f523155af0cabe1a3386de863a9bbd6cf6a86886a",
       "exit_code": 0,
       "result_code": 0,
-      "warnings": "It seems object test_right_back.stl has floating cantilever. Please re-orient the object or enable support generation.",
-      "hours": 0.858,
-      "grams": 31.174,
+      "warnings": "",
+      "hours": 0.853,
+      "grams": 30.699,
       "wall_loops": 6,
       "infill_percent": 30.0,
       "layer_height": 0.20000000298023224,
@@ -210,8 +210,8 @@
     }
   ],
   "total_parts": 8,
-  "total_grams_individual_plates": 702.3,
-  "total_hours_individual_plates": 19.4,
+  "total_grams_individual_plates": 704.3,
+  "total_hours_individual_plates": 19.2,
   "production_gcode": false,
   "project_3mf": {
     "file": "stl/leo_ac1_all_parts.3mf",
@@ -275,8 +275,8 @@
         ]
       }
     ],
-    "total_hours_plates": 19.3,
-    "total_grams_plates": 705.5,
+    "total_hours_plates": 19.1,
+    "total_grams_plates": 707.6,
     "multicolour_parts": {
       "body": [
         "label",
@@ -289,18 +289,18 @@
     "multicolour_slices": {
       "Housing": {
         "plate": 1,
-        "hours": 9.23,
+        "hours": 9.29,
         "grams_by_filament": {
-          "1": 382.17,
+          "1": 386.71,
           "3": 1.6
         },
         "warnings": ""
       },
       "Grey parts": {
         "plate": 3,
-        "hours": 3.56,
+        "hours": 3.52,
         "grams_by_filament": {
-          "2": 118.82,
+          "2": 117.45,
           "5": 0.94
         },
         "warnings": ""
@@ -310,26 +310,26 @@
     "plate_slices": {
       "Housing": {
         "plate": 1,
-        "hours": 9.23,
+        "hours": 9.29,
         "grams_by_filament": {
-          "1": 382.17,
+          "1": 386.71,
           "3": 1.6
         },
         "warnings": ""
       },
       "Back cover": {
         "plate": 2,
-        "hours": 5.43,
+        "hours": 5.23,
         "grams_by_filament": {
-          "1": 189.44
+          "1": 188.34
         },
-        "warnings": "It seems object back_1 has floating cantilever. Please re-orient the object or enable support generation."
+        "warnings": ""
       },
       "Grey parts": {
         "plate": 3,
-        "hours": 3.56,
+        "hours": 3.52,
         "grams_by_filament": {
-          "2": 118.82,
+          "2": 117.45,
           "5": 0.94
         },
         "warnings": ""
@@ -344,7 +344,7 @@
       }
     },
     "own_infill_parts": 2,
-    "sha256": "672bc4538ba8a6b62fd0bcefbcb91a0a487cd58d93eb450cdb73488f94db4491"
+    "sha256": "5353d2c31e3e47479ad19c97a63a0faf82e63d2e3d7b6f229713aa2f2c06a75a"
   },
   "test_3mf": {
     "file": "stl/leo_ac1_fit_tests.3mf",
@@ -370,7 +370,7 @@
       }
     ],
     "total_hours_plates": 4.8,
-    "total_grams_plates": 123.6,
+    "total_grams_plates": 125.0,
     "multicolour_parts": {
       "body": [
         "label",
@@ -383,30 +383,30 @@
     "multicolour_slices": {
       "Right section fit test": {
         "plate": 1,
-        "hours": 4.83,
+        "hours": 4.85,
         "grams_by_filament": {
-          "1": 107.33,
+          "1": 108.71,
           "2": 15.47,
           "5": 0.78
         },
-        "warnings": "It seems object test_right_back_1 has floating cantilever. Please re-orient the object or enable support generation."
+        "warnings": ""
       }
     },
     "pause_slices": {},
     "plate_slices": {
       "Right section fit test": {
         "plate": 1,
-        "hours": 4.83,
+        "hours": 4.85,
         "grams_by_filament": {
-          "1": 107.33,
+          "1": 108.71,
           "2": 15.47,
           "5": 0.78
         },
-        "warnings": "It seems object test_right_back_1 has floating cantilever. Please re-orient the object or enable support generation."
+        "warnings": ""
       }
     },
     "own_infill_parts": 0,
-    "sha256": "bee8f2427ee03e0b71c851f673dcd82837f2db099b3c7a3bfea2ee9879d225d6",
+    "sha256": "b2c35d8baa376da8d48075cf5388738feaa0faac5e69c6be8c50fc25c0f3ce36",
     "process": {
       "wall_loops": 2,
       "top_shell_layers": 3,

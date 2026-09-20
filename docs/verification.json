@@ -1,5 +1,5 @@
 {
-  "source_sha256": "23948f5fa02c65be0626a0c77ec16fea3a10fe20e0aacf7b9632bc4b65c17caf",
+  "source_sha256": "74b76a6a590ed8cd87b6abf960b0f036bd4506ff3d063fa465063bed0c8edddd",
   "software": {
     "numpy": "2.5.3",
     "trimesh": "5.1.0",
@@ -29,17 +29,17 @@
           76.0
         ]
       ],
-      "volume_mm3": 335221.5232,
-      "triangles": 28790,
+      "volume_mm3": 338969.7703,
+      "triangles": 28778,
       "watertight": true,
       "consistent_winding": true,
       "degenerate_faces": 0,
       "components": 1,
       "backend": "Manifold",
-      "sha256": "d9a60d6b52092cee8440e3038e88ff35c6061f70fac59f8b61388291ad763cbd",
+      "sha256": "b27752a8278922e542313dbe4facde46d63274efeea592d4a36cd5681d5eda31",
       "quantity": 1,
       "material": "PETG-white",
-      "committed_sha256": "d9a60d6b52092cee8440e3038e88ff35c6061f70fac59f8b61388291ad763cbd"
+      "committed_sha256": "b27752a8278922e542313dbe4facde46d63274efeea592d4a36cd5681d5eda31"
     },
     "back": {
       "size_mm": [
@@ -59,17 +59,17 @@
           55.75
         ]
       ],
-      "volume_mm3": 177445.2331,
-      "triangles": 10030,
+      "volume_mm3": 176307.9806,
+      "triangles": 8664,
       "watertight": true,
       "consistent_winding": true,
       "degenerate_faces": 0,
       "components": 1,
       "backend": "Manifold",
-      "sha256": "e308a4f49c5a8529991f99db6e08db2b0fbe4686609841348826cc97393a4024",
+      "sha256": "56f3df5d39a7ba6402d00e674ec7e0b149c6b5cb5ef4138342d0821d60acf4fd",
       "quantity": 1,
       "material": "PETG-white",
-      "committed_sha256": "e308a4f49c5a8529991f99db6e08db2b0fbe4686609841348826cc97393a4024"
+      "committed_sha256": "56f3df5d39a7ba6402d00e674ec7e0b149c6b5cb5ef4138342d0821d60acf4fd"
     },
     "grille": {
       "size_mm": [
@@ -126,10 +126,10 @@
       "degenerate_faces": 0,
       "components": 1,
       "backend": "CGAL",
-      "sha256": "d15afa8f0dc9dd5f9e1412fcb74b49de1c203e35c22ecbe35e974ee4141a0125",
+      "sha256": "d90449779eb98528697ba4b26fbad7f88bcd13caa948f05b7a607c24631b8c75",
       "quantity": 1,
       "material": "PETG-grey",
-      "committed_sha256": "d15afa8f0dc9dd5f9e1412fcb74b49de1c203e35c22ecbe35e974ee4141a0125"
+      "committed_sha256": "d90449779eb98528697ba4b26fbad7f88bcd13caa948f05b7a607c24631b8c75"
     },
     "bail": {
       "size_mm": [
@@ -149,17 +149,17 @@
           45.4981
         ]
       ],
-      "volume_mm3": 53490.9728,
-      "triangles": 1250,
+      "volume_mm3": 50854.2184,
+      "triangles": 1256,
       "watertight": true,
       "consistent_winding": true,
       "degenerate_faces": 0,
       "components": 1,
       "backend": "Manifold",
-      "sha256": "ad5720fee948aeda4904f28a4469fd92d642241d9a74ecd1ff3166cd1af7ff5e",
+      "sha256": "d6f86fbadce7043a6556e8b8f76d91b8d0ee9eee4655337b9f2af9aa9e7d7880",
       "quantity": 1,
       "material": "PETG-grey",
-      "committed_sha256": "ad5720fee948aeda4904f28a4469fd92d642241d9a74ecd1ff3166cd1af7ff5e"
+      "committed_sha256": "d6f86fbadce7043a6556e8b8f76d91b8d0ee9eee4655337b9f2af9aa9e7d7880"
     },
     "knob": {
       "size_mm": [
@@ -239,17 +239,17 @@
           76.0
         ]
       ],
-      "volume_mm3": 87168.7459,
-      "triangles": 14690,
+      "volume_mm3": 89077.1411,
+      "triangles": 14688,
       "watertight": true,
       "consistent_winding": true,
       "degenerate_faces": 0,
       "components": 1,
       "backend": "Manifold",
-      "sha256": "9a1da93552b05c7cd78686e8886a0eb86e23468562a7dc340e90c17ac35302f4",
+      "sha256": "a01913add660d120acdd6af1e346377b2a881f28eb8c7fb004c002deeb82acf7",
       "quantity": 0,
       "material": "PETG-white",
-      "committed_sha256": "9a1da93552b05c7cd78686e8886a0eb86e23468562a7dc340e90c17ac35302f4"
+      "committed_sha256": "a01913add660d120acdd6af1e346377b2a881f28eb8c7fb004c002deeb82acf7"
     },
     "test_right_back": {
       "size_mm": [
@@ -269,17 +269,17 @@
           21.8
         ]
       ],
-      "volume_mm3": 30538.7284,
-      "triangles": 586,
+      "volume_mm3": 29576.661,
+      "triangles": 624,
       "watertight": true,
       "consistent_winding": true,
       "degenerate_faces": 0,
       "components": 1,
       "backend": "Manifold",
-      "sha256": "ffaf3aa269b5e90fdd07e09b2b92e65defb20dff22fb9c76c728b0349d816f69",
+      "sha256": "e28e7a9e012ad6c242d6321f523155af0cabe1a3386de863a9bbd6cf6a86886a",
       "quantity": 0,
       "material": "PETG-white",
-      "committed_sha256": "ffaf3aa269b5e90fdd07e09b2b92e65defb20dff22fb9c76c728b0349d816f69"
+      "committed_sha256": "e28e7a9e012ad6c242d6321f523155af0cabe1a3386de863a9bbd6cf6a86886a"
     }
   },
   "color_meshes": {
@@ -301,14 +301,14 @@
           76.0
         ]
       ],
-      "volume_mm3": 334696.7258,
-      "triangles": 29980,
+      "volume_mm3": 338444.9729,
+      "triangles": 29968,
       "watertight": true,
       "consistent_winding": true,
       "degenerate_faces": 0,
       "components": 1,
       "backend": "Manifold",
-      "sha256": "36b04078829fa8c6225fbe7c8a82b6ad6c0c783645d6def0f21d62824b38b256"
+      "sha256": "5a5bb23baffd3fb43d9504274d68d4811e423d8f795684f8e2f2dfa870c8d09e"
     },
     "body_label": {
       "size_mm": [
@@ -1011,10 +1011,10 @@
   "contact_volumes_mm3": {
     "grille@body": 177.7264,
     "fan@body": 10.2112,
-    "back@body": 115.4934,
+    "back@body": 130.2679,
     "cover@body": 2.5265,
     "battery@body": 46.5651,
-    "bail@body": 25.404,
+    "bail@body": 28.4359,
     "bail_up@body": 0.572,
     "pot@body": 6.3327,
     "pot_nut@body": 2.7551,

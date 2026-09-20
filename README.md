@@ -4,23 +4,23 @@ Small battery fan for a child's room, styled like the outdoor unit of a split ai
 
 Designed for a Bambu Lab H2S with AMS in Bambu PETG HF white and grey plus TPU. **Status:** first parts printed; USB-C socket fit confirmed. Remaining fit and functional checks are pending.
 
-![Assembly](img/01_assembly.png?v=84a517a04612)
+![Assembly](img/01_assembly.png?v=cc1386584d8f)
 
 | Back | Exploded |
 |:---:|:---:|
-| ![Back](img/02_back.png?v=532e56fef3c6) | ![Exploded](img/03_exploded.png?v=b301ece789a9) |
+| ![Back](img/02_back.png?v=65c7d5df381f) | ![Exploded](img/03_exploded.png?v=44124b1653e5) |
 | **Logo and grooves** | **Air duct from behind** |
-| ![Logo](img/04_front_right.png?v=951aa9a35efe) | ![Air duct](img/05_duct.png?v=6a083938e0d0) |
+| ![Logo](img/04_front_right.png?v=951aa9a35efe) | ![Air duct](img/05_duct.png?v=56e89ed9598d) |
 | **Knob and service cover** | **Underside with M5 thread and TPU feet** |
-| ![Knob](img/06_knob.png?v=bbc85056ebcf) | ![Underside](img/07_underside.png?v=004850bc649d) |
+| ![Knob](img/06_knob.png?v=3af54763f01b) | ![Underside](img/07_underside.png?v=3efed4599a58) |
 | **Charge module in the air stream** | **LED pocket behind the O** |
-| ![Charge module](img/08_charge_module.png?v=fcf389e88512) | ![LED pocket](img/09_led.png?v=e16ed4530b5b) |
+| ![Charge module](img/08_charge_module.png?v=2b55991b7e7d) | ![LED pocket](img/09_led.png?v=e16ed4530b5b) |
 | **Folding bail, carrying position** | **Back cover bosses** |
-| ![Folding bail](img/11_bail.png?v=ed32b5fe0577) | ![Back cover bosses](img/12_back_bosses.png?v=430914fa0ec8) |
+| ![Folding bail](img/11_bail.png?v=a8fd8294e66e) | ![Back cover bosses](img/12_back_bosses.png?v=5ab9e79da391) |
 | **TPU foot mount** | **USB-C socket** |
 | ![TPU foot mount](img/13_foot_mount.png?v=c3508b32dfc7) | ![USB-C socket](img/14_usb_c.png?v=68ba476da681) |
 | **Power switch well** | **Battery saddles** |
-| ![Power switch](img/15_switch.png?v=8703e073f11f) | ![Battery saddles](img/16_saddles.png?v=57b08142d853) |
+| ![Power switch](img/15_switch.png?v=136124775844) | ![Battery saddles](img/16_saddles.png?v=7c7b362e1f30) |
 
 ## Printed parts
 
@@ -103,7 +103,7 @@ battery (JST-PH, built-in BMS) ──► (PTC) ──► power switch ──► 
 
 - Walls and front 3.2 mm, back cover 4 mm, corner radius 6 mm, recessed screw heads.
 - The battery sits in three closed rings: ribs in the housing and saddles on the back cover, stiffened by fillets and a rib.
-- L-shaped folding bail (concept from the leoino case): the upper legs lie in steps along both top side edges and turn on M4 pivots at mid-depth, folded, the lower legs and the grip sink flush into a recess in the back cover. To carry, it rests on ramps at the front of the steps with the grip right above the pivots, so the fan hangs level with about 40 mm room for the hand. The eyes turn on pressed-in flanged brass bushings on the smooth shoulder of the screws, as on the leoino case; the screw heads sit recessed in the bail arms.
+- L-shaped folding bail (concept from the leoino case): the upper legs lie in steps along both top side edges and turn on M4 pivots at mid-depth, folded, the lower legs and the grip sink flush into a recess in the back cover, with a finger scoop under the middle of the grip. To carry, it rests on ramps at the front of the steps with the grip right above the pivots, so the fan hangs level with about 40 mm room for the hand. The eyes turn on pressed-in flanged brass bushings on the smooth shoulder of the screws, as on the leoino case; the screw heads sit recessed in the bail arms.
 - Grille openings are below 6 mm.
 - The TPU feet are screwed and keyed into pockets of the bottom wall.
 - An M5 heat-set insert in the underside takes a tripod or wall mount.
