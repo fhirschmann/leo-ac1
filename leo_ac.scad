@@ -1016,10 +1016,11 @@ module slice_box(lo, hi) intersection() { children(); translate(lo) cube(hi - lo
 // body and back cover slices keep the print orientation of their part (same hole shapes and layer direction), moved to the origin
 module test_body_slice(lo, hi) translate([-lo[0], hi[2], 0]) body_print_pose() slice_box(lo, hi) body();
 module test_back_slice(lo, hi) translate([-lo[0], -lo[2], 0]) back_print_pose() slice_box(lo, hi) back();
-// right section of the housing (partition to right wall: LED boss, PWM supports, potentiometer pocket, service cover groove, battery
-// cradle, handle and foot inserts) and the matching part of the back cover (saddles, USB-C, switch); light slicer settings keep it cheap
-module test_right() test_body_slice([part_x, -1, -1], [body_w + 1, body_d + 1, body_h + 1]);
-module test_right_back() test_back_slice([part_x, -1, -1], [body_w + 1, body_d + 1, body_h + 1]);
+// upper right section of the housing, from the electronics shelf up (partition to right wall: shelf with the PWM supports, potentiometer
+// pocket, upper service cover groove, LED boss, handle inserts) and the matching part of the back cover (hold-down plate, switch well);
+// battery holder and USB-C socket below were already confirmed in print; light slicer settings keep it cheap
+module test_right() test_body_slice([part_x, -1, shelf_z], [body_w + 1, body_d + 1, body_h + 1]);
+module test_right_back() test_back_slice([part_x, -1, shelf_z], [body_w + 1, body_d + 1, body_h + 1]);
 
 // ---------- branches: the tools check that print_project.py PARTS matches them ----------
 if      (part == "assembly") assembly();
