@@ -12,9 +12,9 @@ eps = 0.01;
 tip = 0.2;           // thickness of hull tips (slices a cone runs out to): eps-thin tips leave degenerate triangles in Manifold exports
 
 /* [Body] */
-body_w = 239;        // outer width (x); 140 mm fan (branch fan-140): 18 mm wider than with the 120 mm fan, margins round the grille as before (user)
+body_w = 235;        // outer width (x); 140 mm fan (branch fan-140): 18 mm wider than with the 120 mm fan, margins round the grille as before (user)
 body_h = 172;        // outer height (z); 18 mm taller for the 140 mm fan between feet/mount bosses and the bail steps
-body_d = 74;         // outer depth (y) without the service cover
+body_d = 70;         // outer depth (y) without the service cover
 wall = 3.2;          // side, top and bottom walls, eight 0.4 mm lines (drop resistance)
 front_t = 3.2;       // front plate
 corner_r = 6;        // corner radius seen from the front, spreads the load of a drop on a corner
@@ -43,6 +43,7 @@ open_r = 69;         // opening in the front plate, spanned by the grille bars
 grille_r = 74;       // outer radius of the grey ring inlay on the front face round the opening (user: a bit narrower)
 grille_groove = [1, 0.6];   // small groove round the ring so the grille looks set in (user): width, depth
 grille_bar = 2;      // ring and spoke width
+grille_depth = 7;    // bars from the front face into the duct (as deep as the former separate grille): grey through the front plate, white behind it
 grille_hub_r = 8;
 grille_rings = 7;
 grille_spokes = 8;
@@ -66,7 +67,7 @@ bat_bms = [20, 4];   // BMS board on one side, facing the partition (-x): width 
 bat_bms_cut = [2, 1];         // extra room around the BMS board in the cradle rings and saddles: per side across (y), in depth (x)
 bat_l = 71.6;        // measured cell-body length; cable end up, through the shelf slot
 cable_slot_w = 10;   // slot in the shelf above the battery, open towards the back
-bat_cx = 194;
+bat_cx = 190;
 bat_clear = 0.5;     // radial clearance in the cradle
 bat_front_gap = 4.5; // front plate to battery, clears the inner fillet
 // three closed rings around the battery for drops: front half as ribs in the body, back half as saddles on the back cover
@@ -74,13 +75,13 @@ cradle_z = [14, 28, 56];  // lower faces of the rings, clear of the corner bosse
 cradle_t = 4;
 saddle_gap = 0.3;    // rib end to saddle along y
 saddle_gusset = 6;            // 45 degree fillets between the back cover and the battery saddles (not below the lowest: back bosses)
-saddle_rib = [3, 194];         // rib across the three saddles behind the battery: thickness, x position
+saddle_rib = [3, 190];         // rib across the three saddles behind the battery: thickness, x position
 saddle_rib_slot = [12, 12];    // wire passage through the rib at the lower cable notch: height, depth from the back cover (pointed end)
 shelf_gap = 3;       // battery top to electronics shelf (cable, protection board)
 shelf_t = 4;         // stops the battery when the unit falls on its top
 shelf_fillet = 3;    // 45 degree fillets along its joints with partition and right wall, above and below
 shelf_hold = [5, 3, 0.2];  // hold-down plate on the back cover over the free shelf edge: overlap (y), thickness, gap
-shelf_d = 56;        // shelf depth from the front plate, carries the PWM board
+shelf_d = 54;        // shelf depth from the front plate, carries the PWM board
 
 /* [Service cover, right side] */
 cover_y = body_d / 2; // centre, in the middle of the side depth
@@ -138,10 +139,10 @@ chg_pcb = [32.2, 11, 1.6];     // measured length/width 2026-09-15; PCB thicknes
 chg_total_h = 3.7;             // measured total board height including components; back confirmed clear
 chg_comp_h = chg_total_h - chg_pcb[2]; // height above the assumed PCB thickness
 chg_sink = [8.8, 8.8, 5, 6];   // planned clearance envelopes only: no heatsinks bought/measured yet; y, z, height, gap
-cable_notch = [10, 12];        // cable notches at the back edge of the partition: length (y), height
+cable_notch = [7, 12];         // cable notches at the back edge of the partition: length (y), height
 cable_notch_z = [44, 126];     // centres: low (switch wires, between two battery saddles) and high (fan cable); a third notch at the USB-C height (usb_notch_z)
 tie_loop = [8, 6, 6, 5, 2.5];  // cable tie loops on the inside of the back cover (user): width (x), height (z), stand-off (y), tunnel width, tunnel depth next to the plate
-tie_loop_xz = [[190, 68], [184, 44]];   // beside the USB-C channel and beside the switch well, on the way to the partition notches
+tie_loop_xz = [[186, 68], [180, 44]];   // beside the USB-C channel and beside the switch well, on the way to the partition notches
 chg_gap = 4.5;                 // board back to partition: pads plus tape; board and heatsinks further in the intake air, but the ledge under
                                // the board must stay beside the fan frame, otherwise the fan cannot be pulled out towards the back
 chg_tape = 1.1;                // double-sided tape between board and pads (3M VHB 1.1 mm); thinner tape moves the board further onto the ledge
@@ -154,7 +155,7 @@ chg_ledge = [2, 0.3];          // ledge under the lower board edge: height, set 
 /* [Folding bail on top, like the leoino case: steps along both top side edges over the full depth, pivots at mid-depth] */
 bail_arm = [14, 12];        // legs: width (x; leoino 11, 3 mm wider outwards so the screw heads sink into the arms, user), thickness = eye diameter; the upper legs lie in the side steps
 bail_bar = 13;              // grip bar height when folded (as thick as the legs)
-bail_drop = 137;            // folded: centre height of the grip bar behind the back cover, above the power switch (user: L bail, grip not too low)
+bail_drop = 134;            // folded: centre height of the grip bar behind the back cover, above the power switch (user: L bail, grip not too low)
 bail_cl = 0.5;              // clearance of the bail in the steps and behind the back cover
 bail_y = body_d / 2;        // pivot axis at mid-depth: the fan hangs level (user)
 bail_screw = [8.8, 3, 5, 11, 8];   // M4 shoulder screw (user): head diameter, head height, shoulder diameter, shoulder length, thread length
@@ -172,14 +173,14 @@ usbc = [usbc_board[0] + usbc_protrusion, usbc_board[1], usbc_board[2]]; // total
 usbc_shell = [8.9, 3.22];    // measured receptacle shell width and height, 2026-09-15
 usbc_shell_bottom = 1.1;     // approximately measured from module underside to shell underside; 1.1 + 3.22 ~= 4.30 overall
 usbc_plate = usbc_protrusion; // local cover thickness: PCB edge rests inside, receptacle face flush outside
-usbc_xz = [212, 68];         // module envelope centre: near the right edge (user), above the power switch, between the top battery saddle and the shelf; shell axis is offset upwards by its measured height
+usbc_xz = [208, 68];         // module envelope centre: near the right edge (user), above the power switch, between the top battery saddle and the shelf; shell axis is offset upwards by its measured height
 usbc_cl = 0.2;               // clearance in channel, plate opening and to the stop
 usbc_wall = 2;               // channel on the inside of the back cover: side walls and floor, open at the top for the wires
 usbc_stop = [4, 6];          // stop on the right wall behind the module end (takes the plug force with the back cover on): thickness, height
                              // (reaches below the module, the wires leave its end at the top)
 
 /* [Power switch: measured 14.7 x 20.9 mm rocker, snap-in, in a well of the back cover] */
-sw_xz = [212, 44];           // low near the right edge (user), between two battery saddles, in one column below the USB-C socket (user)
+sw_xz = [208, 44];           // low near the right edge (user), between two battery saddles, in one column below the USB-C socket (user)
 sw_cut = [19.2, 12.2];       // measured required panel hole; long side horizontal
 sw_bezel = [20.9, 14.7, 2];  // measured outside width/height and bezel thickness
 sw_rocker = 5;               // measured rocker rise above the bezel
@@ -192,7 +193,7 @@ sw_well = [5, 0.2, 2.2];     // well: panel below the back face (user: 3 mm shal
 
 /* [Feet: TPU strips, each screwed with two M3 x 8 from below into Ruthex inserts] */
 foot_w = 16;          // width (x)
-foot_len = 56;        // length (y), ends before the back lip
+foot_len = 52;        // length (y), ends before the back lip
 foot_y0 = 8;          // front end of the feet
 foot_lift = 4.5;      // housing above the ground
 foot_key = 1;         // the foot top sits this deep in a pocket of the bottom wall and takes the shear
@@ -209,7 +210,7 @@ mount_xy = [135, 36];      // near the centre of mass (fan left, battery right)
 mount_insert = [6.4, 9.5, 2.6];   // hole diameter, insert length, minimum wall around the hole
 mount_floor = 2.5;         // above the blind hole: the weight on a mount pushes the insert against it
 mount_boss_d = 15;         // 4.3 mm wall: solid with 6 wall loops (2.4 mm from each side) instead of infill
-mount_rib = [2.4, 20];     // rib from the boss towards the back (a vertical wall in print): thickness, length
+mount_rib = [2.4, 16];     // rib from the boss towards the back (a vertical wall in print): thickness, length
 mount_doubler = [62, 56, 3];  // floor doubler around the boss: width (x, ends at the partition), depth from the front, thickness
 
 /* [Screws, M3 heat-set inserts] */
@@ -241,7 +242,7 @@ qr_runs = [[0, 0, 7], [0, 8, 10], [0, 12, 13], [0, 16, 17], [0, 19, 21], [0, 22,
 brand = "LEO";             // big stencil letters, as wide as the second line
 brand_sub = "INDUSTRIES";  // second line, sets the block width
 brand_model = "AC-1";      // third line
-logo_cx = 203.5;           // centre of the left-aligned block, front view x (right of the grille)
+logo_cx = 199.5;           // centre of the left-aligned block, front view x (right of the grille)
 logo_top = 161;            // top of the big letters, front view z
 line_gap = 3;
 big_size = [13, 18];       // letter box
@@ -255,7 +256,7 @@ groove_pitch = 6;
 groove_w = 1.2;
 groove_depth = 0.8;        // open to the bed in print
 groove_z0 = 19;            // axis of the lowest groove
-groove_x = [174, 233];
+groove_x = [170, 229];
 led_d = 3;                 // 3 mm breathing LED as charge indicator, glued in from inside; shines through the white PETG in the counter of the O
 led_skin = 0.8;            // white PETG left in front of the LED (four layers)
 led_boss = [7, 5.8];       // boss around the LED pocket: diameter, height from the front face; the LED flange rests on it
@@ -263,7 +264,7 @@ dedication = ["Für Leo", "von Papa", "14.09.2026"];   // raised on the inside o
 dedication_font = "Liberation Sans:style=Bold";   // bundled with OpenSCAD
 dedication_size = [6, 6, 4];     // per line, the date smaller; fits between the PWM module (with plugged connector) and the bail recess
 dedication_w = [30, 38, 28];     // measured line widths (incl. bold) for the LED boss and bay checks
-dedication_x = 196;              // centre of the lines, left of the LED boss
+dedication_x = 192;              // centre of the lines, left of the LED boss
 dedication_bold = 0.15;    // extra stroke per side: thin joints of the font reach two lines (0.8 mm) in grey
 dedication_h = 0.8;        // raised height (four layers)
 dedication_z = [131.7, 124.2, 116.8];   // baselines above the PWM module; glyphs measured per line, line gaps checked on the grey inlay
@@ -360,7 +361,7 @@ assert(wall >= 3.2 && front_t >= 3.2 && back_t >= 3 && corner_r >= 5, "Drop resi
 // heat-set inserts need material between pocket and visible face, otherwise the face deforms when pressing
 assert(fan_y - fan_pad - insert_depth >= 3, "Fan insert pocket too close to the front face");
 assert(grille_gap <= 6, "Grille openings wider than 6 mm (finger safety)");
-assert(grille_r - open_r >= 4 && grille_bar >= 1.6 && front_t >= 3 && grille_groove[1] < inlay_t + 0.01 && logo_x0 > fan_cx + grille_r + grille_groove[0] + 3, "Grille: ring inlay narrower than 4 mm, bars thinner than 4 lines, or front plate too thin for stiff bars");
+assert(grille_r - open_r >= 4 && grille_bar >= 1.6 && front_t >= 3 && grille_depth <= fan_y - fan_pad - 2 && grille_groove[1] < inlay_t + 0.01 && logo_x0 > fan_cx + grille_r + grille_groove[0] + 3, "Grille: ring inlay narrower than 4 mm, bars thinner than 4 lines, or front plate too thin for stiff bars");
 assert(fan_blade_d / 2 < open_r, "Front opening smaller than the fan blades");
 assert(open_r < fan_size / 2 - 0.5, "Air duct does not sit on the fan frame face");
 assert(fan_cx - open_r - shroud_t > wall + inner_c && fan_cx + open_r + shroud_t < part_x
@@ -512,7 +513,8 @@ module intake_slots_back() {
 }
 
 module intake_slots_side() {
-    for (z = [18:slot_pitch:body_h - 18], y = [[12, 37.5], [40.5, 66]]) slot2d([y[0] + slot_w / 2, z], [y[1] - slot_w / 2, z], slot_w);
+    for (z = [18:slot_pitch:body_h - 18], y = [[12, 37.5], [40.5, body_d - back_t - lip_h - 1.5]])   // rear slots end before the back-cover lip
+        slot2d([y[0] + slot_w / 2, z], [y[1] - slot_w / 2, z], slot_w);
 }
 
 module body(dedication = true) difference() {   // dedication = false for public images
@@ -543,6 +545,8 @@ module body(dedication = true) difference() {   // dedication = false for public
         translate([part_x, front_t - eps, wall - eps]) cube([part_t, part_y1 - front_t + eps, body_h - 2 * wall + 2 * eps]);
         for (p = fan_holes()) cyl_y(p, front_t - eps, fan_y - fan_pad, fan_boss_d / 2);   // the corner pads rest on them
         for (b = back_bosses()) back_boss(b);
+        // grille bars behind the front plate, into the duct: stiffness of the printed-in grille (grey part ends at the plate)
+        along_y(front_t - 0.5, grille_depth) translate([fan_cx, fan_cz]) intersection() { grille_bars_2d(); circle(r = open_r + shroud_t / 2); }   // ends inside plate and duct wall (clean mesh)
         // battery cradle ribs, open towards the back
         for (z = cradle_z) difference() {
             translate([bay_x0 - eps, front_t - eps, z]) cube([bay_x1 - bay_x0 + 2 * eps, bat_cy - front_t + eps, cradle_t]);
