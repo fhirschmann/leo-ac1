@@ -4,7 +4,7 @@ Small battery fan for a child's room, styled like the outdoor unit of a split ai
 
 Designed for a Bambu Lab H2S with AMS in Bambu PETG HF white and grey plus TPU. **Status:** first parts printed; USB-C socket fit confirmed. Remaining fit and functional checks are pending.
 
-**[Open the 3D viewer](https://fhirschmann.github.io/leo-ac1/)** — the whole assembly in the browser: single parts, exploded view, section plane and the bail in its carrying position.
+**[Open the 3D viewer](https://hirschmann.blog/leo-ac1/)** — the whole assembly in the browser: single parts, exploded view, section plane and the bail in its carrying position.
 
 ![Assembly](img/01_assembly.png?v=4b221da66817)
 
