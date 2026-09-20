@@ -9,6 +9,7 @@ part = "assembly";   // print part, "body_base" / "body_label" / "body_dedicatio
 $fa = 2;
 $fs = 0.6;
 eps = 0.01;
+tip = 0.2;           // thickness of hull tips (slices a cone runs out to): eps-thin tips leave degenerate triangles in Manifold exports
 
 /* [Body] */
 body_w = 225;        // outer width (x); proportions of an 800 x 550 x 285 mm outdoor unit
@@ -156,7 +157,7 @@ chg_ledge = [2, 0.3];          // ledge under the lower board edge: height, set 
 /* [Folding bail on top, like the leoino case: steps along both top side edges over the full depth, pivots at mid-depth] */
 bail_arm = [8.8, 12];       // legs: width (x), thickness = eye diameter; the upper legs lie in the side steps
 bail_bar = 13;              // grip bar height when folded (as thick as the legs)
-bail_drop = 100;            // folded: centre height of the grip bar behind the back cover, below the power switch (user: L bail for more hand room)
+bail_drop = 125;            // folded: centre height of the grip bar behind the back cover, above the power switch (user: L bail, grip not too low)
 bail_cl = 0.5;              // clearance of the bail in the steps and behind the back cover
 bail_y = body_d / 2;        // pivot axis at mid-depth: the fan hangs level (user)
 bail_sleeve = [7, 4.2];     // pivot sleeve as on the leoino bail (bought tube): outside diameter, minimum bore; the eye turns on it
@@ -180,7 +181,7 @@ usbc_stop = [4, 6];          // stop on the right wall behind the module end (ta
                              // (reaches below the module, the wires leave its end at the top)
 
 /* [Power switch: measured 14.7 x 20.9 mm rocker, snap-in, in a well of the back cover] */
-sw_xz = [201, 124];          // above the PWM module, below the top wall with the 8 mm well
+sw_xz = [167, 101];          // low (user) beside the PWM module above the battery, below the folded bail grip
 sw_cut = [19.2, 12.2];       // measured required panel hole; long side horizontal
 sw_bezel = [20.9, 14.7, 2];  // measured outside width/height and bezel thickness
 sw_rocker = 5;               // measured rocker rise above the bezel
@@ -303,17 +304,17 @@ function back_bosses() = concat(
     [for (sx = [0, 1]) let (   // bottom corners: into the wall corner
         c = [sx ? body_w - boss_inset : boss_inset, boss_inset],
         w = [sx ? body_w - wall + 1 : wall - 1, wall - 1],
-        t = [sx ? body_w - wall : wall, wall])
+        t = [sx ? body_w - wall + 0.5 : wall - 0.5, wall - 0.5])   // cone tips end inside the walls, not on their faces (clean meshes)
      [c, w, c, w, t]],
     [for (sx = [0, 1]) let (   // top: beside the bail steps, into the top wall
         c = [sx ? body_w - boss_top_x : boss_top_x, body_h - boss_inset],
         w = [c[0] - back_boss_d / 2, body_h - wall + 1],
-        t = [c[0] + back_boss_d / 2, body_h - wall])
+        t = [c[0] + back_boss_d / 2, body_h - wall + 0.5])
      [c, w, c, w, t]],
     [for (sz = [0, 1]) let (
         c = [part_x + part_t / 2, sz ? body_h - boss_inset : boss_inset],
         w = [part_x, sz ? body_h - wall + 1 : wall - 1],
-        t = [part_x + part_t, sz ? body_h - wall : wall])
+        t = [part_x + part_t, sz ? body_h - wall + 0.5 : wall - 0.5])
      [c, w, [part_x + part_t, c[1]], w, t]]);
 bail_z = body_h - bail_arm[1] / 2;                     // pivot axis height
 bail_floor = body_h - bail_arm[1];                     // floor of the side steps
@@ -323,9 +324,9 @@ bail_bar_z = [bail_drop - bail_bar / 2, bail_drop + bail_bar / 2];
 bail_reach = [bail_leg_y[0] + bail_arm[1] / 2 - bail_y, bail_z - bail_drop];   // pivot to bar centre along the upper and the lower leg
 bail_carry = 180 - atan(bail_reach[0] / bail_reach[1]);   // carrying angle: bar above the pivot, the fan hangs level; the step ramp stops it
 function bail_room() = bail_reach[0] * sin(bail_carry) - bail_reach[1] * cos(bail_carry) - bail_bar / 2 - (body_h - bail_z);   // hand room above the top
-// front end of a side step at the top face: the raised upper leg rests against this ramp at bail_carry
+// ramp at the front end of a side step, taken 1 mm above the top face: the raised upper leg rests against it at bail_carry
 function bail_ramp_y() = let (r = bail_arm[1] / 2 + bail_cl, n = [-sin(bail_carry), cos(bail_carry)], p = [bail_y + r * n[0], bail_z + r * n[1]])
-    p[0] + (body_h - p[1]) / sin(bail_carry) * cos(bail_carry);
+    p[0] + (body_h + 1 - p[1]) / sin(bail_carry) * cos(bail_carry);
 boss_top_x = bail_band + wall + back_boss_d / 2 + 1;   // top back-cover bosses moved inwards beside the steps
 function bail_sleeve_len() = bail_band - (bail_cl + bail_cb[1]) + 0.1;   // insert face to the screw head, which stays 0.1 mm off the counterbore floor
 usbc_y0 = body_d - usbc[0];                             // inner end of the module, in the bay
@@ -385,9 +386,10 @@ assert(usbc_xz[0] - usbc[1] / 2 - usbc_cl > bat_cx + bat_d / 2 + 2,   // the wal
 assert(sw_bezel[2] + sw_rocker <= sw_well[0] - 1 && sw_body[0] < sw_cut[0] && sw_body[1] < sw_cut[1] && sw_bezel[0] > sw_cut[0] + 1 && sw_bezel[1] > sw_cut[1] + 1
        && sw_xz[1] - (sw_bezel[1] / 2 + sw_well[1] + sw_well[2] + sw_well[0] - back_t) > shelf_z + shelf_t + shelf_hold[2] + shelf_hold[1] + 1
        && sw_xz[1] + (sw_bezel[1] / 2 + sw_well[1] + sw_well[2] + sw_well[0] - back_t) < body_h - wall - 1
-       && sw_xz[1] - sw_body[1] / 2 > shelf_z + shelf_t + pwm_standoff + pwm_total_h + 1
+       && (sw_xz[0] + sw_body[0] / 2 + 1 < body_w - wall - pwm_wall_gap - pwm_pcb[0] || sw_xz[1] - sw_body[1] / 2 > shelf_z + shelf_t + pwm_standoff + pwm_total_h + 1)
+       && sw_xz[0] - sw_body[0] / 2 > bay_x0 + 1 && sw_xz[0] - (sw_bezel[0] / 2 + sw_well[1] + sw_well[2] + sw_well[0] - back_t) > 146 + slot_w / 2 + 1.2
        && sw_xz[0] + (sw_bezel[0] / 2 + sw_well[1] + sw_well[2] + sw_well[0] - back_t) < bay_x1 - lip_cl - lip_t,
-       "Power switch: upper well hits the shelf, top wall or back lip, housing reaches PWM, or hole and frame do not match");
+       "Power switch: well hits the hold-down plate, top wall, back lip or intake slots, housing reaches the PWM module or the partition, or hole and frame do not match");
 assert(usbc_stop[0] >= 4 && usbc_stop[1] >= usbc[2] && usbc_wall >= 2 && usbc_plate >= 1.2 && back_t - usbc_plate >= 1 && usbc_board[0] >= 8, "USB-C module: cover skin too thin, recess too shallow or board too short for the channel");
 assert(usbc_xz[0] + usbc[1] / 2 + usbc_cl < bay_x1 - lip_cl - lip_t && usbc_xz[0] - usbc[1] / 2 - usbc_cl - usbc_wall > bay_x0 + 5
        && usbc_xz[1] + usbc[2] / 2 + usbc_cl < body_h - wall - 1
@@ -401,8 +403,8 @@ assert(body_w - foot_inset - max(foot_doubler_hw, foot_boss_d / 2) > bat_cx + ba
 assert((back_boss_d - insert_hole_d) / 2 >= 3 && back_boss_len >= insert_depth + 6 && boss_inset + back_boss_d / 2 + 1 < 14,
        "Back bosses: wall around the insert, column length, or reaching the back cover slots");
 // hand under the raised bail: child hand breadth about 55-70 mm, adult 80-90 mm; comfortable finger clearance 30-35 mm
-assert(bail_room() >= 45 && body_w - 2 * (bail_cl + bail_arm[0]) >= 90 && bail_ramp_y() > front_t + inner_c + wall
-       && bail_bar_z[1] < sw_xz[1] - sw_bezel[1] / 2 - sw_well[1] - sw_well[0] - 1,
+assert(bail_room() >= 38 && body_w - 2 * (bail_cl + bail_arm[0]) >= 90 && bail_ramp_y() > front_t + inner_c + wall
+       && bail_bar_z[0] > sw_xz[1] + sw_bezel[1] / 2 + sw_well[1] + sw_well[0] + 1,
        "Bail: too little room for the hand, step ramp too far forward, or the folded grip bar covers the power switch");
 assert(cover_w / 2 - cover_notch_r >= 6 && wall - cover_glue[0] - cover_glue[2] >= 1.8 && cover_glue[1] + cover_glue[2] < cover_t
        && cover_t - cover_glue[1] - cover_glue[2] >= cover_glue[0] + cover_glue[2] && cover_notch_c < 2 * cover_t,
@@ -482,8 +484,8 @@ module back_boss(b) {
     y1 = body_d - back_t;
     along_y(y1 - back_boss_len, y1) boss_footprint(b);
     hull() {                       // cone down to the wall corner, printable without support
-        along_y(y1 - back_boss_len, y1 - back_boss_len + eps) boss_footprint(b);
-        along_y(y1 - back_boss_len - gusset, y1 - back_boss_len - gusset + eps) rect(b[3], b[4]);
+        along_y(y1 - back_boss_len, y1 - back_boss_len + tip) boss_footprint(b);
+        along_y(y1 - back_boss_len - gusset, y1 - back_boss_len - gusset + tip) rect(b[3], b[4]);
     }
 }
 
@@ -537,7 +539,7 @@ module body(dedication = true) difference() {   // dedication = false for public
         let (zd = wall + mount_doubler[2]) {
             hull() {
                 translate([mount_xy[0], mount_xy[1], wall - eps]) cylinder(d = mount_boss_d, h = mount_top - wall + eps);
-                translate([mount_xy[0] - mount_boss_d / 2, mount_xy[1] - mount_boss_d / 2 - (mount_top - zd), zd - 1]) cube([mount_boss_d, eps, 1]);
+                translate([mount_xy[0] - mount_boss_d / 2, mount_xy[1] - mount_boss_d / 2 - (mount_top - zd), zd - 1]) cube([mount_boss_d, tip, 1]);
             }
             translate([mount_xy[0] - mount_rib[0] / 2, mount_xy[1], wall - eps]) cube([mount_rib[0], mount_boss_d / 2 + mount_rib[1], mount_top - wall + eps]);
             // floor doubler from the front plate to the partition: spreads lever loads of the mount
@@ -546,14 +548,17 @@ module body(dedication = true) difference() {   // dedication = false for public
         }
         // folding bail: floor and inner wall of both side steps from the pivot to the back edge, running out into the wall corner at
         // 45 degrees towards the front (printable), and bosses for the M4 pivot inserts with a 45 degree underside towards the front
-        bail_sides() let (y0 = min(bail_y - bail_arm[1] / 2 - bail_cl, bail_ramp_y()) - wall) hull() {
-            translate([wall - eps, y0, bail_floor - wall]) cube([bail_band + eps, body_d - back_t - y0, bail_arm[1] + wall - eps]);
-            translate([wall - eps, max(front_t, y0 - (bail_arm[1] + wall + bail_band)), body_h - wall]) cube([eps, eps, wall - eps]);
+        intersection() {   // clipped to the outer outline, it would stand out of the rounded top corners
+            along_y(-1, body_d + 1) body_outline();
+            bail_sides() let (y0 = min(bail_y - bail_arm[1] / 2 - bail_cl, bail_ramp_y()) - wall) hull() {
+                translate([wall - eps, y0, bail_floor - wall]) cube([bail_band + eps, body_d - back_t - y0, bail_arm[1] + wall - eps]);
+                translate([wall - eps, max(front_t, y0 - (bail_arm[1] + wall + bail_band)), body_h - wall]) cube([0.2, 0.2, wall - 0.1]);
+            }
         }
         bail_sides() {
             along_x(bail_band - eps, bail_band + m4_insert[1] + 2.5) hull() {
                 translate([bail_y, bail_z]) circle(d = bail_arm[1]);
-                translate([bail_y - bail_arm[1] / 2 / sqrt(2) - (body_h - wall - bail_z + bail_arm[1] / 2 / sqrt(2)), body_h - wall]) square([0.01, wall - eps]);
+                translate([bail_y - bail_arm[1] / 2 / sqrt(2) - (body_h - wall - bail_z + bail_arm[1] / 2 / sqrt(2)), body_h - wall]) square([tip, wall - eps]);
             }
         }
         // two ribs on the shelf carry the PWM board on pads under its pin-free long edges, the solder pins in between stay
@@ -569,12 +574,12 @@ module body(dedication = true) difference() {   // dedication = false for public
         let (xb = part_x - chg_gap - chg_pcb[2], zb = chg_z - chg_pcb[0] / 2) {
             for (pd = chg_pads) hull() {
                 translate([xb + chg_pcb[2] + chg_tape, chg_y0 + 1, zb + pd[0]]) cube([chg_gap - chg_tape + eps, chg_pcb[1] - 2, pd[1]]);
-                translate([part_x, chg_y0 + 1 - (chg_gap - chg_tape), zb + pd[0]]) cube([1, eps, pd[1]]);
+                translate([part_x, chg_y0 + 1 - (chg_gap - chg_tape), zb + pd[0]]) cube([1, tip, pd[1]]);
             }
             // ledge: its 45 degree cone starts behind the fan frame and reaches full width towards the back
             let (x0 = max(xb + chg_ledge[1], fan_cx + fan_size / 2 + 0.3), reach = part_x - x0, ya = max(chg_y0 - 1 - reach, fan_y + fan_t + fan_pad + 0.5), yf = ya + reach) hull() {
                 translate([x0, yf, zb - chg_ledge[0]]) cube([reach + eps, chg_y0 + chg_pcb[1] + 1 - yf, chg_ledge[0]]);
-                translate([part_x, ya, zb - chg_ledge[0]]) cube([1, eps, chg_ledge[0]]);
+                translate([part_x, ya, zb - chg_ledge[0]]) cube([1, tip, chg_ledge[0]]);
             }
         }
         // floor doublers over the foot pockets keep the bottom wall at 3.2 mm; bosses for the foot inserts with 45 degree
@@ -583,12 +588,12 @@ module body(dedication = true) difference() {   // dedication = false for public
             cube([2 * foot_doubler_hw, part_y1 - front_t + eps, foot_key + eps]);
         for (p = foot_screws()) let (zf = wall + foot_key) hull() {
             translate([p[0], p[1], wall - eps]) cylinder(d = foot_boss_d, h = foot_boss_top - wall + eps);
-            translate([p[0] - foot_boss_d / 2, p[1] - foot_boss_d / 2 - (foot_boss_top - zf), zf - 1]) cube([foot_boss_d, eps, 1]);
+            translate([p[0] - foot_boss_d / 2, p[1] - foot_boss_d / 2 - (foot_boss_top - zf), zf - 1]) cube([foot_boss_d, tip, 1]);
         }
         // stop on the right wall behind the USB-C module in the back cover, 45 degree wedge towards the front (printable)
         let (x0 = usbc_xz[0] - usbc[1] / 2, ys = usbc_y0 - usbc_cl, z0 = usbc_xz[1] + usbc[2] / 2 - usbc_stop[1]) hull() {
             translate([x0, ys - usbc_stop[0], z0]) cube([bay_x1 - x0 + eps, usbc_stop[0], usbc_stop[1]]);
-            translate([bay_x1, ys - usbc_stop[0] - (bay_x1 - x0), z0]) cube([eps, eps, usbc_stop[1]]);
+            translate([bay_x1, ys - usbc_stop[0] - (bay_x1 - x0), z0]) cube([tip, tip, usbc_stop[1]]);
         }
         // electronics shelf, also stops the battery upwards
         translate([bay_x0 - eps, front_t - eps, shelf_z]) cube([bay_x1 - bay_x0 + 2 * eps, shelf_d + eps, shelf_t]);
@@ -602,8 +607,8 @@ module body(dedication = true) difference() {   // dedication = false for public
     cyl_y([fan_cx, fan_cz], -1, front_t + 1, open_r);
     // pockets for the tops of the TPU feet, 45 degree ends; inserts pressed in from below
     for (fx = foot_x()) translate([fx, foot_y0, 0]) hull() {
-        translate([-foot_w / 2 - foot_cl, -foot_cl - 1, -1]) cube([foot_w + 2 * foot_cl, foot_len + 2 * foot_cl + 2, eps]);
-        translate([-foot_w / 2 - foot_cl, foot_key - foot_cl, foot_key - eps]) cube([foot_w + 2 * foot_cl, foot_len + 2 * foot_cl - 2 * foot_key, eps]);
+        translate([-foot_w / 2 - foot_cl, -foot_cl - 1, -1]) cube([foot_w + 2 * foot_cl, foot_len + 2 * foot_cl + 2, tip]);
+        translate([-foot_w / 2 - foot_cl, foot_key - foot_cl, foot_key - tip]) cube([foot_w + 2 * foot_cl, foot_len + 2 * foot_cl - 2 * foot_key, tip]);
     }
     for (p = foot_screws()) translate([p[0], p[1], foot_key - eps]) cylinder(d = insert_hole_d, h = insert_depth + eps);
     cyl_y(led_xz, led_skin, led_boss[1] + 1, (led_d + 0.2) / 2);   // LED pocket, blind towards the front
@@ -632,9 +637,13 @@ module body(dedication = true) difference() {   // dedication = false for public
         translate([-1, bail_y, bail_floor]) cube([bail_band + 1, body_d + 2 - bail_y, bail_arm[1] + 1]);   // the upper legs rest on this floor
         hull() {   // around the eye, with the ramp that stops the bail at the carrying angle
             cyl_x([bail_y, bail_z], -1, bail_band, r);
-            translate([-1, bail_ramp_y(), body_h]) cube([bail_band + 1, eps, 1]);
+            translate([-1, bail_ramp_y(), body_h + 1]) cube([bail_band + 1, 0.2, 1]);
         }
         cyl_x([bail_y, bail_z], bail_band - eps, bail_band + m4_insert[1] + 1, m4_insert[0] / 2);
+        bail_step_chamfers(bail_ramp_y() - (bail_c + 2.5) * cos(bail_carry) / sin(bail_carry));   // starts where the ramp is below the chamfer
+        // top face to ramp
+        along_x(-1, bail_band) let (a = bail_carry, y1 = bail_ramp_y() - cos(a) / sin(a))   // runs round onto the inner wall chamfer
+            polygon([[y1 - bail_c, body_h], [y1 - bail_c * cos(a), body_h - bail_c * sin(a)], [y1 + 1, body_h + 1], [y1 - bail_c - 1, body_h + 1]]);
     }
     // groove for the glued-in service cover with 45 degree flanks, printable in every direction (the side wall stands upright in
     // print, vertical flanks would leave overhanging groove ceilings); 0.2 mm steps, the rim sits on the floor with a glue gap
@@ -797,7 +806,7 @@ module back() difference() {
         }
     }
     along_y(y1 - 1, body_d + 1) intake_slots_back();
-    bail_sides() translate([-1, lip_y0 - 1, bail_floor]) cube([bail_band + 1, body_d - lip_y0 + 2, bail_arm[1] + 1]);   // the bail steps run through
+    bail_sides() { translate([-1, lip_y0 - 1, bail_floor]) cube([bail_band + 1, body_d - lip_y0 + 2, bail_arm[1] + 1]); bail_step_chamfers(lip_y0 - 1); }   // the bail steps run through
     // power switch: well from outside with 45 degree walls (printable on the back face), hole in its thin floor
     sw_funnel(body_d - sw_well[0], body_d + 1, 0);
     translate([sw_xz[0] - sw_cut[0] / 2, body_d - sw_well[0] - sw_panel - 1, sw_xz[1] - sw_cut[1] / 2]) cube([sw_cut[0], sw_panel + 2, sw_cut[1]]);
@@ -929,6 +938,11 @@ module pwm_board_env() {             // board on the rib pads: parts above, sold
 // cover to the grip bar below the power switch. Folded = angle 0; carried at bail_carry, where the bar is above the pivot and the
 // upper legs rest on the step ramps. Swing it up before removing the back cover.
 module bail_sides() { children(); translate([body_w, 0, 0]) mirror([1, 0, 0]) children(); }
+// 45 degree chamfers along a left side step from y0 to the back: top edge of the inner wall, side face to step floor
+module bail_step_chamfers(y0) {
+    along_y(y0, body_d + 1) polygon([[bail_band - 1, body_h - bail_c - 1], [bail_band + bail_c + 1, body_h + 1], [bail_band - 1, body_h + 1]]);
+    along_y(max(y0, bail_y), body_d + 1) polygon([[-1, bail_floor - bail_c - 1], [bail_c + 1, bail_floor + 1], [-1, bail_floor + 1]]);
+}
 module chamfered_rect_2d(size, c) polygon([[c, 0], [size[0] - c, 0], [size[0], c], [size[0], size[1] - c], [size[0] - c, size[1]], [c, size[1]], [0, size[1] - c], [0, c]]);
 module bail(angle = 0) translate([0, bail_y, bail_z]) rotate([angle, 0, 0]) translate([0, -bail_y, -bail_z]) difference() {
     union() {

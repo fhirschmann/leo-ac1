@@ -98,7 +98,7 @@ def checks(ctx):
     assert m["grille_gap"] <= 6, "Grille openings above 6 mm let children's fingers through"
     assert m["knob_shaft_engagement"] >= 8 and m["knob_top_skin"] >= 2 and m["knob_protrusion"] <= 8, "Knob: on the shaft, at most 8 mm in front of the cover"
     # L bail (user): pivots at mid-depth, carried with the bar above the pivot so the fan hangs level
-    assert m["bail_clearance"] >= 45 and m["bail_grip"] >= 90 and 90 < m["bail_carry"] < 160, "Bail: 45 mm hand room, 90 mm hand breadth, carrying angle past vertical"
+    assert m["bail_clearance"] >= 38 and m["bail_grip"] >= 90 and 90 < m["bail_carry"] < 160, "Bail: 38 mm hand room, 90 mm hand breadth, carrying angle past vertical"
     assert m["bail_insert"][0] == 5.6, "Ruthex M4 insert: hole 5.6 mm"
     assert m["foot_clearance"] >= 0.2 and m["foot_lift"] >= 3, "TPU feet: clearance 0.2 mm in the pockets, housing at least 3 mm above the ground"
     # dedication: the lines must stay apart (descenders!); letters of the grey inlay in print orientation, merged by their y spans
@@ -265,7 +265,7 @@ VIEWS = {"01_assembly": ("assembly();", "-160,-330,230,112,40,70"),
                       "205,40,156,208,66,44"),
          # power switch in its well above the USB-C socket, cut at the switch axis and seen from the left
          "15_switch": ('intersection() { union() { color("#e6e6e1") back(); color("#1b1b1b") sw_env(); } translate([sw_xz[0], 40, sw_xz[1] - 20]) cube([30, 45, 40]); }',
-                       "90,40,170,201,70,125"),
+                       "56,40,146,167,70,101"),
          # battery saddles on the inside of the back cover: root fillets and the rib behind the battery, seen from the front
          "16_saddles": ('color("#e6e6e1") intersection() { back(); translate([150, 20, 0]) cube([76, 61, 90]); }', "120,-60,120,186,60,40"),
          # underside with the M5 mount insert
