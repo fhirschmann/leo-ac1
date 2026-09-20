@@ -1,5 +1,5 @@
 {
-  "source_sha256": "a1395bbbba461e4a8bed620355e06477aceb6ffeb52aa62eb95af168e9bcf6a0",
+  "source_sha256": "e2e4498eab146b09ac1c5a0208ecdf79da902433027b481b22f4a3b5ef3ae632",
   "software": {
     "numpy": "2.5.3",
     "trimesh": "5.1.0",
@@ -36,10 +36,10 @@
       "degenerate_faces": 0,
       "components": 1,
       "backend": "CGAL",
-      "sha256": "06c8a994bbb7f0608ef7bfe32a781e40d03742c4e91969cb5ab109fdbaa9df11",
+      "sha256": "6998c7bdf75d78c606517eabd7aebded8fb1874ae1cb1fb06fcf15906a3a461a",
       "quantity": 1,
       "material": "PETG-white",
-      "committed_sha256": "06c8a994bbb7f0608ef7bfe32a781e40d03742c4e91969cb5ab109fdbaa9df11"
+      "committed_sha256": "6998c7bdf75d78c606517eabd7aebded8fb1874ae1cb1fb06fcf15906a3a461a"
     },
     "back": {
       "size_mm": [
@@ -96,10 +96,10 @@
       "degenerate_faces": 0,
       "components": 1,
       "backend": "CGAL",
-      "sha256": "156e18315ab4bef3ecabb6a04e2c0f5e8ca03a20b4fc8e1c1de60f924ea013fd",
+      "sha256": "0b5aa0286b09d1d8fda61720beec1e6371983c9072c682449f5a22ed6bf17df7",
       "quantity": 1,
       "material": "PETG-grey",
-      "committed_sha256": "156e18315ab4bef3ecabb6a04e2c0f5e8ca03a20b4fc8e1c1de60f924ea013fd"
+      "committed_sha256": "0b5aa0286b09d1d8fda61720beec1e6371983c9072c682449f5a22ed6bf17df7"
     },
     "bail": {
       "size_mm": [
@@ -359,7 +359,7 @@
       "degenerate_faces": 0,
       "components": 1,
       "backend": "CGAL",
-      "sha256": "6aa9ea77d7a8ee1fd77f57631e93cfefdfa6567cf664949f9d3a22079a8f7333"
+      "sha256": "e6bb1e2d0d7535288f63cd647cd20cfc1e95ba20fe4874890ab220543ce98956"
     },
     "back_base": {
       "size_mm": [
@@ -640,9 +640,9 @@
     "screws": [
       [
         "fan",
-        30,
-        3,
-        4
+        32,
+        5,
+        2
       ],
       [
         "back",
@@ -982,9 +982,9 @@
   ],
   "standard_screws": {
     "fan": {
-      "length": 30,
-      "engagement_mm": 3,
-      "tip_margin_mm": 4
+      "length": 32,
+      "engagement_mm": 5,
+      "tip_margin_mm": 2
     },
     "back": {
       "length": 8,

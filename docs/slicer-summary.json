@@ -6,11 +6,11 @@
       "quantity": 1,
       "material": "PETG-white",
       "passed": true,
-      "source_sha256": "06c8a994bbb7f0608ef7bfe32a781e40d03742c4e91969cb5ab109fdbaa9df11",
+      "source_sha256": "6998c7bdf75d78c606517eabd7aebded8fb1874ae1cb1fb06fcf15906a3a461a",
       "exit_code": 0,
       "result_code": 0,
       "warnings": "",
-      "hours": 9.342,
+      "hours": 9.337,
       "grams": 391.286,
       "wall_loops": 5,
       "infill_percent": 15.0,
@@ -33,7 +33,7 @@
       "exit_code": 0,
       "result_code": 0,
       "warnings": "",
-      "hours": 5.469,
+      "hours": 5.471,
       "grams": 160.782,
       "wall_loops": 5,
       "infill_percent": 15.0,
@@ -52,7 +52,7 @@
       "quantity": 1,
       "material": "PETG-grey",
       "passed": true,
-      "source_sha256": "156e18315ab4bef3ecabb6a04e2c0f5e8ca03a20b4fc8e1c1de60f924ea013fd",
+      "source_sha256": "0b5aa0286b09d1d8fda61720beec1e6371983c9072c682449f5a22ed6bf17df7",
       "exit_code": 0,
       "result_code": 0,
       "warnings": "",
@@ -338,7 +338,7 @@
       }
     },
     "own_infill_parts": 2,
-    "sha256": "143088502ddad039434a038cfc6314af5bd2ba9d28e1a527cd4c3a04976d993c"
+    "sha256": "b61667b92db15f82607b0b34a13062439491abdf07bd6ad9119ea856cae236c9"
   },
   "test_3mf": {
     "file": "stl/leo_ac1_fit_tests.3mf",
@@ -387,7 +387,7 @@
       }
     },
     "own_infill_parts": 0,
-    "sha256": "78b85cfdc2420ac0c0ba7326c949b195f28a8bb34eaeb5e736c263ac15e8630d",
+    "sha256": "09991470c7b2b9964c187dd452278fe27cd11dfd95ff60deafe60453e6874d02",
     "process": {
       "wall_loops": 2,
       "top_shell_layers": 3,

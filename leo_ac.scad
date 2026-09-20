@@ -227,7 +227,7 @@ screw_clear_d = 3.4;
 screw_head_d = 5.7;
 screw_head_h = 1.65;
 head_pocket = [6.4, 1.9];  // screw head recess: diameter, depth
-len_fan = 30;        // M3 x 30, from behind the fan (not in the nas-case set)
+len_fan = 32;        // M3 x 32, from behind the fan (not in the nas-case set; 30 left exactly 3.00 mm of thread, the 1 x d floor, because the engagement is len_fan - fan_t - 2 * fan_pad)
 len_back = 8;        // M3 x 8, from the back, head on the surface
 len_foot = 8;        // M3 x 8, from below through the TPU feet
 

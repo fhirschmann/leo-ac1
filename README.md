@@ -47,7 +47,7 @@ Check with the real parts: the PWM controller lies flat on its pads, the potenti
 
 | Part | Qty | Link | Notes |
 |---|---|---|---|
-| Fan Noctua NF-A14 PWM | 1 | [noctua.at](https://noctua.at/en/nf-a14-pwm) | 140 × 25 mm (141 × 141 × 27 with its anti-vibration pads), 12 V, 1.19 W typical, holes 124.5 mm apart; mounted from behind with M3 × 30, tighten by hand only |
+| Fan Noctua NF-A14 PWM | 1 | [noctua.at](https://noctua.at/en/nf-a14-pwm) | 140 × 25 mm (141 × 141 × 27 with its anti-vibration pads), 12 V, 1.19 W typical, holes 124.5 mm apart; mounted from behind with M3 × 32, tighten by hand only |
 | Battery 3.2 V 6000 mAh LiFePO4 pack with protection board (BMS), JST-PH 2.0 | 1 | [eremit.de](https://www.eremit.de/p/3-2v-6000mah-pack-mit-schutz-arduino-aio-jst-ph-2-0-stecker) | cell Ø 32.5 × 71.6 mm; charge only with a LiFePO4 charger (3.65 V), **no** TP4056 |
 | Charge/boost module "2-in-1 3.2 V LiFePO4", **12 V variant** | 1 | [AliExpress](https://de.aliexpress.com/item/1005008094801881.html) | 32.2 × 11 × 3.7 mm; IN± 5 V charging, B± battery, O± 12 V; taped upright onto the partition behind the fan |
 | PWM fan controller CNY-FA5-PRO, DC 8–24 V, with potentiometer and switch | 1 | [AliExpress](https://de.aliexpress.com/item/1005010113177510.html) | 41 × 32 × 15 mm; rests on pads under its pin-free long edges, potentiometer housing in a pocket on the inside of the right wall, washer and nut outside under the knob |
@@ -59,7 +59,7 @@ Check with the real parts: the PWM controller lies flat on its pads, the potenti
 | Heat-set inserts Ruthex RX-M3x5.7 | 14 | [ruthex.de](https://www.ruthex.de) | – |
 | Heat-set inserts Ruthex RX-M4x8.1 | 2 | [ruthex.de](https://www.ruthex.de) | bail pivots, pressed into the inner walls of the top side steps |
 | Heat-set insert Ruthex RX-M5x9.5 | 1 | [ruthex.de](https://www.ruthex.de) | M5 mounting thread in the underside, pressed in from outside; not a tripod thread |
-| M3 × 30, ISO 7380 Torx | 4 | – | fan |
+| M3 × 32, ISO 7380 Torx | 4 | – | fan; 30 mm would leave only 3 mm of thread in the insert |
 | M3 × 8, ISO 7380 Torx | 10 | – | back cover (6), feet (4) |
 | Double-sided, heat-resistant tape, ≤ 1.1 mm | – | – | charge module, e.g. 3M VHB; no hot glue |
 | 2K epoxy or CA gel | – | – | service cover, LED |
@@ -91,7 +91,7 @@ battery (JST-PH, built-in BMS) ──► (PTC) ──► power switch ──► 
 1. Press in the heat-set inserts: 4 fan bosses inside the front, 6 on the back edge of the housing, 2 M4 inserts for the bail pivots into the inner walls of the top side steps; the M5 insert and 4 M3 inserts for the feet from below.
 2. Glue the LED into the pocket behind the O and solder resistor and wires.
 3. Slide the PWM controller in from behind onto the pads of its ribs and push the potentiometer housing into its pocket in the right wall; put washer and nut on the thread outside and tighten gently. Put a drop of CA gel in the knob bore and push the knob onto the shaft, it covers washer and nut; stop about 0.5 mm short of the wall (a folded sheet of paper as a spacer) so it turns freely — pressed home it rubs. Glue the service cover in below it (thin bead in the groove).
-4. Screw the fan on from behind with M3 × 30 (blowing forward) and route its cable through the upper notch of the partition. Tape the charge module upright onto the two pads on the partition, lower edge on the ledge. It overlaps the fan sideways, so to take the fan out again the module has to come off the partition first.
+4. Screw the fan on from behind with M3 × 32 (blowing forward) and route its cable through the upper notch of the partition. Tape the charge module upright onto the two pads on the partition, lower edge on the ledge. It overlaps the fan sideways, so to take the fan out again the module has to come off the partition first.
 5. Slide the battery in from behind, cable end up, protection board towards the partition; a strip of foam tape above and below keeps it from rattling.
 6. Screw the TPU feet on with M3 × 8 from below; tighten only until the TPU starts to compress.
 7. Solder about 15 cm of wire to the USB-C module and push it into its channel in the back cover; snap the switch into its well. Fix the USB-C wires and the switch wires each with a small cable tie through the loop beside them on the inside of the back cover (strain relief), then route the USB-C wires through the middle notch of the partition and the switch wires through the lower notch, leaving slack to lay the back cover aside. Put on the back cover and screw it on with M3 × 8.
