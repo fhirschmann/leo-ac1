@@ -1,40 +1,39 @@
 # LEO-AC1 — a fan that looks like an air conditioner
 
-Small battery fan for a child's room, styled like the outdoor unit of a split air conditioner (proportions of an 800 × 550 × 285 mm unit). A 120 mm PC fan blows forward through the round grille; air enters through the slots in the back cover and the left side. A round air duct between the front and the fan frame keeps the air from circulating back into the housing. On the right of the front sits the logo "LEO INDUSTRIES AC-1" in custom block letters above horizontal fake grooves like on Mitsubishi outdoor units; a breathing LED behind the O glows through the white PETG while the charger is plugged in. Behind it is a bay for the battery (3.2 V 6000 mAh LiFePO4) and the electronics. The speed knob sits on the right side above a glued-in service cover; USB-C charging socket and power switch are in the back cover.
+Small battery fan for a child's room, styled like the outdoor unit of a split air conditioner (proportions of an 800 × 550 × 285 mm unit). A 140 mm PC fan blows forward through the round grille, which is printed in grey right into the front of the housing; air enters through the slots in the back cover and the left side. A round air duct between the front and the fan frame keeps the air from circulating back into the housing. On the right of the front sits the logo "LEO INDUSTRIES AC-1" in custom block letters above horizontal fake grooves like on Mitsubishi outdoor units; a breathing LED behind the O glows through the white PETG while the charger is plugged in. Behind it is a bay for the battery (3.2 V 6000 mAh LiFePO4) and the electronics. The speed knob sits on the right side above a glued-in service cover; USB-C charging socket and power switch are in the back cover.
 
 Designed for a Bambu Lab H2S with AMS in Bambu PETG HF white and grey plus TPU. **Status:** first parts printed; USB-C socket fit confirmed. Remaining fit and functional checks are pending.
 
-![Assembly](img/01_assembly.png?v=32da57afb195)
+![Assembly](img/01_assembly.png?v=2710bf40d998)
 
 | Back | Exploded |
 |:---:|:---:|
-| ![Back](img/02_back.png?v=3eb52b29f5ce) | ![Exploded](img/03_exploded.png?v=14d3a83c54fc) |
+| ![Back](img/02_back.png?v=bfd895db8904) | ![Exploded](img/03_exploded.png?v=9a5af6c13666) |
 | **Logo and grooves** | **Air duct from behind** |
-| ![Logo](img/04_front_right.png?v=35e2832e0e1a) | ![Air duct](img/05_duct.png?v=b126fc69f63a) |
+| ![Logo](img/04_front_right.png?v=7458b0aba497) | ![Air duct](img/05_duct.png?v=dc507d45fef4) |
 | **Knob and service cover** | **Underside with M5 thread and TPU feet** |
-| ![Knob](img/06_knob.png?v=3cf6ecf42851) | ![Underside](img/07_underside.png?v=558a07386b2b) |
+| ![Knob](img/06_knob.png?v=fa5f1665c26d) | ![Underside](img/07_underside.png?v=5e0575c71218) |
 | **Charge module in the air stream** | **LED pocket behind the O** |
-| ![Charge module](img/08_charge_module.png?v=0750adfae952) | ![LED pocket](img/09_led.png?v=e12ac1b0c768) |
+| ![Charge module](img/08_charge_module.png?v=1a8a31b5cb32) | ![LED pocket](img/09_led.png?v=5c52239f3472) |
 | **Folding bail, carrying position** | **Back cover bosses** |
-| ![Folding bail](img/11_bail.png?v=a272ac94736e) | ![Back cover bosses](img/12_back_bosses.png?v=cabdfaf6e861) |
+| ![Folding bail](img/11_bail.png?v=f09462a9b7ec) | ![Back cover bosses](img/12_back_bosses.png?v=61cc80008f1e) |
 | **TPU foot mount** | **USB-C socket** |
-| ![TPU foot mount](img/13_foot_mount.png?v=ee67c8486af0) | ![USB-C socket](img/14_usb_c.png?v=fbd16ec2f065) |
+| ![TPU foot mount](img/13_foot_mount.png?v=8be62b67c0ae) | ![USB-C socket](img/14_usb_c.png?v=b4a05f4b9155) |
 | **Power switch well** | **Battery saddles** |
-| ![Power switch](img/15_switch.png?v=71bf21d82050) | ![Battery saddles](img/16_saddles.png?v=0c72ca42a893) |
+| ![Power switch](img/15_switch.png?v=6b849d508072) | ![Battery saddles](img/16_saddles.png?v=d743c9ef0d9c) |
 
 ## Printed parts
 
 | Part | Qty | Material | Size (mm) | Print orientation |
 |---|---|---|---|---|
-| `body` housing | 1 | PETG white + grey (logo, dedication) | 225 × 155 × 76 | front on the bed; logo as inlay in the first 0.6 mm, fake grooves open towards the bed; a dedication is raised in grey on the inside of the front plate |
-| `back` back cover | 1 | PETG white + grey (QR code) | 225 × 155 × 55.8 | outside on the bed; QR code to this project as inlay in the first 0.6 mm; battery saddles and hold-down plate stand upright |
-| `grille` fan grille | 1 | PETG grey | Ø 136 × 7 | front on the bed |
+| `body` housing | 1 | PETG white + grey (logo, dedication, fan grille) | 235 × 172 × 66 | front on the bed; logo as inlay in the first 0.6 mm, fake grooves open towards the bed; a dedication is raised in grey on the inside of the front plate |
+| `back` back cover | 1 | PETG white + grey (QR code) | 235 × 172 × 45.8 | outside on the bed; QR code to this project as inlay in the first 0.6 mm; battery saddles and hold-down plate stand upright |
 | `cover` service cover | 1 | PETG grey | 74.4 × 46 × 11.8 | outside on the bed; half-round notch around the knob, glued into a groove of the side wall |
 | `knob` speed knob | 1 | PETG grey + white (pointer) | Ø 28 × 16.5 | top on the bed, pointer as inlay in the first 0.6 mm |
-| `bail` folding bail | 1 | PETG grey | 224 × 36.5 × 58.5 | back faces of the lower legs and the grip on the bed, upper legs upright |
-| `foot` foot | 2 | TPU | 16 × 62 × 5.5 | ground face on the bed, 100 % infill |
+| `bail` folding bail | 1 | PETG grey | 234 × 44.5 × 53.5 | back faces of the lower legs and the grip on the bed, upper legs upright |
+| `foot` foot | 2 | TPU | 16 × 52 × 5.5 | ground face on the bed, 100 % infill |
 
-All parts are in the Bambu Studio project [`stl/leo_ac1_all_parts.3mf`](stl/leo_ac1_all_parts.3mf): plate 1 housing, plate 2 back cover, plate 3 grey parts (grille, service cover, bail, knob), plate 4 TPU feet. Filaments: 1 PETG white, 2 PETG grey, 3 grey for logo, dedication and QR code (same spool as 2), 4 TPU, 5 white for the knob pointer (same spool as 1). All parts print without supports. Bambu Studio estimates about **0.65 kg and 18 hours** in total. Single-colour STLs are in `stl/`, the colour pieces in `stl/multicolour/`.
+All parts are in the Bambu Studio project [`stl/leo_ac1_all_parts.3mf`](stl/leo_ac1_all_parts.3mf): plate 1 housing, plate 2 back cover, plate 3 grey parts (service cover, bail, knob), plate 4 TPU feet. Filaments: 1 PETG white, 2 PETG grey, 3 grey for logo, dedication, fan grille and QR code (same spool as 2), 4 TPU, 5 white for the knob pointer (same spool as 1). All parts print without supports. Bambu Studio estimates about **0.63 kg and 18 hours** in total. Single-colour STLs are in `stl/`, the colour pieces in `stl/multicolour/`.
 
 Print profile: 0.20 mm layers, 5 walls, 4 top/bottom layers, 15 % gyroid (feet 100 %).
 
@@ -48,7 +47,7 @@ Check with the real parts: the PWM controller lies flat on its pads, the potenti
 
 | Part | Qty | Link | Notes |
 |---|---|---|---|
-| Fan Noctua NF-F12 industrialPPC-2000 PWM | 1 | [noctua.at](https://noctua.at/en/nf-f12-industrialppc-2000-pwm) | 120 × 25 mm, 12 V, max. 1.2 W; mounted from behind with M3 × 30, tighten by hand only |
+| Fan Noctua NF-A14 PWM (or another quiet 140 × 25 mm 4-pin PWM fan) | 1 | [noctua.at](https://noctua.at/en/nf-a14-pwm) | 140 × 25 mm, 12 V, holes 124.5 mm apart; mounted from behind with M3 × 30, tighten by hand only |
 | Battery 3.2 V 6000 mAh LiFePO4 pack with protection board (BMS), JST-PH 2.0 | 1 | [eremit.de](https://www.eremit.de/p/3-2v-6000mah-pack-mit-schutz-arduino-aio-jst-ph-2-0-stecker) | cell Ø 32.5 × 71.6 mm; charge only with a LiFePO4 charger (3.65 V), **no** TP4056 |
 | Charge/boost module "2-in-1 3.2 V LiFePO4", **12 V variant** | 1 | [AliExpress](https://de.aliexpress.com/item/1005008094801881.html) | 32.2 × 11 × 3.7 mm; IN± 5 V charging, B± battery, O± 12 V; taped upright onto the partition behind the fan |
 | PWM fan controller CNY-FA5-PRO, DC 8–24 V, with potentiometer and switch | 1 | [AliExpress](https://de.aliexpress.com/item/1005010113177510.html) | 41 × 32 × 15 mm; rests on pads under its pin-free long edges, potentiometer housing in a pocket on the inside of the right wall, washer and nut outside under the knob |
@@ -60,7 +59,6 @@ Check with the real parts: the PWM controller lies flat on its pads, the potenti
 | Heat-set inserts Ruthex RX-M3x5.7 | 18 | [ruthex.de](https://www.ruthex.de) | – |
 | Heat-set inserts Ruthex RX-M4x8.1 | 2 | [ruthex.de](https://www.ruthex.de) | bail pivots, pressed into the inner walls of the top side steps |
 | Heat-set insert Ruthex RX-M5x9.5 | 1 | [ruthex.de](https://www.ruthex.de) | mounting thread in the underside, pressed in from outside |
-| M3 × 12, ISO 7380 Torx | 4 | – | grille |
 | M3 × 30, ISO 7380 Torx | 4 | – | fan |
 | M3 × 8, ISO 7380 Torx | 10 | – | back cover (6), feet (4) |
 | Double-sided, heat-resistant tape, ≤ 1.1 mm | – | – | charge module, e.g. 3M VHB; no hot glue |
@@ -69,7 +67,7 @@ Check with the real parts: the PWM controller lies flat on its pads, the potenti
 | Small cable ties, up to 5 mm wide | 2 | – | strain relief for the USB-C and switch wires on the inside of the back cover |
 | Silicone wire 24 AWG, red and black | about 1 m | – | USB-C module, switch, LED, 12 V to the PWM controller |
 | Heat-shrink tubing 2–3 mm | – | – | every solder joint |
-| M4 shoulder screw, head Ø 8.8 × 3 mm, shoulder Ø 5 × 11 mm, thread 8 mm | 2 | – | bail pivots, the shoulder is clamped against the step wall |
+| M4 shoulder screw, head Ø 8.8 × 3 mm, shoulder Ø 5 × 12 mm, thread 8 mm | 2 | – | bail pivots, the shoulder is clamped against the step wall |
 | Flanged brass bushing Ø 7 / 5 × 10 mm, flange Ø 10 × 1 mm | 2 | – | pressed into the bail eyes, turns on the screw shoulder |
 | Foam tape, self-adhesive, 1–2 mm | – | – | battery: a strip above and below keeps it from rattling |
 
@@ -85,27 +83,26 @@ battery (JST-PH, built-in BMS) ──► (PTC) ──► power switch ──► 
 - The BMS in the battery stays as a second protection layer; the module cuts off earlier at 2.6 V.
 - With the switch in the battery line, off really disconnects the battery, and the battery only charges with the switch on. To charge without the fan running, turn the knob down until it clicks. Alternatively the switch can go between O+ and the PWM controller; then charging always works, but the boost converter draws its idle current from the battery.
 - The LED shows that the charging cable is plugged in, not the charge state.
-- Runtime roughly 10 h at full speed and 20 h at 70 % speed.
+- Runtime depends on the fan; a quiet 140 mm fan draws about as much as the 120 mm industrial fan at full speed, so roughly 10 h at full speed and 20 h at 70 % speed (estimate).
 - Without fan air flow the charge module gets warm while charging; charge with the fan running or reduce the charge current to 0.5 A (R3 = 2.4 kΩ).
 
 ## Assembly
 
-1. Press in the heat-set inserts: 4 grille and 4 fan bosses inside the front, 6 on the back edge of the housing, 2 M4 inserts for the bail pivots into the inner walls of the top side steps; the M5 insert and 4 M3 inserts for the feet from below.
+1. Press in the heat-set inserts: 4 fan bosses inside the front, 6 on the back edge of the housing, 2 M4 inserts for the bail pivots into the inner walls of the top side steps; the M5 insert and 4 M3 inserts for the feet from below.
 2. Glue the LED into the pocket behind the O and solder resistor and wires.
 3. Slide the PWM controller in from behind onto the pads of its ribs and push the potentiometer housing into its pocket in the right wall; put washer and nut on the thread outside and tighten gently. Push the knob onto the shaft, it covers washer and nut. Glue the service cover in below it (thin bead in the groove).
-4. Put the grille on from the front and screw it on with M3 × 12.
-5. Screw the fan on from behind with M3 × 30 (blowing forward) and route its cable through the upper notch of the partition. Tape the charge module upright onto the two pads on the partition, lower edge on the ledge.
-6. Slide the battery in from behind, cable end up, protection board towards the partition; a strip of foam tape above and below keeps it from rattling.
-7. Screw the TPU feet on with M3 × 8 from below; tighten only until the TPU starts to compress.
-8. Solder about 15 cm of wire to the USB-C module and push it into its channel in the back cover; snap the switch into its well. Fix the USB-C wires and the switch wires each with a small cable tie through the loop beside them on the inside of the back cover (strain relief), then route the USB-C wires through the middle notch of the partition and the switch wires through the lower notch, leaving slack to lay the back cover aside. Put on the back cover and screw it on with M3 × 8.
-9. Press a flanged bushing into each bail eye from outside, lay the bail arms into the steps along the top side edges and screw each pivot on from the side with an M4 shoulder screw; the shoulder clamps against the step wall, the bail swings on the bushings. To carry, swing it forward until the legs rest on the ramps at the front of the steps; swing it up before taking off the back cover.
+4. Screw the fan on from behind with M3 × 30 (blowing forward) and route its cable through the upper notch of the partition. Tape the charge module upright onto the two pads on the partition, lower edge on the ledge.
+5. Slide the battery in from behind, cable end up, protection board towards the partition; a strip of foam tape above and below keeps it from rattling.
+6. Screw the TPU feet on with M3 × 8 from below; tighten only until the TPU starts to compress.
+7. Solder about 15 cm of wire to the USB-C module and push it into its channel in the back cover; snap the switch into its well. Fix the USB-C wires and the switch wires each with a small cable tie through the loop beside them on the inside of the back cover (strain relief), then route the USB-C wires through the middle notch of the partition and the switch wires through the lower notch, leaving slack to lay the back cover aside. Put on the back cover and screw it on with M3 × 8.
+8. Press a flanged bushing into each bail eye from outside, lay the bail arms into the steps along the top side edges and screw each pivot on from the side with an M4 shoulder screw; the shoulder clamps against the step wall, the bail swings on the bushings. To carry, swing it forward until the legs rest on the ramps at the front of the steps; swing it up before taking off the back cover.
 
 ## Design notes
 
 - Walls and front 3.2 mm, back cover 4 mm, corner radius 6 mm, recessed screw heads.
 - The battery sits in three closed rings: ribs in the housing and saddles on the back cover, stiffened by fillets and a rib.
 - L-shaped folding bail (concept from the leoino case): the upper legs lie in steps along both top side edges and turn on M4 pivots at mid-depth, the lower legs run down behind the back cover to the grip just above the power switch. To carry, it rests on ramps at the front of the steps with the grip right above the pivots, so the fan hangs level with about 40 mm room for the hand. The eyes turn on pressed-in flanged brass bushings on the smooth shoulder of the screws, as on the leoino case; the screw heads sit recessed in the bail arms.
-- Grille openings are below 6 mm.
+- Grille openings are below 6 mm; the grille bars are part of the 3.2 mm front plate.
 - The TPU feet are screwed and keyed into pockets of the bottom wall.
 - An M5 heat-set insert in the underside takes a tripod or wall mount.
 

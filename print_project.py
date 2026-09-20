@@ -13,7 +13,6 @@ METRICS_TAG = "PROJECT_METRICS"       # part="metrics" echoes this tag with [key
 PARTS = {
     "body": (1, "PETG-white", 1),
     "back": (1, "PETG-white", 1),
-    "grille": (1, "PETG-grey", 1),
     "cover": (1, "PETG-grey", 1),
     "bail": (1, "PETG-grey", 1),
     "knob": (1, "PETG-grey", 1),
@@ -28,7 +27,6 @@ FULL_INFILL_MATERIALS = {"TPU"}
 # Assembly bodies in installed position: name -> OpenSCAD call. Every pair is checked for overlap.
 ASSEMBLY = {
     "body": "body();",
-    "grille": "grille();",
     "back": "back();",
     "cover": "cover();",
     "bail": "bail();",
@@ -45,7 +43,6 @@ ASSEMBLY = {
     "switch": "sw_env();",
     "fan": "fan_env();",
     "battery": "battery_env();",
-    "screws_grille": "screws_grille();",
     "screws_fan": "screws_fan();",
     "screws_back": "screws_back();",
     "screws_bail": "screws_bail();",
@@ -55,7 +52,8 @@ ALLOWED_OVERLAPS = [("fan", "screws_fan"),   # the fan is a solid envelope, its 
                     ("bail", "bail_half"), ("bail", "bail_up"), ("bail_half", "bail_up")]   # one bail in three swing positions
 
 # Multicolour: part -> inlay names; SOURCE needs the branches <part>_base and <part>_<inlay>
-COLOR_PARTS = {"body": ("label", "dedication"), "back": ("qr",), "knob": ("pointer",)}   # logo on the front face, dedication raised inside, QR code on the back (user), white knob pointer
+INLAY_MAX_DEPTH = 3.3   # the grey grille bars run through the whole 3.2 mm front plate (user: grille printed into the housing)
+COLOR_PARTS = {"body": ("label", "dedication", "grille"), "back": ("qr",), "knob": ("pointer",)}   # logo on the front face, dedication raised inside, QR code on the back (user), white knob pointer
 STL_DIR, COLOR_DIR, ASM_DIR, REPORT = "stl", "stl/multicolour", "asm", "docs/verification.json"
 
 PRINTER = dict(machine="Bambu Lab H2S 0.4 nozzle", process="0.20mm Standard @BBL H2S",
@@ -64,10 +62,10 @@ PROCESS = dict(wall_loops=5, top_shell_layers=4, bottom_shell_layers=4, infill=1
 # Filament slots of the project 3MF, 1-based in this order; inlay slots name their inlay or a tuple of inlays
 FILAMENTS = [dict(material="PETG-white", profile="Bambu PETG HF @BBL H2S", colour="#FFFFFF"),
              dict(material="PETG-grey", profile="Bambu PETG HF @BBL H2S", colour="#8E9294"),
-             dict(material="PETG-grey", profile="Bambu PETG HF @BBL H2S", inlay=("label", "dedication", "qr"), colour="#8E9294"),
+             dict(material="PETG-grey", profile="Bambu PETG HF @BBL H2S", inlay=("label", "dedication", "grille", "qr"), colour="#8E9294"),
              dict(material="TPU", profile="Generic TPU @BBL H2S", colour="#222326"),
              dict(material="PETG-white", profile="Bambu PETG HF @BBL H2S", inlay=("pointer",), colour="#FFFFFF")]
-PLATES = [("Housing", ["body"]), ("Back cover", ["back"]), ("Grey parts", ["grille", "cover", "bail", "knob"]), ("TPU feet", ["foot"])]
+PLATES = [("Housing", ["body"]), ("Back cover", ["back"]), ("Grey parts", ["cover", "bail", "knob"]), ("TPU feet", ["foot"])]
 PROJECT_3MF = "stl/leo_ac1_all_parts.3mf"
 # fit test before the full build: right section of housing and back cover with a knob, as little material as possible
 TEST_PLATES = [("Right section fit test", ["test_right", "test_right_back", "knob"])]
@@ -90,8 +88,8 @@ def checks(ctx):
     assert min(m["wall"], m["front_t"]) >= 3.2 and m["back_t"] >= 3 and m["corner_r"] >= 5, "Drop resistance: walls and corner radius"
 
     # Standard dimensions, independent of the model
-    assert (m["fan_size"], m["fan_t"], m["fan_pitch"]) == (120, 25, 105), "120 mm fan: 120 x 120 x 25, holes 105 mm apart"
-    assert m["fan_hole_d"] >= 4.3, "120 mm fan holes are 4.3 mm"
+    assert (m["fan_size"], m["fan_t"], m["fan_pitch"]) == (140, 25, 124.5), "140 mm fan: 140 x 140 x 25, holes 124.5 mm apart"
+    assert m["fan_hole_d"] >= 4.3, "140 mm fan holes are 4.3 mm"
     assert m["open_d"] > m["fan_blade_d"], "Front opening covers the fan blades"
     assert m["insert_hole_d"] == 4.0 and m["insert_len"] == 5.7, "Ruthex M3 insert: hole 4.0 mm, length 5.7 mm"
     # Ruthex datasheet RX series (08/2022): M3x5.7 hole 4.0, depth >= L + 1, wall >= 1.6; M5x9.5 hole 6.4, L 9.5, wall >= 2.6
@@ -123,7 +121,7 @@ def checks(ctx):
         assert info["engagement_mm"] >= 3 and info["tip_margin_mm"] >= 0.3, f"Screw {name}: {info}"
 
     # Contact, not just freedom from overlap: moved 0.05 mm towards its support, a body must intersect it
-    contacts = ctx.contacts([("grille", "body", [0, 1, 0]), ("fan", "body", [0, -1, 0]), ("back", "body", [0, -1, 0]),
+    contacts = ctx.contacts([("fan", "body", [0, -1, 0]), ("back", "body", [0, -1, 0]),
                              ("cover", "body", [-1, 0, 0]), ("battery", "body", [0, 0, -1]), ("bail", "body", [0, 0, -1]),
                              ("bail_up", "body", [0, -math.sin(math.radians(m["bail_carry"])), math.cos(math.radians(m["bail_carry"]))]),   # stop at the carrying angle
                              ("pot", "body", [1, 0, 0]), ("pot_nut", "body", [-1, 0, 0]), ("chg_module", "body", [1, 0, -1]),
@@ -159,7 +157,6 @@ def checks(ctx):
     # PWM board with the potentiometer: after knob, cover and nut, away from the wall until the shaft is clear, then out the back
     clear_x = m["pot_shaft_len"] + m["wall"] + 1
     paths = ctx.paths([
-            ("grille_front", ["grille", "screws_grille"], ["body", "fan", "screws_fan"], [0, -1, 0], 12, 0.25),
             ("back_off", ["back", "screws_back", "usb_trigger", "switch"], others("back", "screws_back", "usb_trigger", "switch", "bail"), [0, 1, 0], 12, 0.25),   # bail swung up first
             ("battery_out", ["battery"], others("battery", "back", "screws_back", "usb_trigger", "switch", "bail"), [0, 1, 0], 90, 1),
             ("chg_module_out", ["chg_module"], others("chg_module", "back", "screws_back", "usb_trigger", "switch", "bail"), [0, 1, 0], 45, 1),
@@ -192,21 +189,22 @@ def checks(ctx):
 
 VIEWER = dict(
     title="LEO-AC1", page_title="LEO-AC1 fan", eyebrow="Assembly · installed position",
-    dims=[("Width", "242"), ("Depth", "96.5"), ("Height", "159.5")],
+    dims=[("Width", "252"), ("Depth", "82.5"), ("Height", "176.5")],
     groups=[("white", "Printed · PETG white"), ("grey", "Printed · PETG grey"),
-            ("tpu", "Printed · TPU"), ("screws", "Screws"), ("bought", "Bought parts")],
-    hidden_groups=["bought"],
-    outer=["body", "back", "cover", "grille", "bail", "knob", "feet", "screws_grille", "screws_back", "screws_bail", "screws_feet"],
+            ("tpu", "Printed · TPU"), ("screws", "Screws"), ("bought", "Bought parts"), ("carry", "Bail · carrying position")],
+    hidden_groups=["bought", "carry"],
+    swaps=[("Raise the bail", ["bail_up"], ["bail"])],
+    outer=["body", "back", "cover", "bail", "knob", "feet", "screws_back", "screws_bail", "screws_feet"],
     cut=["back", "cover", "screws_back"],
     # id, label, group, colour, quantity, explode direction (mm per slider mm)
     parts=[("body", "Housing", "white", "#f2f2ee", "1x", [0, 0, 0]),
            ("back", "Back cover", "white", "#e6e6e1", "1x", [0, 1.5, 0]),
-           ("grille", "Fan grille", "grey", "#8f9396", "1x", [0, -1, 0]),
            ("cover", "Service cover", "grey", "#8f9396", "1x", [1, 0, 0]),
            ("bail", "Folding bail", "grey", "#8f9396", "1x", [0, 0, 1.2]),
+           ("bail_up", "Folding bail · carrying position", "carry", "#8f9396", "1x", [0, 0, 1.2]),
            ("knob", "Speed knob", "grey", "#8f9396", "1x", [2, 0, 0]),
            ("feet", "Feet · TPU", "tpu", "#222326", "2x", [0, 0, -0.8]),
-           ("fan_visual", "Fan 120 mm · placeholder (Noctua NF-F12 iPPC-2000)", "bought", "#303236", "1x", [0, 0.8, 0]),
+           ("fan_visual", "Fan 140 mm · placeholder (e.g. Noctua NF-A14 PWM)", "bought", "#303236", "1x", [0, 0.8, 0]),
            ("battery", "Battery LiFePO4 3.2 V 6000 mAh", "bought", "#3f7fbf", "1x", [0, 0.5, 0]),
            ("pot", "Potentiometer · housing in the wall pocket, washer and nut outside", "bought", "#3a3d41", "1x", [-0.5, 0, 0]),
            ("chg_module", "Charge/boost module · 2 planned heatsink envelopes", "bought", "#c9c9c9", "1x", [0, 0.8, 0]),
@@ -215,15 +213,15 @@ VIEWER = dict(
            ("switch", "Power switch KCD11 · rocker about 2 mm proud of the back face", "bought", "#1b1b1b", "1x", [0, 1.8, 0]),
            ("pwm_board", "PWM board CNY-FA5-PRO · on pads under its pin-free edges", "bought", "#2e6b3f", "1x", [-0.5, 0, 0]),
            # screws leave their part: same direction, further out
-           ("screws_grille", "Grille · M3 × 12 button head", "screws", "#26282b", "4x", [0, -1.6, 0]),
            ("screws_fan", "Fan · M3 × 30 button head", "screws", "#26282b", "4x", [0, 1.4, 0]),
            ("screws_back", "Back cover · M3 × 8 button head", "screws", "#26282b", "6x", [0, 2.2, 0]),
            ("screws_bail", "Bail pivots · M4 shoulder screw, flanged brass bushing", "screws", "#26282b", "2x", [0, 0, 1.2]),
            ("screws_feet", "Feet · M3 × 8 button head, from below", "screws", "#26282b", "4x", [0, 0, -1.4])],
-    colour={"body": [("label", "Housing · logo", "#8f9396"), ("dedication", "Housing · dedication", "#8f9396")], "back": [("qr", "Back cover · QR code to the project", "#8f9396")], "knob": [("pointer", "Speed knob · pointer", "#ffffff")]},
+    colour={"body": [("label", "Housing · logo", "#8f9396"), ("dedication", "Housing · dedication", "#8f9396"), ("grille", "Housing · fan grille, printed in", "#8f9396")], "back": [("qr", "Back cover · QR code to the project", "#8f9396")], "knob": [("pointer", "Speed knob · pointer", "#ffffff")]},
     bodies={"body_base": 'body_install_pose() body_piece("base");',
             "body_label": 'body_install_pose() body_piece("label");',
             "body_dedication": 'body_install_pose() body_piece("dedication");',
+            "body_grille": 'body_install_pose() body_piece("grille");',
             "back_base": 'back_install_pose() back_piece("base");',
             "back_qr": 'back_install_pose() back_piece("qr");',
             "knob_base": 'knob_install_pose() knob_piece("base");',
@@ -231,7 +229,6 @@ VIEWER = dict(
             # simple fan drawn in the model, no vendor CAD in the viewer (user: placeholder, also for the private viewer)
             "fan_visual": "fan_visual();",
             "pot": "pot_env();",
-            "screws_grille": "screws_grille(true);",
             "screws_fan": "screws_fan(true);",
             "screws_back": "screws_back(true);",
             "screws_bail": "screws_bail(true);",

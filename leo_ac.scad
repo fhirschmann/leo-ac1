@@ -1,59 +1,52 @@
-// LEO-AC1: battery fan styled like the outdoor unit of an air conditioner, 120 mm PC fan,
+// LEO-AC1: battery fan styled like the outdoor unit of an air conditioner, 140 mm PC fan,
 // 3.2 V 6000 mAh LiFePO4 pack. Skill openscad-print-project. Units mm, Z up.
 // Installed frame: x = width (left to right seen from the front), y = depth (front face at y = 0,
 // back face at y = body_d), z = height (underside of the body at z = 0).
 // Modules build every part in its INSTALLED position; the part branches at the end put each print
 // part into PRINT orientation (largest flat face on the bed at z = 0). The tools set `part`.
 
-part = "assembly";   // print part, "body_base" / "body_label" / "body_dedication", "back_base" / "back_qr", "assembly", "exploded", "metrics", "none"
+part = "assembly";   // print part, "body_base" / "body_label" / "body_dedication" / "body_grille", "back_base" / "back_qr", "assembly", "exploded", "metrics", "none"
 $fa = 2;
 $fs = 0.6;
 eps = 0.01;
 tip = 0.2;           // thickness of hull tips (slices a cone runs out to): eps-thin tips leave degenerate triangles in Manifold exports
 
 /* [Body] */
-body_w = 225;        // outer width (x); proportions of an 800 x 550 x 285 mm outdoor unit
-body_h = 155;        // outer height (z)
-body_d = 80;         // outer depth (y) without grille and service cover
+body_w = 235;        // outer width (x); 140 mm fan (branch fan-140): 18 mm wider than with the 120 mm fan, margins round the grille as before (user)
+body_h = 172;        // outer height (z); 18 mm taller for the 140 mm fan between feet/mount bosses and the bail steps
+body_d = 70;         // outer depth (y) without the service cover
 wall = 3.2;          // side, top and bottom walls, eight 0.4 mm lines (drop resistance)
 front_t = 3.2;       // front plate
 corner_r = 6;        // corner radius seen from the front, spreads the load of a drop on a corner
 edge_c = 1.5;        // 45 degree chamfer on the bed edges (front of the body, back of the cover)
-part_x = 150;        // left face of the partition between fan section and electronics bay
+part_x = 164;        // left face of the partition between fan section and electronics bay
 part_t = 2.4;
 inner_c = 4;         // 45 degree fillet between front plate and walls (stiffness, printable)
 
-/* [Fan: Noctua NF-F12 industrialPPC-2000 PWM, 120 x 25 mm, 12 V, max. 1.2 W] */
-fan_size = 120;
+/* [Fan: 140 x 25 mm PWM, e.g. Noctua NF-A14 PWM (user: the 120 mm industrialPPC was too loud)] */
+fan_size = 140;
 fan_t = 25;
-fan_pitch = 105;     // mounting hole spacing
+fan_pitch = 124.5;   // mounting hole spacing (140 mm fans)
 fan_hole_d = 4.3;
-fan_blade_d = 116;   // swept blade diameter (typical)
-fan_cx = 84;         // fan axis x
-fan_cz = body_h / 2; // fan axis z
+fan_blade_d = 136;   // swept blade diameter (typical)
+fan_cx = 88;         // fan axis x
+fan_cz = 85.5;       // fan axis z: just above the feet and mount bosses, just below the bail steps
 fan_standoff = 8;    // bosses between front plate and fan frame
 fan_boss_d = 9;
 fan_pad = 1;         // silicone corner pads, proud of both frame faces (Noctua CAD NF-F12 industrialPPC)
-fan_pad_leg = 35.2;  // pads cover the corner triangle (fan_size/2, leg) - (fan_size/2, fan_size/2) - (leg, fan_size/2) (CAD)
+fan_pad_leg = 41;     // pads cover the corner triangle (fan_size/2, leg) - (fan_size/2, fan_size/2) - (leg, fan_size/2) (CAD)
 shroud_t = 3.2;      // round duct front plate -> fan frame, bore = grille opening: air leaves only through the grille
 shroud_gap = 0.2;    // duct end to the fan frame face
 
-/* [Grille] */
-open_r = 59;         // opening in the front plate
-grille_r = 68;       // outer radius of the grille ring
-grille_t = 4;        // ring in front of the front plate, first contact in a drop on the front
-grille_depth = 3;    // bars reach this far behind the front face
-spigot_t = 2;        // locating collar inside the opening
-spigot_w = 2.2;
-spigot_cl = 0.3;     // radial clearance of the collar
-grille_bar = 2.4;    // ring and spoke width
+/* [Grille: printed into the front plate in grey (user, AMS), flush with the front face] */
+open_r = 69;         // opening in the front plate, spanned by the grille bars
+grille_r = 74;       // outer radius of the grey ring inlay on the front face round the opening (user: a bit narrower)
+grille_groove = [1, 0.6];   // small groove round the ring so the grille looks set in (user): width, depth
+grille_bar = 2;      // ring and spoke width
+grille_depth = 7;    // bars from the front face into the duct (as deep as the former separate grille): grey through the front plate, white behind it
 grille_hub_r = 8;
-grille_rings = 6;
+grille_rings = 7;
 grille_spokes = 8;
-grille_screw_r = 63.5;
-grille_screw_a0 = 22.5;  // screw angles between the spokes
-grille_boss_d = 8.4;
-grille_boss_h = 7.2; // behind the front plate, stays below fan_standoff
 
 /* [Back cover] */
 back_t = 4;          // screw heads recessed 1.9 mm, 2.1 mm below
@@ -66,7 +59,7 @@ back_boss_len = 16;  // solid column behind the insert
 gusset = 20;         // cone below the back bosses into the wall corner (print orientation), flatter than 45 degrees
 slot_w = 1.6;        // intake slots, back and left side
 slot_pitch = 3.2;
-back_bar_x = 80;     // extra vertical bar through the back intake slots
+back_bar_x = fan_cx; // extra vertical bar through the back intake slots
 
 /* [Battery, 3.2 V 6000 mAh LiFePO4 pack] */
 bat_d = 32.5;        // measured cell body, excluding the separate protection board, 2026-09-15
@@ -74,7 +67,7 @@ bat_bms = [20, 4];   // BMS board on one side, facing the partition (-x): width 
 bat_bms_cut = [2, 1];         // extra room around the BMS board in the cradle rings and saddles: per side across (y), in depth (x)
 bat_l = 71.6;        // measured cell-body length; cable end up, through the shelf slot
 cable_slot_w = 10;   // slot in the shelf above the battery, open towards the back
-bat_cx = 180;
+bat_cx = 190;
 bat_clear = 0.5;     // radial clearance in the cradle
 bat_front_gap = 4.5; // front plate to battery, clears the inner fillet
 // three closed rings around the battery for drops: front half as ribs in the body, back half as saddles on the back cover
@@ -82,13 +75,13 @@ cradle_z = [14, 28, 56];  // lower faces of the rings, clear of the corner bosse
 cradle_t = 4;
 saddle_gap = 0.3;    // rib end to saddle along y
 saddle_gusset = 6;            // 45 degree fillets between the back cover and the battery saddles (not below the lowest: back bosses)
-saddle_rib = [3, 180];         // rib across the three saddles behind the battery: thickness, x position
+saddle_rib = [3, 190];         // rib across the three saddles behind the battery: thickness, x position
 saddle_rib_slot = [12, 12];    // wire passage through the rib at the lower cable notch: height, depth from the back cover (pointed end)
 shelf_gap = 3;       // battery top to electronics shelf (cable, protection board)
 shelf_t = 4;         // stops the battery when the unit falls on its top
 shelf_fillet = 3;    // 45 degree fillets along its joints with partition and right wall, above and below
 shelf_hold = [5, 3, 0.2];  // hold-down plate on the back cover over the free shelf edge: overlap (y), thickness, gap
-shelf_d = 60;        // shelf depth from the front plate, carries the PWM board
+shelf_d = 54;        // shelf depth from the front plate, carries the PWM board
 
 /* [Service cover, right side] */
 cover_y = body_d / 2; // centre, in the middle of the side depth
@@ -126,7 +119,7 @@ pwm_edge_free = 1.5;      // pin-free strips on the underside along both long PC
 pwm_pad = 1.2;            // rib pads under those strips, 0.3 mm inside their border
 pwm_pin_cl = 0.5;         // clearance below the pins
 pwm_rib = 3;              // support ribs on the shelf: thickness (the left one stays beside the battery cable slot)
-pwm_rib_hole = [16, 7, 2];   // cable passage through both ribs under the board (user): length (y), height (z), web below it; pointed at 45 degrees towards the back (printable)
+pwm_rib_hole = [16, 7, 2];   // cable passage through the left rib under the board (user; none in the rib at the wall): length (y), height (z), web below it; pointed at 45 degrees towards the back (printable)
 knob_d = 28;              // dial on the side wall, sits in the half-round notch of the service cover
 knob_gap = 0.5;           // underside to the wall face
 knob_niche = 3;           // radial gap to the notch of the service cover: room for fingertips
@@ -146,10 +139,10 @@ chg_pcb = [32.2, 11, 1.6];     // measured length/width 2026-09-15; PCB thicknes
 chg_total_h = 3.7;             // measured total board height including components; back confirmed clear
 chg_comp_h = chg_total_h - chg_pcb[2]; // height above the assumed PCB thickness
 chg_sink = [8.8, 8.8, 5, 6];   // planned clearance envelopes only: no heatsinks bought/measured yet; y, z, height, gap
-cable_notch = [15, 12];        // cable notches at the back edge of the partition: length (y), height
+cable_notch = [7, 12];         // cable notches at the back edge of the partition: length (y), height
 cable_notch_z = [44, 126];     // centres: low (switch wires, between two battery saddles) and high (fan cable); a third notch at the USB-C height (usb_notch_z)
 tie_loop = [8, 6, 6, 5, 2.5];  // cable tie loops on the inside of the back cover (user): width (x), height (z), stand-off (y), tunnel width, tunnel depth next to the plate
-tie_loop_xz = [[176, 68], [170, 44]];   // beside the USB-C channel and beside the switch well, on the way to the partition notches
+tie_loop_xz = [[186, 68], [180, 44]];   // beside the USB-C channel and beside the switch well, on the way to the partition notches
 chg_gap = 4.5;                 // board back to partition: pads plus tape; board and heatsinks further in the intake air, but the ledge under
                                // the board must stay beside the fan frame, otherwise the fan cannot be pulled out towards the back
 chg_tape = 1.1;                // double-sided tape between board and pads (3M VHB 1.1 mm); thinner tape moves the board further onto the ledge
@@ -160,16 +153,16 @@ chg_pads = [[4, 7], [chg_pcb[0] - 4 - 7, 7]]; // supports from the board's lower
 chg_ledge = [2, 0.3];          // ledge under the lower board edge: height, set back from the part side
 
 /* [Folding bail on top, like the leoino case: steps along both top side edges over the full depth, pivots at mid-depth] */
-bail_arm = [14, 12];        // legs: width (x; leoino 11, 3 mm wider outwards so the screw heads sink into the arms, user), thickness = eye diameter; the upper legs lie in the side steps
+bail_arm = [15, 12];        // legs: width (x; leoino 11, 3 mm wider outwards for the sunk screw heads, 1 mm for the 12 mm shoulder, user), thickness = eye diameter; the upper legs lie in the side steps
 bail_bar = 13;              // grip bar height when folded (as thick as the legs)
-bail_drop = 125;            // folded: centre height of the grip bar behind the back cover, above the power switch (user: L bail, grip not too low)
+bail_drop = 134;            // folded: centre height of the grip bar behind the back cover, above the power switch (user: L bail, grip not too low)
 bail_cl = 0.5;              // clearance of the bail in the steps and behind the back cover
 bail_y = body_d / 2;        // pivot axis at mid-depth: the fan hangs level (user)
-bail_screw = [8.8, 3, 5, 11, 8];   // M4 shoulder screw (user): head diameter, head height, shoulder diameter, shoulder length, thread length
+bail_screw = [8.8, 3, 5, 12, 8];   // M4 shoulder screw (user): head diameter, head height, shoulder diameter, shoulder length (12, 1 mm longer than on the leoino, user), thread length
 bail_bush = [7, 10, 1, 10];        // flanged brass bushing pressed into the eye (user): outside diameter, flange diameter, flange thickness, total length (bore 5)
-bail_band = 15;                    // side step width from the side face to the insert wall (leoino 12 + 3 for the sunk heads); the arm has 0.5 mm on both sides
+bail_band = 16;                    // side step width from the side face to the insert wall (leoino 12 + 3 for the sunk heads + 1 for the 12 mm shoulder, user); the arm has 0.5 mm on both sides
 bail_head_room = 6;                // cut-back of the outer arm ends this far behind the pivot axis (flange radius 5)
-bail_eye_w = 8.8;                  // eye width, flush with the inner arm face (leoino): the outer 5.2 mm are cut back round the eye for flange and head, the head sits 0.5 mm below the arm face
+bail_eye_w = 9.8;                  // eye width, flush with the inner arm face (leoino 8.8 + 1 for the 12 mm shoulder): the outer 5.2 mm are cut back round the eye for flange and head, the head sits 0.5 mm below the arm face
 bail_c = 1;                 // 45 degree chamfers on the bar and arm edges
 m4_insert = [5.6, 8.1, 2.2];   // Ruthex RX-M4x8.1: hole (as in the leoino case), length, minimum wall (check against the datasheet)
 
@@ -180,14 +173,14 @@ usbc = [usbc_board[0] + usbc_protrusion, usbc_board[1], usbc_board[2]]; // total
 usbc_shell = [8.9, 3.22];    // measured receptacle shell width and height, 2026-09-15
 usbc_shell_bottom = 1.1;     // approximately measured from module underside to shell underside; 1.1 + 3.22 ~= 4.30 overall
 usbc_plate = usbc_protrusion; // local cover thickness: PCB edge rests inside, receptacle face flush outside
-usbc_xz = [198, 68];         // module envelope centre: near the right edge (user), above the power switch, between the top battery saddle and the shelf; shell axis is offset upwards by its measured height
+usbc_xz = [205.5, 68];       // module envelope centre: near the right edge, 2.5 mm towards the middle (user; the wall stop keeps 2.9 mm on the board end beside the battery path), above the power switch, between the top battery saddle and the shelf
 usbc_cl = 0.2;               // clearance in channel, plate opening and to the stop
 usbc_wall = 2;               // channel on the inside of the back cover: side walls and floor, open at the top for the wires
 usbc_stop = [4, 6];          // stop on the right wall behind the module end (takes the plug force with the back cover on): thickness, height
                              // (reaches below the module, the wires leave its end at the top)
 
 /* [Power switch: measured 14.7 x 20.9 mm rocker, snap-in, in a well of the back cover] */
-sw_xz = [198, 44];           // low near the right edge (user), between two battery saddles, in one column below the USB-C socket (user)
+sw_xz = [205.5, 44];         // low near the right edge (user), between two battery saddles, in one column below the USB-C socket (user)
 sw_cut = [19.2, 12.2];       // measured required panel hole; long side horizontal
 sw_bezel = [20.9, 14.7, 2];  // measured outside width/height and bezel thickness
 sw_rocker = 5;               // measured rocker rise above the bezel
@@ -200,7 +193,7 @@ sw_well = [5, 0.2, 2.2];     // well: panel below the back face (user: 3 mm shal
 
 /* [Feet: TPU strips, each screwed with two M3 x 8 from below into Ruthex inserts] */
 foot_w = 16;          // width (x)
-foot_len = 62;        // length (y), ends before the back lip
+foot_len = 52;        // length (y), ends before the back lip
 foot_y0 = 8;          // front end of the feet
 foot_lift = 4.5;      // housing above the ground
 foot_key = 1;         // the foot top sits this deep in a pocket of the bottom wall and takes the shear
@@ -212,12 +205,12 @@ foot_head_recess = 1.2;   // screw heads below the ground face
 foot_boss_d = 9;      // bosses inside the bottom wall for the inserts, pressed in from outside
 
 /* [Mount insert in the underside, like a camera thread] */
-mount_xy = [121, 36];      // near the centre of mass (fan left, battery right)
+mount_xy = [135, 36];      // near the centre of mass (fan left, battery right)
 // Ruthex RX-M5x9.5 (datasheet RX series 08/2022): outer 7.1 / 6.3, length 9.5, hole 6.4, min. wall 2.6, blind hole >= L + 1
 mount_insert = [6.4, 9.5, 2.6];   // hole diameter, insert length, minimum wall around the hole
 mount_floor = 2.5;         // above the blind hole: the weight on a mount pushes the insert against it
 mount_boss_d = 15;         // 4.3 mm wall: solid with 6 wall loops (2.4 mm from each side) instead of infill
-mount_rib = [2.4, 20];     // rib from the boss towards the back (a vertical wall in print): thickness, length
+mount_rib = [2.4, 16];     // rib from the boss towards the back (a vertical wall in print): thickness, length
 mount_doubler = [62, 56, 3];  // floor doubler around the boss: width (x, ends at the partition), depth from the front, thickness
 
 /* [Screws, M3 heat-set inserts] */
@@ -229,8 +222,7 @@ screw_clear_d = 3.4;
 // ISO 7380 button head Torx screws (same set as the nas-case project: M3 x 6, 8, 10, 12, 16, 25), no countersunk heads
 screw_head_d = 5.7;
 screw_head_h = 1.65;
-head_pocket = [6.4, 1.9];  // head recess in the grille ring: diameter, depth
-len_grille = 12;     // M3 x 12, from the front, head recessed in the grille ring
+head_pocket = [6.4, 1.9];  // screw head recess: diameter, depth
 len_fan = 30;        // M3 x 30, from behind the fan (not in the nas-case set)
 len_back = 8;        // M3 x 8, from the back, head on the surface
 len_foot = 8;        // M3 x 8, from below through the TPU feet
@@ -250,8 +242,8 @@ qr_runs = [[0, 0, 7], [0, 8, 10], [0, 12, 13], [0, 16, 17], [0, 19, 21], [0, 22,
 brand = "LEO";             // big stencil letters, as wide as the second line
 brand_sub = "INDUSTRIES";  // second line, sets the block width
 brand_model = "AC-1";      // third line
-logo_cx = 189.5;           // centre of the left-aligned block, front view x (right of the grille)
-logo_top = 144;            // top of the big letters, front view z
+logo_cx = 199.5;           // centre of the left-aligned block, front view x (right of the grille)
+logo_top = 161;            // top of the big letters, front view z
 line_gap = 3;
 big_size = [13, 18];       // letter box
 big_stroke = 3;
@@ -259,12 +251,12 @@ sub_size = [4, 6];
 sub_stroke = 1.2;          // >= 3 lines, also the gaps inside A, E and S
 sub_gap = 1.5;
 stencil_gap = 1.2;         // bridges in the big letters
-groove_count = 14;         // decorative grooves right of the grille, as on Mitsubishi outdoor units
+groove_count = 17;         // decorative grooves right of the grille, as on Mitsubishi outdoor units
 groove_pitch = 6;
 groove_w = 1.2;
 groove_depth = 0.8;        // open to the bed in print
 groove_z0 = 19;            // axis of the lowest groove
-groove_x = [160, 219];
+groove_x = [170, 229];
 led_d = 3;                 // 3 mm breathing LED as charge indicator, glued in from inside; shines through the white PETG in the counter of the O
 led_skin = 0.8;            // white PETG left in front of the LED (four layers)
 led_boss = [7, 5.8];       // boss around the LED pocket: diameter, height from the front face; the LED flange rests on it
@@ -272,7 +264,7 @@ dedication = ["Für Leo", "von Papa", "14.09.2026"];   // raised on the inside o
 dedication_font = "Liberation Sans:style=Bold";   // bundled with OpenSCAD
 dedication_size = [6, 6, 4];     // per line, the date smaller; fits between the PWM module (with plugged connector) and the bail recess
 dedication_w = [30, 38, 28];     // measured line widths (incl. bold) for the LED boss and bay checks
-dedication_x = 182;              // centre of the lines, left of the LED boss
+dedication_x = 192;              // centre of the lines, left of the LED boss
 dedication_bold = 0.15;    // extra stroke per side: thin joints of the font reach two lines (0.8 mm) in grey
 dedication_h = 0.8;        // raised height (four layers)
 dedication_z = [131.7, 124.2, 116.8];   // baselines above the PWM module; glyphs measured per line, line gaps checked on the grey inlay
@@ -284,7 +276,7 @@ pot_recess = wall - pot_mount_t;                  // depth of the round housing 
 function pot_tab_z() = [pot_shaft_d / 2 + pot_tab[3] - pot_tab_cl, pot_bush[0] / 2 + pot_tab[3] + pot_tab[1] + pot_tab_cl];   // tab slot below the axis: from its nearest to its farthest possible edge
 pwm_pcb_slot = max(0, -pwm_wall_gap) + pot_pcb_cl;  // depth of the shallow slot for the PCB edge
 pot_shaft_tip = pot_shaft_free + pot_bush[1] - pot_mount_t; // shaft tip relative to the outer wall
-function pwm_rib_x() = let (x1 = body_w - wall - pwm_wall_gap) [x1 - pwm_pcb[0] + 0.3, x1 - 1 - pwm_rib];   // under both board ends
+function pwm_rib_x() = let (x1 = body_w - wall - pwm_wall_gap) [x1 - pwm_pcb[0] + 0.3, body_w - wall - pwm_rib];   // under both board ends; the right rib stands against the wall (user)
 // material between a pocket from inside (radius r around the knob axis, floor t below the outer face) and the cover glue groove
 function cover_groove_gap(r, t) = let (gd = cover_glue[0] + cover_glue[2], r0 = cover_notch_r + cover_t - cover_glue[1] - cover_glue[2])
     r < r0 ? norm([r0 - r, t - gd]) : t - gd;
@@ -311,10 +303,8 @@ bay_x0 = part_x + part_t;
 bay_x1 = body_w - wall;
 lip_y0 = body_d - back_t - lip_h;
 part_y1 = lip_y0 - lip_cl;
-ring_in = open_r - spigot_cl - spigot_w;              // inner radius of ring and collar
+ring_in = open_r;                                     // the bars span the whole opening
 grille_gap = (ring_in - grille_hub_r - grille_rings * grille_bar) / (grille_rings + 1);
-function grille_screws() = [for (i = [0:3]) let (a = grille_screw_a0 + 90 * i)
-    [fan_cx + grille_screw_r * cos(a), fan_cz + grille_screw_r * sin(a)]];
 function fan_holes() = [for (sx = [-1, 1], sz = [-1, 1]) [fan_cx + sx * fan_pitch / 2, fan_cz + sz * fan_pitch / 2]];
 // back bosses: [axis (x, z), footprint rectangle corner a, corner b, gusset tip corner a, corner b]
 function back_bosses() = concat(
@@ -360,8 +350,6 @@ foot_screw_skin = foot_key + foot_lift - foot_head_recess - screw_head_h;   // T
 // thread engagement in the insert and margin of the screw tip to the pocket end
 screw_table = [
     // name, length, engagement, tip margin
-    ["grille", len_grille, (-grille_t + head_pocket[1] + len_grille) - (front_t + grille_boss_h - insert_len),
-     (front_t + grille_boss_h) - (-grille_t + head_pocket[1] + len_grille)],
     ["fan", len_fan, (fan_y - fan_pad) - max(fan_y + fan_t + fan_pad - len_fan, fan_y - fan_pad - insert_len),
      (fan_y + fan_t + fan_pad - len_fan) - (fan_y - fan_pad - insert_depth)],
     ["back", len_back, (body_d - back_t) - max(body_d - head_pocket[1] - len_back, body_d - back_t - insert_len),
@@ -371,14 +359,9 @@ screw_table = [
 
 assert(wall >= 3.2 && front_t >= 3.2 && back_t >= 3 && corner_r >= 5, "Drop resistance: walls >= 3.2 mm (back 3 mm), corner radius >= 5 mm");
 // heat-set inserts need material between pocket and visible face, otherwise the face deforms when pressing
-assert(front_t + grille_boss_h - insert_depth >= 3, "Grille insert pocket too close to the front face");
 assert(fan_y - fan_pad - insert_depth >= 3, "Fan insert pocket too close to the front face");
-assert(front_t + grille_boss_h <= fan_y - 0.3, "Grille bosses touch the fan");
-assert(grille_depth <= fan_y - 2, "Grille bars too close to the fan");
 assert(grille_gap <= 6, "Grille openings wider than 6 mm (finger safety)");
-assert(ring_in - spigot_w > grille_hub_r + grille_rings * grille_bar, "Grille collar hits the rings");
-assert(grille_screw_r - grille_boss_d / 2 > open_r, "Grille bosses reach into the opening");
-assert(grille_r - (grille_screw_r + head_pocket[0] / 2) >= 1.2 && grille_t - head_pocket[1] >= 2, "Grille ring too narrow or too thin at the screw heads");
+assert(grille_r - open_r >= 4 && grille_bar >= 1.6 && front_t >= 3 && grille_depth <= fan_y - fan_pad - 2 && grille_groove[1] < inlay_t + 0.01 && logo_x0 > fan_cx + grille_r + grille_groove[0] + 3, "Grille: ring inlay narrower than 4 mm, bars thinner than 4 lines, or front plate too thin for stiff bars");
 assert(fan_blade_d / 2 < open_r, "Front opening smaller than the fan blades");
 assert(open_r < fan_size / 2 - 0.5, "Air duct does not sit on the fan frame face");
 assert(fan_cx - open_r - shroud_t > wall + inner_c && fan_cx + open_r + shroud_t < part_x
@@ -403,13 +386,13 @@ assert(mount_top < fan_cz - fan_size / 2 - 2 && (mount_boss_d - mount_insert[0])
        "Mount boss hits the fan, is thinner than the datasheet wall + 1.5 mm, or its floor is too thin");
 assert(mount_xy[0] + mount_doubler[0] / 2 >= part_x - 1, "Mount doubler does not reach the partition");
 assert(back_t - head_pocket[1] >= 2, "Back cover too thin under the recessed screw heads");
-assert(usbc_xz[0] + usbc[1] / 2 - usbc_stop_x0() >= 5,
-       "USB-C module: its stop on the right wall, kept out of the battery removal path, covers less than 5 mm of the board end");
+assert(usbc_xz[0] + usbc[1] / 2 - usbc_stop_x0() >= 2.5,
+       "USB-C module: its stop on the right wall, kept out of the battery removal path, covers less than 2.5 mm of the board end");
 assert(sw_bezel[2] <= sw_well[0] - 1 && sw_body[0] < sw_cut[0] && sw_body[1] < sw_cut[1] && sw_bezel[0] > sw_cut[0] + 1 && sw_bezel[1] > sw_cut[1] + 1
        && (sw_xz[1] - sw_well_half()[1] > shelf_z + shelf_t + shelf_hold[2] + shelf_hold[1] + 1 || sw_xz[1] + sw_well_half()[1] < shelf_z - 1)
        && sw_xz[1] + (sw_bezel[1] / 2 + sw_well[1] + sw_well[2] + sw_well[0] - back_t) < body_h - wall - 1
        && (sw_xz[0] + sw_body[0] / 2 + 1 < body_w - wall - pwm_wall_gap - pwm_pcb[0] || sw_xz[1] - sw_body[1] / 2 > shelf_z + shelf_t + pwm_standoff + pwm_total_h + 1 || sw_xz[1] + sw_body[1] / 2 < shelf_z - 1)
-       && sw_xz[0] - sw_body[0] / 2 > bay_x0 + 1 && sw_xz[0] - (sw_bezel[0] / 2 + sw_well[1] + sw_well[2] + sw_well[0] - back_t) > 146 + slot_w / 2 + 1.2
+       && sw_xz[0] - sw_body[0] / 2 > bay_x0 + 1 && sw_xz[0] - (sw_bezel[0] / 2 + sw_well[1] + sw_well[2] + sw_well[0] - back_t) > part_x - 4 + slot_w / 2 + 1.2
        && sw_xz[0] + (sw_bezel[0] / 2 + sw_well[1] + sw_well[2] + sw_well[0] - back_t) < bay_x1 - lip_cl - lip_t,
        "Power switch: well hits the hold-down plate, top wall, back lip or intake slots, housing reaches the PWM module or the partition, or hole and frame do not match");
 assert(usbc_stop[0] >= 4 && usbc_wall >= 2 && usbc_plate >= 1.2 && back_t - usbc_plate >= 1 && usbc_board[0] >= 8, "USB-C module: cover skin too thin, recess too shallow or board too short for the channel");
@@ -444,7 +427,7 @@ assert(pot_tab_z()[1] < pot_axis_h + pwm_pcb[2] && pot_tab[2] < pot_mount_t + 1 
        "Potentiometer: wall under the nut too thin, no thread reserve, housing pocket too small or too shallow for the PCB slot, knob recess misses the nut, or a pocket comes within 1.2 mm of the cover glue groove");
 assert(pwm_pad < pwm_edge_free && pwm_standoff > pwm_pins + pwm_pin_cl + 3 && pwm_rib >= 2.4
        && pwm_standoff - pwm_pins - pwm_pin_cl - pwm_rib_hole[2] - pwm_rib_hole[1] >= 2 && pwm_rib_hole[0] + pwm_rib_hole[1] / 2 < pwm_pcb[1] - 2 * pwm_pad
-       && pwm_rib_x()[0] + pwm_rib <= bat_cx + 10 - cable_slot_w / 2 - 0.2 && pwm_rib_x()[1] + pwm_rib < body_w - wall - 0.2,
+       && pwm_rib_x()[0] + pwm_rib <= bat_cx + 10 - cable_slot_w / 2 - 0.2 && pwm_rib_x()[1] + pwm_rib <= body_w - wall,
        "PWM supports: pads wider than the pin-free edges, cable passage leaving less than 2 mm under the pin notch or longer than the notch, no rib left under the pin clearance, rib too thin, left rib over the battery cable slot, or right rib in the wall");
 assert(pot_shaft_tip - knob_gap - knob_sleeve_z >= 8 && knob_skin >= 2 && knob_cavity_d > pot_nut[0] + 1 && knob_gap + knob_sleeve_z > pot_washer[1] + pot_nut[1] + 0.3   // recess over washer and nut on the outer face
        && knob_sleeve_z + knob_slit[1] < knob_len - knob_skin - 2 && knob_gap + knob_len - cover_out <= 8,
@@ -454,10 +437,10 @@ assert((bail_arm[1] - bail_bush[0]) / 2 >= 2.2 && bail_band - bail_screw[3] - ba
        && bail_screw[4] <= m4_insert[1] && bail_arm[1] / 2 - m4_insert[0] / 2 >= m4_insert[2] && bail_screw[2] < bail_bush[0] - 1,
        "Bail pivot: eye wall round the bushing, flange hits the eye, bushing longer than the eye, head or flange bigger than the recess, thread longer than the insert, or insert boss wall");
 assert(bail_floor - wall > fan_cz + fan_size / 2 + 1 && bail_floor - wall > sw_xz[1] + sw_bezel[1] / 2 + sw_well[1] + sw_well[2] + sw_well[0] - back_t + 1
-       && bail_floor - wall > 137 + slot_w
+       && bail_floor - wall > body_h - 18 + slot_w
        && boss_top_x - back_boss_d / 2 > bail_band + wall,
        "Bail steps reach the fan, the switch well, the side intake slots, the logo or the LED boss, or the top back bosses reach a step");
-assert(let (h = (qr_n / 2 + qr_quiet) * qr_module) qr_module >= 0.8 && qr_xz[0] - h > 146 + slot_w / 2 + 1
+assert(let (h = (qr_n / 2 + qr_quiet) * qr_module) qr_module >= 0.8 && qr_xz[0] - h > part_x - 4 + slot_w / 2 + 1
        && qr_xz[1] - h > usbc_xz[1] - usbc[2] / 2 + usbc_shell_bottom + usbc_shell[1] + usbc_cl + 1 && qr_xz[0] + h < body_w - wall - lip_t - 2
        && qr_xz[1] + h < bail_bar_z[0] - bail_cl && qr_xz[1] - h > sw_xz[1] + sw_well_half()[1] + sw_well[0],
        "QR code: modules below the inlay minimum, or code plus quiet zone reaching the intake slots, USB-C socket, switch well, the side edge or the folded grip");
@@ -525,12 +508,13 @@ module back_boss(b) {
 }
 
 module intake_slots_back() {
-    bars = [[14, 44], [47, 76], [79, 108], [111, 141]];
-    for (x = [14.8:slot_pitch:146], z = bars) if (abs(x - back_bar_x) > slot_w / 2 + 1.5) slot2d([x, z[0] + slot_w / 2], [x, z[1] - slot_w / 2], slot_w);
+    bars = [[14, 44], [47, 76], [79, 108], [111, 140], [143, body_h - 14]];
+    for (x = [14.8:slot_pitch:part_x - 4], z = bars) if (abs(x - back_bar_x) > slot_w / 2 + 1.5) slot2d([x, z[0] + slot_w / 2], [x, z[1] - slot_w / 2], slot_w);
 }
 
 module intake_slots_side() {
-    for (z = [18:slot_pitch:137], y = [[12, 37.5], [40.5, 66]]) slot2d([y[0] + slot_w / 2, z], [y[1] - slot_w / 2, z], slot_w);
+    for (z = [18:slot_pitch:body_h - 18], y = [[12, 37.5], [40.5, body_d - back_t - lip_h - 1.5]])   // rear slots end before the back-cover lip
+        slot2d([y[0] + slot_w / 2, z], [y[1] - slot_w / 2, z], slot_w);
 }
 
 module body(dedication = true) difference() {   // dedication = false for public images
@@ -560,8 +544,9 @@ module body(dedication = true) difference() {   // dedication = false for public
         // partition between fan section and electronics bay
         translate([part_x, front_t - eps, wall - eps]) cube([part_t, part_y1 - front_t + eps, body_h - 2 * wall + 2 * eps]);
         for (p = fan_holes()) cyl_y(p, front_t - eps, fan_y - fan_pad, fan_boss_d / 2);   // the corner pads rest on them
-        for (p = grille_screws()) cyl_y(p, front_t - eps, front_t + grille_boss_h, grille_boss_d / 2);
         for (b = back_bosses()) back_boss(b);
+        // grille bars behind the front plate, into the duct: stiffness of the printed-in grille (grey part ends at the plate)
+        along_y(front_t - 0.5, grille_depth) translate([fan_cx, fan_cz]) intersection() { grille_bars_2d(); circle(r = open_r + shroud_t / 2); }   // ends inside plate and duct wall (clean mesh)
         // battery cradle ribs, open towards the back
         for (z = cradle_z) difference() {
             translate([bay_x0 - eps, front_t - eps, z]) cube([bay_x1 - bay_x0 + 2 * eps, bat_cy - front_t + eps, cradle_t]);
@@ -599,11 +584,11 @@ module body(dedication = true) difference() {   // dedication = false for public
         // two ribs on the shelf carry the PWM board on pads under its pin-free long edges, the solder pins in between stay
         // free; the ribs start at the front plate (printable), the back pad overhangs only the pin clearance
         // (the ribs run on behind the board edge up to the hold-down plate, so the back pads are not thin blades)
-        for (x = pwm_rib_x()) difference() {
-            translate([x, front_t - eps, shelf_z + shelf_t - eps]) cube([pwm_rib, front_t + shelf_d - shelf_hold[0] - 0.3 - front_t, pwm_standoff + eps]);
+        for (i = [0, 1]) let (x = pwm_rib_x()[i], w = pwm_rib + (i ? 0.5 : 0)) difference() {   // the right rib reaches 0.5 into the wall
+            translate([x, front_t - eps, shelf_z + shelf_t - eps]) cube([w, front_t + shelf_d - shelf_hold[0] - 0.3 - front_t, pwm_standoff + eps]);
             translate([x - 1, pot_yz[0] - pwm_pcb[1] / 2 + pwm_pad, shelf_z + shelf_t + pwm_standoff - pwm_pins - pwm_pin_cl])
-                cube([pwm_rib + 2, pwm_pcb[1] - 2 * pwm_pad, pwm_pins + pwm_pin_cl + 1]);
-            let (h = pwm_rib_hole, z0 = shelf_z + shelf_t + h[2], y0 = pot_yz[0] - h[0] / 2) hull() {   // cable passage below the board
+                cube([pwm_rib + (i ? 1 : 2), pwm_pcb[1] - 2 * pwm_pad, pwm_pins + pwm_pin_cl + 1]);   // pin notch, not into the wall
+            if (i == 0) let (h = pwm_rib_hole, z0 = shelf_z + shelf_t + h[2], y0 = pot_yz[0] - h[0] / 2) hull() {   // cable passage below the board (none at the wall, user)
                 translate([x - 1, y0, z0]) cube([pwm_rib + 2, h[0], h[1]]);
                 translate([x - 1, y0 + h[0] + h[1] / 2 - tip, z0 + h[1] / 2 - tip / 2]) cube([pwm_rib + 2, tip, tip]);
             }
@@ -643,7 +628,12 @@ module body(dedication = true) difference() {   // dedication = false for public
             }
         }
     }
-    cyl_y([fan_cx, fan_cz], -1, front_t + 1, open_r);
+    difference() {   // front opening; the grille bars stay as part of the front plate (grey, flush with the front face)
+        cyl_y([fan_cx, fan_cz], -1, front_t + 1, open_r);
+        along_y(-2, front_t + 2) translate([fan_cx, fan_cz]) grille_bars_2d();
+    }
+    // small groove round the grey ring: the grille looks set into the front (open to the bed in print)
+    along_y(-1, grille_groove[1]) translate([fan_cx, fan_cz]) difference() { circle(r = grille_r + grille_groove[0]); circle(r = grille_r); }
     // pockets for the tops of the TPU feet, 45 degree ends; inserts pressed in from below
     for (fx = foot_x()) translate([fx, foot_y0, 0]) hull() {
         translate([-foot_w / 2 - foot_cl, -foot_cl - 1, -1]) cube([foot_w + 2 * foot_cl, foot_len + 2 * foot_cl + 2, tip]);
@@ -653,10 +643,6 @@ module body(dedication = true) difference() {   // dedication = false for public
     cyl_y(led_xz, led_skin, led_boss[1] + 1, (led_d + 0.2) / 2);   // LED pocket, blind towards the front
     for (i = [0:groove_count - 1]) let (z = groove_z0 + i * groove_pitch)
         along_y(-1, groove_depth) slot2d([groove_x[0] + groove_w, z], [groove_x[1] - groove_w, z], groove_w);
-    for (p = grille_screws()) {
-        cyl_y(p, -1, front_t + grille_boss_h, screw_clear_d / 2);
-        cyl_y(p, front_t + grille_boss_h - insert_depth, front_t + grille_boss_h + 1, insert_hole_d / 2);
-    }
     for (p = fan_holes()) cyl_y(p, fan_y - fan_pad - insert_depth, fan_y + 1, insert_hole_d / 2);
     for (b = back_bosses()) cyl_y(b[0], body_d - back_t - insert_depth, body_d + 1, insert_hole_d / 2);
     // cable notches at the back edge of the partition: low for the USB-C wires, high for the fan cable
@@ -766,15 +752,22 @@ module dedication_2d() for (i = [0:len(dedication) - 1])
         text(dedication[i], size = dedication_size[i], font = dedication_font, halign = "center");
 module body_dedication_print_2d() mirror([0, 1]) dedication_2d();
 // multicolour pieces of the body in print orientation: logo inlay on the bed, dedication raised on the inside of the front plate
+// grille in grey: the bars through the whole front plate inside the opening, a ring inlay round it on the front face
+module body_grille_zone() {
+    inlay_zone(front_t + eps) mirror([0, 1]) translate([fan_cx, fan_cz]) circle(r = open_r + 0.01);
+    inlay_zone() mirror([0, 1]) translate([fan_cx, fan_cz]) circle(r = grille_r);
+}
 module body_piece(piece)
     if (piece == "base") difference() {
         body_print_pose() body();
         inlay_zone() body_label_print_2d();
         inlay_zone(dedication_h + eps, front_t) body_dedication_print_2d();
+        body_grille_zone();
     }
     else intersection() {
         body_print_pose() body();
         if (piece == "label") inlay_zone() body_label_print_2d();
+        else if (piece == "grille") body_grille_zone();
         else inlay_zone(dedication_h + eps, front_t) body_dedication_print_2d();
     }
 
@@ -786,30 +779,6 @@ module grille_bars_2d() {
     for (i = [0:grille_spokes - 1]) rotate(i * 360 / grille_spokes) translate([0, -grille_bar / 2]) square([ring_in + 1, grille_bar]);
 }
 
-module grille() {
-    c = [fan_cx, fan_cz];
-    difference() {
-        union() {
-            difference() {
-                union() {
-                    cyl_y(c, -grille_t, -grille_t + 0.6, grille_r - 0.6, grille_r);   // chamfer on the bed edge
-                    cyl_y(c, -grille_t + 0.6 - eps, 0, grille_r);
-                }
-                cyl_y(c, -grille_t - 1, 1, ring_in);
-            }
-            along_y(-grille_t, grille_depth) translate(c) intersection() { grille_bars_2d(); circle(r = ring_in + 0.5); }
-            difference() {
-                cyl_y(c, -eps, spigot_t, open_r - spigot_cl);
-                cyl_y(c, -1, spigot_t + 1, ring_in);
-            }
-        }
-        for (p = grille_screws()) {
-            cyl_y(p, -grille_t - 1, -grille_t + head_pocket[1], head_pocket[0] / 2);
-            cyl_y(p, -grille_t - 1, spigot_t + 1, screw_clear_d / 2);
-        }
-    }
-}
-module grille_print_pose() translate([0, 0, grille_t]) rotate([90, 0, 0]) children();
 
 // ---------- back cover ----------
 module back() difference() {
@@ -1082,9 +1051,11 @@ module fan_visual() translate([fan_cx, fan_y, fan_cz]) rotate([-90, 0, 0]) {   /
         translate([0, 0, -1]) cylinder(d = fan_blade_d + 2, h = fan_t + 2);
         for (sx = [-1, 1], sy = [-1, 1]) translate([sx * fan_pitch / 2, sy * fan_pitch / 2, -1]) cylinder(d = fan_hole_d, h = fan_t + 2);
     }
-    cylinder(r = 20, h = fan_t - 3);
-    for (i = [0:6]) rotate(i * 360 / 7) translate([19, 0, 11]) rotate([40, 0, 0]) translate([0, -9, -0.75]) cube([37, 18, 1.5]);
-    for (i = [0:3]) rotate(45 + i * 90) translate([18, -1.5, fan_t - 3]) cube([62, 3, 3]);
+    let (s = fan_size / 120, hub = 20 * s) {   // placeholder hub, blades and struts scaled from the 120 mm look
+        cylinder(r = hub, h = fan_t - 3);
+        for (i = [0:6]) rotate(i * 360 / 7) translate([hub - 1, 0, 11]) rotate([40, 0, 0]) translate([0, -9 * s, -0.75]) cube([fan_blade_d / 2 - hub - 1, 18 * s, 1.5]);
+        for (i = [0:3]) rotate(45 + i * 90) translate([hub - 2, -1.5, fan_t - 3]) cube([fan_size / 2 * sqrt(2) - hub - 3 * s, 3, 3]);
+    }
 }
 module battery_env() translate([bat_cx, bat_cy, wall]) {
     cylinder(d = bat_d, h = bat_l);
@@ -1114,7 +1085,6 @@ module screw(len, socket = false) difference() {   // ISO 7380 button head, head
     }
     if (socket) translate([0, 0, -screw_head_h - eps]) cylinder(d = 2.5 / cos(30), h = 1, $fn = 6);   // drive recess, viewer only
 }
-module screws_grille(socket = false) for (p = grille_screws()) translate([p[0], -grille_t + head_pocket[1], p[1]]) orient([0, 1, 0]) screw(len_grille, socket);
 module screws_fan(socket = false) for (p = fan_holes()) translate([p[0], fan_y + fan_t + fan_pad, p[1]]) orient([0, -1, 0]) screw(len_fan, socket);
 module screws_back(socket = false) for (b = back_bosses()) translate([b[0][0], body_d - head_pocket[1], b[0][1]]) orient([0, -1, 0]) screw(len_back, socket);
 module screws_feet(socket = false) for (p = foot_screws()) translate([p[0], p[1], -foot_lift + foot_head_recess + screw_head_h]) orient([0, 0, 1]) screw(len_foot, socket);
@@ -1123,7 +1093,7 @@ module screws_bail(socket = false) bail_sides() let (xh = bail_band - bail_screw
     cyl_x([bail_y, bail_z], xh - eps, bail_band, bail_screw[2] / 2);                         // shoulder, clamped against the step wall
     cyl_x([bail_y, bail_z], bail_band - eps, bail_band + bail_screw[4], 2);                  // thread in the insert
     cyl_x([bail_y, bail_z], xh, xh + bail_bush[2], bail_bush[1] / 2);                        // bushing flange
-    cyl_x([bail_y, bail_z], xh + bail_bush[2] - eps, xh + bail_bush[3], bail_bush[0] / 2 - 0.01);   // bushing, pressed into the eye
+    cyl_x([bail_y, bail_z], xh + bail_bush[2] - eps, xh + bail_bush[3], bail_bush[0] / 2 - 0.1);    // bushing, pressed into the eye (0.1 under the bore: facets of the rotated swing samples)
 }
 
 module assembly(explode = 0, bail_angle = 0) {
@@ -1131,8 +1101,8 @@ module assembly(explode = 0, bail_angle = 0) {
         color("#f2f2ee") body_piece("base");
         color("#8f9396") body_piece("label");
         color("#8f9396") body_piece("dedication");
+        color("#8f9396") body_piece("grille");
     }
-    color("#8f9396") translate([0, -explode, 0]) grille();
     translate([0, 2 * explode, 0]) back_install_pose() { color("#f2f2ee") back_piece("base"); color("#8f9396") back_piece("qr"); }
     color("#8f9396") translate([explode, 0, 0]) cover();
     color("#8f9396") translate([0, 0, explode]) bail(bail_angle);
@@ -1168,7 +1138,7 @@ else if (part == "metrics") echo("PROJECT_METRICS", [
     ["fan_size", fan_size], ["fan_pad", fan_pad], ["fan_t", fan_t], ["fan_pitch", fan_pitch], ["fan_hole_d", fan_hole_d],
     ["fan_blade_d", fan_blade_d], ["pot_shaft_len", pot_shaft_tip], ["pot_shaft_d", pot_shaft_d], ["pot_shaft_free", pot_shaft_free], ["pot_bush", pot_bush], ["pot_mount_t", pot_mount_t], ["pwm_total_h", pwm_total_h], ["pwm_total_len", pwm_total_len], ["pwm_pcb", pwm_pcb], ["pot_axis_h", pot_axis_h], ["pwm_lift", pwm_pins + pwm_pin_cl + 0.5], ["knob_shaft_engagement", pot_shaft_tip - knob_gap - knob_sleeve_z], ["knob_top_skin", knob_len - knob_bore_top], ["knob_protrusion", knob_gap + knob_len - cover_out], ["bail_clearance", bail_room()], ["bail_carry", bail_carry], ["bail_grip", body_w - 2 * (bail_cl + bail_arm[0])], ["bail_insert", m4_insert], ["foot_clearance", foot_cl], ["dedication_lines", len(dedication)], ["foot_lift", foot_lift], ["fan_axis", [fan_cx, fan_cz]], ["fan_y", fan_y], ["shroud_r", [open_r, open_r + shroud_t]], ["shroud_gap", shroud_gap], ["open_d", 2 * open_r], ["grille_gap", grille_gap],
     ["bat_mm", [bat_d, bat_l]], ["bat_bms", bat_bms], ["bat_clear", bat_clear], ["saddle_gap", saddle_gap], ["cradle_rings", len(cradle_z)], ["shelf_gap", shelf_gap],
-    ["lip_clearance", lip_cl], ["spigot_clearance", spigot_cl],
+    ["lip_clearance", lip_cl],
     ["usbc_board_mm", usbc_board], ["usbc_protrusion", usbc_protrusion], ["usbc_total_mm", usbc], ["usbc_plate", usbc_plate], ["usbc_clearance", usbc_cl],
     ["usbc_shell_mm", usbc_shell], ["usbc_shell_bottom_approx", usbc_shell_bottom],
     ["chg_pcb_mm", chg_pcb], ["chg_total_h", chg_total_h],
@@ -1176,7 +1146,6 @@ else if (part == "metrics") echo("PROJECT_METRICS", [
     ["screws", screw_table],
     // insert pockets: [assembly body, opening point, direction into the material, depth]
     ["inserts", concat(
-        [for (p = grille_screws()) ["body", [p[0], front_t + grille_boss_h, p[1]], [0, -1, 0], insert_depth, insert_hole_d, insert_w_min]],
         [for (p = fan_holes()) ["body", [p[0], fan_y - fan_pad, p[1]], [0, -1, 0], insert_depth, insert_hole_d, insert_w_min]],
         [for (b = back_bosses()) ["body", [b[0][0], body_d - back_t, b[0][1]], [0, -1, 0], insert_depth, insert_hole_d, insert_w_min]],
         [for (s = [0, 1]) ["body", [s ? body_w - bail_band : bail_band, bail_y, bail_z], [s ? -1 : 1, 0, 0], m4_insert[1] + 1, m4_insert[0], m4_insert[2]]],
@@ -1187,10 +1156,10 @@ else if (part == "body") body_print_pose() body();
 else if (part == "body_base") body_piece("base");
 else if (part == "body_label") body_piece("label");
 else if (part == "body_dedication") body_piece("dedication");
+else if (part == "body_grille") body_piece("grille");
 else if (part == "back") back_print_pose() back();
 else if (part == "back_base") back_piece("base");
 else if (part == "back_qr") back_piece("qr");
-else if (part == "grille") grille_print_pose() grille();
 else if (part == "cover") cover_print_pose() cover();
 else if (part == "bail") bail_print_pose() bail();
 else if (part == "knob") knob_print_pose() knob_local();
