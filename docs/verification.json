@@ -1,5 +1,5 @@
 {
-  "source_sha256": "3a8ab3bcebf743a85e5818b80fb2d3ee28add7b6700b1e097fdb82c7206ddc30",
+  "source_sha256": "9951daa825b0bacb0fca3c530cc366b16a7698851cc81150ea14ed883022e6c8",
   "software": {
     "numpy": "2.5.3",
     "trimesh": "5.1.0",
@@ -59,17 +59,17 @@
           55.75
         ]
       ],
-      "volume_mm3": 160682.3098,
-      "triangles": 10402,
+      "volume_mm3": 160145.1153,
+      "triangles": 10438,
       "watertight": true,
       "consistent_winding": true,
       "degenerate_faces": 0,
       "components": 1,
       "backend": "Manifold",
-      "sha256": "0dd4a2617604271d51f584957a46f3345f8387f960507c3f644855957587d0fc",
+      "sha256": "511bee17c550dbaa5bcf8da8beea47125a5e5a38149fb6305c474cb1c833e593",
       "quantity": 1,
       "material": "PETG-white",
-      "committed_sha256": "0dd4a2617604271d51f584957a46f3345f8387f960507c3f644855957587d0fc"
+      "committed_sha256": "511bee17c550dbaa5bcf8da8beea47125a5e5a38149fb6305c474cb1c833e593"
     },
     "grille": {
       "size_mm": [
@@ -126,10 +126,10 @@
       "degenerate_faces": 0,
       "components": 1,
       "backend": "CGAL",
-      "sha256": "07c9d330ce0740dc6426cfce8ba9519ad90ad570be0d93789055376e42eb53bb",
+      "sha256": "87311deba457fa9477147142296e1ebbb793626356b30a497f46d4b9f114af53",
       "quantity": 1,
       "material": "PETG-grey",
-      "committed_sha256": "07c9d330ce0740dc6426cfce8ba9519ad90ad570be0d93789055376e42eb53bb"
+      "committed_sha256": "87311deba457fa9477147142296e1ebbb793626356b30a497f46d4b9f114af53"
     },
     "bail": {
       "size_mm": [
@@ -382,14 +382,14 @@
           55.75
         ]
       ],
-      "volume_mm3": 160399.7021,
-      "triangles": 12750,
+      "volume_mm3": 159862.5077,
+      "triangles": 12786,
       "watertight": true,
       "consistent_winding": true,
       "degenerate_faces": 0,
       "components": 1,
       "backend": "Manifold",
-      "sha256": "f091d57a01143273ebabcdee3aec1860ae3ddbb39e1c7722b26b238470e2e8ba"
+      "sha256": "1b8ef3603e907f37f5ef86ef4ff51382602c825afa41da88222accf0cf30695e"
     },
     "back_qr": {
       "size_mm": [

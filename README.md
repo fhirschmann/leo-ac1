@@ -8,7 +8,7 @@ Designed for a Bambu Lab H2S with AMS in Bambu PETG HF white and grey plus TPU. 
 
 | Back | Exploded |
 |:---:|:---:|
-| ![Back](img/02_back.png?v=edb51dbab22d) | ![Exploded](img/03_exploded.png?v=35e4ea54bade) |
+| ![Back](img/02_back.png?v=edb51dbab22d) | ![Exploded](img/03_exploded.png?v=308a12260a09) |
 | **Logo and grooves** | **Air duct from behind** |
 | ![Logo](img/04_front_right.png?v=35e2832e0e1a) | ![Air duct](img/05_duct.png?v=b126fc69f63a) |
 | **Knob and service cover** | **Underside with M5 thread and TPU feet** |
@@ -20,7 +20,7 @@ Designed for a Bambu Lab H2S with AMS in Bambu PETG HF white and grey plus TPU. 
 | **TPU foot mount** | **USB-C socket** |
 | ![TPU foot mount](img/13_foot_mount.png?v=ee67c8486af0) | ![USB-C socket](img/14_usb_c.png?v=e1bff708972c) |
 | **Power switch well** | **Battery saddles** |
-| ![Power switch](img/15_switch.png?v=71bf21d82050) | ![Battery saddles](img/16_saddles.png?v=613cbae1f250) |
+| ![Power switch](img/15_switch.png?v=71bf21d82050) | ![Battery saddles](img/16_saddles.png?v=3d96a91e5e12) |
 
 ## Printed parts
 

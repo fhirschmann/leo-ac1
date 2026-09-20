@@ -824,9 +824,9 @@ module back() difference() {
         // stiffening against drops: 45 degree fillets at the saddle roots, rib tying the saddles together behind the battery
         for (i = [0:len(cradle_z) - 1], s = [-1, 1]) if (i > 0 || s > 0) let (z = s > 0 ? cradle_z[i] + cradle_t : cradle_z[i],
                 zg = [min(z, z + s * saddle_gusset), max(z, z + s * saddle_gusset)],
-                gaps = [[usbc_channel_x(), usbc_channel_z()], [[sw_xz[0] - sw_well_half()[0], sw_xz[0] + sw_well_half()[0]], [sw_xz[1] - sw_well_half()[1], sw_xz[1] + sw_well_half()[1]]]]) difference() {
+                gaps = [[usbc_channel_x(), usbc_channel_z()], [[sw_xz[0] - sw_well_half()[0], sw_xz[0] + sw_well_half()[0]], [sw_xz[1] - sw_well_half()[1], sw_xz[1] + sw_well_half()[1]]], for (q = tie_loop_xz) [[q[0] - tie_loop[0] / 2 - 1, q[0] + tie_loop[0] / 2 + 1], [q[1] - tie_loop[1] / 2 - saddle_gusset, q[1] + tie_loop[1] / 2 + saddle_gusset]]]) difference() {
             along_x(bay_x0 + 0.5, bay_x1 - 0.5) polygon([[y1 + eps, z - s * eps], [y1 - saddle_gusset, z - s * eps], [y1 + eps, z + s * saddle_gusset]]);
-            for (g = gaps) if (zg[0] < g[1][1] && zg[1] > g[1][0])   // gaps for the USB-C channel and the switch well
+            for (g = gaps) if (zg[0] < g[1][1] && zg[1] > g[1][0])   // gaps for the USB-C channel, the switch well and the tie loops (the tie passes along the plate)
                 translate([g[0][0], y1 - saddle_gusset - 1, zg[0] - 1]) cube([g[0][1] - g[0][0], saddle_gusset + 2, zg[1] - zg[0] + 2]);
         }
         let (ry = bat_cy + bat_d / 2 + bat_clear + 1) difference() {
