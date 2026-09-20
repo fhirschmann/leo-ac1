@@ -155,15 +155,15 @@ chg_pads = [[4, 7], [chg_pcb[0] - 4 - 7, 7]]; // supports from the board's lower
 chg_ledge = [2, 0.3];          // ledge under the lower board edge: height, set back from the part side
 
 /* [Folding bail on top, like the leoino case: steps along both top side edges over the full depth, pivots at mid-depth] */
-bail_arm = [11, 12];        // legs: width (x, as the leoino bail), thickness = eye diameter; the upper legs lie in the side steps
+bail_arm = [14, 12];        // legs: width (x; leoino 11, 3 mm wider outwards so the screw heads sink into the arms, user), thickness = eye diameter; the upper legs lie in the side steps
 bail_bar = 13;              // grip bar height when folded (as thick as the legs)
 bail_drop = 125;            // folded: centre height of the grip bar behind the back cover, above the power switch (user: L bail, grip not too low)
 bail_cl = 0.5;              // clearance of the bail in the steps and behind the back cover
 bail_y = body_d / 2;        // pivot axis at mid-depth: the fan hangs level (user)
 bail_screw = [8.8, 3, 5, 11, 8];   // M4 shoulder screw (user): head diameter, head height, shoulder diameter, shoulder length, thread length
 bail_bush = [7, 10, 1, 10];        // flanged brass bushing pressed into the eye (user): outside diameter, flange diameter, flange thickness, total length (bore 5)
-bail_band = 12;                    // side step width from the side face to the insert wall (leoino); the arm has 0.5 mm on both sides
-bail_eye_w = 8.8;                  // eye width, flush with the inner arm face: the outer 2.2 mm are cut back round the eye for flange and head (leoino)
+bail_band = 15;                    // side step width from the side face to the insert wall (leoino 12 + 3 for the sunk heads); the arm has 0.5 mm on both sides
+bail_eye_w = 8.8;                  // eye width, flush with the inner arm face (leoino): the outer 5.2 mm are cut back round the eye for flange and head, the head sits 0.5 mm below the arm face
 bail_c = 1;                 // 45 degree chamfers on the bar and arm edges
 m4_insert = [5.6, 8.1, 2.2];   // Ruthex RX-M4x8.1: hole (as in the leoino case), length, minimum wall (check against the datasheet)
 
@@ -318,7 +318,7 @@ function back_bosses() = concat(
 bail_z = body_h - bail_arm[1] / 2;                     // pivot axis height
 bail_floor = body_h - bail_arm[1];                     // floor of the side steps
 bail_x = [(bail_band - bail_arm[0]) / 2, (bail_band + bail_arm[0]) / 2];   // left arm: outer and inner face (right arm mirrored)
-bail_eye_x = [bail_x[1] - bail_eye_w, bail_x[1]];   // eye faces; the shoulder screw head sits outside, as on the leoino bail
+bail_eye_x = [bail_x[1] - bail_eye_w, bail_x[1]];   // eye faces; the shoulder screw head sits in the cut-back outer part of the arm
 bail_leg_y = [body_d + bail_cl, body_d + bail_cl + bail_arm[1]];     // folded: lower legs and bar behind the back cover
 bail_bar_z = [bail_drop - bail_bar / 2, bail_drop + bail_bar / 2];
 bail_reach = [bail_leg_y[0] + bail_arm[1] / 2 - bail_y, bail_z - bail_drop];   // pivot to bar centre along the upper and the lower leg
@@ -429,7 +429,7 @@ assert(pwm_pad < pwm_edge_free && pwm_standoff > pwm_pins + pwm_pin_cl + 3 && pw
 assert(pot_shaft_tip - knob_gap - knob_sleeve_z >= 8 && knob_skin >= 2 && knob_cavity_d > pot_nut[0] + 1 && knob_gap + knob_sleeve_z > pot_washer[1] + pot_nut[1] + 0.3   // recess over washer and nut on the outer face
        && knob_sleeve_z + knob_slit[1] < knob_len - knob_skin - 2 && knob_gap + knob_len - cover_out <= 8,
        "Knob: shaft engagement, top skin, nut recess, slit length or protrusion");
-assert((bail_arm[1] - bail_bush[0]) / 2 >= 2.2 && bail_band - bail_screw[3] + bail_bush[2] <= bail_eye_x[0]
+assert((bail_arm[1] - bail_bush[0]) / 2 >= 2.2 && bail_band - bail_screw[3] - bail_screw[1] >= bail_x[0] + 0.3 && bail_band - bail_screw[3] + bail_bush[2] <= bail_eye_x[0]
        && bail_band - bail_screw[3] + bail_bush[3] <= bail_eye_x[1] && bail_screw[0] / 2 + 0.5 <= bail_arm[1] / 2 + 0.5 && bail_bush[1] / 2 < bail_arm[1] / 2 + 0.5
        && bail_screw[4] <= m4_insert[1] && bail_arm[1] / 2 - m4_insert[0] / 2 >= m4_insert[2] && bail_screw[2] < bail_bush[0] - 1,
        "Bail pivot: eye wall round the bushing, flange hits the eye, bushing longer than the eye, head or flange bigger than the recess, thread longer than the insert, or insert boss wall");
