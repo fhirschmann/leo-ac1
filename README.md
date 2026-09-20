@@ -8,11 +8,11 @@ Designed for a Bambu Lab H2S with AMS in Bambu PETG HF white and grey plus TPU. 
 
 | Back | Exploded |
 |:---:|:---:|
-| ![Back](img/02_back.png?v=09ce05cff5ca) | ![Exploded](img/03_exploded.png?v=b6c812af02dd) |
+| ![Back](img/02_back.png?v=09ce05cff5ca) | ![Exploded](img/03_exploded.png?v=54055cad02ee) |
 | **Logo and grooves** | **Air duct from behind** |
-| ![Logo](img/04_front_right.png?v=e090feb60c84) | ![Air duct](img/05_duct.png?v=759e42189cff) |
+| ![Logo](img/04_front_right.png?v=e090feb60c84) | ![Air duct](img/05_duct.png?v=0740ff54c3cd) |
 | **Knob and service cover** | **Underside with M5 thread and TPU feet** |
-| ![Knob](img/06_knob.png?v=53cad2c0ed28) | ![Underside](img/07_underside.png?v=bda2a7e2c801) |
+| ![Knob](img/06_knob.png?v=6306e3e898f4) | ![Underside](img/07_underside.png?v=bda2a7e2c801) |
 | **Charge module in the air stream** | **LED pocket behind the O** |
 | ![Charge module](img/08_charge_module.png?v=2ef05f89a581) | ![LED pocket](img/09_led.png?v=e16ed4530b5b) |
 | **Handle mount** | **Back cover bosses** |
@@ -40,16 +40,9 @@ Print profile: 0.20 mm layers, 6 walls, 5 top/bottom layers, 30 % gyroid (feet 1
 
 ### Fit tests before the full print
 
-Small slices of the real housing and back cover, in the same print orientation, so the bought parts can be tried before the 20-hour print. They are ready in the Bambu Studio project [`stl/leo_ac1_fit_tests.3mf`](stl/leo_ac1_fit_tests.3mf): plate 1 the six slices in PETG white with one knob (white pointer), plate 2 one TPU foot. Both plates take about 86 g and 4.6 hours, prime tower included.
+The right section of the housing (from the partition to the right wall) and the matching part of the back cover, cut from the real parts in their print orientation, so the electronics can be fitted before the 20-hour print. The Bambu Studio project [`stl/leo_ac1_fit_tests.3mf`](stl/leo_ac1_fit_tests.3mf) holds both sections and a knob on one plate with light settings (2 walls, 3 top/bottom layers, 10 % infill): same geometry, less material, about 230 g and 7.5 hours including the prime tower for the knob.
 
-| STL | Slice of | Check with |
-|---|---|---|
-| `stl/test_pot.stl` | right wall with potentiometer bore, counterbore and service cover groove | PWM controller: thread through the wall, washer and nut in the counterbore, wrench room; then the knob on the shaft |
-| `stl/test_usbc.stl` | USB-C channel in the back cover | USB-C module with soldered wires slides in, receptacle flush, a cable plugs in fully |
-| `stl/test_switch.stl` | switch well in the back cover | rocker switch snaps in and holds, rocker stays below the back face |
-| `stl/test_ring.stl` | lowest battery ring, housing half and back cover half | battery with its protection board slides through both halves |
-| `stl/test_foot.stl` | foot pocket with M3 insert hole | insert presses in straight, foot fits the pocket, M3 × 8 holds |
-| `stl/test_mount.stl` | M5 mount insert in the underside | M5 insert presses in straight, tripod screw holds |
+Check with the real parts: the PWM controller lies flat on its pads, the potentiometer housing sits in its wall pocket and washer and nut tighten from outside, the knob covers them; LED, USB-C socket, power switch, battery with foam tape, handle and foot inserts.
 
 ## Bought parts
 
@@ -58,7 +51,7 @@ Small slices of the real housing and back cover, in the same print orientation, 
 | Fan Noctua NF-F12 industrialPPC-2000 PWM | 1 | [noctua.at](https://noctua.at/en/nf-f12-industrialppc-2000-pwm) | 120 × 25 mm, 12 V, max. 1.2 W; mounted from behind with M3 × 30, tighten by hand only |
 | Battery 3.2 V 6000 mAh LiFePO4 pack with protection board (BMS), JST-PH 2.0 | 1 | [eremit.de](https://www.eremit.de/p/3-2v-6000mah-pack-mit-schutz-arduino-aio-jst-ph-2-0-stecker) | cell Ø 32.5 × 71.6 mm; charge only with a LiFePO4 charger (3.65 V), **no** TP4056 |
 | Charge/boost module "2-in-1 3.2 V LiFePO4", **12 V variant** | 1 | [AliExpress](https://de.aliexpress.com/item/1005008094801881.html) | 32.2 × 11 × 3.7 mm; IN± 5 V charging, B± battery, O± 12 V; taped upright onto the partition behind the fan |
-| PWM fan controller CNY-FA5-PRO, DC 8–24 V, with potentiometer and switch | 1 | [AliExpress](https://de.aliexpress.com/item/1005010113177510.html) | 41 × 32 × 15 mm; potentiometer through the right side wall, washer and nut in a counterbore under the knob |
+| PWM fan controller CNY-FA5-PRO, DC 8–24 V, with potentiometer and switch | 1 | [AliExpress](https://de.aliexpress.com/item/1005010113177510.html) | 41 × 32 × 15 mm; rests on pads under its pin-free long edges, potentiometer housing in a pocket on the inside of the right wall, washer and nut outside under the knob |
 | USB-C PD trigger module, Type A (default 5 V) | 1 | [AliExpress](https://de.aliexpress.com/item/1005010610660644.html) | charging socket in the back cover. **Leave pads 1–4 open** (they select 9/12/15/20 V); the charge module only takes 4–6 V, check 5 V with a multimeter before connecting |
 | ON-OFF rocker switch, snap-in, 21 × 15 mm (cut-out 19.2 × 12.2 mm) | 1 | [AliExpress](https://de.aliexpress.com/item/1005008871215158.html) | power switch in a well of the back cover, so it stays off the table when the fan lies on its back |
 | LED 3 mm, breathing/fading, 3.3 V, water clear | 1 | [AliExpress](https://de.aliexpress.com/item/1005005336879647.html) | glued from inside behind the O of the logo |
@@ -74,6 +67,7 @@ Small slices of the real housing and back cover, in the same print orientation, 
 | JST-PH 2.0 cable, 2-pin, mating the battery plug | 1 | – | battery to the switch and B+ / B− |
 | Silicone wire 24 AWG, red and black | about 1 m | – | USB-C module, switch, LED, 12 V to the PWM controller |
 | Heat-shrink tubing 2–3 mm | – | – | every solder joint |
+| Foam tape, self-adhesive, 1–2 mm | – | – | battery: a strip above and below keeps it from rattling |
 
 ## Wiring
 
@@ -94,10 +88,10 @@ battery (JST-PH, built-in BMS) ──► (PTC) ──► power switch ──► 
 
 1. Press in the heat-set inserts: 4 grille and 4 fan bosses inside the front, 6 on the back edge of the housing, 4 in the handle feet; the M5 insert and 4 M3 inserts for the feet from below.
 2. Screw the handle on from inside with M3 × 12 while the housing is still empty. Glue the LED into the pocket behind the O and solder resistor and wires.
-3. Slide the PWM controller in from behind onto its ribs, push the potentiometer thread through the right side wall, put washer and nut into the counterbore outside and tighten gently. Push the knob onto the shaft. Glue the service cover in below it (thin bead in the groove).
+3. Slide the PWM controller in from behind onto the pads of its ribs and push the potentiometer housing into its pocket in the right wall; put washer and nut on the thread outside and tighten gently. Push the knob onto the shaft, it covers washer and nut. Glue the service cover in below it (thin bead in the groove).
 4. Put the grille on from the front and screw it on with M3 × 12.
 5. Screw the fan on from behind with M3 × 30 (blowing forward) and route its cable through the upper notch of the partition. Tape the charge module upright onto the two pads on the partition, lower edge on the ledge.
-6. Slide the battery in from behind, cable end up, protection board towards the partition.
+6. Slide the battery in from behind, cable end up, protection board towards the partition; a strip of foam tape above and below keeps it from rattling.
 7. Screw the TPU feet on with M3 × 8 from below; tighten only until the TPU starts to compress.
 8. Solder about 15 cm of wire to the USB-C module and push it into its channel in the back cover; snap the switch into its well. Route the wires through the lower notch of the partition, leaving slack to lay the back cover aside. Put on the back cover and screw it on with M3 × 8.
 

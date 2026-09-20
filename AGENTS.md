@@ -28,13 +28,15 @@ Internal notes for coding agents (Claude, Codex). The README is public and stays
 | Battery cell body | Ø 32.50 × 71.60 | measured without the side BMS board |
 | Battery BMS | approx. 20 wide over the full cell length, 4 thick | measured (width approx.); cable exit open |
 | PWM module PCB | 41.05 × 32.00 × 1.6 | measured |
+| PWM underside | solder pins 2–3 below the PCB; pin-free strips approx. 1.5 wide along both long edges | measured 2026-09-16 (the old full-width ribs pressed on the pins, board stood crooked) |
 | PWM module height | 15.00 without fan connector; modelled 18 with plugged connector | measured without connector, +3 estimated (user); datum = PCB underside (assumed) |
 | PWM module + pot to shaft tip | 56.30 | measured |
 | Pot shaft | round, knurled, split, Ø 5.80, free length 9.50 | measured |
-| Pot thread | Ø 6.73 × 3.60 | measured |
-| Pot axis above PCB top | approx. 6.00 | approximate |
+| Pot thread | Ø 6.73 × 5.00 from the housing shoulder | measured again 2026-09-16 (earlier 3.60) |
+| Pot axis above PCB top | approx. 6.00 | approximate; modelled 6.30 so the axis stayed put when the supports went 0.3 lower (user) |
 | Pot nut | 10 across flats (11.6 across corners), 2.15 thick | measured |
-| Pot washer | Ø approx. 11, 0.35 thick | measured |
+| Pot washer | Ø approx. 11; nut and washer together 3.00 | measured (washer modelled 0.85) |
+| Pot housing | 13 × 13 square envelope | **assumed** (12 mm pot) |
 | Charge module | 32.20 × 11.00 × 3.70, back clear | measured; no heatsinks yet (modelled envelopes are reservations) |
 | Charge module tape | 1.1 | **assumed** (VHB) |
 | USB-C module | 12.88 × 10.35 × 4.30 + receptacle projection 1.50 | measured |
@@ -43,18 +45,18 @@ Internal notes for coding agents (Claude, Codex). The README is public and stays
 
 ## Current design state (details in `leo_ac.scad` parameters)
 
-- Knob Ø 28 on the right wall at z 107.3 (PWM board on 15 mm ribs); pot shoulder on the full inner wall, washer + nut in an outside counterbore Ø 15 (wrench room) with a 1.0 mm clamped ring (0.1 mm thread reserve); knob ≥ 6 mm proud of the cover, 9 mm on the shaft, slotted clamping sleeve, white pointer inlay.
+- Knob Ø 28 on the right wall at z 104.4. PWM board 14.7 mm above the shelf on 1.2 mm pads under its pin-free long edges: two 3 mm ribs notched 3.5 mm under the pins, running on behind the board up to the hold-down plate (back pads ≥ 3 mm thick); the left rib stays beside the battery cable slot. Removal path: off the wall, lift over the pads, out the back. Potentiometer housing in a round pocket R 10 from inside, PCB edge in a 0.95 mm slot; 1.8 mm wall under washer and nut, which sit on the flat outer face (0.2 mm thread reserve) inside the knob recess; the pockets keep ≥ 1.2 mm to the cover glue groove (assert). Knob ≥ 6 mm proud of the cover, 9 mm on the shaft, slotted clamping sleeve, white pointer inlay.
 - Service cover below the knob with a half-round notch, glued: 1.2 mm rim in a 45° groove.
 - Back cover: USB-C module low right (x 205, z 44) in a channel, 1.5 mm skin for a flush receptacle, 4 × 6 mm wedge stop on the right wall; rocker switch top right (x 201, z 124) in an 8 mm deep 45° well (rocker 1 mm below the back face), floor 1.5 mm, 0.2 mm floor margin (no support needed), well wall 2.2 mm horizontal = 1.56 mm across the flank.
 - Partition with two cable notches (z 44 and 126); charge module centred between them, 5 mm behind the fan, 4.5 mm off the partition.
-- Battery saddles on the back cover with root fillets and a tie rib; BMS cut-out 25 × 5.5 mm for the approx. 20 mm board.
+- Battery saddles on the back cover with root fillets and a tie rib; BMS cut-out 25 × 5.5 mm for the approx. 20 mm board. Printed fit accepted by the user (2026-09-16); foam tape above and below clamps the battery, no geometry change.
 - Dedication (3 lines, 6/6/4 mm) raised in grey on the inside of the front plate above the PWM module; line gaps are checked on the inlay mesh.
 - TPU feet screwed (2 × M3 × 8 each) into outside-pressed inserts; handle with doubled top wall, ribs and keys; M5 insert in the underside.
 
 ## Open items
 
 - Measure: battery cable exit; PWM underside parts; switch body depth behind the panel; USB-C shell height/centring with a plugged cable; tape thickness; heatsinks if added.
-- Fit tests before the full print: `test_*` parts (quantity 0, not in the full project 3MF; `TEST_PLATES` puts them with a knob and one foot into `stl/leo_ac1_fit_tests.3mf`) are slices of the real body/back cover made with `slice_box()` — pot counterbore with washer/nut, USB-C channel with plugged cable, switch well with clips, battery ring with BMS, horizontal M3 foot insert and M5 mount insert — plus one knob on the real shaft and one TPU foot. Adjust parameters after the user's results.
+- Fit test (user wants the whole right section, as little material as possible): `test_right` and `test_right_back` (quantity 0) are body and back cover from `part_x` to the right wall, cut with `slice_box()` in print orientation; `TEST_PLATES` puts them with a knob into `stl/leo_ac1_fit_tests.3mf`, sliced with `TEST_PROCESS` (2 walls, 3 top/bottom, 10 % infill). Check: PWM board flat on its pads, potentiometer pocket, nut from outside, knob over washer and nut, LED, switch, inserts. The earlier small slices were removed.
 - USB-C mechanical fit is confirmed (2026-09-16); full cable insertion and fit with soldered wires still need explicit confirmation. Results for the other fit tests are pending.
 - Wiring: stow the 400 mm fan cable, keep wires out of the fan, saddles and back lip; leave slack at the back-cover modules.
 - Measure the boost converter idle current, then decide the switch position (battery line vs. O+). Check charge-module temperature in the closed housing, also charging with the fan off.
@@ -63,8 +65,8 @@ Internal notes for coding agents (Claude, Codex). The README is public and stays
 ## Verification and known limits
 
 - `print_tools.py export` checks meshes, bed placement, 210 assembly pairs, alignment of round features from the CSG dumps (201 coaxial pairs, none 0.2–2 mm off axis), contacts, stops, clearances (knob ≥ 0.4 running clearance, charge module ≥ 5 mm from the fan), 12 removal paths, 23 insert probes, screw engagement, colour pieces and project checks in `print_project.py` (knob, handle, feet, dedication line gaps). Reports: `docs/verification.json`, `docs/slicer-summary.json`.
-- `analyze.py thickness` finds two walls under 1.2 mm, both intended: the 1.0 mm clamped ring at the pot (body, right wall) and the 0.8 mm skin in front of the LED. The switch-well wall was raised to 1.56 mm across its 45° flanks.
-- Physical feedback (2026-09-16): the user has the printed parts and reports that the USB-C socket fits perfectly. No geometry adjustment is needed for this fit. The exact printed set and full cable insertion were not specified.
+- `analyze.py thickness` finds one wall under 1.2 mm, intended: the 0.8 mm skin in front of the LED. The potentiometer wall under washer and nut is 1.8 mm; the switch-well wall 1.56 mm across its 45° flanks.
+- Physical feedback (2026-09-16): the user has the printed parts and reports that the USB-C socket fits perfectly. No geometry adjustment is needed for this fit. The exact printed set and full cable insertion were not specified. The PWM board stood crooked because the full-width ribs pressed on its solder pins → pads under the pin-free long edges, 0.3 mm lower. The outside counterbore left the potentiometer wall too thin → housing pocket from inside, washer and nut on the flat outer face. The battery holder fits (foam tape).
 - Bought parts are envelopes; physical fit is confirmed only for the USB-C socket. Strength, airflow, thermal performance and the remaining fits have not been validated.
-- Accepted small overhangs: groove ends, screw-head pocket rings, knob flutes, connector openings, switch-floor ledge.
+- Accepted small overhangs: groove ends, screw-head pocket rings, knob flutes, connector openings, switch-floor ledge, PWM back pads (3.5 mm over the pin notch). `analyze.py overhangs test_right_back` reports the exact-45° switch-well flanks (about 120 mm² per layer) although the same flanks in `back` stay below the threshold: raster artifact of the shifted slice, not a real overhang.
 - Freshly exported CGAL STLs (body, cover) are not byte-identical to committed ones; compare geometry, re-slice after export.

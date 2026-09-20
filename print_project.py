@@ -17,13 +17,9 @@ PARTS = {
     "handle": (1, "PETG-grey", 1),
     "knob": (1, "PETG-grey", 1),
     "foot": (2, "TPU", 1),
-    # fit tests: slices of the real parts, printed before the full build (with one knob and one foot)
-    "test_pot": (0, "PETG-white", 1),
-    "test_usbc": (0, "PETG-white", 1),
-    "test_switch": (0, "PETG-white", 1),
-    "test_ring": (0, "PETG-white", 2),
-    "test_foot": (0, "PETG-white", 1),
-    "test_mount": (0, "PETG-white", 1),
+    # fit test: right section of housing and back cover, cut from the real parts
+    "test_right": (0, "PETG-white", 1),
+    "test_right_back": (0, "PETG-white", 1),
 }
 FULL_INFILL = set()
 FULL_INFILL_MATERIALS = {"TPU"}
@@ -69,9 +65,9 @@ FILAMENTS = [dict(material="PETG-white", profile="Bambu PETG HF @BBL H2S", colou
              dict(material="PETG-white", profile="Bambu PETG HF @BBL H2S", inlay=("pointer",), colour="#FFFFFF")]
 PLATES = [("Housing", ["body"]), ("Back cover", ["back"]), ("Grey parts", ["grille", "cover", "handle", "knob"]), ("TPU feet", ["foot"])]
 PROJECT_3MF = "stl/leo_ac1_all_parts.3mf"
-# fit tests before the full build: PETG slices with a knob (white pointer), one TPU foot on its own plate
-TEST_PLATES = [("Fit tests", ["test_pot", "test_usbc", "test_switch", "test_ring", "test_foot", "test_mount", "knob"]),
-               ("Fit test TPU foot", ["foot"])]
+# fit test before the full build: right section of housing and back cover with a knob, as little material as possible
+TEST_PLATES = [("Right section fit test", ["test_right", "test_right_back", "knob"])]
+TEST_PROCESS = dict(wall_loops=2, top_shell_layers=3, bottom_shell_layers=3, infill=10)
 TEST_3MF = "stl/leo_ac1_fit_tests.3mf"
 SLICER_SUMMARY = "docs/slicer-summary.json"
 
@@ -169,7 +165,7 @@ def checks(ctx):
             ("usb_trigger_from_back", ["usb_trigger"], ["back"], [0, -1, 0], 16, 0.5),
             ("switch_out", ["switch"], ["back"], [0, 1, 0], 25, 0.5),
             ("pwm_board_out", ["pot", "pwm_board"], others("pot", "pot_nut", "pwm_board", "knob", "cover", "back", "screws_back", "usb_trigger", "switch"),
-             [([-1, 0, 0], clear_x, 0.5), ([0, 1, 0], 90, 1)])])
+             [([-1, 0, 0], clear_x, 0.5), ([0, 0, 1], m["pwm_lift"], 0.5), ([0, 1, 0], 90, 1)])])   # lift the solder pins over the back pads
     ctx.summary.append(f"{len(paths)} paths")
 
     # Insert pockets: core open, datasheet wall around it and the floor ring below it material
@@ -177,9 +173,9 @@ def checks(ctx):
     ctx.summary.append(f"{len(inserts)} inserts")
 
     ctx.open_items.append("Battery cell measured Ø32.5 × 71.6 mm on 2026-09-15; verify protection-board envelope and cable exit separately")
-    ctx.open_items.append("PWM potentiometer measured: round split/knurled Ø5.8 shaft, free length 9.5, bushing Ø6.73 × 3.6, nut 10 across flats × 2.15, washer Ø11 × 0.35 (measured); verify knob push-fit and clamp")
+    ctx.open_items.append("PWM potentiometer measured: round split/knurled Ø5.8 shaft, free length 9.5, bushing Ø6.73 with 5 mm thread, nut 10 across flats, nut and washer 3 mm together (measured); housing in an inside wall pocket (12 mm pot assumed); verify knob push-fit and clamp")
     ctx.open_items.append("Battery BMS board approx. 20 × 4 mm over the full length (measured); cable exit still to be checked")
-    ctx.open_items.append("PWM module measured 41.05 × 32 × 15 mm, PCB 1.6 mm, 56.30 mm to shaft tip, axis about 6 mm above PCB; modelled 18 mm high with plugged fan connector (estimate); verify underside datum")
+    ctx.open_items.append("PWM module measured 41.05 × 32 × 15 mm, PCB 1.6 mm, 56.30 mm to shaft tip, axis about 6 mm above PCB (6.3 modelled: supports 0.3 lower after the fit test), solder pins 2-3 mm below except 1.5 mm strips along the long edges; modelled 18 mm high with plugged fan connector (estimate); verify underside datum")
     ctx.open_items.append("USB-C module and shell measured 2026-09-15 (shell bottom approximately 1.1 mm above module underside); verify fit with a plugged cable and soldered wires, and check 5 V at + / - before connecting")
     ctx.open_items.append("Switch measured 20.9 × 14.7 × 23 mm including contacts, cutout 19.2 × 12.2, panel about 1.5, bezel 2 + rocker 5 above the panel; body depth behind the panel assumed; verify snap fit in the 8 mm well")
     ctx.open_items.append("Charge PCB measured 32.2 × 11 × 3.7 mm, back clear; heatsinks not yet available, displayed heatsinks are planned clearance envelopes")
@@ -205,12 +201,12 @@ VIEWER = dict(
            ("feet", "Feet · TPU", "tpu", "#222326", "2x", [0, 0, -0.8]),
            ("fan_visual", "Fan Noctua NF-F12 iPPC-2000", "bought", "#303236", "1x", [0, 0.8, 0]),
            ("battery", "Battery LiFePO4 3.2 V 6000 mAh", "bought", "#3f7fbf", "1x", [0, 0.5, 0]),
-           ("pot", "Potentiometer · measured shaft, conservative body envelope", "bought", "#3a3d41", "1x", [-0.5, 0, 0]),
+           ("pot", "Potentiometer · housing in the wall pocket, washer and nut outside", "bought", "#3a3d41", "1x", [-0.5, 0, 0]),
            ("chg_module", "Charge/boost module · 2 planned heatsink envelopes", "bought", "#c9c9c9", "1x", [0, 0.8, 0]),
            ("led", "USB power indicator LED 3 mm, behind the O", "bought", "#9fd3ff", "1x", [0, 1, 0]),
            ("usb_trigger", "USB-C PD trigger, 5 V (Type A)", "bought", "#4b2a7a", "1x", [0, 1.5, 0]),
            ("switch", "Power switch KCD11 · rocker 1 mm below the back face", "bought", "#1b1b1b", "1x", [0, 1.8, 0]),
-           ("pwm_board", "PWM board CNY-FA5-PRO · 41.05 × 32 × 15 mm, unplugged", "bought", "#2e6b3f", "1x", [-0.5, 0, 0]),
+           ("pwm_board", "PWM board CNY-FA5-PRO · on pads under its pin-free edges", "bought", "#2e6b3f", "1x", [-0.5, 0, 0]),
            # screws leave their part: same direction, further out
            ("screws_grille", "Grille · M3 × 12 button head", "screws", "#26282b", "4x", [0, -1.6, 0]),
            ("screws_fan", "Fan · M3 × 30 button head", "screws", "#26282b", "4x", [0, 1.4, 0]),

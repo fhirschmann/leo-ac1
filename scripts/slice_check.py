@@ -7,7 +7,7 @@
    parts as one object per copy with their inlay filaments, parts at the left edge and the prime tower
    to their right. Every plate is sliced (layout, instances, effective settings); multicolour plates also prove the inlays print.
 3. Optional TEST_PLATES (e.g. fit tests; entries are part names or (name, count), one copy by default) become TEST_3MF
-   the same way.
+   the same way, with TEST_PROCESS overriding PROCESS (e.g. fewer walls and less infill: same geometry, less material).
 
 Generated G-code and 3MF files under build/ are diagnostics, NOT print releases.
 Writes build/slicer-diagnostic/summary.json and SLICER_SUMMARY (default docs/slicer-summary.json).
@@ -52,6 +52,7 @@ PAUSES = getattr(P, "PAUSES", {})
 PROJECT_3MF = ROOT / getattr(P, "PROJECT_3MF", f"{STL_DIR.relative_to(ROOT).as_posix()}/{ROOT.name}_all_parts.3mf")
 # Test prints (fit tests, samples) as their own project: plates of part names or (name, count), one copy by default
 TEST_PLATES = getattr(P, "TEST_PLATES", [])
+TEST_PROCESS = PROCESS | getattr(P, "TEST_PROCESS", {})
 TEST_3MF = ROOT / getattr(P, "TEST_3MF", f"{STL_DIR.relative_to(ROOT).as_posix()}/{ROOT.name}_test_prints.3mf")
 SUMMARY = ROOT / getattr(P, "SLICER_SUMMARY", "docs/slicer-summary.json")
 INLAY_FILAMENT = {inlay: i for i, f in enumerate(FILAMENTS, 1)
@@ -98,12 +99,20 @@ for name, inlays in COLOR_PARTS.items():
 machine = resolve(PRINTER["machine"])
 machine["curr_bed_type"] = PRINTER["bed"]
 (profiles / "machine.json").write_text(json.dumps(machine, indent=2))
-for density in {infill(n, m) for n, (_, m, _) in PARTS.items()} | {DEFAULT_INFILL}:
+
+
+def write_process(name, settings, density):
     process = resolve(PRINTER["process"])
-    process.update(wall_loops=str(PROCESS["wall_loops"]), sparse_infill_density=f"{density}%", enable_support="0",
-                   top_shell_layers=str(PROCESS["top_shell_layers"]),
-                   bottom_shell_layers=str(PROCESS["bottom_shell_layers"]), sparse_infill_pattern=pattern(density))
-    (profiles / f"process-{density}.json").write_text(json.dumps(process, indent=2))
+    process.update(wall_loops=str(settings["wall_loops"]), sparse_infill_density=f"{density}%", enable_support="0",
+                   top_shell_layers=str(settings["top_shell_layers"]),
+                   bottom_shell_layers=str(settings["bottom_shell_layers"]), sparse_infill_pattern=pattern(density))
+    (profiles / name).write_text(json.dumps(process, indent=2))
+
+
+for density in {infill(n, m) for n, (_, m, _) in PARTS.items()} | {DEFAULT_INFILL}:
+    write_process(f"process-{density}.json", PROCESS, density)
+if TEST_PLATES:
+    write_process("process-test.json", TEST_PROCESS, int(TEST_PROCESS["infill"]))
 for slot, filament in enumerate(FILAMENTS, 1):
     profile = resolve(filament["profile"])
     if filament.get("colour"):
@@ -171,10 +180,11 @@ def plate_counts(group, full_build):
     return dict((entry, PARTS[entry][0] if full_build else 1) if isinstance(entry, str) else tuple(entry) for entry in group)
 
 
-def build_project_3mf(plate_list=None, target=None, folder_name="project-3mf", full_build=True):
+def build_project_3mf(plate_list=None, target=None, folder_name="project-3mf", full_build=True, process_file=None):
     """Every part of the full build (no test prints) as one Bambu Studio project on the fixed PLATES; with
-    full_build=False any plate list (test prints) into its own target file."""
+    full_build=False any plate list (test prints) into its own target file, optionally with its own process profile."""
     target = target or PROJECT_3MF
+    process_file = process_file or profiles / f"process-{DEFAULT_INFILL}.json"
     folder = out / folder_name
     folder.mkdir(exist_ok=True)
     resolved = [(title, plate_counts(group, full_build)) for title, group in (PLATES if plate_list is None else plate_list)]
@@ -209,7 +219,7 @@ def build_project_3mf(plate_list=None, target=None, folder_name="project-3mf", f
     raw = folder / "raw.3mf"
     raw.unlink(missing_ok=True)
     command = [str(executable), "--datadir", str(folder / "config"), "--debug", "2",
-               "--load-settings", f"{profiles / 'machine.json'};{profiles / f'process-{DEFAULT_INFILL}.json'}",
+               "--load-settings", f"{profiles / 'machine.json'};{process_file}",
                "--load-filaments", ";".join(str(profiles / f"filament-{slot}.json") for slot in range(1, len(FILAMENTS) + 1)),
                "--load-assemble-list", "assemble.json",
                "--export-3mf", raw.name, "--outputdir", str(folder)]
@@ -437,7 +447,8 @@ assert all(r["effective_settings"]["sparse_infill_pattern"] == pattern(infill(r[
 assert all(r["effective_settings"]["enable_support"] == "0" for r in results)
 summary["project_3mf"] = build_project_3mf()
 if TEST_PLATES:
-    summary["test_3mf"] = build_project_3mf(TEST_PLATES, TEST_3MF, "test-3mf", full_build=False)
+    summary["test_3mf"] = build_project_3mf(TEST_PLATES, TEST_3MF, "test-3mf", full_build=False, process_file=profiles / "process-test.json")
+    summary["test_3mf"]["process"] = {key: TEST_PROCESS[key] for key in ("wall_loops", "top_shell_layers", "bottom_shell_layers", "infill")}
 write_summary(summary)
 test = summary.get("test_3mf")
 print(f"PASS: {len(results)} slices; {summary['total_parts']} parts; "

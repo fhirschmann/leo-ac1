@@ -102,20 +102,27 @@ cover_notch_c = 3;           // 45 degree chamfer along the notch at the outer f
 /* [Speed knob, potentiometer of the PWM fan controller] */
 pot_shaft_d = 5.8;        // measured outside the knurling; round split shaft, not a D shaft
 pot_shaft_free = 9.5;     // measured shaft length beyond the threaded bushing
-pot_bush = [6.73, 3.6];   // measured bushing outside diameter and length from its mounting shoulder
+pot_bush = [6.73, 5];      // bushing outside diameter and thread length from the housing shoulder (measured)
 pot_nut = [11.6, 2.15];    // nut across corners (10 across flats, measured) and thickness (measured)
-pot_washer = [11, 0.35];   // washer outside diameter (approx. measured) and thickness (measured)
-pot_cb_room = 1.7;         // room per side around nut and washer in the counterbore (box wrench / slim socket)
-pot_thread_reserve = 0.1;  // thread left beyond the nut
-pot_mount_t = wall;        // the potentiometer shoulder rests on the full inner wall; washer and nut sit in a small counterbore outside
+pot_washer = [11, 0.85];   // washer outside diameter (approx. measured); nut and washer together 3 mm (measured)
+pot_thread_reserve = 0.2;  // thread left beyond the nut
+pot_housing = 13;          // potentiometer housing on the PCB edge: square envelope (12 mm pot assumed)
+pot_recess_r = 10;         // round pocket from inside around the axis: the housing reaches into the wall, shoulder on the pocket floor
+pot_pcb_cl = 0.3;          // clearance around the PCB edge in its shallow slot in the wall
+pot_mount_t = pot_bush[1] - pot_nut[1] - pot_washer[1] - pot_thread_reserve;   // wall under washer and nut; flat outer face, the knob covers them
 // PWM board CNY-FA5-PRO: right-angle potentiometer on its edge, shaft parallel to the board. The board lies on two ribs
 // above the shelf and is held by the potentiometer nut. Measured board/module dimensions, 2026-09-15.
 pwm_pcb = [41.05, 32, 1.6]; // measured length, width and PCB thickness
 pwm_total_h = 18;          // measured 15 without the fan connector, +3 estimated for the plugged connector and wires
 pwm_total_len = 56.30;     // measured rear PCB edge to shaft tip, including potentiometer
 pwm_comp_h = pwm_total_h - pwm_pcb[2]; // component height above the PCB
-pwm_standoff = 15;        // board underside above the shelf: raises the knob into the upper part of the side (ribs from the shelf)
-pot_axis_h = 6;           // approximately measured from PCB top to shaft centre
+pwm_standoff = 14.7;      // board underside above the shelf: raises the knob into the upper part of the side; 0.3 lower after the fit test
+pot_axis_h = 6.3;         // PCB top to shaft centre: approx. 6 measured, +0.3 so the axis stayed put when the supports went 0.3 mm lower
+pwm_pins = 3;             // solder pins below the PCB, 2-3 mm (measured), everywhere except along both long edges
+pwm_edge_free = 1.5;      // pin-free strips on the underside along both long PCB edges (measured)
+pwm_pad = 1.2;            // rib pads under those strips, 0.3 mm inside their border
+pwm_pin_cl = 0.5;         // clearance below the pins
+pwm_rib = 3;              // support ribs on the shelf: thickness (the left one stays beside the battery cable slot)
 knob_d = 28;              // dial on the side wall, sits in the half-round notch of the service cover
 knob_gap = 0.5;           // underside to the wall face
 knob_niche = 3;           // radial gap to the notch of the service cover: room for fingertips
@@ -258,11 +265,15 @@ dedication_h = 0.8;        // raised height (four layers)
 dedication_z = [131.7, 124.2, 116.8];   // baselines above the PWM module; glyphs measured per line, line gaps checked on the grey inlay
 
 // ---------- derived values ----------
-pot_nose_len = pwm_total_len - pwm_pcb[0] - pot_shaft_free - pot_bush[1]; // 2.15 mm mounting shoulder ahead of PCB
-pwm_wall_gap = pot_mount_t + pot_nose_len - wall; // PCB edge clearance to the normal inner wall, 0.25 mm
+pot_nose_len = pwm_total_len - pwm_pcb[0] - pot_shaft_free - pot_bush[1]; // housing shoulder ahead of the PCB edge
+pwm_wall_gap = pot_mount_t + pot_nose_len - wall; // PCB edge to the inner wall face; negative: the edge reaches into the wall slot
+pot_recess = wall - pot_mount_t;                  // depth of the round housing pocket from inside
+pwm_pcb_slot = max(0, -pwm_wall_gap) + pot_pcb_cl;  // depth of the shallow slot for the PCB edge
 pot_shaft_tip = pot_shaft_free + pot_bush[1] - pot_mount_t; // shaft tip relative to the outer wall
-pot_skin = pot_bush[1] - pot_nut[1] - pot_washer[1] - pot_thread_reserve; // clamped wall under the washer
-pot_cb = [max(pot_washer[0], pot_nut[0]) + 2 * pot_cb_room, pot_mount_t - pot_skin];   // counterbore from outside under the knob: diameter, depth
+function pwm_rib_x() = let (x1 = body_w - wall - pwm_wall_gap) [x1 - pwm_pcb[0] + 0.3, x1 - 1 - pwm_rib];   // under both board ends
+// material between a pocket from inside (radius r around the knob axis, floor t below the outer face) and the cover glue groove
+function cover_groove_gap(r, t) = let (gd = cover_glue[0] + cover_glue[2], r0 = cover_notch_r + cover_t - cover_glue[1] - cover_glue[2])
+    r < r0 ? norm([r0 - r, t - gd]) : t - gd;
 pot_yz = [cover_y, wall + bat_l + shelf_gap + shelf_t + pwm_standoff + pwm_pcb[2] + pot_axis_h];   // knob axis above the battery, centred in the depth
 mount_top = mount_insert[1] + 1 + mount_floor;        // boss top inside; blind hole L + 1 from the underside
 knob_sleeve_z = pot_bush[1] - pot_mount_t + knob_stem_cl - knob_gap; // sleeve end above bushing, relative to knob underside
@@ -389,11 +400,15 @@ assert(pot_yz[0] - pwm_pcb[1] / 2 > front_t + inner_c && pot_yz[0] + pwm_pcb[1] 
        && pot_yz[1] + pwm_comp_h + 2 < body_h - wall - 10
        && (usbc_xz[1] + usbc[2] / 2 < shelf_z || pot_yz[1] - pot_axis_h + pwm_comp_h < usbc_xz[1] + usbc[2] / 2 - usbc_stop[1] - 1),
        "PWM board: beyond the shelf, no room to pull it off the wall, too high, or its parts reach the USB-C stop");
-assert(pot_skin >= 0.9 && pot_cb[1] > 0 && pot_nose_len > 0 && pwm_wall_gap >= 0.2 && pot_nut[0] < knob_cavity_d - 1
-       && pot_bush[1] - pot_skin >= pot_nut[1] + pot_washer[1] + pot_thread_reserve - eps,
-       "Potentiometer: clamped skin under the counterbore too thin, no thread for washer and nut, or the knob recess misses the nut");
-assert(pot_cb[0] / 2 * sqrt(2) < knob_d / 2 - 1, "Potentiometer counterbore (with its printable point) is not hidden under the knob");
-assert(pot_shaft_tip - knob_gap - knob_sleeve_z >= 8 && knob_skin >= 2 && knob_cavity_d > pot_nut[0] + 1 && knob_gap + knob_sleeve_z > pot_washer[1] + pot_nut[1] - pot_cb[1] + 0.3   // above the nut top in the counterbore
+assert(pot_mount_t >= 1.6 && pot_thread_reserve >= 0.1 && pot_nose_len > 0 && pwm_pcb_slot < pot_recess - 0.2
+       && pot_recess_r >= pot_housing / 2 * sqrt(2) + 0.5 && pot_nut[0] < knob_cavity_d - 1
+       && cover_groove_gap(pot_recess_r, pot_mount_t) >= 1.2
+       && cover_groove_gap(norm([pwm_pcb[1] / 2 + pot_pcb_cl, pot_axis_h + pwm_pcb[2] + pot_pcb_cl]), wall - pwm_pcb_slot) >= 1.2,
+       "Potentiometer: wall under the nut too thin, no thread reserve, housing pocket too small or too shallow for the PCB slot, knob recess misses the nut, or a pocket comes within 1.2 mm of the cover glue groove");
+assert(pwm_pad < pwm_edge_free && pwm_standoff > pwm_pins + pwm_pin_cl + 3 && pwm_rib >= 2.4
+       && pwm_rib_x()[0] + pwm_rib <= bat_cx + 10 - cable_slot_w / 2 - 0.2 && pwm_rib_x()[1] + pwm_rib < body_w - wall - 0.2,
+       "PWM supports: pads wider than the pin-free edges, no rib left under the pin clearance, rib too thin, left rib over the battery cable slot, or right rib in the wall");
+assert(pot_shaft_tip - knob_gap - knob_sleeve_z >= 8 && knob_skin >= 2 && knob_cavity_d > pot_nut[0] + 1 && knob_gap + knob_sleeve_z > pot_washer[1] + pot_nut[1] + 0.3   // recess over washer and nut on the outer face
        && knob_sleeve_z + knob_slit[1] < knob_len - knob_skin - 2 && knob_gap + knob_len - cover_out <= 8,
        "Knob: shaft engagement, top skin, nut recess, slit length or protrusion");
 assert(handle_end[1] > handle_ins_depth - handle_key[0] && handle_open[2] > handle_ins_depth - handle_key[0] && handle_ins_depth >= insert_len + 1,
@@ -527,9 +542,14 @@ module body(dedication = true) difference() {   // dedication = false for public
             for (uc = [u[0] + handle_rib[0] / 2, (handle_screw_dx[0] + handle_screw_dx[1]) / 2, u[1] - handle_rib[0] / 2])
                 translate([handle_cx + sx * uc - handle_rib[0] / 2, front_t - eps, zt - handle_rib[1]]) cube([handle_rib[0], part_y1 - front_t + eps, handle_rib[1] + eps]);
         }
-        // two ribs on the shelf carry the PWM board; they start at the front plate (printable)
-        for (x = [body_w - wall - pwm_wall_gap - pwm_pcb[0] + 1, body_w - wall - pwm_wall_gap - 5])
-            translate([x, front_t - eps, shelf_z + shelf_t - eps]) cube([4, pot_yz[0] + pwm_pcb[1] / 2 - front_t, pwm_standoff + eps]);
+        // two ribs on the shelf carry the PWM board on pads under its pin-free long edges, the solder pins in between stay
+        // free; the ribs start at the front plate (printable), the back pad overhangs only the pin clearance
+        // (the ribs run on behind the board edge up to the hold-down plate, so the back pads are not thin blades)
+        for (x = pwm_rib_x()) difference() {
+            translate([x, front_t - eps, shelf_z + shelf_t - eps]) cube([pwm_rib, front_t + shelf_d - shelf_hold[0] - 0.3 - front_t, pwm_standoff + eps]);
+            translate([x - 1, pot_yz[0] - pwm_pcb[1] / 2 + pwm_pad, shelf_z + shelf_t + pwm_standoff - pwm_pins - pwm_pin_cl])
+                cube([pwm_rib + 2, pwm_pcb[1] - 2 * pwm_pad, pwm_pins + pwm_pin_cl + 1]);
+        }
         // charge/boost module standing upright: board back on two pads (tape), lower short edge on a ledge behind the
         // part side; 45 degree cones towards the front (printable)
         let (xb = part_x - chg_gap - chg_pcb[2], zb = chg_z - chg_pcb[0] / 2) {
@@ -587,11 +607,11 @@ module body(dedication = true) difference() {   // dedication = false for public
     translate([bat_cx + 10 - cable_slot_w / 2, bat_cy - 6, shelf_z - 1]) cube([cable_slot_w, shelf_d + front_t - bat_cy + 7, shelf_t + 2]);
     along_x(-1, wall + 1) intake_slots_side();
     cyl_x(pot_yz, body_w - wall - 1, body_w + 1, (pot_bush[0] + 0.4) / 2);   // potentiometer bushing, nutted to the wall
-    // counterbore from outside for washer and nut, hidden under the knob; pointed towards +y (up in print, printable)
-    along_x(body_w - pot_cb[1], body_w + 1) hull() {
-        translate(pot_yz) circle(d = pot_cb[0]);
-        translate([pot_yz[0] + pot_cb[0] / 2 * sqrt(2), pot_yz[1]]) square(0.01, center = true);
-    }
+    // from inside: round pocket for the potentiometer housing (shoulder on its floor) and a shallow slot for the PCB edge;
+    // washer and nut sit on the flat outer face under the knob
+    cyl_x(pot_yz, body_w - wall - 1, body_w - pot_mount_t, pot_recess_r);
+    translate([body_w - wall - 1, pot_yz[0] - pwm_pcb[1] / 2 - pot_pcb_cl, pot_yz[1] - pot_axis_h - pwm_pcb[2] - pot_pcb_cl])
+        cube([1 + pwm_pcb_slot, pwm_pcb[1] + 2 * pot_pcb_cl, pwm_pcb[2] + 2 * pot_pcb_cl]);
     for (p = handle_screws()) translate([p[0], p[1], body_h - wall - handle_pad[0] - 1]) cylinder(d = screw_clear_d, h = wall + handle_pad[0] + 2);
     // recesses for the keys under the handle feet, 45 degree side walls along y
     for (sx = [-1, 1]) let (u = handle_key_u(), x0 = handle_cx + (sx > 0 ? u[0] : -u[1]) - handle_key[1], lx = u[1] - u[0] + 2 * handle_key[1],
@@ -826,19 +846,20 @@ module knob_piece(piece)   // multicolour pieces in print orientation: grey knob
     if (piece == "base") inlay_base() { knob_print_pose() knob_local(); knob_pointer_2d(); }
     else inlay_piece() { knob_print_pose() knob_local(); knob_pointer_2d(); }
 module pot_local(nut = true) {       // z = 0 at the outer face of the right wall
-    // Only the nose ahead of the PCB; the rest is covered by pwm_board_env(). Local x maps to -world z.
-    translate([pot_axis_h + pwm_pcb[2] - pwm_total_h, -pwm_pcb[1] / 2, -pot_mount_t - pot_nose_len])
-        cube([pwm_total_h, pwm_pcb[1], pot_nose_len]);
+    // housing from 1 mm behind the PCB edge to its shoulder in the wall pocket, on the PCB top; the rest is covered by
+    // pwm_board_env(). Local x maps to -world z.
+    translate([-pot_housing / 2, -pot_housing / 2, -pot_mount_t - pot_nose_len - 1])
+        cube([pot_housing / 2 + pot_axis_h, pot_housing, pot_nose_len + 1]);
     translate([0, 0, -pot_mount_t - eps]) cylinder(d = pot_bush[0], h = pot_bush[1] + eps);
-    if (nut) translate([0, 0, -pot_cb[1]]) {   // washer on the counterbore floor, nut on top
+    if (nut) {   // washer on the outer face, nut on top
         cylinder(d = pot_washer[0], h = pot_washer[1]);
         translate([0, 0, pot_washer[1] - eps]) cylinder(d = pot_nut[0], h = pot_nut[1] + eps);
     }
     translate([0, 0, -pot_mount_t + pot_bush[1] - eps]) cylinder(d = pot_shaft_d, h = pot_shaft_free + eps); // knurling/shaft slit simplified as outside envelope
 }
 module pot_env(nut = true) translate([body_w, pot_yz[0], pot_yz[1]]) orient([1, 0, 0]) pot_local(nut);
-module pot_nut_env() translate([body_w, pot_yz[0], pot_yz[1]]) orient([1, 0, 0]) translate([0, 0, -pot_cb[1]]) difference() {
-    union() {   // washer on the counterbore floor, nut on top
+module pot_nut_env() translate([body_w, pot_yz[0], pot_yz[1]]) orient([1, 0, 0]) difference() {
+    union() {   // washer on the outer face, nut on top
         cylinder(d = pot_washer[0], h = pot_washer[1]);
         translate([0, 0, pot_washer[1] - eps]) cylinder(d = pot_nut[0], h = pot_nut[1] + eps);
     }
@@ -874,11 +895,13 @@ module chg_module_env() {            // board upright on the partition, parts an
                                 z0 + (chg_pcb[0] - 2 * chg_sink[0] - chg_sink[3]) / 2 + i * (chg_sink[0] + chg_sink[3])])
         cube([chg_sink[2] + eps, chg_sink[1], chg_sink[0]]);
 }
-module pwm_board_env() {             // board on the ribs, parts behind the potentiometer
-    x1 = body_w - wall - pwm_wall_gap;
+module pwm_board_env() {             // board on the rib pads: parts above, solder pins below except along the long edges
+    x1 = body_w - wall - pwm_wall_gap;   // PCB edge, in the wall slot
     translate([x1 - pwm_pcb[0], pot_yz[0] - pwm_pcb[1] / 2, shelf_z + shelf_t + pwm_standoff]) {
-        cube([pwm_pcb[0], pwm_pcb[1], pwm_pcb[2]]);
-        translate([0, 0, pwm_pcb[2] - eps]) cube([pwm_pcb[0], pwm_pcb[1], pwm_comp_h + eps]); // full measured populated-module envelope
+        cube(pwm_pcb);
+        // measured populated height; parts end 1 mm before the wall edge, where only the potentiometer housing continues
+        translate([0, 0, pwm_pcb[2] - eps]) cube([pwm_pcb[0] - 1, pwm_pcb[1], pwm_comp_h + eps]);
+        translate([0, pwm_edge_free, -pwm_pins]) cube([pwm_pcb[0] - 1, pwm_pcb[1] - 2 * pwm_edge_free, pwm_pins + eps]);   // solder pins
     }
 }
 
@@ -993,23 +1016,10 @@ module slice_box(lo, hi) intersection() { children(); translate(lo) cube(hi - lo
 // body and back cover slices keep the print orientation of their part (same hole shapes and layer direction), moved to the origin
 module test_body_slice(lo, hi) translate([-lo[0], hi[2], 0]) body_print_pose() slice_box(lo, hi) body();
 module test_back_slice(lo, hi) translate([-lo[0], -lo[2], 0]) back_print_pose() slice_box(lo, hi) back();
-// potentiometer bore and counterbore in the right wall with washer and nut, PWM rib and service cover groove; the x range stays clear of the dedication
-module test_pot() test_body_slice([dedication_x + max(dedication_w) / 2 + 3, -1, pot_yz[1] - 16], [body_w + 1, pot_yz[0] + 14, pot_yz[1] + 16]);
-// USB-C channel with the flush receptacle opening, between two battery saddle fillets
-module test_usbc() let (hw = usbc[1] / 2 + usbc_cl + usbc_wall + 3)
-    test_back_slice([usbc_xz[0] - hw, usbc_y0 - 1, cradle_z[1] + cradle_t + saddle_gusset + 0.5], [usbc_xz[0] + hw, body_d + 1, cradle_z[2] - saddle_gusset - 0.5]);
-// switch well with the snap-in panel, clear of the back lip and the corner boss
-module test_switch() let (g = sw_bezel / 2 + [1, 1, 1] * (sw_well[1] + sw_well[2] + sw_well[0] - back_t + 2))
-    test_back_slice([sw_xz[0] - g[0], body_d - sw_well[0] - sw_panel - 1, sw_xz[1] - g[1]], [min(sw_xz[0] + g[0], bay_x1 - lip_cl - lip_t - 0.2), body_d + 1, sw_xz[1] + g[1]]);
-// lowest battery ring lying flat: front half from the body, saddle from the back cover 8 mm behind it (slide the battery with its BMS through)
-module test_ring() translate([-part_x, 0, -cradle_z[0]]) let (x1 = bat_cx + bat_d / 2 + 8, z1 = cradle_z[0] + cradle_t) {
-    slice_box([part_x, -1, cradle_z[0]], [x1, bat_cy + 1, z1]) body();
-    translate([0, 8, 0]) slice_box([part_x, bat_cy, cradle_z[0]], [x1, body_d + 1, z1]) back();
-}
-// foot pocket with an M3 insert pressed in from below (horizontal hole in print)
-module test_foot() let (p = foot_screws()[0]) test_body_slice([p[0] - 10, -1, -1], [p[0] + 10, p[1] + 8, foot_boss_top + 1]);
-// M5 mount insert in the underside (horizontal hole in print)
-module test_mount() test_body_slice([mount_xy[0] - 12, -1, -1], [mount_xy[0] + 12, mount_xy[1] + mount_boss_d / 2 + 3, mount_top + 1]);
+// right section of the housing (partition to right wall: LED boss, PWM supports, potentiometer pocket, service cover groove, battery
+// cradle, handle and foot inserts) and the matching part of the back cover (saddles, USB-C, switch); light slicer settings keep it cheap
+module test_right() test_body_slice([part_x, -1, -1], [body_w + 1, body_d + 1, body_h + 1]);
+module test_right_back() test_back_slice([part_x, -1, -1], [body_w + 1, body_d + 1, body_h + 1]);
 
 // ---------- branches: the tools check that print_project.py PARTS matches them ----------
 if      (part == "assembly") assembly();
@@ -1017,7 +1027,7 @@ else if (part == "exploded") assembly(40);
 else if (part == "metrics") echo("PROJECT_METRICS", [
     ["wall", wall], ["front_t", front_t], ["back_t", back_t], ["corner_r", corner_r], ["body_mm", [body_w, body_d, body_h]],
     ["fan_size", fan_size], ["fan_pad", fan_pad], ["fan_t", fan_t], ["fan_pitch", fan_pitch], ["fan_hole_d", fan_hole_d],
-    ["fan_blade_d", fan_blade_d], ["pot_shaft_len", pot_shaft_tip], ["pot_shaft_d", pot_shaft_d], ["pot_shaft_free", pot_shaft_free], ["pot_bush", pot_bush], ["pot_mount_t", pot_mount_t], ["pwm_total_h", pwm_total_h], ["pwm_total_len", pwm_total_len], ["pwm_pcb", pwm_pcb], ["pot_axis_h", pot_axis_h], ["knob_shaft_engagement", pot_shaft_tip - knob_gap - knob_sleeve_z], ["knob_top_skin", knob_len - knob_bore_top], ["knob_protrusion", knob_gap + knob_len - cover_out], ["handle_clearance", handle_h - handle_bar], ["handle_open_top", handle_open[1]], ["handle_mount_wall", wall + handle_pad[0]], ["foot_clearance", foot_cl], ["dedication_lines", len(dedication)], ["foot_lift", foot_lift], ["fan_axis", [fan_cx, fan_cz]], ["fan_y", fan_y], ["shroud_r", [open_r, open_r + shroud_t]], ["shroud_gap", shroud_gap], ["open_d", 2 * open_r], ["grille_gap", grille_gap],
+    ["fan_blade_d", fan_blade_d], ["pot_shaft_len", pot_shaft_tip], ["pot_shaft_d", pot_shaft_d], ["pot_shaft_free", pot_shaft_free], ["pot_bush", pot_bush], ["pot_mount_t", pot_mount_t], ["pwm_total_h", pwm_total_h], ["pwm_total_len", pwm_total_len], ["pwm_pcb", pwm_pcb], ["pot_axis_h", pot_axis_h], ["pwm_lift", pwm_pins + pwm_pin_cl + 0.5], ["knob_shaft_engagement", pot_shaft_tip - knob_gap - knob_sleeve_z], ["knob_top_skin", knob_len - knob_bore_top], ["knob_protrusion", knob_gap + knob_len - cover_out], ["handle_clearance", handle_h - handle_bar], ["handle_open_top", handle_open[1]], ["handle_mount_wall", wall + handle_pad[0]], ["foot_clearance", foot_cl], ["dedication_lines", len(dedication)], ["foot_lift", foot_lift], ["fan_axis", [fan_cx, fan_cz]], ["fan_y", fan_y], ["shroud_r", [open_r, open_r + shroud_t]], ["shroud_gap", shroud_gap], ["open_d", 2 * open_r], ["grille_gap", grille_gap],
     ["bat_mm", [bat_d, bat_l]], ["bat_bms", bat_bms], ["bat_clear", bat_clear], ["saddle_gap", saddle_gap], ["cradle_rings", len(cradle_z)], ["shelf_gap", shelf_gap],
     ["lip_clearance", lip_cl], ["spigot_clearance", spigot_cl],
     ["usbc_board_mm", usbc_board], ["usbc_protrusion", usbc_protrusion], ["usbc_total_mm", usbc], ["usbc_plate", usbc_plate], ["usbc_clearance", usbc_cl],
@@ -1046,9 +1056,5 @@ else if (part == "knob") knob_print_pose() knob_local();
 else if (part == "knob_base") knob_piece("base");
 else if (part == "knob_pointer") knob_piece("pointer");
 else if (part == "foot") foot_print_pose() foot();
-else if (part == "test_pot") test_pot();
-else if (part == "test_usbc") test_usbc();
-else if (part == "test_switch") test_switch();
-else if (part == "test_ring") test_ring();
-else if (part == "test_foot") test_foot();
-else if (part == "test_mount") test_mount();
+else if (part == "test_right") test_right();
+else if (part == "test_right_back") test_right_back();
