@@ -985,7 +985,7 @@ module bail(angle = 0) translate([0, bail_y, bail_z]) rotate([angle, 0, 0]) tran
     union() {   // every piece with all edges chamfered, so the outer corners of the joints are chamfered too
         chamfered_box([bail_x[0], bail_leg_y[0], bail_bar_z[0]], [body_w - bail_x[0], bail_leg_y[1], bail_bar_z[1]], bail_c);   // grip bar
         bail_sides() {
-            chamfered_box([bail_x[0], bail_y, bail_floor], [bail_x[1], bail_leg_y[1], body_h], bail_c);        // upper leg
+            chamfered_box([bail_x[0], bail_y - bail_c, bail_floor], [bail_x[1], bail_leg_y[1], body_h], bail_c);   // upper leg: its front chamfer stays inside the eye, no groove
             chamfered_box([bail_x[0], bail_leg_y[0], bail_bar_z[0]], [bail_x[1], bail_leg_y[1], body_h], bail_c);   // lower leg
             hull() {   // eye with chamfered faces
                 cyl_x([bail_y, bail_z], bail_x[0] + bail_c, bail_x[1] - bail_c, bail_arm[1] / 2);
@@ -995,24 +995,28 @@ module bail(angle = 0) translate([0, bail_y, bail_z]) rotate([angle, 0, 0]) tran
     }
     bail_sides() {
         cyl_x([bail_y, bail_z], bail_x[0] - 1, bail_x[1] + 1, bail_bush[0] / 2);                 // bore for the pressed-in bushing
-        // outer part of the arm cut back round the eye for flange and screw head: straight, ending in a flat face bail_head_room from
-        // the axis, 45 degree chamfers on its edges (a round cut wider than the arm left knife edges, user)
-        let (h = bail_arm[1] / 2, c = bail_c, e = 0.01, yb = bail_y - h - 2, ye = bail_y + bail_head_room, x0 = bail_x[0] - 1, x1 = bail_eye_x[0]) {
-            hull() {
-                translate([x0, yb, bail_z - h - e]) cube([x1 - x0, ye - yb, 2 * (h + e)]);
-                translate([x0, yb, bail_z - h + c - e]) cube([x1 - c - x0, ye + c - yb, 2 * (h - c + e)]);
-            }
-            difference() {   // chamfer round the new eye face
-                translate([x1 - e, yb, bail_z - h - 1]) cube([c + e, ye - yb, 2 * h + 2]);
-                hull() {
-                    along_x(x1, x1 + tip) offset(delta = -c) bail_eye_face_2d();
-                    along_x(x1 + c, x1 + c + tip) bail_eye_face_2d();
-                }
-            }
-        }
+        // outer part of the arm cut back round the eye for flange and screw head: a straight cut ending bail_head_room behind the axis
+        // (a round cut wider than the arm left knife edges, user); its outer edges chamfered, inner corners left square
+        bail_head_cut(0);
+        bail_head_chamfer();
     }
 }
-module bail_eye_face_2d() hull() { translate([bail_y, bail_z]) circle(r = bail_arm[1] / 2); translate([bail_y, bail_z - bail_arm[1] / 2]) square([bail_head_room + 5, bail_arm[1]]); }
+// the head cut-out of the left arm (right one mirrored by bail_sides), grown by g for the chamfer hulls
+module bail_head_cut(g) let (h = bail_arm[1] / 2) translate([bail_x[0] - 3 - g, bail_y - h - 3 - g, bail_z - h - 3 - g])
+    cube([bail_eye_x[0] + g - (bail_x[0] - 3 - g), bail_y + bail_head_room + g - (bail_y - h - 3 - g), 2 * (h + 3 + g)]);
+// 45 degree chamfers of the cut-out edges: one hull per tangent plane of the arm surface (eye cylinder in 15 degree steps, flat top
+// and bottom, outer face); both slabs touch the hull with their deeper face, the cut grown by bail_c + 1 gives mitred inner corners
+module bail_head_chamfer() let (h = bail_arm[1] / 2, c = bail_c, r = bail_head_room + 5) {
+    for (a = [0:15:180]) let (n = [0, -sin(a), cos(a)], tv = [0, cos(a), sin(a)], p0 = [0, bail_y - h * sin(a), bail_z + h * cos(a)],
+            u = a == 0 ? [-3, r] : a == 180 ? [-r, 3] : [-2, 2],
+            m = [[1, 0, -n[0], p0[0]], [0, tv[1], -n[1], p0[1]], [0, tv[2], -n[2], p0[2]], [0, 0, 0, 1]])
+        bail_plane_chamfer(m, [bail_x[0] - 3, bail_eye_x[0] + 5], u);
+    bail_plane_chamfer([[0, 0, 1, bail_x[0]], [1, 0, 0, 0], [0, 1, 0, 0], [0, 0, 0, 1]], [bail_y - h - 3, bail_y + r], [bail_z - h - 1, bail_z + h + 1]);
+}
+module bail_plane_chamfer(m, s, u) hull() {
+    intersection() { multmatrix(m) translate([s[0], u[0], -1 - tip]) cube([s[1] - s[0], u[1] - u[0], tip]); bail_head_cut(bail_c + 1); }
+    intersection() { multmatrix(m) translate([s[0], u[0], bail_c - tip]) cube([s[1] - s[0], u[1] - u[0], tip]); bail_head_cut(0); }
+}
 module bail_print_pose() translate([0, 0, bail_leg_y[1]]) rotate([-90, 0, 0]) children();   // back faces of lower legs and bar on the bed
 
 // ---------- bought parts: envelopes for the checks ----------
