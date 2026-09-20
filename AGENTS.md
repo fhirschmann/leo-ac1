@@ -10,7 +10,7 @@ Internal notes for coding agents (Claude, Codex). The README is public and stays
 - No painted or scripted local supports. Design geometry so every part prints without supports (45° flanks, short ledges); the user relies on Bambu Studio's own supports if ever needed.
 - Viewer artifact (republish from `build/viewer.html`, keep the URL): a private Claude viewer artifact
 - README images (`img/`, `VIEWS`) are public: transparent renders for dark pages, every body coloured, no image of the dedication (`body(dedication = false)` in views that see the inside of the front plate). Two-column image table in the README.
-- Commits: German message without umlauts, one change per commit, ending with the co-author line.
+- Commits: English message, one change per commit, ending with the co-author line.
 - Forgejo remote: `the user's private Forgejo remote`.
 
 ## User constraints and preferences
