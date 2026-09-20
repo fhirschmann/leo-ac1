@@ -69,7 +69,7 @@ back_bar_x = 80;     // extra vertical bar through the back intake slots
 
 /* [Battery, 3.2 V 6000 mAh LiFePO4 pack] */
 bat_d = 32.5;        // measured cell body, excluding the separate protection board, 2026-09-15
-bat_bms = [20, 4];   // BMS board on one side, facing the partition (-x): width approx. 20 measured over the full length (y), thickness assumed (x)
+bat_bms = [20, 4];   // BMS board on one side, facing the partition (-x): width approx. 20 over the full length (y) and thickness (x) measured
 bat_bms_cut = [2, 1];         // extra room around the BMS board in the cradle rings and saddles: per side across (y), in depth (x)
 bat_l = 71.6;        // measured cell-body length; cable end up, through the shelf slot
 cable_slot_w = 10;   // slot in the shelf above the battery, open towards the back
@@ -110,10 +110,10 @@ pot_thread_reserve = 0.1;  // thread left beyond the nut
 pot_mount_t = wall;        // the potentiometer shoulder rests on the full inner wall; washer and nut sit in a small counterbore outside
 // PWM board CNY-FA5-PRO: right-angle potentiometer on its edge, shaft parallel to the board. The board lies on two ribs
 // above the shelf and is held by the potentiometer nut. Measured board/module dimensions, 2026-09-15.
-pwm_pcb = [41.05, 32, 1.6]; // measured length/width; PCB thickness remains assumed
+pwm_pcb = [41.05, 32, 1.6]; // measured length, width and PCB thickness
 pwm_total_h = 18;          // measured 15 without the fan connector, +3 estimated for the plugged connector and wires
 pwm_total_len = 56.30;     // measured rear PCB edge to shaft tip, including potentiometer
-pwm_comp_h = pwm_total_h - pwm_pcb[2]; // component height above the assumed PCB thickness
+pwm_comp_h = pwm_total_h - pwm_pcb[2]; // component height above the PCB
 pwm_standoff = 15;        // board underside above the shelf: raises the knob into the upper part of the side (ribs from the shelf)
 pot_axis_h = 6;           // approximately measured from PCB top to shaft centre
 knob_d = 28;              // dial on the side wall, sits in the half-round notch of the service cover
@@ -176,15 +176,15 @@ usbc_stop = [4, 6];          // stop on the right wall behind the module end (ta
                              // (reaches below the module, the wires leave its end at the top)
 
 /* [Power switch: measured 14.7 x 20.9 mm rocker, snap-in, in a well of the back cover] */
-sw_xz = [201, 125];          // larger measured switch moved above the PWM module, below the handle ribs
+sw_xz = [201, 124];          // above the PWM module, 1 mm below the handle ribs with the 8 mm well
 sw_cut = [19.2, 12.2];       // measured required panel hole; long side horizontal
-sw_bezel = [20.9, 14.7, 2];  // measured outside width/height; bezel thickness still assumed
-sw_rocker = 4;               // assumed rocker rise above the bezel; verify before/behind-panel depth split
+sw_bezel = [20.9, 14.7, 2];  // measured outside width/height and bezel thickness
+sw_rocker = 5;               // measured rocker rise above the bezel
 sw_body = [sw_cut[0] - 0.2, sw_cut[1] - 0.2, 11]; // conservative body below the hole; depth still assumed
 sw_total_depth = 23;         // measured overall depth including contacts
 sw_pins = sw_total_depth - sw_bezel[2] - sw_rocker - sw_body[2]; // inferred from the provisional front/body depth split
 sw_panel = 1.5;              // user-confirmed approximate panel thickness for the snap clips
-sw_well = [7, 0.2, 2.2];     // well: panel below the back face (frame and rocker stay inside when the fan lies on its back), floor margin around the frame (small: short overhang, no support),
+sw_well = [8, 0.2, 2.2];     // well: panel below the back face (frame and rocker stay inside when the fan lies on its back), floor margin around the frame (small: short overhang, no support),
                              // wall measured horizontally (2.2 = 1.56 mm across the 45 degree flank)
 
 /* [Feet: TPU strips, each screwed with two M3 x 8 from below into Ruthex inserts] */

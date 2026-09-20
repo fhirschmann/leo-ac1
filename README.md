@@ -2,13 +2,13 @@
 
 Small battery fan for a child's room, styled like the outdoor unit of a split air conditioner (proportions of an 800 × 550 × 285 mm unit). A 120 mm PC fan blows forward through the round grille; air enters through the slots in the back cover and the left side. A round air duct between the front and the fan frame keeps the air from circulating back into the housing. On the right of the front sits the logo "LEO INDUSTRIES AC-1" in custom block letters above horizontal fake grooves like on Mitsubishi outdoor units; a breathing LED behind the O glows through the white PETG while the charger is plugged in. Behind it is a bay for the battery (3.2 V 6000 mAh LiFePO4) and the electronics. The speed knob sits on the right side above a glued-in service cover; USB-C charging socket and power switch are in the back cover.
 
-Designed for a Bambu Lab H2S in PETG Basic white and grey plus TPU. **Status:** designed and checked in CAD and in the slicer, not printed or tested yet.
+Designed for a Bambu Lab H2S with AMS in Bambu PETG HF white and grey plus TPU. **Status:** designed and checked in CAD and in the slicer, not printed or tested yet.
 
 ![Assembly](img/01_assembly.png?v=a4e3abd30cbb)
 
 | Back | Exploded |
 |:---:|:---:|
-| ![Back](img/02_back.png?v=33b4f77d8fc0) | ![Exploded](img/03_exploded.png?v=0b2a7f1fbf48) |
+| ![Back](img/02_back.png?v=09ce05cff5ca) | ![Exploded](img/03_exploded.png?v=b6c812af02dd) |
 | **Logo and grooves** | **Air duct from behind** |
 | ![Logo](img/04_front_right.png?v=e090feb60c84) | ![Air duct](img/05_duct.png?v=759e42189cff) |
 | **Knob and service cover** | **Underside with M5 thread and TPU feet** |
@@ -20,7 +20,7 @@ Designed for a Bambu Lab H2S in PETG Basic white and grey plus TPU. **Status:** 
 | **TPU foot mount** | **USB-C socket** |
 | ![TPU foot mount](img/13_foot_mount.png?v=0d16075905f5) | ![USB-C socket](img/14_usb_c.png?v=a320c0740188) |
 | **Power switch well** | **Battery saddles** |
-| ![Power switch](img/15_switch.png?v=ba82932dbd47) | ![Battery saddles](img/16_saddles.png?v=f90d4ac26b24) |
+| ![Power switch](img/15_switch.png?v=d4cbbba76c92) | ![Battery saddles](img/16_saddles.png?v=f90d4ac26b24) |
 
 ## Printed parts
 
@@ -34,13 +34,13 @@ Designed for a Bambu Lab H2S in PETG Basic white and grey plus TPU. **Status:** 
 | `handle` handle | 1 | PETG grey | 170 × 43.2 × 24 | lying on its side (layers along the pull direction) |
 | `foot` foot | 2 | TPU | 16 × 62 × 5.5 | ground face on the bed, 100 % infill |
 
-All parts are in the Bambu Studio project [`stl/leo_ac1_all_parts.3mf`](stl/leo_ac1_all_parts.3mf): plate 1 housing, plate 2 back cover, plate 3 grey parts (grille, service cover, handle, knob), plate 4 TPU feet. Filaments: 1 PETG white, 2 PETG grey, 3 grey for logo and dedication (same spool as 2), 4 TPU, 5 white for the knob pointer (same spool as 1). All parts print without supports. Bambu Studio estimates about **0.71 kg and 21 hours** in total. Single-colour STLs are in `stl/`, the colour pieces in `stl/multicolour/`.
+All parts are in the Bambu Studio project [`stl/leo_ac1_all_parts.3mf`](stl/leo_ac1_all_parts.3mf): plate 1 housing, plate 2 back cover, plate 3 grey parts (grille, service cover, handle, knob), plate 4 TPU feet. Filaments: 1 PETG white, 2 PETG grey, 3 grey for logo and dedication (same spool as 2), 4 TPU, 5 white for the knob pointer (same spool as 1). All parts print without supports. Bambu Studio estimates about **0.73 kg and 20 hours** in total. Single-colour STLs are in `stl/`, the colour pieces in `stl/multicolour/`.
 
 Print profile: 0.20 mm layers, 6 walls, 5 top/bottom layers, 30 % gyroid (feet 100 %).
 
 ### Fit tests before the full print
 
-Small slices of the real housing and back cover, in the same print orientation, so the bought parts can be tried before the 21-hour print. Print them in PETG white together with one knob and one TPU foot; they are not in the project 3MF, import the STLs onto one plate. The six slices take about 38 g and 3.5 hours.
+Small slices of the real housing and back cover, in the same print orientation, so the bought parts can be tried before the 20-hour print. Print them in PETG white together with one knob and one TPU foot; they are not in the project 3MF, import the STLs onto one plate. The six slices take about 39 g and 3 hours.
 
 | STL | Slice of | Check with |
 |---|---|---|
