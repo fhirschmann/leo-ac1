@@ -6,12 +6,12 @@
       "quantity": 1,
       "material": "PETG-white",
       "passed": true,
-      "source_sha256": "82120a4603416ebfd717758b90abb0bc985887f44421f0be158ad467af6b653e",
+      "source_sha256": "ff2b8436b1b8610bf26a3ed9b7c2d30af433887cdc43bdafb658bb04f8de0f8e",
       "exit_code": 0,
       "result_code": 0,
       "warnings": "",
-      "hours": 9.281,
-      "grams": 401.895,
+      "hours": 9.666,
+      "grams": 417.306,
       "wall_loops": 5,
       "infill_percent": 15.0,
       "layer_height": 0.20000000298023224,
@@ -33,31 +33,8 @@
       "exit_code": 0,
       "result_code": 0,
       "warnings": "",
-      "hours": 5.885,
+      "hours": 5.886,
       "grams": 180.618,
-      "wall_loops": 5,
-      "infill_percent": 15.0,
-      "layer_height": 0.20000000298023224,
-      "effective_settings": {
-        "sparse_infill_pattern": "gyroid",
-        "enable_support": "0",
-        "curr_bed_type": "Textured PEI Plate",
-        "top_shell_layers": "4",
-        "bottom_shell_layers": "4"
-      },
-      "start_gcode_diagnostic": true
-    },
-    {
-      "part": "grille",
-      "quantity": 1,
-      "material": "PETG-grey",
-      "passed": true,
-      "source_sha256": "71b1bf91e1167a115765110579e69f4b30ffc7d958660ae076c71b33e0b8398c",
-      "exit_code": 0,
-      "result_code": 0,
-      "warnings": "",
-      "hours": 1.528,
-      "grams": 55.137,
       "wall_loops": 5,
       "infill_percent": 15.0,
       "layer_height": 0.20000000298023224,
@@ -75,7 +52,7 @@
       "quantity": 1,
       "material": "PETG-grey",
       "passed": true,
-      "source_sha256": "8e103a47ab0694b15085d193204184b24ed88a6a1666f561002afcf235334eb3",
+      "source_sha256": "f4bebef1b4b59384d22e1e6fbe70a521e2c0288efd9833afef8d4bd949bc4d03",
       "exit_code": 0,
       "result_code": 0,
       "warnings": "",
@@ -167,11 +144,11 @@
       "quantity": 0,
       "material": "PETG-white",
       "passed": true,
-      "source_sha256": "a7fab90a199973902686ad84fc61b97565052fe30e539fe02b8c1578ec356ae8",
+      "source_sha256": "324a70f3b776a030a43fd1c1d4936db86bb51f07c7418a54b93eb5fb4e34f84d",
       "exit_code": 0,
       "result_code": 0,
       "warnings": "",
-      "hours": 2.405,
+      "hours": 2.406,
       "grams": 110.742,
       "wall_loops": 5,
       "infill_percent": 15.0,
@@ -209,13 +186,13 @@
       "start_gcode_diagnostic": true
     }
   ],
-  "total_parts": 8,
-  "total_grams_individual_plates": 710.6,
-  "total_hours_individual_plates": 20.2,
+  "total_parts": 7,
+  "total_grams_individual_plates": 670.9,
+  "total_hours_individual_plates": 19.0,
   "production_gcode": false,
   "project_3mf": {
     "file": "stl/leo_ac1_all_parts.3mf",
-    "parts": 8,
+    "parts": 7,
     "plates": 4,
     "layout": [
       {
@@ -254,12 +231,11 @@
         "parts": [
           "bail",
           "cover",
-          "grille",
           "knob"
         ],
         "size_mm": [
           242.0,
-          242.5
+          84.5
         ],
         "prime_tower_xy": [
           270.0,
@@ -279,12 +255,13 @@
         ]
       }
     ],
-    "total_hours_plates": 20.2,
-    "total_grams_plates": 714.1,
+    "total_hours_plates": 19.5,
+    "total_grams_plates": 679.1,
     "multicolour_parts": {
       "body": [
         "label",
-        "dedication"
+        "dedication",
+        "grille"
       ],
       "back": [
         "qr"
@@ -296,10 +273,10 @@
     "multicolour_slices": {
       "Housing": {
         "plate": 1,
-        "hours": 9.54,
+        "hours": 10.28,
         "grams_by_filament": {
-          "1": 402.07,
-          "3": 1.6
+          "1": 401.04,
+          "3": 22.72
         },
         "warnings": ""
       },
@@ -314,9 +291,9 @@
       },
       "Grey parts": {
         "plate": 3,
-        "hours": 3.54,
+        "hours": 2.1,
         "grams_by_filament": {
-          "2": 115.81,
+          "2": 60.73,
           "5": 0.94
         },
         "warnings": ""
@@ -326,10 +303,10 @@
     "plate_slices": {
       "Housing": {
         "plate": 1,
-        "hours": 9.54,
+        "hours": 10.28,
         "grams_by_filament": {
-          "1": 402.07,
-          "3": 1.6
+          "1": 401.04,
+          "3": 22.72
         },
         "warnings": ""
       },
@@ -344,9 +321,9 @@
       },
       "Grey parts": {
         "plate": 3,
-        "hours": 3.54,
+        "hours": 2.1,
         "grams_by_filament": {
-          "2": 115.81,
+          "2": 60.73,
           "5": 0.94
         },
         "warnings": ""
@@ -361,7 +338,7 @@
       }
     },
     "own_infill_parts": 2,
-    "sha256": "b185a22b021b8ba71694c508a1f68687a409531d2c6760daf013d892d8ffbdcf"
+    "sha256": "56d0dc465b0a116ccf13ad28bcb0c2827165104bb0e51eb1280bbdf0a0f58e7e"
   },
   "test_3mf": {
     "file": "stl/leo_ac1_fit_tests.3mf",
@@ -387,7 +364,8 @@
     "multicolour_parts": {
       "body": [
         "label",
-        "dedication"
+        "dedication",
+        "grille"
       ],
       "back": [
         "qr"
@@ -409,7 +387,7 @@
       }
     },
     "own_infill_parts": 0,
-    "sha256": "291672907bb16bd63554bf478367dacdd77c495ccf7279a049a6293e6afd1476",
+    "sha256": "932d4aa4a76ddef640ef7654902a4049489cc3b06c66289281f20cef79817ad6",
     "process": {
       "wall_loops": 2,
       "top_shell_layers": 3,

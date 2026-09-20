@@ -1,5 +1,5 @@
 {
-  "source_sha256": "60757c377263b381ad1f88a5ba2a0a265cfc7bb487f92d7e6c33b85ba8f40d5b",
+  "source_sha256": "c069888f6ab8eb1782088fb8add811e28ad10e2622ce82dfda9a8ebf85d79fcc",
   "software": {
     "numpy": "2.5.3",
     "trimesh": "5.1.0",
@@ -8,8 +8,8 @@
     "rtree": "1.4.1",
     "networkx": "3.6.1"
   },
-  "print_parts": 9,
-  "print_quantity": 8,
+  "print_parts": 8,
+  "print_quantity": 7,
   "print_meshes": {
     "body": {
       "size_mm": [
@@ -29,17 +29,17 @@
           76.0
         ]
       ],
-      "volume_mm3": 368969.957,
-      "triangles": 29504,
+      "volume_mm3": 382211.7692,
+      "triangles": 39068,
       "watertight": true,
       "consistent_winding": true,
       "degenerate_faces": 0,
       "components": 1,
       "backend": "Manifold",
-      "sha256": "82120a4603416ebfd717758b90abb0bc985887f44421f0be158ad467af6b653e",
+      "sha256": "ff2b8436b1b8610bf26a3ed9b7c2d30af433887cdc43bdafb658bb04f8de0f8e",
       "quantity": 1,
       "material": "PETG-white",
-      "committed_sha256": "82120a4603416ebfd717758b90abb0bc985887f44421f0be158ad467af6b653e"
+      "committed_sha256": "ff2b8436b1b8610bf26a3ed9b7c2d30af433887cdc43bdafb658bb04f8de0f8e"
     },
     "back": {
       "size_mm": [
@@ -71,36 +71,6 @@
       "material": "PETG-white",
       "committed_sha256": "fbbe1199e606ab4d1defc480973b007b136ad15fbfc85625fdb8db96f31baa82"
     },
-    "grille": {
-      "size_mm": [
-        156.0,
-        156.0,
-        7.0
-      ],
-      "bounds_mm": [
-        [
-          14.0,
-          -164.5,
-          0.0
-        ],
-        [
-          170.0,
-          -8.5,
-          7.0
-        ]
-      ],
-      "volume_mm3": 51672.5639,
-      "triangles": 15348,
-      "watertight": true,
-      "consistent_winding": true,
-      "degenerate_faces": 0,
-      "components": 1,
-      "backend": "Manifold",
-      "sha256": "71b1bf91e1167a115765110579e69f4b30ffc7d958660ae076c71b33e0b8398c",
-      "quantity": 1,
-      "material": "PETG-grey",
-      "committed_sha256": "71b1bf91e1167a115765110579e69f4b30ffc7d958660ae076c71b33e0b8398c"
-    },
     "cover": {
       "size_mm": [
         74.4,
@@ -126,10 +96,10 @@
       "degenerate_faces": 0,
       "components": 1,
       "backend": "CGAL",
-      "sha256": "8e103a47ab0694b15085d193204184b24ed88a6a1666f561002afcf235334eb3",
+      "sha256": "f4bebef1b4b59384d22e1e6fbe70a521e2c0288efd9833afef8d4bd949bc4d03",
       "quantity": 1,
       "material": "PETG-grey",
-      "committed_sha256": "8e103a47ab0694b15085d193204184b24ed88a6a1666f561002afcf235334eb3"
+      "committed_sha256": "f4bebef1b4b59384d22e1e6fbe70a521e2c0288efd9833afef8d4bd949bc4d03"
     },
     "bail": {
       "size_mm": [
@@ -240,16 +210,16 @@
         ]
       ],
       "volume_mm3": 99682.5698,
-      "triangles": 14730,
+      "triangles": 14746,
       "watertight": true,
       "consistent_winding": true,
       "degenerate_faces": 0,
       "components": 1,
       "backend": "Manifold",
-      "sha256": "a7fab90a199973902686ad84fc61b97565052fe30e539fe02b8c1578ec356ae8",
+      "sha256": "324a70f3b776a030a43fd1c1d4936db86bb51f07c7418a54b93eb5fb4e34f84d",
       "quantity": 0,
       "material": "PETG-white",
-      "committed_sha256": "a7fab90a199973902686ad84fc61b97565052fe30e539fe02b8c1578ec356ae8"
+      "committed_sha256": "324a70f3b776a030a43fd1c1d4936db86bb51f07c7418a54b93eb5fb4e34f84d"
     },
     "test_right_back": {
       "size_mm": [
@@ -301,14 +271,14 @@
           76.0
         ]
       ],
-      "volume_mm3": 368445.1594,
-      "triangles": 30694,
+      "volume_mm3": 365297.3536,
+      "triangles": 30982,
       "watertight": true,
       "consistent_winding": true,
       "degenerate_faces": 0,
       "components": 1,
       "backend": "Manifold",
-      "sha256": "6330e6a802d41f182796e09f50a01282f5d3ad1ff9b2614eb1e0442de6303acf"
+      "sha256": "193071c07be177e3ba7eaa9d21b0e59fb0c44a9f19e100d3a2ab68ceed6467be"
     },
     "body_label": {
       "size_mm": [
@@ -335,7 +305,7 @@
       "degenerate_faces": 0,
       "components": 22,
       "backend": "Manifold",
-      "sha256": "c21f18ca2cae3f35459da193e1a5343ccac8cb5c4462da1c15b346025bb413e4"
+      "sha256": "4361c8976099e6a12468094207d94daafad66f37fa2c014b005b4fb59cd8cffc"
     },
     "body_dedication": {
       "size_mm": [
@@ -363,6 +333,33 @@
       "components": 24,
       "backend": "Manifold",
       "sha256": "d0bf0c2ab6966a7cd1826bf2aa3d213142b3f80addf8476531e16ce692fabf3d"
+    },
+    "body_grille": {
+      "size_mm": [
+        156.0,
+        156.0,
+        3.21
+      ],
+      "bounds_mm": [
+        [
+          14.0,
+          -164.5,
+          0.0
+        ],
+        [
+          170.0,
+          -8.5,
+          3.21
+        ]
+      ],
+      "volume_mm3": 16389.6181,
+      "triangles": 13570,
+      "watertight": true,
+      "consistent_winding": true,
+      "degenerate_faces": 0,
+      "components": 1,
+      "backend": "Manifold",
+      "sha256": "8880d9b83cff9704aba9ac03d122f245fe040dd2b3db7d24d03a498d520b10a0"
     },
     "back_base": {
       "size_mm": [
@@ -476,7 +473,7 @@
   "color_parts": {
     "body": {
       "overlap_mm3": 0.0,
-      "union_delta_mm3": 0.0,
+      "union_delta_mm3": 0.0004,
       "label": {
         "mm3": 310.0,
         "depth_mm": 0.6,
@@ -494,6 +491,15 @@
           4.0
         ],
         "bodies": 24
+      },
+      "grille": {
+        "mm3": 16389.62,
+        "depth_mm": 3.21,
+        "z_mm": [
+          0.0,
+          3.21
+        ],
+        "bodies": 1
       }
     },
     "back": {
@@ -523,8 +529,8 @@
       }
     }
   },
-  "assembly_bodies": 23,
-  "assembly_pairs": 253,
+  "assembly_bodies": 21,
+  "assembly_pairs": 210,
   "metrics": {
     "wall": 3.2,
     "front_t": 3.2,
@@ -583,7 +589,7 @@
     ],
     "shroud_gap": 0.2,
     "open_d": 138,
-    "grille_gap": 5.5625,
+    "grille_gap": 5.875,
     "bat_mm": [
       32.5,
       71.6
@@ -597,7 +603,6 @@
     "cradle_rings": 3,
     "shelf_gap": 3,
     "lip_clearance": 0.25,
-    "spigot_clearance": 0.3,
     "usbc_board_mm": [
       12.88,
       10.35,
@@ -634,12 +639,6 @@
     "insert_depth": 7,
     "screws": [
       [
-        "grille",
-        12,
-        5.2,
-        0.5
-      ],
-      [
         "fan",
         30,
         3,
@@ -665,70 +664,6 @@
       ]
     ],
     "inserts": [
-      [
-        "body",
-        [
-          159.905,
-          10.4,
-          114.627
-        ],
-        [
-          0,
-          -1,
-          0
-        ],
-        7,
-        4,
-        1.6
-      ],
-      [
-        "body",
-        [
-          63.8728,
-          10.4,
-          154.405
-        ],
-        [
-          0,
-          -1,
-          0
-        ],
-        7,
-        4,
-        1.6
-      ],
-      [
-        "body",
-        [
-          24.0949,
-          10.4,
-          58.3728
-        ],
-        [
-          0,
-          -1,
-          0
-        ],
-        7,
-        4,
-        1.6
-      ],
-      [
-        "body",
-        [
-          120.127,
-          10.4,
-          18.5949
-        ],
-        [
-          0,
-          -1,
-          0
-        ],
-        7,
-        4,
-        1.6
-      ],
       [
         "body",
         [
@@ -1005,7 +940,7 @@
   },
   "intersections": [],
   "alignment": {
-    "features": 156,
+    "features": 127,
     "coaxial_pairs": {
       "back|battery": 3,
       "back|body": 15,
@@ -1022,7 +957,6 @@
       "battery|body": 3,
       "body|cover": 4,
       "body|feet": 4,
-      "body|grille": 39,
       "body|knob": 2,
       "body|led": 2,
       "body|pot": 2,
@@ -1031,12 +965,10 @@
       "body|screws_bail": 6,
       "body|screws_fan": 4,
       "body|screws_feet": 4,
-      "body|screws_grille": 12,
       "cover|knob": 8,
       "cover|pot": 2,
       "cover|pot_nut": 4,
       "feet|screws_feet": 16,
-      "grille|screws_grille": 16,
       "knob|pot": 6,
       "knob|pot_nut": 9,
       "pot|pot_nut": 2
@@ -1049,11 +981,6 @@
     1.49
   ],
   "standard_screws": {
-    "grille": {
-      "length": 12,
-      "engagement_mm": 5.2,
-      "tip_margin_mm": 0.5
-    },
     "fan": {
       "length": 30,
       "engagement_mm": 3,
@@ -1076,7 +1003,6 @@
     }
   },
   "contact_volumes_mm3": {
-    "grille@body": 205.995,
     "fan@body": 10.2112,
     "back@body": 146.7436,
     "cover@body": 2.5265,
@@ -1133,13 +1059,6 @@
     }
   ],
   "sampled_paths": [
-    {
-      "name": "grille_front",
-      "length_mm": 12.0,
-      "collisions": 0,
-      "first_mm": null,
-      "max_volume_mm3": 0.0
-    },
     {
       "name": "back_off",
       "length_mm": 12.0,
@@ -1219,50 +1138,6 @@
     }
   ],
   "insert_probes": [
-    {
-      "body": "body",
-      "at": [
-        159.9,
-        10.4,
-        114.63
-      ],
-      "empty_mm3": 0.0,
-      "ring_fill": 1.0,
-      "floor_fill": 1.0
-    },
-    {
-      "body": "body",
-      "at": [
-        63.87,
-        10.4,
-        154.4
-      ],
-      "empty_mm3": 0.0,
-      "ring_fill": 1.0,
-      "floor_fill": 1.0
-    },
-    {
-      "body": "body",
-      "at": [
-        24.09,
-        10.4,
-        58.37
-      ],
-      "empty_mm3": 0.0,
-      "ring_fill": 1.0,
-      "floor_fill": 1.0
-    },
-    {
-      "body": "body",
-      "at": [
-        120.13,
-        10.4,
-        18.59
-      ],
-      "empty_mm3": 0.0,
-      "ring_fill": 1.0,
-      "floor_fill": 1.0
-    },
     {
       "body": "body",
       "at": [
@@ -1459,7 +1334,6 @@
   "stl_difference_mm3": {
     "body": 0.0,
     "back": 0.0,
-    "grille": 0.0,
     "cover": 0.0,
     "bail": 0.0,
     "knob": 0.0,
@@ -1469,6 +1343,7 @@
     "multicolour/body_base": 0.0,
     "multicolour/body_label": 0.0,
     "multicolour/body_dedication": 0.0,
+    "multicolour/body_grille": 0.0,
     "multicolour/back_base": 0.0,
     "multicolour/back_qr": 0.0,
     "multicolour/knob_base": 0.0,
