@@ -33,7 +33,7 @@
       "exit_code": 0,
       "result_code": 0,
       "warnings": "",
-      "hours": 5.291,
+      "hours": 5.29,
       "grams": 160.908,
       "wall_loops": 5,
       "infill_percent": 15.0,
@@ -221,8 +221,8 @@
           172.0
         ],
         "prime_tower_xy": [
-          263.0,
-          130.0
+          140.0,
+          257.0
         ]
       },
       {
@@ -338,7 +338,7 @@
       }
     },
     "own_infill_parts": 2,
-    "sha256": "25da0b36a64af2e301dfdbd4cf65e39f450fa12f44cf9d9b196a2c4ce1e7d738"
+    "sha256": "c08c13355a24c58bab21b642e79d121ca3d2a03f11415a5d97211168c7fb16c5"
   },
   "test_3mf": {
     "file": "stl/leo_ac1_fit_tests.3mf",
@@ -387,7 +387,7 @@
       }
     },
     "own_infill_parts": 0,
-    "sha256": "3b154b2d05cb32ba9095612ec8cf28b26736478d055312604fff110c00f6dd3a",
+    "sha256": "30d81cd469d9446e85406acec38b68563dd5b4b767bdf9a7d1a80233821e1a31",
     "process": {
       "wall_loops": 2,
       "top_shell_layers": 3,

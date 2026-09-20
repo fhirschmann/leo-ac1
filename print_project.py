@@ -67,7 +67,7 @@ FILAMENTS = [dict(material="PETG-white", profile="Bambu PETG HF @BBL H2S", colou
              dict(material="TPU", profile="Generic TPU @BBL H2S", colour="#222326"),
              dict(material="PETG-white", profile="Bambu PETG HF @BBL H2S", inlay=("pointer",), colour="#FFFFFF")]
 PLATES = [("Housing", ["body"]), ("Back cover", ["back"]), ("Grey parts", ["cover", "bail", "knob"]), ("TPU feet", ["foot"])]
-CENTRE_PLATES = ("Housing",)   # housing in the middle of the bed (user), prime tower behind it
+CENTRE_PLATES = ("Housing", "Back cover")   # housing and back cover in the middle of the bed (user), prime tower behind them
 PROJECT_3MF = "stl/leo_ac1_all_parts.3mf"
 # fit test before the full build: right section of housing and back cover with a knob, as little material as possible
 TEST_PLATES = [("Right section fit test", ["test_right", "test_right_back", "knob"])]
