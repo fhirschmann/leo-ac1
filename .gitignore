@@ -4,7 +4,7 @@ build/
 asm/
 .venv/
 __pycache__/
-# vendor CAD (licence), only for the viewer
+# vendor CAD (licence), not used by the viewer or the renders
 vendor/
 # local agent tooling
 .claude/

@@ -206,7 +206,7 @@ VIEWER = dict(
            ("bail", "Folding bail", "grey", "#8f9396", "1x", [0, 0, 1.2]),
            ("knob", "Speed knob", "grey", "#8f9396", "1x", [2, 0, 0]),
            ("feet", "Feet · TPU", "tpu", "#222326", "2x", [0, 0, -0.8]),
-           ("fan_visual", "Fan Noctua NF-F12 iPPC-2000", "bought", "#303236", "1x", [0, 0.8, 0]),
+           ("fan_visual", "Fan 120 mm · placeholder (Noctua NF-F12 iPPC-2000)", "bought", "#303236", "1x", [0, 0.8, 0]),
            ("battery", "Battery LiFePO4 3.2 V 6000 mAh", "bought", "#3f7fbf", "1x", [0, 0.5, 0]),
            ("pot", "Potentiometer · housing in the wall pocket, washer and nut outside", "bought", "#3a3d41", "1x", [-0.5, 0, 0]),
            ("chg_module", "Charge/boost module · 2 planned heatsink envelopes", "bought", "#c9c9c9", "1x", [0, 0.8, 0]),
@@ -226,8 +226,8 @@ VIEWER = dict(
             "body_dedication": 'body_install_pose() body_piece("dedication");',
             "knob_base": 'knob_install_pose() knob_piece("base");',
             "knob_pointer": 'knob_install_pose() knob_piece("pointer");',
-            # Noctua CAD (vendor/, not in the repo): outlet face with stator vanes and hub label at CAD y = 0.3, towards the front
-            "fan_visual": 'translate([fan_cx, fan_y - 0.3, fan_cz]) import("$ROOT/vendor/noctua/NF-F12_iPPC.stl");',
+            # simple fan drawn in the model, no vendor CAD in the viewer (user: placeholder, also for the private viewer)
+            "fan_visual": "fan_visual();",
             "pot": "pot_env();",
             "screws_grille": "screws_grille(true);",
             "screws_fan": "screws_fan(true);",
