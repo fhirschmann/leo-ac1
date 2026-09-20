@@ -40,7 +40,7 @@ shroud_gap = 0.2;    // duct end to the fan frame face
 
 /* [Grille] */
 open_r = 69;         // opening in the front plate
-grille_r = 75;       // outer radius of the grille ring (slim, user); the screws sit in small lugs outside it
+grille_r = 78;       // outer radius of the grille ring (user: keep the wide ring, the slim one with lugs looked weaker)
 grille_t = 4;        // ring in front of the front plate, first contact in a drop on the front
 grille_depth = 3;    // bars reach this far behind the front face
 spigot_t = 2;        // locating collar inside the opening
@@ -53,7 +53,6 @@ grille_spokes = 8;
 grille_screw_r = 73.5;
 grille_screw_a0 = 22.5;  // screw angles between the spokes
 grille_boss_d = 8.4;
-grille_lug_r = 4.8;  // lugs round the grille screws outside the slim ring (head pocket 6.4 + 1.6 per side)
 grille_boss_h = 7.2; // behind the front plate, stays below fan_standoff
 
 /* [Back cover] */
@@ -379,7 +378,7 @@ assert(grille_depth <= fan_y - 2, "Grille bars too close to the fan");
 assert(grille_gap <= 6, "Grille openings wider than 6 mm (finger safety)");
 assert(ring_in - spigot_w > grille_hub_r + grille_rings * grille_bar, "Grille collar hits the rings");
 assert(grille_screw_r - grille_boss_d / 2 > open_r, "Grille bosses reach into the opening");
-assert(grille_lug_r - head_pocket[0] / 2 >= 1.2 && grille_t - head_pocket[1] >= 2 && grille_screw_r - grille_lug_r < grille_r - 2, "Grille lugs too narrow or too thin at the screw heads, or not joined to the ring");
+assert(grille_r - (grille_screw_r + head_pocket[0] / 2) >= 1.2 && grille_t - head_pocket[1] >= 2, "Grille ring too narrow or too thin at the screw heads");
 assert(fan_blade_d / 2 < open_r, "Front opening smaller than the fan blades");
 assert(open_r < fan_size / 2 - 0.5, "Air duct does not sit on the fan frame face");
 assert(fan_cx - open_r - shroud_t > wall + inner_c && fan_cx + open_r + shroud_t < part_x
@@ -469,7 +468,7 @@ assert(usb_notch_z - cable_notch[1] / 2 > cradle_z[2] + cradle_t && usb_notch_z 
        && tie_loop_xz[1][0] + tie_loop[0] / 2 < saddle_rib[1] - saddle_rib[0] / 2 - 1 && tie_loop_xz[1][0] + tie_loop[0] / 2 < sw_xz[0] - sw_well_half()[0] - 1
        && abs(tie_loop_xz[1][1] - sw_xz[1]) + tie_loop[1] / 2 < cradle_z[2] - (cradle_z[1] + cradle_t) - saddle_gusset,
        "Cable routing: USB-C notch outside the bay between top saddle and shelf or at the charge module, or a tie loop hitting the partition, USB-C channel, saddle rib, switch well or saddle fillets, or its bar too thin");
-assert(logo_x0 > fan_cx + max(grille_r, grille_screw_r + grille_lug_r) + 3 && logo_x0 + logo_w < body_w - corner_r - 2 && logo_top < body_h - corner_r - 2,
+assert(logo_x0 > fan_cx + grille_r + 3 && logo_x0 + logo_w < body_w - corner_r - 2 && logo_top < body_h - corner_r - 2,
        "Logo outside the free front area");
 assert(big_gap >= 2, "Big letters too wide for the second line");
 assert(sub_stroke >= 1.2 && stencil_gap >= 1.2, "Logo lines or gaps below 1.2 mm");
@@ -787,18 +786,14 @@ module grille_bars_2d() {
     for (i = [0:grille_spokes - 1]) rotate(i * 360 / grille_spokes) translate([0, -grille_bar / 2]) square([ring_in + 1, grille_bar]);
 }
 
-module grille_outline_2d(grow) offset(delta = grow) {
-    translate([fan_cx, fan_cz]) circle(r = grille_r);
-    for (p = grille_screws()) hull() { translate(p) circle(r = grille_lug_r); translate([fan_cx, fan_cz] + (p - [fan_cx, fan_cz]) * (grille_r - 3) / grille_screw_r) circle(r = grille_lug_r); }
-}
 module grille() {
     c = [fan_cx, fan_cz];
     difference() {
         union() {
             difference() {
-                union() {   // ring with lugs round the screws; bed edge chamfered in three 0.2 mm layer steps
-                    for (i = [0:2]) along_y(-grille_t + 0.2 * i - (i ? eps : 0), -grille_t + 0.2 * (i + 1)) grille_outline_2d(0.2 * (i + 1) - 0.6);
-                    along_y(-grille_t + 0.6 - eps, 0) grille_outline_2d(0);
+                union() {
+                    cyl_y(c, -grille_t, -grille_t + 0.6, grille_r - 0.6, grille_r);   // chamfer on the bed edge
+                    cyl_y(c, -grille_t + 0.6 - eps, 0, grille_r);
                 }
                 cyl_y(c, -grille_t - 1, 1, ring_in);
             }

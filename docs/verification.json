@@ -1,5 +1,5 @@
 {
-  "source_sha256": "62a13457993ffd7132cb0ec8f07eae50bd6a6a5082716affaf957bf0a64445a4",
+  "source_sha256": "60757c377263b381ad1f88a5ba2a0a265cfc7bb487f92d7e6c33b85ba8f40d5b",
   "software": {
     "numpy": "2.5.3",
     "trimesh": "5.1.0",
@@ -73,33 +73,33 @@
     },
     "grille": {
       "size_mm": [
-        150.0,
-        150.0,
+        156.0,
+        156.0,
         7.0
       ],
       "bounds_mm": [
         [
-          17.0,
-          -161.5,
+          14.0,
+          -164.5,
           0.0
         ],
         [
-          167.0,
-          -11.5,
+          170.0,
+          -8.5,
           7.0
         ]
       ],
-      "volume_mm3": 46296.9359,
-      "triangles": 18622,
+      "volume_mm3": 51672.5639,
+      "triangles": 15348,
       "watertight": true,
       "consistent_winding": true,
       "degenerate_faces": 0,
       "components": 1,
       "backend": "Manifold",
-      "sha256": "000aeee5d918f1c2ca0d3cbe7002f76fb46e67e84545a5212bb7ed475da2a931",
+      "sha256": "71b1bf91e1167a115765110579e69f4b30ffc7d958660ae076c71b33e0b8398c",
       "quantity": 1,
       "material": "PETG-grey",
-      "committed_sha256": "000aeee5d918f1c2ca0d3cbe7002f76fb46e67e84545a5212bb7ed475da2a931"
+      "committed_sha256": "71b1bf91e1167a115765110579e69f4b30ffc7d958660ae076c71b33e0b8398c"
     },
     "cover": {
       "size_mm": [
@@ -126,10 +126,10 @@
       "degenerate_faces": 0,
       "components": 1,
       "backend": "CGAL",
-      "sha256": "1a3c112d5002010d88f27472a9b548c091915ec6ae3ee8ccd1283f91252608bb",
+      "sha256": "8e103a47ab0694b15085d193204184b24ed88a6a1666f561002afcf235334eb3",
       "quantity": 1,
       "material": "PETG-grey",
-      "committed_sha256": "1a3c112d5002010d88f27472a9b548c091915ec6ae3ee8ccd1283f91252608bb"
+      "committed_sha256": "8e103a47ab0694b15085d193204184b24ed88a6a1666f561002afcf235334eb3"
     },
     "bail": {
       "size_mm": [
@@ -1076,7 +1076,7 @@
     }
   },
   "contact_volumes_mm3": {
-    "grille@body": 138.4005,
+    "grille@body": 205.995,
     "fan@body": 10.2112,
     "back@body": 146.7436,
     "cover@body": 2.5265,
