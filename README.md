@@ -1,40 +1,40 @@
 # LEO-AC1 — a fan that looks like an air conditioner
 
-Small battery fan for a child's room, styled like the outdoor unit of a split air conditioner (proportions of an 800 × 550 × 285 mm unit). A 120 mm PC fan blows forward through the round grille; air enters through the slots in the back cover and the left side. A round air duct between the front and the fan frame keeps the air from circulating back into the housing. On the right of the front sits the logo "LEO INDUSTRIES AC-1" in custom block letters above horizontal fake grooves like on Mitsubishi outdoor units; a breathing LED behind the O glows through the white PETG while the charger is plugged in. Behind it is a bay for the battery (3.2 V 6000 mAh LiFePO4) and the electronics. The speed knob sits on the right side above a glued-in service cover; USB-C charging socket and power switch are in the back cover.
+Small battery fan for a child's room, styled like the outdoor unit of a split air conditioner (proportions of an 800 × 550 × 285 mm unit). A 140 mm PC fan blows forward through the round grille; air enters through the slots in the back cover and the left side. A round air duct between the front and the fan frame keeps the air from circulating back into the housing. On the right of the front sits the logo "LEO INDUSTRIES AC-1" in custom block letters above horizontal fake grooves like on Mitsubishi outdoor units; a breathing LED behind the O glows through the white PETG while the charger is plugged in. Behind it is a bay for the battery (3.2 V 6000 mAh LiFePO4) and the electronics. The speed knob sits on the right side above a glued-in service cover; USB-C charging socket and power switch are in the back cover.
 
 Designed for a Bambu Lab H2S with AMS in Bambu PETG HF white and grey plus TPU. **Status:** first parts printed; USB-C socket fit confirmed. Remaining fit and functional checks are pending.
 
-![Assembly](img/01_assembly.png?v=32da57afb195)
+![Assembly](img/01_assembly.png?v=114a4a8b463b)
 
 | Back | Exploded |
 |:---:|:---:|
-| ![Back](img/02_back.png?v=3eb52b29f5ce) | ![Exploded](img/03_exploded.png?v=14d3a83c54fc) |
+| ![Back](img/02_back.png?v=17492dfd2d8e) | ![Exploded](img/03_exploded.png?v=1f5e09bc32bb) |
 | **Logo and grooves** | **Air duct from behind** |
-| ![Logo](img/04_front_right.png?v=35e2832e0e1a) | ![Air duct](img/05_duct.png?v=b126fc69f63a) |
+| ![Logo](img/04_front_right.png?v=034374684296) | ![Air duct](img/05_duct.png?v=ceac1e080666) |
 | **Knob and service cover** | **Underside with M5 thread and TPU feet** |
-| ![Knob](img/06_knob.png?v=3cf6ecf42851) | ![Underside](img/07_underside.png?v=558a07386b2b) |
+| ![Knob](img/06_knob.png?v=4be4a8c78eb8) | ![Underside](img/07_underside.png?v=2e3053b8c1b4) |
 | **Charge module in the air stream** | **LED pocket behind the O** |
-| ![Charge module](img/08_charge_module.png?v=0750adfae952) | ![LED pocket](img/09_led.png?v=e12ac1b0c768) |
+| ![Charge module](img/08_charge_module.png?v=25811d5a997e) | ![LED pocket](img/09_led.png?v=b69d75768f94) |
 | **Folding bail, carrying position** | **Back cover bosses** |
-| ![Folding bail](img/11_bail.png?v=a272ac94736e) | ![Back cover bosses](img/12_back_bosses.png?v=cabdfaf6e861) |
+| ![Folding bail](img/11_bail.png?v=1447177fd3f2) | ![Back cover bosses](img/12_back_bosses.png?v=b9fb608b6abb) |
 | **TPU foot mount** | **USB-C socket** |
-| ![TPU foot mount](img/13_foot_mount.png?v=ee67c8486af0) | ![USB-C socket](img/14_usb_c.png?v=fbd16ec2f065) |
+| ![TPU foot mount](img/13_foot_mount.png?v=538c526af76a) | ![USB-C socket](img/14_usb_c.png?v=ea00254e04ed) |
 | **Power switch well** | **Battery saddles** |
-| ![Power switch](img/15_switch.png?v=71bf21d82050) | ![Battery saddles](img/16_saddles.png?v=0c72ca42a893) |
+| ![Power switch](img/15_switch.png?v=8857bfa1cfbf) | ![Battery saddles](img/16_saddles.png?v=ca6a630656bf) |
 
 ## Printed parts
 
 | Part | Qty | Material | Size (mm) | Print orientation |
 |---|---|---|---|---|
-| `body` housing | 1 | PETG white + grey (logo, dedication) | 225 × 155 × 76 | front on the bed; logo as inlay in the first 0.6 mm, fake grooves open towards the bed; a dedication is raised in grey on the inside of the front plate |
-| `back` back cover | 1 | PETG white + grey (QR code) | 225 × 155 × 55.8 | outside on the bed; QR code to this project as inlay in the first 0.6 mm; battery saddles and hold-down plate stand upright |
-| `grille` fan grille | 1 | PETG grey | Ø 136 × 7 | front on the bed |
+| `body` housing | 1 | PETG white + grey (logo, dedication) | 231 × 173 × 76 | front on the bed; logo as inlay in the first 0.6 mm, fake grooves open towards the bed; a dedication is raised in grey on the inside of the front plate |
+| `back` back cover | 1 | PETG white + grey (QR code) | 231 × 173 × 55.8 | outside on the bed; QR code to this project as inlay in the first 0.6 mm; battery saddles and hold-down plate stand upright |
+| `grille` fan grille | 1 | PETG grey | Ø 156 × 7 | front on the bed |
 | `cover` service cover | 1 | PETG grey | 74.4 × 46 × 11.8 | outside on the bed; half-round notch around the knob, glued into a groove of the side wall |
 | `knob` speed knob | 1 | PETG grey + white (pointer) | Ø 28 × 16.5 | top on the bed, pointer as inlay in the first 0.6 mm |
 | `bail` folding bail | 1 | PETG grey | 224 × 36.5 × 58.5 | back faces of the lower legs and the grip on the bed, upper legs upright |
 | `foot` foot | 2 | TPU | 16 × 62 × 5.5 | ground face on the bed, 100 % infill |
 
-All parts are in the Bambu Studio project [`stl/leo_ac1_all_parts.3mf`](stl/leo_ac1_all_parts.3mf): plate 1 housing, plate 2 back cover, plate 3 grey parts (grille, service cover, bail, knob), plate 4 TPU feet. Filaments: 1 PETG white, 2 PETG grey, 3 grey for logo, dedication and QR code (same spool as 2), 4 TPU, 5 white for the knob pointer (same spool as 1). All parts print without supports. Bambu Studio estimates about **0.65 kg and 18 hours** in total. Single-colour STLs are in `stl/`, the colour pieces in `stl/multicolour/`.
+All parts are in the Bambu Studio project [`stl/leo_ac1_all_parts.3mf`](stl/leo_ac1_all_parts.3mf): plate 1 housing, plate 2 back cover, plate 3 grey parts (grille, service cover, bail, knob), plate 4 TPU feet. Filaments: 1 PETG white, 2 PETG grey, 3 grey for logo, dedication and QR code (same spool as 2), 4 TPU, 5 white for the knob pointer (same spool as 1). All parts print without supports. Bambu Studio estimates about **0.70 kg and 20 hours** in total. Single-colour STLs are in `stl/`, the colour pieces in `stl/multicolour/`.
 
 Print profile: 0.20 mm layers, 5 walls, 4 top/bottom layers, 15 % gyroid (feet 100 %).
 
@@ -48,7 +48,7 @@ Check with the real parts: the PWM controller lies flat on its pads, the potenti
 
 | Part | Qty | Link | Notes |
 |---|---|---|---|
-| Fan Noctua NF-F12 industrialPPC-2000 PWM | 1 | [noctua.at](https://noctua.at/en/nf-f12-industrialppc-2000-pwm) | 120 × 25 mm, 12 V, max. 1.2 W; mounted from behind with M3 × 30, tighten by hand only |
+| Fan Noctua NF-A14 PWM (or another quiet 140 × 25 mm 4-pin PWM fan) | 1 | [noctua.at](https://noctua.at/en/nf-a14-pwm) | 140 × 25 mm, 12 V, holes 124.5 mm apart; mounted from behind with M3 × 30, tighten by hand only |
 | Battery 3.2 V 6000 mAh LiFePO4 pack with protection board (BMS), JST-PH 2.0 | 1 | [eremit.de](https://www.eremit.de/p/3-2v-6000mah-pack-mit-schutz-arduino-aio-jst-ph-2-0-stecker) | cell Ø 32.5 × 71.6 mm; charge only with a LiFePO4 charger (3.65 V), **no** TP4056 |
 | Charge/boost module "2-in-1 3.2 V LiFePO4", **12 V variant** | 1 | [AliExpress](https://de.aliexpress.com/item/1005008094801881.html) | 32.2 × 11 × 3.7 mm; IN± 5 V charging, B± battery, O± 12 V; taped upright onto the partition behind the fan |
 | PWM fan controller CNY-FA5-PRO, DC 8–24 V, with potentiometer and switch | 1 | [AliExpress](https://de.aliexpress.com/item/1005010113177510.html) | 41 × 32 × 15 mm; rests on pads under its pin-free long edges, potentiometer housing in a pocket on the inside of the right wall, washer and nut outside under the knob |
@@ -85,7 +85,7 @@ battery (JST-PH, built-in BMS) ──► (PTC) ──► power switch ──► 
 - The BMS in the battery stays as a second protection layer; the module cuts off earlier at 2.6 V.
 - With the switch in the battery line, off really disconnects the battery, and the battery only charges with the switch on. To charge without the fan running, turn the knob down until it clicks. Alternatively the switch can go between O+ and the PWM controller; then charging always works, but the boost converter draws its idle current from the battery.
 - The LED shows that the charging cable is plugged in, not the charge state.
-- Runtime roughly 10 h at full speed and 20 h at 70 % speed.
+- Runtime depends on the fan; a quiet 140 mm fan draws about as much as the 120 mm industrial fan at full speed, so roughly 10 h at full speed and 20 h at 70 % speed (estimate).
 - Without fan air flow the charge module gets warm while charging; charge with the fan running or reduce the charge current to 0.5 A (R3 = 2.4 kΩ).
 
 ## Assembly

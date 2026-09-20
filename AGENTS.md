@@ -15,6 +15,10 @@ Internal notes for coding agents (Claude, Codex). The README is public and stays
 - Commits: English message, one change per commit, ending with the co-author line; push to Forgejo right after every commit (user), no force push without an explicit request.
 - Forgejo remote: `the user's private Forgejo remote`.
 
+## Branch fan-140
+
+- Branch `fan-140` (user, 2026-09-17: the 120 mm industrialPPC is too loud for the son): 140 × 25 mm fan (e.g. NF-A14 PWM, holes 124.5), body 231 × 173 × 80 instead of 225 × 155 × 80. Fan axis x 80, partition x 156 (the charge-module ledge must stay beside the fan frame), everything in the electronics bay moved 6 mm right with the right wall (battery, saddle rib, switch/USB-C column, tie loops, logo, grooves, dedication, mount insert), everything below the shelf keeps its height, the bail grip and the logo move up with the top (bail_drop 143, logo_top 162). Grille Ø 156 with 7 rings (openings stay ≤ 6 mm), back slots extended to the partition and to the new height. main still holds the 120 mm version; merge only when the user decides.
+
 ## User constraints and preferences
 
 - Toy for the user's son: drop-resistant (walls ≥ 3.2 mm, corner radius ≥ 5), grille openings ≤ 6 mm, no sharp edges.

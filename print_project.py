@@ -90,8 +90,8 @@ def checks(ctx):
     assert min(m["wall"], m["front_t"]) >= 3.2 and m["back_t"] >= 3 and m["corner_r"] >= 5, "Drop resistance: walls and corner radius"
 
     # Standard dimensions, independent of the model
-    assert (m["fan_size"], m["fan_t"], m["fan_pitch"]) == (120, 25, 105), "120 mm fan: 120 x 120 x 25, holes 105 mm apart"
-    assert m["fan_hole_d"] >= 4.3, "120 mm fan holes are 4.3 mm"
+    assert (m["fan_size"], m["fan_t"], m["fan_pitch"]) == (140, 25, 124.5), "140 mm fan: 140 x 140 x 25, holes 124.5 mm apart"
+    assert m["fan_hole_d"] >= 4.3, "140 mm fan holes are 4.3 mm"
     assert m["open_d"] > m["fan_blade_d"], "Front opening covers the fan blades"
     assert m["insert_hole_d"] == 4.0 and m["insert_len"] == 5.7, "Ruthex M3 insert: hole 4.0 mm, length 5.7 mm"
     # Ruthex datasheet RX series (08/2022): M3x5.7 hole 4.0, depth >= L + 1, wall >= 1.6; M5x9.5 hole 6.4, L 9.5, wall >= 2.6
@@ -206,7 +206,7 @@ VIEWER = dict(
            ("bail", "Folding bail", "grey", "#8f9396", "1x", [0, 0, 1.2]),
            ("knob", "Speed knob", "grey", "#8f9396", "1x", [2, 0, 0]),
            ("feet", "Feet · TPU", "tpu", "#222326", "2x", [0, 0, -0.8]),
-           ("fan_visual", "Fan 120 mm · placeholder (Noctua NF-F12 iPPC-2000)", "bought", "#303236", "1x", [0, 0.8, 0]),
+           ("fan_visual", "Fan 140 mm · placeholder (e.g. Noctua NF-A14 PWM)", "bought", "#303236", "1x", [0, 0.8, 0]),
            ("battery", "Battery LiFePO4 3.2 V 6000 mAh", "bought", "#3f7fbf", "1x", [0, 0.5, 0]),
            ("pot", "Potentiometer · housing in the wall pocket, washer and nut outside", "bought", "#3a3d41", "1x", [-0.5, 0, 0]),
            ("chg_module", "Charge/boost module · 2 planned heatsink envelopes", "bought", "#c9c9c9", "1x", [0, 0.8, 0]),
