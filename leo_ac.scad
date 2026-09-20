@@ -163,6 +163,7 @@ bail_y = body_d / 2;        // pivot axis at mid-depth: the fan hangs level (use
 bail_screw = [8.8, 3, 5, 11, 8];   // M4 shoulder screw (user): head diameter, head height, shoulder diameter, shoulder length, thread length
 bail_bush = [7, 10, 1, 10];        // flanged brass bushing pressed into the eye (user): outside diameter, flange diameter, flange thickness, total length (bore 5)
 bail_band = 15;                    // side step width from the side face to the insert wall (leoino 12 + 3 for the sunk heads); the arm has 0.5 mm on both sides
+bail_head_room = 6;                // cut-back of the outer arm ends this far behind the pivot axis (flange radius 5)
 bail_eye_w = 8.8;                  // eye width, flush with the inner arm face (leoino): the outer 5.2 mm are cut back round the eye for flange and head, the head sits 0.5 mm below the arm face
 bail_c = 1;                 // 45 degree chamfers on the bar and arm edges
 m4_insert = [5.6, 8.1, 2.2];   // Ruthex RX-M4x8.1: hole (as in the leoino case), length, minimum wall (check against the datasheet)
@@ -644,16 +645,13 @@ module body(dedication = true) difference() {   // dedication = false for public
             translate([-1, bail_ramp_y(), body_h + 1]) cube([bail_band + 1, 0.2, 1]);
         }
         cyl_x([bail_y, bail_z], bail_band - eps, bail_band + m4_insert[1] + 1, m4_insert[0] / 2);
-        // side face edge of the whole step outline (ramp, arc round the eye, floor) chamfered as one hull
-        hull() {
-            along_x(-1, -1 + tip) bail_step_profile_2d(bail_c + 1);
-            along_x(bail_c, bail_c + tip) bail_step_profile_2d(0);
-        }
+        // outer edge of the whole step outline (ramp, arc round the eye, floor) chamfered on the side face and round the rounded top corner
+        bail_step_edge_chamfer();
         // top edges of the step (ramp and inner wall) chamfered as one hull, so both chamfers meet in a clean corner:
         // a slab of the step outline 1 mm below the top face and one grown by 2 mm 1 mm above it
         let (k = -cos(bail_carry) / sin(bail_carry), y1 = bail_ramp_y() + k, c = bail_c) hull() {
             translate([-1, y1 + c * k, body_h - c]) cube([bail_band + 1, body_d + 1 - (y1 + c * k), tip]);
-            translate([-1, y1 - 2 * c - c * k, body_h + c - tip]) cube([bail_band + 2 * c + 1, body_d + 1 - (y1 - 2 * c - c * k), tip]);
+            translate([-1, y1 - 2 * c - c * k, body_h + c]) cube([bail_band + 2 * c + 1, body_d + 1 - (y1 - 2 * c - c * k), tip]);
         }
     }
     // groove for the glued-in service cover with 45 degree flanks, printable in every direction (the side wall stands upright in
@@ -961,6 +959,15 @@ module bail_step_profile_2d(grow = 0) offset(delta = grow) hull() {
     translate([bail_ramp_y(), body_h + 1]) square([0.2, 1]);
     translate([bail_y, bail_floor]) square([body_d + 2 - bail_y, bail_arm[1] + 1]);
 }
+// chamfer where the step outline leaves the outer surface: for each tangent plane of the rounded top corner (and the flat side face)
+// the hull of the outline 1 mm outside the plane grown by bail_c + 1 and the plain outline bail_c inside it; the slabs meet the hull with
+// their inner faces, so the flanks are exactly 45 degrees. Tangent planes lie outside the convex corner: no cut goes deeper than bail_c.
+module bail_step_edge_chamfer() for (a = [0:15:75]) let (n = [-cos(a), 0, sin(a)], tv = [sin(a), 0, cos(a)],
+        p0 = [corner_r * (1 - cos(a)), 0, body_h - corner_r + corner_r * sin(a)], u = a == 0 ? [-30, 2] : [-2, 2],
+        m = [[tv[0], 0, -n[0], p0[0]], [0, 1, 0, 0], [tv[2], 0, -n[2], p0[2]], [0, 0, 0, 1]]) hull() {
+    intersection() { multmatrix(m) translate([u[0], -1, -1 - tip]) cube([u[1] - u[0], body_d + 2, tip]); along_x(-12, bail_band) bail_step_profile_2d(bail_c + 1); }
+    intersection() { multmatrix(m) translate([u[0], -1, bail_c]) cube([u[1] - u[0], body_d + 2, tip]); along_x(-12, bail_band) bail_step_profile_2d(0); }
+}
 module bail_step_chamfers(y0, top = true) {
     if (top) along_y(y0, body_d + 1) polygon([[bail_band - 1, body_h - bail_c - 1], [bail_band + bail_c + 1, body_h + 1], [bail_band - 1, body_h + 1]]);
     along_y(max(y0, bail_y), body_d + 1) polygon([[-1, bail_floor - bail_c - 1], [bail_c + 1, bail_floor + 1], [-1, bail_floor + 1]]);
@@ -986,9 +993,24 @@ module bail(angle = 0) translate([0, bail_y, bail_z]) rotate([angle, 0, 0]) tran
     }
     bail_sides() {
         cyl_x([bail_y, bail_z], bail_x[0] - 1, bail_x[1] + 1, bail_bush[0] / 2);                 // bore for the pressed-in bushing
-        cyl_x([bail_y, bail_z], bail_x[0] - 1, bail_eye_x[0], bail_arm[1] / 2 + 0.5);            // recess round the eye for flange and screw head
+        // outer part of the arm cut back round the eye for flange and screw head: straight, ending in a flat face bail_head_room from
+        // the axis, 45 degree chamfers on its edges (a round cut wider than the arm left knife edges, user)
+        let (h = bail_arm[1] / 2, c = bail_c, e = 0.01, yb = bail_y - h - 2, ye = bail_y + bail_head_room, x0 = bail_x[0] - 1, x1 = bail_eye_x[0]) {
+            hull() {
+                translate([x0, yb, bail_z - h - e]) cube([x1 - x0, ye - yb, 2 * (h + e)]);
+                translate([x0, yb, bail_z - h + c - e]) cube([x1 - c - x0, ye + c - yb, 2 * (h - c + e)]);
+            }
+            difference() {   // chamfer round the new eye face
+                translate([x1 - e, yb, bail_z - h - 1]) cube([c + e, ye - yb, 2 * h + 2]);
+                hull() {
+                    along_x(x1, x1 + tip) offset(delta = -c) bail_eye_face_2d();
+                    along_x(x1 + c, x1 + c + tip) bail_eye_face_2d();
+                }
+            }
+        }
     }
 }
+module bail_eye_face_2d() hull() { translate([bail_y, bail_z]) circle(r = bail_arm[1] / 2); translate([bail_y, bail_z - bail_arm[1] / 2]) square([bail_head_room + 5, bail_arm[1]]); }
 module bail_print_pose() translate([0, 0, bail_leg_y[1]]) rotate([-90, 0, 0]) children();   // back faces of lower legs and bar on the bed
 
 // ---------- bought parts: envelopes for the checks ----------
