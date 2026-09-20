@@ -155,17 +155,17 @@ chg_pads = [[4, 7], [chg_pcb[0] - 4 - 7, 7]]; // supports from the board's lower
 chg_ledge = [2, 0.3];          // ledge under the lower board edge: height, set back from the part side
 
 /* [Folding bail on top, like the leoino case: steps along both top side edges over the full depth, pivots at mid-depth] */
-bail_arm = [8.8, 12];       // legs: width (x), thickness = eye diameter; the upper legs lie in the side steps
+bail_arm = [11, 12];        // legs: width (x, as the leoino bail), thickness = eye diameter; the upper legs lie in the side steps
 bail_bar = 13;              // grip bar height when folded (as thick as the legs)
 bail_drop = 125;            // folded: centre height of the grip bar behind the back cover, above the power switch (user: L bail, grip not too low)
 bail_cl = 0.5;              // clearance of the bail in the steps and behind the back cover
 bail_y = body_d / 2;        // pivot axis at mid-depth: the fan hangs level (user)
-bail_sleeve = [7, 4.2];     // pivot sleeve as on the leoino bail (bought tube): outside diameter, minimum bore; the eye turns on it
-bail_eye_cl = 0.15;         // radial clearance of the eye on the sleeve
-bail_cb = [9, 2.5];         // counterbore for the M4 head in the outer arm face: diameter, depth
+bail_screw = [8.8, 3, 5, 11, 8];   // M4 shoulder screw (user): head diameter, head height, shoulder diameter, shoulder length, thread length
+bail_bush = [7, 10, 1, 10];        // flanged brass bushing pressed into the eye (user): outside diameter, flange diameter, flange thickness, total length (bore 5)
+bail_band = 12;                    // side step width from the side face to the insert wall (leoino); the arm has 0.5 mm on both sides
+bail_eye_w = 8.8;                  // eye width, flush with the inner arm face: the outer 2.2 mm are cut back round the eye for flange and head (leoino)
 bail_c = 1;                 // 45 degree chamfers on the bar and arm edges
 m4_insert = [5.6, 8.1, 2.2];   // Ruthex RX-M4x8.1: hole (as in the leoino case), length, minimum wall (check against the datasheet)
-m4_head = [7.6, 2.2];       // ISO 7380 M4 button head: diameter, height
 
 /* [USB-C charging socket: PD trigger module (Type A, pads 1-4 open = 5 V) in the back cover] */
 usbc_board = [12.88, 10.35, 4.30]; // measured 2026-09-15: length without the projecting receptacle (y), width (x), height incl. components (z)
@@ -227,7 +227,6 @@ head_pocket = [6.4, 1.9];  // head recess in the grille ring: diameter, depth
 len_grille = 12;     // M3 x 12, from the front, head recessed in the grille ring
 len_fan = 30;        // M3 x 30, from behind the fan (not in the nas-case set)
 len_back = 8;        // M3 x 8, from the back, head on the surface
-len_bail = 12;       // M4 x 12, bail pivots: through the sleeve into the insert (user's set)
 len_foot = 8;        // M3 x 8, from below through the TPU feet
 
 /* [Decor] */
@@ -318,7 +317,8 @@ function back_bosses() = concat(
      [c, w, [part_x + part_t, c[1]], w, t]]);
 bail_z = body_h - bail_arm[1] / 2;                     // pivot axis height
 bail_floor = body_h - bail_arm[1];                     // floor of the side steps
-bail_band = bail_arm[0] + 2 * bail_cl;                 // width of a side step from the side face; its inner wall carries the M4 insert
+bail_x = [(bail_band - bail_arm[0]) / 2, (bail_band + bail_arm[0]) / 2];   // left arm: outer and inner face (right arm mirrored)
+bail_eye_x = [bail_x[1] - bail_eye_w, bail_x[1]];   // eye faces; the shoulder screw head sits outside, as on the leoino bail
 bail_leg_y = [body_d + bail_cl, body_d + bail_cl + bail_arm[1]];     // folded: lower legs and bar behind the back cover
 bail_bar_z = [bail_drop - bail_bar / 2, bail_drop + bail_bar / 2];
 bail_reach = [bail_leg_y[0] + bail_arm[1] / 2 - bail_y, bail_z - bail_drop];   // pivot to bar centre along the upper and the lower leg
@@ -328,7 +328,6 @@ function bail_room() = bail_reach[0] * sin(bail_carry) - bail_reach[1] * cos(bai
 function bail_ramp_y() = let (r = bail_arm[1] / 2 + bail_cl, n = [-sin(bail_carry), cos(bail_carry)], p = [bail_y + r * n[0], bail_z + r * n[1]])
     p[0] + (body_h + 1 - p[1]) / sin(bail_carry) * cos(bail_carry);
 boss_top_x = bail_band + wall + back_boss_d / 2 + 1;   // top back-cover bosses moved inwards beside the steps
-function bail_sleeve_len() = bail_band - (bail_cl + bail_cb[1]) + 0.1;   // insert face to the screw head, which stays 0.1 mm off the counterbore floor
 usbc_y0 = body_d - usbc[0];                             // inner end of the module, in the bay
 function foot_x() = [foot_inset, body_w - foot_inset];
 function foot_screws() = [for (fx = foot_x(), dy = [-1, 1]) [fx, foot_y0 + foot_len / 2 + dy * foot_screw_dy]];
@@ -344,7 +343,7 @@ screw_table = [
      (fan_y + fan_t + fan_pad - len_fan) - (fan_y - fan_pad - insert_depth)],
     ["back", len_back, (body_d - back_t) - max(body_d - head_pocket[1] - len_back, body_d - back_t - insert_len),
      (body_d - head_pocket[1] - len_back) - (body_d - back_t - insert_depth)],
-    ["bail", len_bail, min(len_bail - bail_sleeve_len(), m4_insert[1]), m4_insert[1] + 1 - (len_bail - bail_sleeve_len())],
+    ["bail", bail_screw[1] + bail_screw[3] + bail_screw[4], min(bail_screw[4], m4_insert[1]), m4_insert[1] + 1 - bail_screw[4]],
     ["feet", len_foot, min(len_foot - foot_screw_skin, insert_len), insert_depth - (len_foot - foot_screw_skin)]];
 
 assert(wall >= 3.2 && front_t >= 3.2 && back_t >= 3 && corner_r >= 5, "Drop resistance: walls >= 3.2 mm (back 3 mm), corner radius >= 5 mm");
@@ -403,7 +402,7 @@ assert(body_w - foot_inset - max(foot_doubler_hw, foot_boss_d / 2) > bat_cx + ba
 assert((back_boss_d - insert_hole_d) / 2 >= 3 && back_boss_len >= insert_depth + 6 && boss_inset + back_boss_d / 2 + 1 < 14,
        "Back bosses: wall around the insert, column length, or reaching the back cover slots");
 // hand under the raised bail: child hand breadth about 55-70 mm, adult 80-90 mm; comfortable finger clearance 30-35 mm
-assert(bail_room() >= 38 && body_w - 2 * (bail_cl + bail_arm[0]) >= 90 && bail_ramp_y() > front_t + inner_c + wall
+assert(bail_room() >= 38 && body_w - 2 * bail_x[1] >= 90 && bail_ramp_y() > front_t + inner_c + wall
        && bail_bar_z[0] > sw_xz[1] + sw_bezel[1] / 2 + sw_well[1] + sw_well[0] + 1,
        "Bail: too little room for the hand, step ramp too far forward, or the folded grip bar covers the power switch");
 assert(cover_w / 2 - cover_notch_r >= 6 && wall - cover_glue[0] - cover_glue[2] >= 1.8 && cover_glue[1] + cover_glue[2] < cover_t
@@ -425,12 +424,12 @@ assert(pwm_pad < pwm_edge_free && pwm_standoff > pwm_pins + pwm_pin_cl + 3 && pw
 assert(pot_shaft_tip - knob_gap - knob_sleeve_z >= 8 && knob_skin >= 2 && knob_cavity_d > pot_nut[0] + 1 && knob_gap + knob_sleeve_z > pot_washer[1] + pot_nut[1] + 0.3   // recess over washer and nut on the outer face
        && knob_sleeve_z + knob_slit[1] < knob_len - knob_skin - 2 && knob_gap + knob_len - cover_out <= 8,
        "Knob: shaft engagement, top skin, nut recess, slit length or protrusion");
-assert((bail_arm[1] - bail_sleeve[0] - 2 * bail_eye_cl) / 2 >= 2.2
-       && bail_cb[0] >= m4_head[0] + 1 && bail_cb[1] <= bail_arm[0] / 3 && len_bail - bail_sleeve_len() >= 4
-       && len_bail - bail_sleeve_len() <= m4_insert[1] && bail_arm[1] / 2 - m4_insert[0] / 2 >= m4_insert[2],
-       "Bail: eye wall, counterbore, screw engagement in the M4 insert or insert boss wall");
+assert((bail_arm[1] - bail_bush[0]) / 2 >= 2.2 && bail_band - bail_screw[3] + bail_bush[2] <= bail_eye_x[0]
+       && bail_band - bail_screw[3] + bail_bush[3] <= bail_eye_x[1] && bail_screw[0] / 2 + 0.5 <= bail_arm[1] / 2 + 0.5 && bail_bush[1] / 2 < bail_arm[1] / 2 + 0.5
+       && bail_screw[4] <= m4_insert[1] && bail_arm[1] / 2 - m4_insert[0] / 2 >= m4_insert[2] && bail_screw[2] < bail_bush[0] - 1,
+       "Bail pivot: eye wall round the bushing, flange hits the eye, bushing longer than the eye, head or flange bigger than the recess, thread longer than the insert, or insert boss wall");
 assert(bail_floor - wall > fan_cz + fan_size / 2 + 1 && bail_floor - wall > sw_xz[1] + sw_bezel[1] / 2 + sw_well[1] + sw_well[2] + sw_well[0] - back_t + 1
-       && bail_floor - wall > 137 + slot_w && logo_x0 + logo_w < body_w - bail_band - 1 && led_xz[0] + led_boss[0] / 2 < body_w - bail_band - wall - 1
+       && bail_floor - wall > 137 + slot_w
        && boss_top_x - back_boss_d / 2 > bail_band + wall,
        "Bail steps reach the fan, the switch well, the side intake slots, the logo or the LED boss, or the top back bosses reach a step");
 assert(logo_x0 > fan_cx + grille_r + 3 && logo_x0 + logo_w < body_w - corner_r - 2 && logo_top < body_h - corner_r - 2,
@@ -965,19 +964,19 @@ module chamfered_box(a, b, c) let (s = b - a) translate(a) hull() {
 }
 module bail(angle = 0) translate([0, bail_y, bail_z]) rotate([angle, 0, 0]) translate([0, -bail_y, -bail_z]) difference() {
     union() {   // every piece with all edges chamfered, so the outer corners of the joints are chamfered too
-        chamfered_box([bail_cl, bail_leg_y[0], bail_bar_z[0]], [body_w - bail_cl, bail_leg_y[1], bail_bar_z[1]], bail_c);   // grip bar
+        chamfered_box([bail_x[0], bail_leg_y[0], bail_bar_z[0]], [body_w - bail_x[0], bail_leg_y[1], bail_bar_z[1]], bail_c);   // grip bar
         bail_sides() {
-            chamfered_box([bail_cl, bail_y, bail_floor], [bail_cl + bail_arm[0], bail_leg_y[1], body_h], bail_c);        // upper leg
-            chamfered_box([bail_cl, bail_leg_y[0], bail_bar_z[0]], [bail_cl + bail_arm[0], bail_leg_y[1], body_h], bail_c);   // lower leg
+            chamfered_box([bail_x[0], bail_y, bail_floor], [bail_x[1], bail_leg_y[1], body_h], bail_c);        // upper leg
+            chamfered_box([bail_x[0], bail_leg_y[0], bail_bar_z[0]], [bail_x[1], bail_leg_y[1], body_h], bail_c);   // lower leg
             hull() {   // eye with chamfered faces
-                cyl_x([bail_y, bail_z], bail_cl + bail_c, bail_cl + bail_arm[0] - bail_c, bail_arm[1] / 2);
-                cyl_x([bail_y, bail_z], bail_cl, bail_cl + bail_arm[0], bail_arm[1] / 2 - bail_c);
+                cyl_x([bail_y, bail_z], bail_x[0] + bail_c, bail_x[1] - bail_c, bail_arm[1] / 2);
+                cyl_x([bail_y, bail_z], bail_x[0], bail_x[1], bail_arm[1] / 2 - bail_c);
             }
         }
     }
     bail_sides() {
-        cyl_x([bail_y, bail_z], bail_cl - 1, bail_cl + bail_arm[0] + 1, bail_sleeve[0] / 2 + bail_eye_cl);   // turns on the sleeve
-        cyl_x([bail_y, bail_z], bail_cl - 1, bail_cl + bail_cb[1], bail_cb[0] / 2);                         // screw head, outer face
+        cyl_x([bail_y, bail_z], bail_x[0] - 1, bail_x[1] + 1, bail_bush[0] / 2);                 // bore for the pressed-in bushing
+        cyl_x([bail_y, bail_z], bail_x[0] - 1, bail_eye_x[0], bail_arm[1] / 2 + 0.5);            // recess round the eye for flange and screw head
     }
 }
 module bail_print_pose() translate([0, 0, bail_leg_y[1]]) rotate([-90, 0, 0]) children();   // back faces of lower legs and bar on the bed
@@ -1030,16 +1029,12 @@ module screws_grille(socket = false) for (p = grille_screws()) translate([p[0], 
 module screws_fan(socket = false) for (p = fan_holes()) translate([p[0], fan_y + fan_t + fan_pad, p[1]]) orient([0, -1, 0]) screw(len_fan, socket);
 module screws_back(socket = false) for (b = back_bosses()) translate([b[0][0], body_d - head_pocket[1], b[0][1]]) orient([0, -1, 0]) screw(len_back, socket);
 module screws_feet(socket = false) for (p = foot_screws()) translate([p[0], p[1], -foot_lift + foot_head_recess + screw_head_h]) orient([0, 0, 1]) screw(len_foot, socket);
-module screw_m4(len, socket = false) difference() {   // ISO 7380 M4 button head, head above z = 0
-    union() {
-        translate([0, 0, -m4_head[1]]) cylinder(d = m4_head[0], h = m4_head[1]);
-        translate([0, 0, -m4_head[1]]) cylinder(r = 2, h = len + m4_head[1]);
-    }
-    if (socket) translate([0, 0, -m4_head[1] - eps]) cylinder(d = 3.5 / cos(30), h = 1.2, $fn = 6);   // drive recess, viewer only
-}
-module screws_bail(socket = false) bail_sides() {   // M4 x 12 from the side through the sleeve (part of this envelope) into the insert
-    translate([bail_band - bail_sleeve_len(), bail_y, bail_z]) orient([1, 0, 0]) screw_m4(len_bail, socket);
-    cyl_x([bail_y, bail_z], bail_band - bail_sleeve_len(), bail_band, bail_sleeve[0] / 2);
+module screws_bail(socket = false) bail_sides() let (xh = bail_band - bail_screw[3]) {   // M4 shoulder screw and flanged bushing (bought)
+    cyl_x([bail_y, bail_z], xh - bail_screw[1], xh, bail_screw[0] / 2);                      // head
+    cyl_x([bail_y, bail_z], xh - eps, bail_band, bail_screw[2] / 2);                         // shoulder, clamped against the step wall
+    cyl_x([bail_y, bail_z], bail_band - eps, bail_band + bail_screw[4], 2);                  // thread in the insert
+    cyl_x([bail_y, bail_z], xh, xh + bail_bush[2], bail_bush[1] / 2);                        // bushing flange
+    cyl_x([bail_y, bail_z], xh + bail_bush[2] - eps, xh + bail_bush[3], bail_bush[0] / 2 - 0.01);   // bushing, pressed into the eye
 }
 
 module assembly(explode = 0, bail_angle = 0) {

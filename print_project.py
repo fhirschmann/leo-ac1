@@ -215,7 +215,7 @@ VIEWER = dict(
            ("screws_grille", "Grille · M3 × 12 button head", "screws", "#26282b", "4x", [0, -1.6, 0]),
            ("screws_fan", "Fan · M3 × 30 button head", "screws", "#26282b", "4x", [0, 1.4, 0]),
            ("screws_back", "Back cover · M3 × 8 button head", "screws", "#26282b", "6x", [0, 2.2, 0]),
-           ("screws_bail", "Bail pivots · M4 × 12 button head with Ø 7 sleeve", "screws", "#26282b", "2x", [0, 0, 1.2]),
+           ("screws_bail", "Bail pivots · M4 shoulder screw, flanged brass bushing", "screws", "#26282b", "2x", [0, 0, 1.2]),
            ("screws_feet", "Feet · M3 × 8 button head, from below", "screws", "#26282b", "4x", [0, 0, -1.4])],
     colour={"body": [("label", "Housing · logo", "#8f9396"), ("dedication", "Housing · dedication", "#8f9396")], "knob": [("pointer", "Speed knob · pointer", "#ffffff")]},
     bodies={"body_base": 'body_install_pose() body_piece("base");',
