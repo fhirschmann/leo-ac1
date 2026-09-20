@@ -1,5 +1,5 @@
 {
-  "source_sha256": "60987b7f7f0dba6f7e13b2bdf1dc0bac3d9edc06d9892253aff2e89110af59ed",
+  "source_sha256": "01484ebf424e889e4ba4c0f680f4cc2c03eb471669ad69ea43010c4adeed6389",
   "software": {
     "numpy": "2.5.3",
     "trimesh": "5.1.0",
@@ -59,17 +59,17 @@
           55.75
         ]
       ],
-      "volume_mm3": 159691.1644,
-      "triangles": 10278,
+      "volume_mm3": 160641.1164,
+      "triangles": 10276,
       "watertight": true,
       "consistent_winding": true,
       "degenerate_faces": 0,
       "components": 1,
       "backend": "Manifold",
-      "sha256": "69460c935eb8e745a82d1af2ae92d58c5258b681941008b824fefcff9210ae97",
+      "sha256": "45244fc7ffd73513b3029db79afff682cd6c64c85ae8f8763c849031e6e29d71",
       "quantity": 1,
       "material": "PETG-white",
-      "committed_sha256": "69460c935eb8e745a82d1af2ae92d58c5258b681941008b824fefcff9210ae97"
+      "committed_sha256": "45244fc7ffd73513b3029db79afff682cd6c64c85ae8f8763c849031e6e29d71"
     },
     "grille": {
       "size_mm": [
@@ -126,10 +126,10 @@
       "degenerate_faces": 0,
       "components": 1,
       "backend": "CGAL",
-      "sha256": "e5b90813a7980e7ad5f8dbcf966b8a3b81560fc92cc633e4d8c0c48d37d5e09e",
+      "sha256": "9d4cf2712d0486934faa4c52669ab55abe1b096cf0b337000ac1f2e80be5b14b",
       "quantity": 1,
       "material": "PETG-grey",
-      "committed_sha256": "e5b90813a7980e7ad5f8dbcf966b8a3b81560fc92cc633e4d8c0c48d37d5e09e"
+      "committed_sha256": "9d4cf2712d0486934faa4c52669ab55abe1b096cf0b337000ac1f2e80be5b14b"
     },
     "bail": {
       "size_mm": [
@@ -1411,7 +1411,7 @@
     "Battery BMS board approx. 20 × 4 mm over the full length (measured); cable exit still to be checked",
     "PWM module measured 41.05 × 32 × 15 mm, PCB 1.6 mm, 56.30 mm to shaft tip, axis about 6 mm above PCB (6.3 modelled: supports 0.3 lower after the fit test), solder pins 2-3 mm below except 1.5 mm strips along the long edges; modelled 18 mm high with plugged fan connector (estimate); verify underside datum",
     "USB-C module and shell measured 2026-09-15 (shell bottom approximately 1.1 mm above module underside); verify fit with a plugged cable and soldered wires, and check 5 V at + / - before connecting",
-    "Switch measured 20.9 × 14.7 × 23 mm including contacts, cutout 19.2 × 12.2, panel about 1.5, bezel 2 + rocker 5 above the panel; body depth behind the panel assumed; verify snap fit in the 8 mm well",
+    "Switch measured 20.9 × 14.7 × 23 mm including contacts, cutout 19.2 × 12.2, panel about 1.5, bezel 2 + rocker 5 above the panel; body depth behind the panel assumed; verify snap fit in the 5 mm well",
     "Charge PCB measured 32.2 × 11 × 3.7 mm, back clear; heatsinks not yet available, displayed heatsinks are planned clearance envelopes"
   ],
   "limitations": [

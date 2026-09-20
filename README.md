@@ -8,7 +8,7 @@ Designed for a Bambu Lab H2S with AMS in Bambu PETG HF white and grey plus TPU. 
 
 | Back | Exploded |
 |:---:|:---:|
-| ![Back](img/02_back.png?v=4b17e41aa0e2) | ![Exploded](img/03_exploded.png?v=d830b08fc1f0) |
+| ![Back](img/02_back.png?v=202ad0db272b) | ![Exploded](img/03_exploded.png?v=be155d766112) |
 | **Logo and grooves** | **Air duct from behind** |
 | ![Logo](img/04_front_right.png?v=951aa9a35efe) | ![Air duct](img/05_duct.png?v=7c00eb6bdca3) |
 | **Knob and service cover** | **Underside with M5 thread and TPU feet** |
@@ -16,11 +16,11 @@ Designed for a Bambu Lab H2S with AMS in Bambu PETG HF white and grey plus TPU. 
 | **Charge module in the air stream** | **LED pocket behind the O** |
 | ![Charge module](img/08_charge_module.png?v=2ef05f89a581) | ![LED pocket](img/09_led.png?v=e16ed4530b5b) |
 | **Folding bail, carrying position** | **Back cover bosses** |
-| ![Folding bail](img/11_bail.png?v=46a9efe63018) | ![Back cover bosses](img/12_back_bosses.png?v=5181bcb5c3eb) |
+| ![Folding bail](img/11_bail.png?v=9291423e30e6) | ![Back cover bosses](img/12_back_bosses.png?v=5181bcb5c3eb) |
 | **TPU foot mount** | **USB-C socket** |
-| ![TPU foot mount](img/13_foot_mount.png?v=6cbfac0ba65b) | ![USB-C socket](img/14_usb_c.png?v=7bab01d29736) |
+| ![TPU foot mount](img/13_foot_mount.png?v=6cbfac0ba65b) | ![USB-C socket](img/14_usb_c.png?v=68ba476da681) |
 | **Power switch well** | **Battery saddles** |
-| ![Power switch](img/15_switch.png?v=425be4c2cbec) | ![Battery saddles](img/16_saddles.png?v=90db077897a9) |
+| ![Power switch](img/15_switch.png?v=8703e073f11f) | ![Battery saddles](img/16_saddles.png?v=57b08142d853) |
 
 ## Printed parts
 
@@ -53,7 +53,7 @@ Check with the real parts: the PWM controller lies flat on its pads, the potenti
 | Charge/boost module "2-in-1 3.2 V LiFePO4", **12 V variant** | 1 | [AliExpress](https://de.aliexpress.com/item/1005008094801881.html) | 32.2 × 11 × 3.7 mm; IN± 5 V charging, B± battery, O± 12 V; taped upright onto the partition behind the fan |
 | PWM fan controller CNY-FA5-PRO, DC 8–24 V, with potentiometer and switch | 1 | [AliExpress](https://de.aliexpress.com/item/1005010113177510.html) | 41 × 32 × 15 mm; rests on pads under its pin-free long edges, potentiometer housing in a pocket on the inside of the right wall, washer and nut outside under the knob |
 | USB-C PD trigger module, Type A (default 5 V) | 1 | [AliExpress](https://de.aliexpress.com/item/1005010610660644.html) | charging socket in the back cover. **Leave pads 1–4 open** (they select 9/12/15/20 V); the charge module only takes 4–6 V, check 5 V with a multimeter before connecting |
-| ON-OFF rocker switch, snap-in, 21 × 15 mm (cut-out 19.2 × 12.2 mm) | 1 | [AliExpress](https://de.aliexpress.com/item/1005008871215158.html) | power switch in a well of the back cover, so it stays off the table when the fan lies on its back |
+| ON-OFF rocker switch, snap-in, 21 × 15 mm (cut-out 19.2 × 12.2 mm) | 1 | [AliExpress](https://de.aliexpress.com/item/1005008871215158.html) | power switch in a shallow well low on the back cover; the rocker stands about 2 mm out |
 | LED 3 mm, breathing/fading, 3.3 V, water clear | 1 | [AliExpress](https://de.aliexpress.com/item/1005005336879647.html) | glued from inside behind the O of the logo |
 | Resistor 220 Ω, 1/4 W | 1 | – | series resistor for the LED on the 5 V USB input |
 | Resettable PTC fuse Bourns MF-R160 or RXEF160 (1.6 A hold) | 1 | – | optional, between battery plus and the switch, in heat shrink |

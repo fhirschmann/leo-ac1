@@ -183,7 +183,7 @@ def checks(ctx):
     ctx.open_items.append("Battery BMS board approx. 20 × 4 mm over the full length (measured); cable exit still to be checked")
     ctx.open_items.append("PWM module measured 41.05 × 32 × 15 mm, PCB 1.6 mm, 56.30 mm to shaft tip, axis about 6 mm above PCB (6.3 modelled: supports 0.3 lower after the fit test), solder pins 2-3 mm below except 1.5 mm strips along the long edges; modelled 18 mm high with plugged fan connector (estimate); verify underside datum")
     ctx.open_items.append("USB-C module and shell measured 2026-09-15 (shell bottom approximately 1.1 mm above module underside); verify fit with a plugged cable and soldered wires, and check 5 V at + / - before connecting")
-    ctx.open_items.append("Switch measured 20.9 × 14.7 × 23 mm including contacts, cutout 19.2 × 12.2, panel about 1.5, bezel 2 + rocker 5 above the panel; body depth behind the panel assumed; verify snap fit in the 8 mm well")
+    ctx.open_items.append("Switch measured 20.9 × 14.7 × 23 mm including contacts, cutout 19.2 × 12.2, panel about 1.5, bezel 2 + rocker 5 above the panel; body depth behind the panel assumed; verify snap fit in the 5 mm well")
     ctx.open_items.append("Charge PCB measured 32.2 × 11 × 3.7 mm, back clear; heatsinks not yet available, displayed heatsinks are planned clearance envelopes")
     return dict(dedication_line_gaps_mm=gaps, standard_screws=screws, contact_volumes_mm3=contacts, stops=stops, clearances=clearances,
                 sampled_paths=paths, insert_probes=inserts, air_duct=duct)
@@ -211,7 +211,7 @@ VIEWER = dict(
            ("chg_module", "Charge/boost module · 2 planned heatsink envelopes", "bought", "#c9c9c9", "1x", [0, 0.8, 0]),
            ("led", "USB power indicator LED 3 mm, behind the O", "bought", "#9fd3ff", "1x", [0, 1, 0]),
            ("usb_trigger", "USB-C PD trigger, 5 V (Type A)", "bought", "#4b2a7a", "1x", [0, 1.5, 0]),
-           ("switch", "Power switch KCD11 · rocker 1 mm below the back face", "bought", "#1b1b1b", "1x", [0, 1.8, 0]),
+           ("switch", "Power switch KCD11 · rocker about 2 mm proud of the back face", "bought", "#1b1b1b", "1x", [0, 1.8, 0]),
            ("pwm_board", "PWM board CNY-FA5-PRO · on pads under its pin-free edges", "bought", "#2e6b3f", "1x", [-0.5, 0, 0]),
            # screws leave their part: same direction, further out
            ("screws_grille", "Grille · M3 × 12 button head", "screws", "#26282b", "4x", [0, -1.6, 0]),
@@ -263,11 +263,11 @@ VIEWS = {"01_assembly": ("assembly();", "-160,-330,230,112,40,70"),
          "13_foot_mount": ('intersection() { union() { color("#f2f2ee") body(); color("#222326") place_feet(); color("#26282b") screws_feet(true); } translate([-1, 0, -10]) cube([foot_inset + 1, body_d, 30]); }',
                            "130,40,-35,17,40,2"),
          # USB-C charging socket in the back cover, cut at its axis and seen from above: plate, channel, module, stop on the wall
-         "14_usb_c": ('intersection() { union() { color("#f2f2ee") body(); color("#e6e6e1") back(); color("#4b2a7a") usbc_env(); } translate([192.5, 48, usbc_xz[1] - 20]) cube([33, 36, 20]); }',
-                      "201.5,40,180,204.5,66,68"),
+         "14_usb_c": ('intersection() { union() { color("#f2f2ee") body(); color("#e6e6e1") back(); color("#4b2a7a") usbc_env(); } translate([189, 48, usbc_xz[1] - 20]) cube([37, 36, 20]); }',
+                      "198,40,180,201,66,68"),
          # power switch in its well below the USB-C socket, cut at the switch axis and seen from the left
          "15_switch": ('intersection() { union() { color("#e6e6e1") back(); color("#1b1b1b") sw_env(); } translate([sw_xz[0], 40, sw_xz[1] - 20]) cube([30, 45, 40]); }',
-                       "90.5,40,89,201.5,70,44"),
+                       "87,40,89,198,70,44"),
          # battery saddles on the inside of the back cover: root fillets and the rib behind the battery, seen from the front
          "16_saddles": ('color("#e6e6e1") intersection() { back(); translate([150, 20, 0]) cube([76, 61, 90]); }', "120,-60,120,186,60,40"),
          # underside with the M5 mount insert

@@ -174,14 +174,14 @@ usbc = [usbc_board[0] + usbc_protrusion, usbc_board[1], usbc_board[2]]; // total
 usbc_shell = [8.9, 3.22];    // measured receptacle shell width and height, 2026-09-15
 usbc_shell_bottom = 1.1;     // approximately measured from module underside to shell underside; 1.1 + 3.22 ~= 4.30 overall
 usbc_plate = usbc_protrusion; // local cover thickness: PCB edge rests inside, receptacle face flush outside
-usbc_xz = [201.5, 68];       // module envelope centre: near the right edge (user), above the power switch, between the top battery saddle and the shelf; shell axis is offset upwards by its measured height
+usbc_xz = [198, 68];         // module envelope centre: near the right edge (user), above the power switch, between the top battery saddle and the shelf; shell axis is offset upwards by its measured height
 usbc_cl = 0.2;               // clearance in channel, plate opening and to the stop
 usbc_wall = 2;               // channel on the inside of the back cover: side walls and floor, open at the top for the wires
 usbc_stop = [4, 6];          // stop on the right wall behind the module end (takes the plug force with the back cover on): thickness, height
                              // (reaches below the module, the wires leave its end at the top)
 
 /* [Power switch: measured 14.7 x 20.9 mm rocker, snap-in, in a well of the back cover] */
-sw_xz = [201.5, 44];         // low near the right edge (user), between two battery saddles, in one column below the USB-C socket (user)
+sw_xz = [198, 44];           // low near the right edge (user), between two battery saddles, in one column below the USB-C socket (user)
 sw_cut = [19.2, 12.2];       // measured required panel hole; long side horizontal
 sw_bezel = [20.9, 14.7, 2];  // measured outside width/height and bezel thickness
 sw_rocker = 5;               // measured rocker rise above the bezel
@@ -189,7 +189,7 @@ sw_body = [sw_cut[0] - 0.2, sw_cut[1] - 0.2, 11]; // conservative body below the
 sw_total_depth = 23;         // measured overall depth including contacts
 sw_pins = sw_total_depth - sw_bezel[2] - sw_rocker - sw_body[2]; // inferred from the provisional front/body depth split
 sw_panel = 1.5;              // user-confirmed approximate panel thickness for the snap clips
-sw_well = [8, 0.2, 2.2];     // well: panel below the back face (frame and rocker stay inside when the fan lies on its back), floor margin around the frame (small: short overhang, no support),
+sw_well = [5, 0.2, 2.2];     // well: panel below the back face (user: 3 mm shallower than 8, the frame stays inside, the rocker stands about 2 mm out), floor margin around the frame (small: short overhang, no support),
                              // wall measured horizontally (2.2 = 1.56 mm across the 45 degree flank)
 
 /* [Feet: TPU strips, each screwed with two M3 x 8 from below into Ruthex inserts] */
@@ -387,7 +387,7 @@ assert(mount_xy[0] + mount_doubler[0] / 2 >= part_x - 1, "Mount doubler does not
 assert(back_t - head_pocket[1] >= 2, "Back cover too thin under the recessed screw heads");
 assert(usbc_xz[0] + usbc[1] / 2 - usbc_stop_x0() >= 5,
        "USB-C module: its stop on the right wall, kept out of the battery removal path, covers less than 5 mm of the board end");
-assert(sw_bezel[2] + sw_rocker <= sw_well[0] - 1 && sw_body[0] < sw_cut[0] && sw_body[1] < sw_cut[1] && sw_bezel[0] > sw_cut[0] + 1 && sw_bezel[1] > sw_cut[1] + 1
+assert(sw_bezel[2] <= sw_well[0] - 1 && sw_body[0] < sw_cut[0] && sw_body[1] < sw_cut[1] && sw_bezel[0] > sw_cut[0] + 1 && sw_bezel[1] > sw_cut[1] + 1
        && (sw_xz[1] - sw_well_half()[1] > shelf_z + shelf_t + shelf_hold[2] + shelf_hold[1] + 1 || sw_xz[1] + sw_well_half()[1] < shelf_z - 1)
        && sw_xz[1] + (sw_bezel[1] / 2 + sw_well[1] + sw_well[2] + sw_well[0] - back_t) < body_h - wall - 1
        && (sw_xz[0] + sw_body[0] / 2 + 1 < body_w - wall - pwm_wall_gap - pwm_pcb[0] || sw_xz[1] - sw_body[1] / 2 > shelf_z + shelf_t + pwm_standoff + pwm_total_h + 1 || sw_xz[1] + sw_body[1] / 2 < shelf_z - 1)
