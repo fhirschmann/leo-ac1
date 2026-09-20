@@ -159,14 +159,14 @@ chg_fan_gap = 5;               // free space from the fan's back pads to the fro
 chg_pads = [[4, 7], [chg_pcb[0] - 4 - 7, 7]]; // supports from the board's lower end: start, height; keep 4 mm free at both ends
 chg_ledge = [2, 0.3];          // ledge under the lower board edge: height, set back from the part side
 // the charger IC (CN3058E, linear, 1 A with the fitted 1.2 kOhm ISET resistor) runs too hot to touch, and one housing pad sat
-// right behind it (user, 2026-09-18; housing already printed): a grey holder is glued onto both pads with CA gel and stands on
-// the ledge. The board (eletechsup LFUPSMA) stands in it IN end up and is only gripped at its cool OUT end (user): a lip under
+// right behind it (user, 2026-09-18; housing already printed): a grey holder is glued over both pads with CA gel, each pad
+// enclosed in a socket, and stands on the ledge. The board (eletechsup LFUPSMA) stands in it IN end up and is only gripped at its cool OUT end (user): a lip under
 // the end, two snap hooks over the long edges of the part side, back stops under the edges. The IN half with the IC stands free,
 // with the user's heatsink on the metal pad behind the IC. Board from the user's photos, from the OUT end: back - OUT pads with
 // wires in both corners (0-2.8), 5/9/12 V solder jumpers (6.3-8.1, 3.4-8.7 across, 12 V bridged), BAT pads at one long edge
 // (16.7-21.2), metal pad (21.9-29.5); part side - inductor 1.0 and SS34 diode 0.7 from the long edges between 5 and 12.5,
 // castellations and the B wires from 13 on
-chg_glue = 0.1;                // CA gel between holder and housing pads (user: superglue instead of VHB)
+chg_sock = [0.2, 1.6, 0.3];    // sockets over the housing pads (user: female over the printed male pads, fully enclosed, CA gel): clearance per side, wall, rim to the partition
 chg_holder = [2, 2, 4];        // plate thickness, lip under the lower board edge (z), lip and web width (y, between the OUT pads)
 chg_clip = [3, 11, 2, 0.4, 0.2, [0.6, 2.6]];   // snap hooks at both long edges: from / to (from the OUT end), jaw thickness, overlap on the part side,
                                // edge clearance, back stop under the edge from / to (0.8 mm slot to the jaw so the slicer cannot close it; jumpers from 3.4)
@@ -323,7 +323,8 @@ led_xz = [logo_x0 + text_x(brand, big_size, big_stroke, big_gap, 2) + big_size[0
 fan_y = front_t + fan_standoff;                       // front face of the fan frame
 chg_y0 = fan_y + fan_t + fan_pad + chg_fan_gap;       // front edge of the upright charge module
 chg_z = (cable_notch_z[0] + cable_notch_z[1]) / 2;    // charge module centred between the two cable notches
-chg_hx1 = part_x - (chg_gap - chg_tape) - chg_glue;   // back face of the holder, glued onto the housing pads
+chg_hx1 = part_x - (chg_gap - chg_tape);              // socket floors on the faces of the housing pads
+chg_rim_x = part_x - chg_sock[2];                      // socket rims, short of the partition
 chg_hz0 = chg_z - chg_pcb[0] / 2;                      // holder foot on the housing ledge
 chg_air = chg_rear_sink[2] + chg_rear_sink[3] + chg_rear_sink[4];   // board back to holder plate
 chg_bx0 = chg_hx1 - chg_holder[0] - chg_air - chg_pcb[2];   // part side of the board on the holder
@@ -1012,22 +1013,34 @@ module chg_rear_sink_env() let (s = chg_rear_sink)
 // ledge; it grips only the OUT end of the board: a lip under the end between the OUT pads (0.3 behind the part side) with a web
 // behind the board, back stops under both long edges, and a jaw beside each edge with a snap hook over the part side. The jaws
 // spring 0.6 mm on their free length from the plate; the hooks have a 45 degree lead-in, the board clips in from the front
+// the printed housing pads (body code), grown by g (by gx at the pad face) and run out to x1 along their 45 degree front cone
+module chg_pad_env(g, x1, gx = 0) for (pd = chg_pads) hull() {
+    translate([chg_hx1 - gx, chg_y0 + 1 - g, chg_hz0 + pd[0] - g]) cube([x1 - chg_hx1 + gx, chg_pcb[1] - 2 + 2 * g, pd[1] + 2 * g]);
+    translate([x1 - tip, chg_y0 + 1 - (x1 - chg_hx1) - g * sqrt(2), chg_hz0 + pd[0] - g]) cube([tip, tip, pd[1] + 2 * g]);
+}
 module chg_holder() let (xs = chg_hx1 - chg_holder[0], w = chg_pcb[1], c = chg_clip, yl = chg_y0 + (w - chg_holder[2]) / 2,
                          z0 = chg_bz0 + c[0], dz = c[1] - c[0], xh = chg_bx0 - c[3] - c[4], ym = chg_y0 + w / 2) {
-    translate([xs, chg_y0 - c[4] - c[2], chg_hz0]) cube([chg_holder[0], w + 2 * (c[4] + c[2]), chg_bz0 + c[1] - chg_hz0]);   // plate with the jaw roots
-    translate([xs, chg_y0, chg_hz0]) cube([chg_holder[0], w, chg_pads[1][0] + chg_pads[1][1] + 1]);                         // over both pads
-    translate([chg_bx0 + chg_ledge[1], yl, chg_hz0]) cube([xs - chg_bx0 - chg_ledge[1] + eps, chg_holder[2], chg_holder[1]]);   // lip
-    translate([chg_bx0 + chg_pcb[2] + chg_web_gap, yl, chg_hz0]) cube([xs - chg_bx0 - chg_pcb[2] - chg_web_gap + eps, chg_holder[2], chg_bz0 + c[1] - chg_hz0]);   // web
-    for (m = [0, 1]) translate([0, ym, 0]) mirror([0, m, 0]) translate([0, -ym, 0]) {   // one jaw per long edge
-        translate([chg_bx0 + chg_pcb[2], chg_y0 + c[5][0], z0]) cube([xs - chg_bx0 - chg_pcb[2] + eps, c[5][1] - c[5][0], dz]);   // back stop under the edge
-        translate([xh, chg_y0 - c[4] - c[2], z0]) cube([xs - xh + eps, c[2], dz]);   // jaw, free from the plate
+    difference() {   // plate, solid back to the socket rims, with a socket over each housing pad
+        union() {
+            translate([xs, chg_y0 - c[4] - c[2], chg_hz0]) cube([chg_rim_x - xs, w + 2 * (c[4] + c[2]), chg_bz0 + c[1] - chg_hz0]);   // with the jaw roots
+            translate([xs, chg_y0, chg_hz0]) cube([chg_rim_x - xs, w, chg_pads[1][0] + chg_pads[1][1] + chg_sock[0] + chg_sock[1]]);
+            chg_pad_env(chg_sock[0] + chg_sock[1], chg_rim_x);
+        }
+        chg_pad_env(chg_sock[0], part_x + 1);   // floors on the pad faces, clearance on the other sides
+    }
+    translate([chg_bx0 + chg_ledge[1], yl, chg_hz0]) cube([xs - chg_bx0 - chg_ledge[1] + 1, chg_holder[2], chg_holder[1]]);   // lip
+    translate([chg_bx0 + chg_pcb[2] + chg_web_gap, yl, chg_hz0]) cube([xs - chg_bx0 - chg_pcb[2] - chg_web_gap + 1, chg_holder[2], chg_bz0 + c[1] - chg_hz0]);   // web
+    for (sd = [0, 1]) let (yj = sd ? chg_y0 + w + c[4] : chg_y0 - c[4] - c[2], yh = sd ? chg_y0 + w - c[3] : yj,
+                           yb = sd ? chg_y0 + w - c[5][1] : chg_y0 + c[5][0]) {   // one jaw per long edge (no mirror: its float noise left slivers)
+        translate([chg_bx0 + chg_pcb[2], yb, z0]) cube([xs - chg_bx0 - chg_pcb[2] + 1, c[5][1] - c[5][0], dz]);   // back stop under the edge
+        translate([xh, yj, z0]) cube([xs - xh + 1, c[2], dz]);   // jaw, free from the plate
         hull() {   // hook: flat seat on the part side, 45 degree lead-in towards the front
-            translate([chg_bx0 - tip, chg_y0 - c[4] - c[2], z0]) cube([tip, c[2] + c[4] + c[3], dz]);
-            translate([xh, chg_y0 - c[4] - c[2], z0]) cube([tip, c[2], dz]);
+            translate([chg_bx0 - tip, yh, z0]) cube([tip, c[2] + c[4] + c[3], dz]);
+            translate([xh, yj, z0]) cube([tip, c[2], dz]);
         }
     }
 }
-module chg_holder_print_pose() rotate([0, 90, 0]) translate([-chg_hx1, chg_clip[2] + chg_clip[4] - chg_y0, -chg_hz0]) children();   // pad face on the bed
+module chg_holder_print_pose() rotate([0, 90, 0]) translate([-chg_rim_x, chg_clip[2] + chg_clip[4] - chg_y0 + 3, -chg_hz0]) children();   // socket rims on the bed
 module pwm_board_env() {             // board on the rib pads: parts above, solder pins below except along the long edges
     x1 = body_w - wall - pwm_wall_gap;   // PCB edge, in the wall slot
     translate([x1 - pwm_pcb[0], pot_yz[0] - pwm_pcb[1] / 2, shelf_z + shelf_t + pwm_standoff]) {

@@ -132,7 +132,7 @@ def checks(ctx):
                              ("cover", "body", [-1, 0, 0]), ("battery", "body", [0, 0, -1]), ("bail", "body", [0, 0, -1]),
                              ("bail_up", "body", [0, -math.sin(math.radians(m["bail_carry"])), math.cos(math.radians(m["bail_carry"]))]),   # stop at the carrying angle
                              ("pot", "body", [1, 0, 0]), ("pot_nut", "body", [-1, 0, 0]),
-                             ("chg_holder", "body", [0, 0, -1]), ("chg_module", "chg_holder", [1, 0, -1]),
+                             ("chg_holder", "body", [0, 0, -1]), ("chg_holder", "body", [1, 0, 0]),   # on the ledge, socket floors on the pads ("chg_module", "chg_holder", [1, 0, -1]),
                              ("chg_sink", "chg_module", [-1, 0, 0]),
                              ("led", "body", [0, -1, 0]), ("feet", "body", [0, 0, 1]), ("usb_trigger", "back", [0, 1, 0]),
                              ("switch", "back", [0, -1, 0])])
@@ -171,6 +171,7 @@ def checks(ctx):
             ("battery_out", ["battery"], others("battery", "back", "screws_back", "usb_trigger", "switch", "bail"), [0, 1, 0], 90, 1),
             # the snap hooks spring open (not a rigid path): off the back stops towards the fan section, against everything but the holder
             ("chg_module_unclip", ["chg_module", "chg_sink"], others("chg_module", "chg_sink", "chg_holder", "back", "screws_back", "usb_trigger", "switch", "bail"), [-1, 0, 0], 4, 0.25),
+            ("chg_holder_off", ["chg_holder"], ["body"], [-1, 0, 0], 6, 0.25),   # the sockets slide off the pads (before gluing)
             ("screws_fan_out", ["screws_fan"], others("screws_fan", "fan", "back", "screws_back", "usb_trigger", "switch", "bail"), [0, 1, 0], 40, 1),
             # the charge module holder is glued in and stays: off the duct ring, sideways past the holder, then out the back
             ("fan_out", ["fan"], others("fan", "screws_fan", "battery", "chg_module", "chg_sink", "back", "screws_back", "usb_trigger", "switch", "bail"),
