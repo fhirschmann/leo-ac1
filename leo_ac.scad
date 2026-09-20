@@ -954,19 +954,21 @@ module pwm_board_env() {             // board on the rib pads: parts above, sold
 module bail_sides() { children(); translate([body_w, 0, 0]) mirror([1, 0, 0]) children(); }
 // 45 degree chamfers along a left side step from y0 to the back: top edge of the inner wall, side face to step floor
 // outline of a side step in (y, z): arc round the eye, ramp, floor to the back; grow = outward offset
-module bail_step_profile_2d(grow = 0) offset(delta = grow) hull() {
-    translate([bail_y, bail_z]) circle(r = bail_arm[1] / 2 + bail_cl);
-    translate([bail_ramp_y(), body_h + 1]) square([0.2, 1]);
-    translate([bail_y, bail_floor]) square([body_d + 2 - bail_y, bail_arm[1] + 1]);
-}
+// step outline in two convex pieces (a hull of both would slope the floor down to the eye clearance): 0 eye and ramp, 1 floor
+module bail_step_profile_2d(grow = 0, piece = 0) offset(delta = grow)
+    if (piece == 0) hull() {
+        translate([bail_y, bail_z]) circle(r = bail_arm[1] / 2 + bail_cl);
+        translate([bail_ramp_y(), body_h + 1]) square([0.2, 1]);
+    }
+    else translate([bail_y, bail_floor]) square([body_d + 2 - bail_y, bail_arm[1] + 1]);
 // chamfer where the step outline leaves the outer surface: for each tangent plane of the rounded top corner (and the flat side face)
 // the hull of the outline 1 mm outside the plane grown by bail_c + 1 and the plain outline bail_c inside it; the slabs meet the hull with
 // their inner faces, so the flanks are exactly 45 degrees. Tangent planes lie outside the convex corner: no cut goes deeper than bail_c.
-module bail_step_edge_chamfer() for (a = [0:15:75]) let (n = [-cos(a), 0, sin(a)], tv = [sin(a), 0, cos(a)],
+module bail_step_edge_chamfer() for (a = [0:15:75], piece = [0, 1]) let (n = [-cos(a), 0, sin(a)], tv = [sin(a), 0, cos(a)],
         p0 = [corner_r * (1 - cos(a)), 0, body_h - corner_r + corner_r * sin(a)], u = a == 0 ? [-30, 2] : [-2, 2],
         m = [[tv[0], 0, -n[0], p0[0]], [0, 1, 0, 0], [tv[2], 0, -n[2], p0[2]], [0, 0, 0, 1]]) hull() {
-    intersection() { multmatrix(m) translate([u[0], -1, -1 - tip]) cube([u[1] - u[0], body_d + 2, tip]); along_x(-12, bail_band) bail_step_profile_2d(bail_c + 1); }
-    intersection() { multmatrix(m) translate([u[0], -1, bail_c]) cube([u[1] - u[0], body_d + 2, tip]); along_x(-12, bail_band) bail_step_profile_2d(0); }
+    intersection() { multmatrix(m) translate([u[0], -1, -1 - tip]) cube([u[1] - u[0], body_d + 2, tip]); along_x(-12, bail_band) bail_step_profile_2d(bail_c + 1, piece); }
+    intersection() { multmatrix(m) translate([u[0], -1, bail_c - tip]) cube([u[1] - u[0], body_d + 2, tip]); along_x(-12, bail_band) bail_step_profile_2d(0, piece); }
 }
 module bail_step_chamfers(y0, top = true) {
     if (top) along_y(y0, body_d + 1) polygon([[bail_band - 1, body_h - bail_c - 1], [bail_band + bail_c + 1, body_h + 1], [bail_band - 1, body_h + 1]]);
