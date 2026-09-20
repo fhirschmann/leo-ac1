@@ -17,9 +17,9 @@ Internal notes for coding agents (Claude, Codex). The README is public and stays
 ## User constraints and preferences
 
 - Toy for the user's son: drop-resistant (walls ≥ 3.2 mm, corner radius ≥ 5), grille openings ≤ 6 mm, no sharp edges.
-- Screws only ISO 7380 button head Torx from the user's set: M3 × 6/8/10/12/16/25, M4 × 12; M3 × 30 for the fan is bought separately. No countersunk screws.
+- Screws only ISO 7380 button head Torx from the user's set: M3 × 6/8/10/12/16/25, M4 × 12; M3 × 30 for the fan is bought separately; M4 × 12 holds the bail pivots. No countersunk screws.
 - Ruthex inserts per datasheet (RX series 08/2022): M3x5.7 hole 4.0, depth ≥ L + 1, wall ≥ 1.6, ≥ 3 mm material to visible faces; M5x9.5 hole 6.4, wall ≥ 2.6. Inserts must be pressable from an accessible side.
-- Printer Bambu Lab H2S with AMS, Bambu PETG HF white/grey (plenty in stock), TPU for the feet. Housing white, grille/cover/handle/knob grey.
+- Printer Bambu Lab H2S with AMS, Bambu PETG HF white/grey (plenty in stock), TPU for the feet. Housing white, grille/cover/bail/knob grey.
 
 ## Measured hardware (2026-09-15, measured by the user)
 
@@ -51,13 +51,14 @@ Internal notes for coding agents (Claude, Codex). The README is public and stays
 - Partition with two cable notches (z 44 and 126); charge module centred between them, 5 mm behind the fan, 4.5 mm off the partition.
 - Battery saddles on the back cover with root fillets and a tie rib; BMS cut-out 25 × 5.5 mm for the approx. 20 mm board. Printed fit accepted by the user (2026-09-16); foam tape above and below clamps the battery, no geometry change.
 - Dedication (3 lines, 6/6/4 mm) raised in grey on the inside of the front plate above the PWM module; line gaps are checked on the inlay mesh.
-- TPU feet screwed (2 × M3 × 8 each) into outside-pressed inserts; handle with doubled top wall, ribs and keys; M5 insert in the underside.
+- TPU feet screwed (2 × M3 × 8 each) into outside-pressed inserts; folding bail (concept of the user's leoino case): flush in a step of the front top edge and beside 6 mm rims, pivots at mid-depth (user: level carrying, 20 mm finger room, 194 mm grip), M4 × 12 through Ø 7 × 6.9 sleeves into Ruthex M4 inserts (5.1 mm engaged), bar recess with a 45° back face (printable finger groove), swing sampled at 45° and 90° as extra assembly bodies; M5 insert in the underside.
 
 ## Open items
 
 - Measure: battery cable exit; PWM underside parts; switch body depth behind the panel; USB-C shell height/centring with a plugged cable; tape thickness; heatsinks if added.
 - Fit test (user wants the whole right section, as little material as possible): `test_right` and `test_right_back` (quantity 0) are body and back cover from `part_x` to the right wall and from `shelf_z` up (user: only the upper part, battery holder and USB-C already confirmed), cut with `slice_box()` in print orientation; `TEST_PLATES` puts them with a knob into `stl/leo_ac1_fit_tests.3mf`, sliced with `TEST_PROCESS` (2 walls, 3 top/bottom, 10 % infill). Check: PWM board flat on its pads, potentiometer pocket, nut from outside, knob over washer and nut, LED, switch, inserts. The earlier small slices were removed.
 - USB-C mechanical fit is confirmed (2026-09-16); full cable insertion and fit with soldered wires still need explicit confirmation. Results for the other fit tests are pending.
+- Bail: source the Ø 7 × 6.9 mm sleeves (bore ≥ 4.2); check the Ruthex RX-M4x8.1 datasheet (hole 5.6 taken from the leoino case, length 8.1 and wall 2.2 assumed); 0.5 mm gaps between arm and rim/pocket (pinch check on the print).
 - Wiring: stow the 400 mm fan cable, keep wires out of the fan, saddles and back lip; leave slack at the back-cover modules.
 - Measure the boost converter idle current, then decide the switch position (battery line vs. O+). Check charge-module temperature in the closed housing, also charging with the fan off.
 - Air duct vs. real fan frame: the duct check uses the fan envelope; the real Noctua frame has chamfers, some back-flow is possible (a foam ring could help).

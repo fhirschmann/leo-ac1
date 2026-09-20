@@ -1,5 +1,5 @@
 {
-  "source_sha256": "e597296e574c1bda278f60538ca9e60a15dd17682aa2afaea2b01820945dc81f",
+  "source_sha256": "40a8a2dae787a93205a5fc6371fd717fd1918839c81b43d9401131df5a4a7610",
   "software": {
     "numpy": "2.5.3",
     "trimesh": "5.1.0",
@@ -29,17 +29,17 @@
           76.0
         ]
       ],
-      "volume_mm3": 357435.44,
-      "triangles": 26510,
+      "volume_mm3": 340483.4294,
+      "triangles": 27238,
       "watertight": true,
       "consistent_winding": true,
       "degenerate_faces": 0,
       "components": 1,
       "backend": "CGAL",
-      "sha256": "f646e0da42247f24f03d02e8e5d6bb2f9b24c94412b6b0f822a2436f0ea5af8b",
+      "sha256": "e790f31a557dd1c9c8e0a1d1254b690916c4d0a3a1a4ca714d044114f10bdb7c",
       "quantity": 1,
       "material": "PETG-white",
-      "committed_sha256": "f646e0da42247f24f03d02e8e5d6bb2f9b24c94412b6b0f822a2436f0ea5af8b"
+      "committed_sha256": "e790f31a557dd1c9c8e0a1d1254b690916c4d0a3a1a4ca714d044114f10bdb7c"
     },
     "back": {
       "size_mm": [
@@ -126,40 +126,40 @@
       "degenerate_faces": 0,
       "components": 1,
       "backend": "CGAL",
-      "sha256": "900b740fd34d61e678ffe54f5a597c42db608e4648792ab1db20b8de698b3502",
+      "sha256": "0f1d0f5f1502c703bce934397b1fdd7f6eaa841455de0eae232b238ffb9df68e",
       "quantity": 1,
       "material": "PETG-grey",
-      "committed_sha256": "900b740fd34d61e678ffe54f5a597c42db608e4648792ab1db20b8de698b3502"
+      "committed_sha256": "0f1d0f5f1502c703bce934397b1fdd7f6eaa841455de0eae232b238ffb9df68e"
     },
-    "handle": {
+    "bail": {
       "size_mm": [
-        170.0,
-        43.2,
-        24.0
+        212.0,
+        44.9981,
+        12.0
       ],
       "bounds_mm": [
         [
-          27.5,
-          -197.0,
+          6.5,
+          1.0,
           0.0
         ],
         [
-          197.5,
-          -153.8,
-          24.0
+          218.5,
+          45.9981,
+          12.0
         ]
       ],
-      "volume_mm3": 81557.6642,
-      "triangles": 484,
+      "volume_mm3": 28783.9478,
+      "triangles": 1300,
       "watertight": true,
       "consistent_winding": true,
       "degenerate_faces": 0,
       "components": 1,
-      "backend": "Manifold",
-      "sha256": "7b1a5447d63ce52d58b911bd836ea875d3de2e600ade58cb79e825f52929392e",
+      "backend": "CGAL",
+      "sha256": "7ffa3e233345ba9d5e5a90c4fd04e2e7169182db1cacd8da4cc56c2c71cc2b89",
       "quantity": 1,
       "material": "PETG-grey",
-      "committed_sha256": "7b1a5447d63ce52d58b911bd836ea875d3de2e600ade58cb79e825f52929392e"
+      "committed_sha256": "7ffa3e233345ba9d5e5a90c4fd04e2e7169182db1cacd8da4cc56c2c71cc2b89"
     },
     "knob": {
       "size_mm": [
@@ -239,17 +239,17 @@
           76.0
         ]
       ],
-      "volume_mm3": 99103.6885,
-      "triangles": 14106,
+      "volume_mm3": 90220.6732,
+      "triangles": 14468,
       "watertight": true,
       "consistent_winding": true,
       "degenerate_faces": 0,
       "components": 1,
       "backend": "CGAL",
-      "sha256": "1d9629ee2a5169f3834478ffed90eb70dbda855bb8ad4561e81b4c46f43f63a7",
+      "sha256": "139167e387e37bcbf46e13eb1a9bd826f9eeae7722df99dd9c00e660f85a2426",
       "quantity": 0,
       "material": "PETG-white",
-      "committed_sha256": "1d9629ee2a5169f3834478ffed90eb70dbda855bb8ad4561e81b4c46f43f63a7"
+      "committed_sha256": "139167e387e37bcbf46e13eb1a9bd826f9eeae7722df99dd9c00e660f85a2426"
     },
     "test_right_back": {
       "size_mm": [
@@ -301,14 +301,14 @@
           76.0
         ]
       ],
-      "volume_mm3": 356910.6427,
-      "triangles": 27698,
+      "volume_mm3": 339958.6322,
+      "triangles": 28426,
       "watertight": true,
       "consistent_winding": true,
       "degenerate_faces": 0,
       "components": 1,
       "backend": "CGAL",
-      "sha256": "0ac1ef9f1a37f1c2a0879e0c9c4b08b1c1ab7601a71ed22fca2d665af19907b8"
+      "sha256": "d834a81625068790783161617980fe3832bb48b7a60def5e9b626307d987e905"
     },
     "body_label": {
       "size_mm": [
@@ -335,7 +335,7 @@
       "degenerate_faces": 0,
       "components": 22,
       "backend": "Manifold",
-      "sha256": "3d31f0d2efaff7aae5d760c0c03180e634645f06a8f078c1d78f806bd2b6b7ff"
+      "sha256": "f7f84af2576ed03b79fa44263be32b0ecc8c9c959d8100d55a93d382fad36c58"
     },
     "body_dedication": {
       "size_mm": [
@@ -362,7 +362,7 @@
       "degenerate_faces": 0,
       "components": 24,
       "backend": "Manifold",
-      "sha256": "40254b797d10a0f3fecdcc2e8f8c838102bdba84d5d721dbeb9f91e3eaf95571"
+      "sha256": "14f185934186116bdbc5348c1116af07f1f372eebd59b659f766afac14bc1ba5"
     },
     "knob_base": {
       "size_mm": [
@@ -456,8 +456,8 @@
       }
     }
   },
-  "assembly_bodies": 21,
-  "assembly_pairs": 210,
+  "assembly_bodies": 23,
+  "assembly_pairs": 253,
   "metrics": {
     "wall": 3.2,
     "front_t": 3.2,
@@ -494,9 +494,13 @@
     "knob_shaft_engagement": 9,
     "knob_top_skin": 3.3,
     "knob_protrusion": 6,
-    "handle_clearance": 30,
-    "handle_open_top": 90,
-    "handle_mount_wall": 6.4,
+    "bail_clearance": 20,
+    "bail_grip": 194.4,
+    "bail_insert": [
+      5.6,
+      8.1,
+      2.2
+    ],
     "foot_clearance": 0.2,
     "dedication_lines": 3,
     "foot_lift": 4.5,
@@ -580,10 +584,10 @@
         1.1
       ],
       [
-        "handle",
+        "bail",
         12,
-        5.7,
-        1.7
+        5.1,
+        4
       ],
       [
         "feet",
@@ -818,68 +822,36 @@
         1.6
       ],
       [
-        "handle",
+        "body",
         [
-          50.5,
+          15.8,
           40,
-          153.8
+          149
         ],
         [
+          1,
           0,
-          0,
-          1
+          0
         ],
-        8.5,
-        4,
-        1.6
+        9.1,
+        5.6,
+        2.2
       ],
       [
-        "handle",
+        "body",
         [
-          35.5,
+          209.2,
           40,
-          153.8
+          149
         ],
         [
+          -1,
           0,
-          0,
-          1
+          0
         ],
-        8.5,
-        4,
-        1.6
-      ],
-      [
-        "handle",
-        [
-          174.5,
-          40,
-          153.8
-        ],
-        [
-          0,
-          0,
-          1
-        ],
-        8.5,
-        4,
-        1.6
-      ],
-      [
-        "handle",
-        [
-          189.5,
-          40,
-          153.8
-        ],
-        [
-          0,
-          0,
-          1
-        ],
-        8.5,
-        4,
-        1.6
+        9.1,
+        5.6,
+        2.2
       ],
       [
         "body",
@@ -965,31 +937,38 @@
   },
   "intersections": [],
   "alignment": {
-    "features": 153,
+    "features": 165,
     "coaxial_pairs": {
       "back|battery": 3,
       "back|body": 15,
       "back|screws_back": 24,
+      "bail_half|bail_up": 16,
+      "bail_half|body": 10,
+      "bail_half|screws_bail": 12,
+      "bail_up|body": 10,
+      "bail_up|screws_bail": 12,
+      "bail|bail_half": 16,
+      "bail|bail_up": 16,
+      "bail|body": 10,
+      "bail|screws_bail": 12,
       "battery|body": 3,
       "body|cover": 4,
       "body|feet": 4,
       "body|grille": 37,
-      "body|handle": 4,
       "body|knob": 2,
       "body|led": 2,
       "body|pot": 2,
       "body|pot_nut": 5,
       "body|screws_back": 12,
+      "body|screws_bail": 8,
       "body|screws_fan": 4,
       "body|screws_feet": 4,
       "body|screws_grille": 12,
-      "body|screws_handle": 8,
       "cover|knob": 8,
       "cover|pot": 2,
       "cover|pot_nut": 4,
       "feet|screws_feet": 16,
       "grille|screws_grille": 16,
-      "handle|screws_handle": 4,
       "knob|pot": 6,
       "knob|pot_nut": 9,
       "pot|pot_nut": 2
@@ -1017,10 +996,10 @@
       "engagement_mm": 5.7,
       "tip_margin_mm": 1.1
     },
-    "handle": {
+    "bail": {
       "length": 12,
-      "engagement_mm": 5.7,
-      "tip_margin_mm": 1.7
+      "engagement_mm": 5.1,
+      "tip_margin_mm": 4
     },
     "feet": {
       "length": 8,
@@ -1034,7 +1013,7 @@
     "back@body": 133.4096,
     "cover@body": 2.5265,
     "battery@body": 46.5649,
-    "handle@body": 12.3758,
+    "bail@body": 132.3378,
     "pot@body": 6.3327,
     "pot_nut@body": 2.7551,
     "chg_module@body": 4.8873,
@@ -1135,7 +1114,7 @@
       "max_volume_mm3": 0.0
     },
     {
-      "name": "handle_up",
+      "name": "bail_up",
       "length_mm": 15.0,
       "collisions": 0,
       "first_mm": null,
@@ -1326,44 +1305,22 @@
       "floor_fill": 1.0
     },
     {
-      "body": "handle",
+      "body": "body",
       "at": [
-        50.5,
+        15.8,
         40.0,
-        153.8
+        149.0
       ],
       "empty_mm3": 0.0,
       "ring_fill": 1.0,
       "floor_fill": 1.0
     },
     {
-      "body": "handle",
+      "body": "body",
       "at": [
-        35.5,
+        209.2,
         40.0,
-        153.8
-      ],
-      "empty_mm3": 0.0,
-      "ring_fill": 1.0,
-      "floor_fill": 1.0
-    },
-    {
-      "body": "handle",
-      "at": [
-        174.5,
-        40.0,
-        153.8
-      ],
-      "empty_mm3": 0.0,
-      "ring_fill": 1.0,
-      "floor_fill": 1.0
-    },
-    {
-      "body": "handle",
-      "at": [
-        189.5,
-        40.0,
-        153.8
+        149.0
       ],
       "empty_mm3": 0.0,
       "ring_fill": 1.0,
@@ -1435,7 +1392,7 @@
     "back": 0.0,
     "grille": 0.0,
     "cover": 0.0,
-    "handle": 0.0,
+    "bail": 0.0,
     "knob": 0.0,
     "foot": 0.0,
     "test_right": 0.0,

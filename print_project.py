@@ -14,7 +14,7 @@ PARTS = {
     "back": (1, "PETG-white", 1),
     "grille": (1, "PETG-grey", 1),
     "cover": (1, "PETG-grey", 1),
-    "handle": (1, "PETG-grey", 1),
+    "bail": (1, "PETG-grey", 1),
     "knob": (1, "PETG-grey", 1),
     "foot": (2, "TPU", 1),
     # fit test: right section of housing and back cover, cut from the real parts
@@ -30,7 +30,9 @@ ASSEMBLY = {
     "grille": "grille();",
     "back": "back();",
     "cover": "cover();",
-    "handle": "handle();",
+    "bail": "bail();",
+    "bail_half": "bail(45);",   # the swing, sampled half and fully raised: checked against the housing
+    "bail_up": "bail(90);",
     "feet": "place_feet();",
     "knob": "knob();",
     "pot": "pot_env(nut = false);",
@@ -45,10 +47,11 @@ ASSEMBLY = {
     "screws_grille": "screws_grille();",
     "screws_fan": "screws_fan();",
     "screws_back": "screws_back();",
-    "screws_handle": "screws_handle();",
+    "screws_bail": "screws_bail();",
     "screws_feet": "screws_feet();",
 }
-ALLOWED_OVERLAPS = [("fan", "screws_fan")]   # the fan is a solid envelope, its screws run through the frame holes
+ALLOWED_OVERLAPS = [("fan", "screws_fan"),   # the fan is a solid envelope, its screws run through the frame holes
+                    ("bail", "bail_half"), ("bail", "bail_up"), ("bail_half", "bail_up")]   # one bail in three swing positions
 
 # Multicolour: part -> inlay names; SOURCE needs the branches <part>_base and <part>_<inlay>
 COLOR_PARTS = {"body": ("label", "dedication"), "knob": ("pointer",)}   # logo on the front face, dedication raised inside, white knob pointer
@@ -63,7 +66,7 @@ FILAMENTS = [dict(material="PETG-white", profile="Bambu PETG HF @BBL H2S", colou
              dict(material="PETG-grey", profile="Bambu PETG HF @BBL H2S", inlay=("label", "dedication"), colour="#8E9294"),
              dict(material="TPU", profile="Generic TPU @BBL H2S", colour="#222326"),
              dict(material="PETG-white", profile="Bambu PETG HF @BBL H2S", inlay=("pointer",), colour="#FFFFFF")]
-PLATES = [("Housing", ["body"]), ("Back cover", ["back"]), ("Grey parts", ["grille", "cover", "handle", "knob"]), ("TPU feet", ["foot"])]
+PLATES = [("Housing", ["body"]), ("Back cover", ["back"]), ("Grey parts", ["grille", "cover", "bail", "knob"]), ("TPU feet", ["foot"])]
 PROJECT_3MF = "stl/leo_ac1_all_parts.3mf"
 # fit test before the full build: right section of housing and back cover with a knob, as little material as possible
 TEST_PLATES = [("Right section fit test", ["test_right", "test_right_back", "knob"])]
@@ -94,8 +97,9 @@ def checks(ctx):
     assert m["mount_insert"] == [6.4, 9.5, 2.6] and m["mount_floor"] >= 2, "Ruthex M5x9.5: hole 6.4, length 9.5, wall 2.6; 2 mm floor"
     assert m["grille_gap"] <= 6, "Grille openings above 6 mm let children's fingers through"
     assert m["knob_shaft_engagement"] >= 8 and m["knob_top_skin"] >= 2 and m["knob_protrusion"] <= 8, "Knob: on the shaft, at most 8 mm in front of the cover"
-    assert m["handle_clearance"] >= 30 and m["handle_open_top"] >= 90, "Handle: 30 mm finger clearance, 90 mm hand breadth"
-    assert m["handle_mount_wall"] >= 6, "Handle mount: top wall with doubler at least 6 mm under the feet"
+    # bail pivots at mid-depth (user: level carrying): about 20 mm for the fingers, a hand breadth between the arms
+    assert m["bail_clearance"] >= 18 and m["bail_grip"] >= 90, "Bail: 18 mm finger clearance, 90 mm hand breadth"
+    assert m["bail_insert"][0] == 5.6, "Ruthex M4 insert: hole 5.6 mm"
     assert m["foot_clearance"] >= 0.2 and m["foot_lift"] >= 3, "TPU feet: clearance 0.2 mm in the pockets, housing at least 3 mm above the ground"
     # dedication: the lines must stay apart (descenders!); letters of the grey inlay in print orientation, merged by their y spans
     import trimesh
@@ -118,7 +122,7 @@ def checks(ctx):
 
     # Contact, not just freedom from overlap: moved 0.05 mm towards its support, a body must intersect it
     contacts = ctx.contacts([("grille", "body", [0, 1, 0]), ("fan", "body", [0, -1, 0]), ("back", "body", [0, -1, 0]),
-                             ("cover", "body", [-1, 0, 0]), ("battery", "body", [0, 0, -1]), ("handle", "body", [0, 0, -1]),
+                             ("cover", "body", [-1, 0, 0]), ("battery", "body", [0, 0, -1]), ("bail", "body", [0, 0, -1]),
                              ("pot", "body", [1, 0, 0]), ("pot_nut", "body", [-1, 0, 0]), ("chg_module", "body", [1, 0, -1]),
                              ("led", "body", [0, -1, 0]), ("feet", "body", [0, 0, 1]), ("usb_trigger", "back", [0, 1, 0]),
                              ("switch", "back", [0, -1, 0])])
@@ -159,7 +163,7 @@ def checks(ctx):
             ("fan_out", ["fan", "screws_fan"], others("fan", "screws_fan", "battery", "chg_module", "back", "screws_back", "usb_trigger", "switch"), [0, 1, 0], 90, 1),
             ("knob_off", ["knob"], others("knob"), [1, 0, 0], 25, 0.5),
             ("cover_off", ["cover"], ["body", "pot", "pot_nut", "pwm_board", "knob"], [1, 0, 0], 30, 0.5),   # glued in; the knob can stay on
-            ("handle_up", ["handle"], ["body"], [0, 0, 1], 15, 0.5),
+            ("bail_up", ["bail"], ["body"], [0, 0, 1], 15, 0.5),   # after its pivot screws
             ("feet_down", ["feet"], ["body"], [0, 0, -1], 6, 0.5),
             # the USB-C module comes off with the back cover (back_off), then out of its channel
             ("usb_trigger_from_back", ["usb_trigger"], ["back"], [0, -1, 0], 16, 0.5),
@@ -185,18 +189,18 @@ def checks(ctx):
 
 VIEWER = dict(
     title="LEO-AC1", page_title="LEO-AC1 fan", eyebrow="Assembly · installed position",
-    dims=[("Width", "239.8"), ("Depth", "84"), ("Height", "201.5")],
+    dims=[("Width", "239.8"), ("Depth", "84"), ("Height", "159.5")],
     groups=[("white", "Printed · PETG white"), ("grey", "Printed · PETG grey"),
             ("tpu", "Printed · TPU"), ("screws", "Screws M3"), ("bought", "Bought parts")],
     hidden_groups=["bought"],
-    outer=["body", "back", "cover", "grille", "handle", "feet", "screws_grille", "screws_back", "screws_handle", "screws_feet"],
+    outer=["body", "back", "cover", "grille", "bail", "feet", "screws_grille", "screws_back", "screws_bail", "screws_feet"],
     cut=["back", "cover", "screws_back"],
     # id, label, group, colour, quantity, explode direction (mm per slider mm)
     parts=[("body", "Housing", "white", "#f2f2ee", "1x", [0, 0, 0]),
            ("back", "Back cover", "white", "#e6e6e1", "1x", [0, 1.5, 0]),
            ("grille", "Fan grille", "grey", "#8f9396", "1x", [0, -1, 0]),
            ("cover", "Service cover", "grey", "#8f9396", "1x", [1, 0, 0]),
-           ("handle", "Handle", "grey", "#8f9396", "1x", [0, 0, 1.2]),
+           ("bail", "Folding bail", "grey", "#8f9396", "1x", [0, 0, 1.2]),
            ("knob", "Speed knob", "grey", "#8f9396", "1x", [2, 0, 0]),
            ("feet", "Feet · TPU", "tpu", "#222326", "2x", [0, 0, -0.8]),
            ("fan_visual", "Fan Noctua NF-F12 iPPC-2000", "bought", "#303236", "1x", [0, 0.8, 0]),
@@ -211,7 +215,7 @@ VIEWER = dict(
            ("screws_grille", "Grille · M3 × 12 button head", "screws", "#26282b", "4x", [0, -1.6, 0]),
            ("screws_fan", "Fan · M3 × 30 button head", "screws", "#26282b", "4x", [0, 1.4, 0]),
            ("screws_back", "Back cover · M3 × 8 button head", "screws", "#26282b", "6x", [0, 2.2, 0]),
-           ("screws_handle", "Handle · M3 × 12 button head", "screws", "#26282b", "4x", [0, 0, -0.5]),
+           ("screws_bail", "Bail pivots · M4 × 12 button head with Ø 7 sleeve", "screws", "#26282b", "2x", [0, 0, 1.2]),
            ("screws_feet", "Feet · M3 × 8 button head, from below", "screws", "#26282b", "4x", [0, 0, -1.4])],
     colour={"body": [("label", "Housing · logo", "#8f9396"), ("dedication", "Housing · dedication", "#8f9396")], "knob": [("pointer", "Speed knob · pointer", "#ffffff")]},
     bodies={"body_base": 'body_install_pose() body_piece("base");',
@@ -225,7 +229,7 @@ VIEWER = dict(
             "screws_grille": "screws_grille(true);",
             "screws_fan": "screws_fan(true);",
             "screws_back": "screws_back(true);",
-            "screws_handle": "screws_handle(true);",
+            "screws_bail": "screws_bail(true);",
             "screws_feet": "screws_feet(true);"},
     output="build/viewer.html",
 )
@@ -248,9 +252,8 @@ VIEWS = {"01_assembly": ("assembly();", "-160,-330,230,112,40,70"),
          # LED pocket behind the O, cut through the LED axis and seen from behind: 0.8 mm white skin in front of the LED
          "09_led": ("intersection() { union() { color(\"#f2f2ee\") body(); color(\"#9fd3ff\") led_env(); } translate([led_xz[0] - 9, -1, led_xz[1] - 8]) cube([18, 10, 8]); }",
                     "232,40,178,207,3,131"),
-         # handle mount from below: doubler, ribs and screws under the right foot, cut at the screw axis, with the handle keys
-         "11_handle_mount": ("rotate([0, 0, 180]) rotate([90, 0, 0]) intersection() { union() { color(\"#f2f2ee\") body(dedication = false); color(\"#8f9396\") handle(); color(\"#26282b\") screws_handle(); } translate([150, -1, 125]) cube([76, handle_cy + 1, 60]); }",
-                             "-185,95,215,-185,150,40"),
+         # folding bail raised: pivots at mid-depth in the step of the top edge, finger groove behind the bar recess
+         "11_bail": ("assembly(bail_angle = 90);", "-150,-300,330,112,40,90"),
          # back cover insert boss in the top left corner from behind and below, back cover off: column and cone into the corner
          "12_back_bosses": ('color("#f2f2ee") intersection() { body(); translate([-1, 30, 105]) cube([45, body_d, 60]); }',
                             "110,190,60,12,62,142"),

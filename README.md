@@ -4,19 +4,19 @@ Small battery fan for a child's room, styled like the outdoor unit of a split ai
 
 Designed for a Bambu Lab H2S with AMS in Bambu PETG HF white and grey plus TPU. **Status:** first parts printed; USB-C socket fit confirmed. Remaining fit and functional checks are pending.
 
-![Assembly](img/01_assembly.png?v=a4e3abd30cbb)
+![Assembly](img/01_assembly.png?v=72b32c036533)
 
 | Back | Exploded |
 |:---:|:---:|
-| ![Back](img/02_back.png?v=09ce05cff5ca) | ![Exploded](img/03_exploded.png?v=54055cad02ee) |
+| ![Back](img/02_back.png?v=11f803043725) | ![Exploded](img/03_exploded.png?v=b79d4cfcc117) |
 | **Logo and grooves** | **Air duct from behind** |
-| ![Logo](img/04_front_right.png?v=e090feb60c84) | ![Air duct](img/05_duct.png?v=0740ff54c3cd) |
+| ![Logo](img/04_front_right.png?v=daffcabf38c5) | ![Air duct](img/05_duct.png?v=4887fb2bbf96) |
 | **Knob and service cover** | **Underside with M5 thread and TPU feet** |
-| ![Knob](img/06_knob.png?v=6306e3e898f4) | ![Underside](img/07_underside.png?v=bda2a7e2c801) |
+| ![Knob](img/06_knob.png?v=73bc622b2fc7) | ![Underside](img/07_underside.png?v=2bcccfda9cf6) |
 | **Charge module in the air stream** | **LED pocket behind the O** |
 | ![Charge module](img/08_charge_module.png?v=2ef05f89a581) | ![LED pocket](img/09_led.png?v=e16ed4530b5b) |
-| **Handle mount** | **Back cover bosses** |
-| ![Handle mount](img/11_handle_mount.png?v=c25b2dd79557) | ![Back cover bosses](img/12_back_bosses.png?v=3865f924c163) |
+| **Folding bail, raised** | **Back cover bosses** |
+| ![Folding bail](img/11_bail.png?v=4e9c41993ee2) | ![Back cover bosses](img/12_back_bosses.png?v=0929e27fd697) |
 | **TPU foot mount** | **USB-C socket** |
 | ![TPU foot mount](img/13_foot_mount.png?v=0d16075905f5) | ![USB-C socket](img/14_usb_c.png?v=a320c0740188) |
 | **Power switch well** | **Battery saddles** |
@@ -31,18 +31,18 @@ Designed for a Bambu Lab H2S with AMS in Bambu PETG HF white and grey plus TPU. 
 | `grille` fan grille | 1 | PETG grey | Ø 136 × 7 | front on the bed |
 | `cover` service cover | 1 | PETG grey | 74.4 × 46 × 11.8 | outside on the bed; half-round notch around the knob, glued into a groove of the side wall |
 | `knob` speed knob | 1 | PETG white + grey (pointer) | Ø 28 × 16.5 | top on the bed, pointer as inlay in the first 0.6 mm |
-| `handle` handle | 1 | PETG grey | 170 × 43.2 × 24 | lying on its side (layers along the pull direction) |
+| `bail` folding bail | 1 | PETG grey | 212 × 45 × 12 | top face on the bed; folded it lies flush in the top edge |
 | `foot` foot | 2 | TPU | 16 × 62 × 5.5 | ground face on the bed, 100 % infill |
 
-All parts are in the Bambu Studio project [`stl/leo_ac1_all_parts.3mf`](stl/leo_ac1_all_parts.3mf): plate 1 housing, plate 2 back cover, plate 3 grey parts (grille, service cover, handle, knob), plate 4 TPU feet. Filaments: 1 PETG white, 2 PETG grey, 3 grey for logo and dedication (same spool as 2), 4 TPU, 5 white for the knob pointer (same spool as 1). All parts print without supports. Bambu Studio estimates about **0.73 kg and 20 hours** in total. Single-colour STLs are in `stl/`, the colour pieces in `stl/multicolour/`.
+All parts are in the Bambu Studio project [`stl/leo_ac1_all_parts.3mf`](stl/leo_ac1_all_parts.3mf): plate 1 housing, plate 2 back cover, plate 3 grey parts (grille, service cover, bail, knob), plate 4 TPU feet. Filaments: 1 PETG white, 2 PETG grey, 3 grey for logo and dedication (same spool as 2), 4 TPU, 5 white for the knob pointer (same spool as 1). All parts print without supports. Bambu Studio estimates about **0.68 kg and 19 hours** in total. Single-colour STLs are in `stl/`, the colour pieces in `stl/multicolour/`.
 
 Print profile: 0.20 mm layers, 6 walls, 5 top/bottom layers, 30 % gyroid (feet 100 %).
 
 ### Fit tests before the full print
 
-The upper right section of the housing (from the partition to the right wall, from the electronics shelf up) and the matching part of the back cover, cut from the real parts in their print orientation, so the electronics can be fitted before the 20-hour print. The Bambu Studio project [`stl/leo_ac1_fit_tests.3mf`](stl/leo_ac1_fit_tests.3mf) holds both sections and a knob on one plate with light settings (2 walls, 3 top/bottom layers, 10 % infill): same geometry, less material, about 125 g and 5 hours including the prime tower for the knob.
+The upper right section of the housing (from the partition to the right wall, from the electronics shelf up) and the matching part of the back cover, cut from the real parts in their print orientation, so the electronics can be fitted before the 19-hour print. The Bambu Studio project [`stl/leo_ac1_fit_tests.3mf`](stl/leo_ac1_fit_tests.3mf) holds both sections and a knob on one plate with light settings (2 walls, 3 top/bottom layers, 10 % infill): same geometry, less material, about 120 g and 5 hours including the prime tower for the knob.
 
-Check with the real parts: the PWM controller lies flat on its pads, the potentiometer housing sits in its wall pocket and washer and nut tighten from outside, the knob covers them; LED, power switch and handle inserts.
+Check with the real parts: the PWM controller lies flat on its pads, the potentiometer housing sits in its wall pocket and washer and nut tighten from outside, the knob covers them; LED, power switch and the right bail pivot (M4 insert, sleeve and screw).
 
 ## Bought parts
 
@@ -57,9 +57,11 @@ Check with the real parts: the PWM controller lies flat on its pads, the potenti
 | LED 3 mm, breathing/fading, 3.3 V, water clear | 1 | [AliExpress](https://de.aliexpress.com/item/1005005336879647.html) | glued from inside behind the O of the logo |
 | Resistor 220 Ω, 1/4 W | 1 | – | series resistor for the LED on the 5 V USB input |
 | Resettable PTC fuse Bourns MF-R160 | 1 | – | optional, between battery plus and the switch |
-| Heat-set inserts Ruthex RX-M3x5.7 | 22 | [ruthex.de](https://www.ruthex.de) | – |
+| Heat-set inserts Ruthex RX-M3x5.7 | 18 | [ruthex.de](https://www.ruthex.de) | – |
+| Heat-set inserts Ruthex RX-M4x8.1 | 2 | [ruthex.de](https://www.ruthex.de) | bail pivots, pressed in through the holes in the side rims |
 | Heat-set insert Ruthex RX-M5x9.5 | 1 | [ruthex.de](https://www.ruthex.de) | mounting thread in the underside, pressed in from outside |
-| M3 × 12, ISO 7380 Torx | 8 | – | grille (4), handle (4) |
+| M3 × 12, ISO 7380 Torx | 4 | – | grille |
+| M4 × 12, ISO 7380 Torx | 2 | – | bail pivots |
 | M3 × 30, ISO 7380 Torx | 4 | – | fan |
 | M3 × 8, ISO 7380 Torx | 10 | – | back cover (6), feet (4) |
 | Double-sided, heat-resistant tape, ≤ 1.1 mm | – | – | charge module, e.g. 3M VHB; no hot glue |
@@ -67,6 +69,7 @@ Check with the real parts: the PWM controller lies flat on its pads, the potenti
 | JST-PH 2.0 cable, 2-pin, mating the battery plug | 1 | – | battery to the switch and B+ / B− |
 | Silicone wire 24 AWG, red and black | about 1 m | – | USB-C module, switch, LED, 12 V to the PWM controller |
 | Heat-shrink tubing 2–3 mm | – | – | every solder joint |
+| Spacer sleeve Ø 7 × 6.9 mm, bore ≥ 4.2 mm | 2 | – | bail pivots: the bail turns on it, the screw clamps it (brass or aluminium tube cut to length) |
 | Foam tape, self-adhesive, 1–2 mm | – | – | battery: a strip above and below keeps it from rattling |
 
 ## Wiring
@@ -86,20 +89,21 @@ battery (JST-PH, built-in BMS) ──► (PTC) ──► power switch ──► 
 
 ## Assembly
 
-1. Press in the heat-set inserts: 4 grille and 4 fan bosses inside the front, 6 on the back edge of the housing, 4 in the handle feet; the M5 insert and 4 M3 inserts for the feet from below.
-2. Screw the handle on from inside with M3 × 12 while the housing is still empty. Glue the LED into the pocket behind the O and solder resistor and wires.
+1. Press in the heat-set inserts: 4 grille and 4 fan bosses inside the front, 6 on the back edge of the housing, 2 M4 inserts for the bail pivots through the holes in the side rims; the M5 insert and 4 M3 inserts for the feet from below.
+2. Glue the LED into the pocket behind the O and solder resistor and wires.
 3. Slide the PWM controller in from behind onto the pads of its ribs and push the potentiometer housing into its pocket in the right wall; put washer and nut on the thread outside and tighten gently. Push the knob onto the shaft, it covers washer and nut. Glue the service cover in below it (thin bead in the groove).
 4. Put the grille on from the front and screw it on with M3 × 12.
 5. Screw the fan on from behind with M3 × 30 (blowing forward) and route its cable through the upper notch of the partition. Tape the charge module upright onto the two pads on the partition, lower edge on the ledge.
 6. Slide the battery in from behind, cable end up, protection board towards the partition; a strip of foam tape above and below keeps it from rattling.
 7. Screw the TPU feet on with M3 × 8 from below; tighten only until the TPU starts to compress.
 8. Solder about 15 cm of wire to the USB-C module and push it into its channel in the back cover; snap the switch into its well. Route the wires through the lower notch of the partition, leaving slack to lay the back cover aside. Put on the back cover and screw it on with M3 × 8.
+9. Lay the bail into its step, push a sleeve through each eye and screw it on from the side with M4 × 12; the screw clamps the sleeve, the bail swings freely.
 
 ## Design notes
 
 - Walls and front 3.2 mm, back cover 4 mm, corner radius 6 mm, recessed screw heads.
 - The battery sits in three closed rings: ribs in the housing and saddles on the back cover, stiffened by fillets and a rib.
-- Handle mount with a doubled top wall, ribs and keys, so the screws are not bent by a jerk on the handle.
+- Folding bail (concept from the leoino case): folded it lies flush in the top edge, with a finger groove behind the bar; raised it hangs from M4 pivots at mid-depth, so the fan stays level. The eyes turn on sleeves, not on the screw threads.
 - Grille openings are below 6 mm.
 - The TPU feet are screwed and keyed into pockets of the bottom wall.
 - An M5 heat-set insert in the underside takes a tripod or wall mount.
