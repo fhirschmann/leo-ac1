@@ -640,10 +640,13 @@ module body(dedication = true) difference() {   // dedication = false for public
             translate([-1, bail_ramp_y(), body_h + 1]) cube([bail_band + 1, 0.2, 1]);
         }
         cyl_x([bail_y, bail_z], bail_band - eps, bail_band + m4_insert[1] + 1, m4_insert[0] / 2);
-        bail_step_chamfers(bail_ramp_y() - (bail_c + 2.5) * cos(bail_carry) / sin(bail_carry));   // starts where the ramp is below the chamfer
-        // top face to ramp
-        along_x(-1, bail_band) let (a = bail_carry, y1 = bail_ramp_y() - cos(a) / sin(a))   // runs round onto the inner wall chamfer
-            polygon([[y1 - bail_c, body_h], [y1 - bail_c * cos(a), body_h - bail_c * sin(a)], [y1 + 1, body_h + 1], [y1 - bail_c - 1, body_h + 1]]);
+        bail_step_chamfers(bail_y, top = false);
+        // top edges of the step (ramp and inner wall) chamfered as one hull, so both chamfers meet in a clean corner:
+        // a slab of the step outline 1 mm below the top face and one grown by 2 mm 1 mm above it
+        let (k = -cos(bail_carry) / sin(bail_carry), y1 = bail_ramp_y() + k, c = bail_c) hull() {
+            translate([-1, y1 + c * k, body_h - c]) cube([bail_band + 1, body_d + 1 - (y1 + c * k), tip]);
+            translate([-1, y1 - 2 * c - c * k, body_h + c - tip]) cube([bail_band + 2 * c + 1, body_d + 1 - (y1 - 2 * c - c * k), tip]);
+        }
     }
     // groove for the glued-in service cover with 45 degree flanks, printable in every direction (the side wall stands upright in
     // print, vertical flanks would leave overhanging groove ceilings); 0.2 mm steps, the rim sits on the floor with a glue gap
@@ -939,18 +942,27 @@ module pwm_board_env() {             // board on the rib pads: parts above, sold
 // upper legs rest on the step ramps. Swing it up before removing the back cover.
 module bail_sides() { children(); translate([body_w, 0, 0]) mirror([1, 0, 0]) children(); }
 // 45 degree chamfers along a left side step from y0 to the back: top edge of the inner wall, side face to step floor
-module bail_step_chamfers(y0) {
-    along_y(y0, body_d + 1) polygon([[bail_band - 1, body_h - bail_c - 1], [bail_band + bail_c + 1, body_h + 1], [bail_band - 1, body_h + 1]]);
+module bail_step_chamfers(y0, top = true) {
+    if (top) along_y(y0, body_d + 1) polygon([[bail_band - 1, body_h - bail_c - 1], [bail_band + bail_c + 1, body_h + 1], [bail_band - 1, body_h + 1]]);
     along_y(max(y0, bail_y), body_d + 1) polygon([[-1, bail_floor - bail_c - 1], [bail_c + 1, bail_floor + 1], [-1, bail_floor + 1]]);
 }
 module chamfered_rect_2d(size, c) polygon([[c, 0], [size[0] - c, 0], [size[0], c], [size[0], size[1] - c], [size[0] - c, size[1]], [c, size[1]], [0, size[1] - c], [0, c]]);
+// box from corner a to corner b with all twelve edges chamfered at 45 degrees
+module chamfered_box(a, b, c) let (s = b - a) translate(a) hull() {
+    translate([c, c, 0]) cube([s[0] - 2 * c, s[1] - 2 * c, s[2]]);
+    translate([c, 0, c]) cube([s[0] - 2 * c, s[1], s[2] - 2 * c]);
+    translate([0, c, c]) cube([s[0], s[1] - 2 * c, s[2] - 2 * c]);
+}
 module bail(angle = 0) translate([0, bail_y, bail_z]) rotate([angle, 0, 0]) translate([0, -bail_y, -bail_z]) difference() {
-    union() {
-        along_x(bail_cl, body_w - bail_cl) translate([bail_leg_y[0], bail_bar_z[0]]) chamfered_rect_2d([bail_arm[1], bail_bar], bail_c);   // grip bar
+    union() {   // every piece with all edges chamfered, so the outer corners of the joints are chamfered too
+        chamfered_box([bail_cl, bail_leg_y[0], bail_bar_z[0]], [body_w - bail_cl, bail_leg_y[1], bail_bar_z[1]], bail_c);   // grip bar
         bail_sides() {
-            along_y(bail_y, bail_leg_y[1]) translate([bail_cl, bail_floor]) chamfered_rect_2d(bail_arm, bail_c);                              // upper leg
-            translate([bail_cl, bail_leg_y[0], bail_bar_z[0]]) linear_extrude(body_h - bail_bar_z[0]) chamfered_rect_2d(bail_arm, bail_c);   // lower leg
-            cyl_x([bail_y, bail_z], bail_cl, bail_cl + bail_arm[0], bail_arm[1] / 2);                                                      // rounded eye
+            chamfered_box([bail_cl, bail_y, bail_floor], [bail_cl + bail_arm[0], bail_leg_y[1], body_h], bail_c);        // upper leg
+            chamfered_box([bail_cl, bail_leg_y[0], bail_bar_z[0]], [bail_cl + bail_arm[0], bail_leg_y[1], body_h], bail_c);   // lower leg
+            hull() {   // eye with chamfered faces
+                cyl_x([bail_y, bail_z], bail_cl + bail_c, bail_cl + bail_arm[0] - bail_c, bail_arm[1] / 2);
+                cyl_x([bail_y, bail_z], bail_cl, bail_cl + bail_arm[0], bail_arm[1] / 2 - bail_c);
+            }
         }
     }
     bail_sides() {
