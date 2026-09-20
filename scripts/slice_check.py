@@ -2,7 +2,7 @@
 """Diagnostic Bambu Studio slicing and the multi-plate project 3MF (skill openscad-print-project).
 
 1. Slices every print STL on its own with the installed system profiles (PRINTER, PROCESS, FILAMENTS in
-   print_project.py): no supports, default infill, solid for FULL_INFILL parts and FULL_INFILL_MATERIALS.
+   print_project.py): local painted supports where configured, default infill, solid for FULL_INFILL parts and FULL_INFILL_MATERIALS.
 2. Builds PROJECT_3MF: every part of the full build on the fixed PLATES, each plate centred; multicolour
    parts as one object per copy with their inlay filaments, parts at the left edge and the prime tower
    to their right. Every plate is sliced (layout, instances, effective settings); multicolour plates also prove the inlays print.
@@ -18,8 +18,10 @@ from pathlib import Path
 import re
 import subprocess
 import zipfile
+import xml.etree.ElementTree as ET
 
 from print_tools import BUILD, COLOR_DIR, COLOR_PARTS, P, PARTS, ROOT, STL_DIR
+from local_support import local_supports
 
 parser = argparse.ArgumentParser(description=__doc__, formatter_class=argparse.RawDescriptionHelpFormatter)
 parser.add_argument("--app", type=Path, default=Path("/Applications/BambuStudio.app"), help="macOS app bundle")
@@ -46,6 +48,7 @@ PLATES = getattr(P, "PLATES", None) or [(name, [name]) for name in PARTS if PART
 # Print pauses (e.g. to embed magnets or lay mesh): part -> print_z of the first layer printed after the pause.
 # A pause stops its whole plate, so give such parts their own plate.
 PAUSES = getattr(P, "PAUSES", {})
+LOCAL_SUPPORTS = getattr(P, "LOCAL_SUPPORTS", {})
 PROJECT_3MF = ROOT / getattr(P, "PROJECT_3MF", f"{STL_DIR.relative_to(ROOT).as_posix()}/{ROOT.name}_all_parts.3mf")
 SUMMARY = ROOT / getattr(P, "SLICER_SUMMARY", "docs/slicer-summary.json")
 INLAY_FILAMENT = {inlay: i for i, f in enumerate(FILAMENTS, 1)
@@ -110,12 +113,24 @@ def run(name):
     folder = out / name
     folder.mkdir(exist_ok=True)
     source = STL_DIR / f"{name}.stl"
-    command = [str(executable), "--datadir", str(folder / "config"), "--debug", "2",
+    base = [str(executable), "--datadir", str(folder / "config"), "--debug", "2"]
+    prepare = [*base,
                "--load-settings", f"{profiles / 'machine.json'};{profiles / f'process-{infill(name, material)}.json'}",
                "--load-filaments", str(profiles / f"filament-{base_filament(material)}.json"),
-               "--orient", "0", "--arrange", "1", "--slice", "0",
+               "--orient", "0", "--arrange", "1"]
+    if name in LOCAL_SUPPORTS:
+        painted = folder / f"{name}-SUPPORT.3mf"
+        result = subprocess.run([*prepare, "--export-3mf", painted.name, "--outputdir", str(folder), str(source)],
+                                capture_output=True, text=True, cwd=folder)
+        (folder / "prepare-support.log").write_text(result.stdout + result.stderr)
+        assert result.returncode == 0 and painted.exists(), f"Support project preparation failed for {name}"
+        local_supports(painted, {name: LOCAL_SUPPORTS[name]})
+        slice_input, prefix = painted, base
+    else:
+        slice_input, prefix = source, prepare
+    command = [*prefix, "--slice", "0",
                # --outputdir must be absolute, otherwise the CLI exits with 243
-               "--export-3mf", f"{name}-DIAGNOSTIC.3mf", "--outputdir", str(folder), str(source)]
+               "--export-3mf", f"{name}-DIAGNOSTIC.3mf", "--outputdir", str(folder), str(slice_input)]
     result = subprocess.run(command, capture_output=True, text=True, cwd=folder)
     log = result.stdout + result.stderr
     (folder / "cli.log").write_text(log)
@@ -128,6 +143,9 @@ def run(name):
     if passed:
         with zipfile.ZipFile(folder / f"{name}-DIAGNOSTIC.3mf") as archive:
             settings = json.loads(archive.read("Metadata/project_settings.config"))
+            object_settings = ET.fromstring(archive.read("Metadata/model_settings.config"))
+            settings.update({m.get("key"): m.get("value") for m in object_settings.findall("object/metadata")
+                             if m.get("key") in ("enable_support", *LOCAL_SUPPORTS.get(name, {}).get("settings", {}))})
     row = dict(part=name, quantity=quantity, material=material, passed=passed,
                source_sha256=hashlib.sha256(source.read_bytes()).hexdigest(),
                exit_code=result.returncode, result_code=data.get("return_code"),
@@ -138,7 +156,7 @@ def run(name):
                layer_height=data.get("layer_height"),
                effective_settings={key: settings.get(key) for key in
                                    ("sparse_infill_pattern", "enable_support", "curr_bed_type",
-                                    "top_shell_layers", "bottom_shell_layers")},
+                                    "top_shell_layers", "bottom_shell_layers", *LOCAL_SUPPORTS.get(name, {}).get("settings", {}))},
                start_gcode_diagnostic="Invalid T command" in log)
     print(f"Slice {name}: {'PASS' if passed else 'FAIL'}", flush=True)
     return row
@@ -306,6 +324,7 @@ def build_project_3mf():
                 project.writestr(item, data)
             if pause_plates:
                 project.writestr(custom_name, custom_gcode_xml(pause_plates, pause_gcode))
+    support_paint = local_supports(PROJECT_3MF, LOCAL_SUPPORTS)
     placed = sum(len(ids) for ids in plate_ids)
     own_infill = len([v for v in re.findall(r'sparse_infill_density" value="(\d+)%"', settings) if int(v) != DEFAULT_INFILL])
     expected_own = sum(PARTS[n][0] for n in PARTS if infill(n, PARTS[n][1]) != DEFAULT_INFILL)
@@ -328,6 +347,12 @@ def build_project_3mf():
         grams = {f["id"]: round(f["total_used_g"], 2) for f in plate.get("filaments", [])}
         assert result.returncode == 0 and data.get("return_code") == 0 and "slicing result conflict" not in log, \
             f"Plate {title} does not slice; see {plate_dir}"
+        with zipfile.ZipFile(plate_dir / "sliced.3mf") as sliced:
+            gcode_name = next(n for n in sliced.namelist() if re.fullmatch(r"Metadata/plate_\d+\.gcode", n))
+            gcode = sliced.read(gcode_name).decode(errors="replace")
+        support_sections = len(re.findall(r"^; FEATURE: Support(?: interface)?$", gcode, re.M))
+        expected_support = bool(set(group) & set(LOCAL_SUPPORTS))
+        assert bool(support_sections) == expected_support, f"Plate {title}: unexpected or missing support toolpaths"
         if index - 1 in pause_plates:
             with zipfile.ZipFile(plate_dir / "sliced.3mf") as sliced:
                 name = next(n for n in sliced.namelist() if re.fullmatch(r"Metadata/plate_\d+\.gcode", n))
@@ -339,7 +364,7 @@ def build_project_3mf():
             pauses[title] = dict(plate=index, pause_before_layer_mm=wanted)
             print(f"Slice pause plate {title}: PASS, pause before layer {wanted} mm", flush=True)
         plate_slices[title] = dict(plate=index, hours=round(plate.get("total_predication", 0) / 3600, 2),
-                                   grams_by_filament=grams, warnings=plate.get("warning_message"))
+                                   grams_by_filament=grams, warnings=plate.get("warning_message"), support_sections=support_sections)
         if not coloured:
             print(f"Slice plate {title}: PASS, filament use {grams} g", flush=True)
             continue
@@ -351,7 +376,7 @@ def build_project_3mf():
         print(f"Slice multicolour plate {title}: PASS, filament use {grams} g", flush=True)
     return dict(file=str(PROJECT_3MF.relative_to(ROOT)), parts=placed, plates=len(plate_ids), layout=layout,
                 multicolour_parts=COLOR_PARTS, multicolour_slices=multicolour, pause_slices=pauses, plate_slices=plate_slices,
-                own_infill_parts=own_infill, sha256=hashlib.sha256(PROJECT_3MF.read_bytes()).hexdigest())
+                own_infill_parts=own_infill, local_supports=support_paint, sha256=hashlib.sha256(PROJECT_3MF.read_bytes()).hexdigest())
 
 
 def custom_gcode_xml(pause_plates, gcode):
@@ -388,7 +413,8 @@ solid = sorted(n for n in PARTS if infill(n, PARTS[n][1]) == 100)
 with ThreadPoolExecutor(max_workers=2) as pool:
     results = list(pool.map(run, PARTS))
 summary = dict(profile=f"{PRINTER['machine']} / {PRINTER['process']}, {PROCESS['wall_loops']} walls, "
-                       f"{PROCESS['top_shell_layers']}/{PROCESS['bottom_shell_layers']} top/bottom, no supports; "
+                       f"{PROCESS['top_shell_layers']}/{PROCESS['bottom_shell_layers']} top/bottom, "
+                       f"manual local supports: {', '.join(LOCAL_SUPPORTS) or 'none'}; "
                        f"{DEFAULT_INFILL} % {PROCESS['pattern']}, 100 % zig-zag: {', '.join(solid) or 'none'}",
                parts=results, total_parts=sum(r["quantity"] for r in results),
                total_grams_individual_plates=round(sum(r["quantity"] * r["grams"] for r in results), 1),
@@ -399,7 +425,10 @@ assert all(r["passed"] for r in results), f"Slicing failed; inspect {out}"
 assert all(r["wall_loops"] == PROCESS["wall_loops"] for r in results), "Wrong diagnostic wall count"
 assert all(r["infill_percent"] == infill(r["part"], r["material"]) for r in results), "Wrong diagnostic infill"
 assert all(r["effective_settings"]["sparse_infill_pattern"] == pattern(infill(r["part"], r["material"])) for r in results)
-assert all(r["effective_settings"]["enable_support"] == "0" for r in results)
+assert all(r["effective_settings"]["enable_support"] == ("1" if r["part"] in LOCAL_SUPPORTS else "0") for r in results)
+for row in results:
+    for key, value in LOCAL_SUPPORTS.get(row["part"], {}).get("settings", {}).items():
+        assert row["effective_settings"][key] == value, (row["part"], key, "Wrong effective support setting")
 summary["project_3mf"] = build_project_3mf()
 write_summary(summary)
 print(f"PASS: {len(results)} slices; {summary['total_parts']} parts; "

@@ -1,7 +1,7 @@
 """Project settings for the openscad-print-project tools in scripts/.
 
-Everything project-specific lives here, the scripts stay identical to the skill copies
-(python3 ~/.claude/skills/openscad-print-project/scripts/skill_sync.py status).
+Project-specific settings live here. The local slicer extension preserves painted
+manual supports when regenerating individual diagnostics and the project 3MF.
 """
 import manifold3d as md
 import numpy as np
@@ -57,6 +57,16 @@ STL_DIR, COLOR_DIR, ASM_DIR, REPORT = "stl", "stl/multicolour", "asm", "docs/ver
 PRINTER = dict(machine="Bambu Lab H2S 0.4 nozzle", process="0.20mm Standard @BBL H2S",
                bed="Textured PEI Plate", envelope_mm=(340, 320, 340))
 PROCESS = dict(wall_loops=6, top_shell_layers=5, bottom_shell_layers=5, infill=30, pattern="gyroid")   # drop resistant
+# Only the switch-well floor needs removable support. Coordinates are in back.stl
+# print pose; selection assertions fail if later CAD changes move or resize it.
+LOCAL_SUPPORTS = {
+    "back": dict(bounds_mm=[[189.5, 116.6, 6.99], [212.5, 133.4, 7.01]], normal=[0, 0, -1],
+                 expected_faces=8, expected_area_mm2=148.19,
+                 settings=dict(enable_support="1", support_type="normal(manual)", support_style="snug",
+                               support_on_build_plate_only="1", support_top_z_distance="0.2",
+                               support_interface_top_layers="3", support_interface_spacing="0.2",
+                               support_base_pattern_spacing="2.5", support_object_xy_distance="0.35"))
+}
 # Filament slots of the project 3MF, 1-based in this order; inlay slots name their inlay or a tuple of inlays
 FILAMENTS = [dict(material="PETG-white", profile="Bambu PETG Basic @BBL H2S", colour="#FFFFFF"),
              dict(material="PETG-grey", profile="Bambu PETG Basic @BBL H2S", colour="#8E9294"),
@@ -203,18 +213,20 @@ def checks(ctx):
         assert empty < 0.01 and filled > 0.95 and bottom > 0.95, f"Insert pocket {inserts[-1]}"
     ctx.summary.append(f"{len(inserts)} inserts")
 
-    ctx.open_items.append("Measure the battery (label Ø34 × 70 mm; model: cell Ø33.5 × 72 mm, holder rings Ø34.5 mm) and its cable exit")
-    ctx.open_items.append("Measure the potentiometer of the PWM controller (assumed WH148: D shaft Ø6/4.5 × 15, bushing M7, housing Ø16.5 × 18)")
+    ctx.open_items.append("Battery cell measured Ø32.5 × 71.6 mm on 2026-09-15; verify protection-board envelope and cable exit separately")
+    ctx.open_items.append("PWM potentiometer measured: round split/knurled Ø5.8 shaft, free length 9.5, bushing Ø6.73 × 3.6; nut thickness still assumed 2 mm, verify push-fit and clamp")
     ctx.open_items.append("Measure the BMS board on the battery (assumed 16 × 4 mm over the full length, facing the partition)")
-    ctx.open_items.append("Measure the PWM board CNY-FA5-PRO (assumed 48 × 34 mm, parts 13 mm high, potentiometer axis 8.5 mm above the board)")
-    ctx.open_items.append("Measure the USB-C PD trigger (listing 13 x 10 x 4 mm, receptacle at least 2.4 mm beyond the board) and check 5 V at + / - before connecting")
+    ctx.open_items.append("PWM module measured 41.05 × 32 × 15 mm, 56.30 mm to shaft tip, axis about 6 mm above PCB; verify underside datum and plugged connector envelope")
+    ctx.open_items.append("USB-C module and shell measured 2026-09-15 (shell bottom approximately 1.1 mm above module underside); verify fit with a plugged cable and soldered wires, and check 5 V at + / - before connecting")
+    ctx.open_items.append("Switch measured 20.9 × 14.7 × 23 mm including contacts, cutout 19.2 × 12.2, panel about 1.5; verify depth split before/behind mounting flange and snap fit")
+    ctx.open_items.append("Charge PCB measured 32.2 × 11 × 3.7 mm, back clear; heatsinks not yet available, displayed heatsinks are planned clearance envelopes")
     return dict(dedication_line_gaps_mm=gaps, standard_screws=screws, contact_volumes_mm3=contacts, stops=stops, sampled_paths=paths,
                 insert_probes=inserts, air_duct=duct)
 
 
 VIEWER = dict(
     title="LEO-AC1", page_title="LEO-AC1 fan", eyebrow="Assembly · installed position",
-    dims=[("Width", "234"), ("Depth", "84"), ("Height", "197")],
+    dims=[("Width", "239.8"), ("Depth", "84"), ("Height", "201.5")],
     groups=[("white", "Printed · PETG white"), ("grey", "Printed · PETG grey"),
             ("tpu", "Printed · TPU"), ("screws", "Screws M3"), ("bought", "Bought parts")],
     hidden_groups=["bought"],
@@ -230,12 +242,12 @@ VIEWER = dict(
            ("feet", "Feet · TPU", "tpu", "#222326", "2x", [0, 0, -0.8]),
            ("fan_visual", "Fan Noctua NF-F12 iPPC-2000", "bought", "#303236", "1x", [0, 0.8, 0]),
            ("battery", "Battery LiFePO4 3.2 V 6000 mAh", "bought", "#3f7fbf", "1x", [0, 0.5, 0]),
-           ("pot", "Potentiometer of the PWM controller (assumed)", "bought", "#3a3d41", "1x", [-0.5, 0, 0]),
-           ("chg_module", "Charge/boost module with 2 heatsinks", "bought", "#c9c9c9", "1x", [0, 0.8, 0]),
-           ("led", "Charge indicator LED 3 mm, behind the O", "bought", "#9fd3ff", "1x", [0, 1, 0]),
+           ("pot", "Potentiometer · measured shaft, conservative body envelope", "bought", "#3a3d41", "1x", [-0.5, 0, 0]),
+           ("chg_module", "Charge/boost module · 2 planned heatsink envelopes", "bought", "#c9c9c9", "1x", [0, 0.8, 0]),
+           ("led", "USB power indicator LED 3 mm, behind the O", "bought", "#9fd3ff", "1x", [0, 1, 0]),
            ("usb_trigger", "USB-C PD trigger, 5 V (Type A)", "bought", "#4b2a7a", "1x", [0, 1.5, 0]),
-           ("switch", "Power switch KCD11, battery plus", "bought", "#1b1b1b", "1x", [0, 1.8, 0]),
-           ("pwm_board", "PWM board CNY-FA5-PRO (assumed 48 × 34)", "bought", "#2e6b3f", "1x", [-0.5, 0, 0]),
+           ("switch", "Measured power switch · depth split provisional", "bought", "#1b1b1b", "1x", [0, 1.8, 0]),
+           ("pwm_board", "PWM board CNY-FA5-PRO · 41.05 × 32 × 15 mm, unplugged", "bought", "#2e6b3f", "1x", [-0.5, 0, 0]),
            # screws leave their part: same direction, further out
            ("screws_grille", "Grille · M3 × 12 button head", "screws", "#26282b", "4x", [0, -1.6, 0]),
            ("screws_fan", "Fan · M3 × 30 button head", "screws", "#26282b", "4x", [0, 1.4, 0]),
@@ -292,8 +304,8 @@ VIEWS = {"01_assembly": ("assembly();", "-160,-330,230,112,40,70"),
          "14_usb_c": ('intersection() { union() { color("#f2f2ee") body(); color("#e6e6e1") back(); color("#4b2a7a") usbc_env(); } translate([196, 48, usbc_xz[1] - 20]) cube([30, 36, 20]); }',
                       "205,40,156,208,66,44"),
          # power switch in its well above the USB-C socket, cut at the switch axis and seen from the left
-         "15_switch": ('intersection() { union() { color("#e6e6e1") back(); color("#1b1b1b") sw_env(); } translate([sw_xz[0], 40, 50]) cube([30, 45, 40]); }',
-                       "90,40,120,205,70,71"),
+         "15_switch": ('intersection() { union() { color("#e6e6e1") back(); color("#1b1b1b") sw_env(); } translate([sw_xz[0], 40, sw_xz[1] - 20]) cube([30, 45, 40]); }',
+                       "90,40,170,201,70,125"),
          # battery saddles on the inside of the back cover: root fillets and the rib behind the battery, seen from the front
          "16_saddles": ('intersection() { back(); translate([150, 20, 0]) cube([76, 61, 90]); }', "120,-60,120,186,60,40"),
          # underside with the M5 mount insert

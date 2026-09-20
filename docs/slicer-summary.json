@@ -1,17 +1,17 @@
 {
-  "profile": "Bambu Lab H2S 0.4 nozzle / 0.20mm Standard @BBL H2S, 6 walls, 5/5 top/bottom, no supports; 30 % gyroid, 100 % zig-zag: foot",
+  "profile": "Bambu Lab H2S 0.4 nozzle / 0.20mm Standard @BBL H2S, 6 walls, 5/5 top/bottom, manual local supports: back; 30 % gyroid, 100 % zig-zag: foot",
   "parts": [
     {
       "part": "body",
       "quantity": 1,
       "material": "PETG-white",
       "passed": true,
-      "source_sha256": "81611a6f51566af71a4a6d5622a372b7910f7ddf23a347cfcc88956cf3c74f07",
+      "source_sha256": "c0a10fdd603ab354f2ea1da173187520c60f01b9b2b5d2e58c3fb2fde59a1c0f",
       "exit_code": 0,
       "result_code": 0,
       "warnings": "",
-      "hours": 10.327,
-      "grams": 401.874,
+      "hours": 10.36,
+      "grams": 400.36,
       "wall_loops": 6,
       "infill_percent": 30.0,
       "layer_height": 0.20000000298023224,
@@ -29,21 +29,29 @@
       "quantity": 1,
       "material": "PETG-white",
       "passed": true,
-      "source_sha256": "a397ea1bbc5095d4bc5226f9ffb5bc5e07784912f4d8e9e0f531f07c7c226529",
+      "source_sha256": "7d7e9e927af4d86d9155d76d17af12bef2fb487cb74ba5acc73c039c169656bc",
       "exit_code": 0,
       "result_code": 0,
       "warnings": "",
-      "hours": 5.476,
-      "grams": 166.171,
+      "hours": 5.512,
+      "grams": 167.383,
       "wall_loops": 6,
       "infill_percent": 30.0,
       "layer_height": 0.20000000298023224,
       "effective_settings": {
         "sparse_infill_pattern": "gyroid",
-        "enable_support": "0",
+        "enable_support": "1",
         "curr_bed_type": "Textured PEI Plate",
         "top_shell_layers": "5",
-        "bottom_shell_layers": "5"
+        "bottom_shell_layers": "5",
+        "support_type": "normal(manual)",
+        "support_style": "snug",
+        "support_on_build_plate_only": "1",
+        "support_top_z_distance": "0.2",
+        "support_interface_top_layers": "3",
+        "support_interface_spacing": "0.2",
+        "support_base_pattern_spacing": "2.5",
+        "support_object_xy_distance": "0.35"
       },
       "start_gcode_diagnostic": true
     },
@@ -75,12 +83,12 @@
       "quantity": 1,
       "material": "PETG-grey",
       "passed": true,
-      "source_sha256": "7d28a402512c6cad8c351cd731ae66bbb9f168b61c41cb217463b7618275b5a1",
+      "source_sha256": "729040b7cf2a1f789e2db5bb4f470b9198306a38c91dbda889cc7ceef6a7ec7b",
       "exit_code": 0,
       "result_code": 0,
       "warnings": "",
-      "hours": 0.463,
-      "grams": 14.166,
+      "hours": 0.455,
+      "grams": 13.654,
       "wall_loops": 6,
       "infill_percent": 30.0,
       "layer_height": 0.20000000298023224,
@@ -121,12 +129,12 @@
       "quantity": 1,
       "material": "PETG-grey",
       "passed": true,
-      "source_sha256": "45049cbc747d05402d56b9ad21f6b66f6b83512d4918880991ec58badb98a85d",
+      "source_sha256": "151c5691a29e33122073cbf677ea3a8b3de611dae0a1977972cc5f3f681501da",
       "exit_code": 0,
       "result_code": 0,
       "warnings": "",
-      "hours": 0.602,
-      "grams": 9.283,
+      "hours": 0.508,
+      "grams": 7.78,
       "wall_loops": 6,
       "infill_percent": 30.0,
       "layer_height": 0.20000000298023224,
@@ -164,8 +172,8 @@
     }
   ],
   "total_parts": 8,
-  "total_grams_individual_plates": 709.7,
-  "total_hours_individual_plates": 21.2,
+  "total_grams_individual_plates": 707.4,
+  "total_hours_individual_plates": 21.1,
   "production_gcode": false,
   "project_3mf": {
     "file": "stl/leo_ac1_all_parts.3mf",
@@ -241,18 +249,18 @@
     "multicolour_slices": {
       "Housing": {
         "plate": 1,
-        "hours": 10.64,
+        "hours": 10.66,
         "grams_by_filament": {
-          "1": 402.21,
+          "1": 400.7,
           "3": 1.63
         },
         "warnings": ""
       },
       "Grey parts": {
         "plate": 3,
-        "hours": 3.96,
+        "hours": 3.87,
         "grams_by_filament": {
-          "2": 129.84,
+          "2": 127.83,
           "5": 0.92
         },
         "warnings": ""
@@ -262,29 +270,32 @@
     "plate_slices": {
       "Housing": {
         "plate": 1,
-        "hours": 10.64,
+        "hours": 10.66,
         "grams_by_filament": {
-          "1": 402.21,
+          "1": 400.7,
           "3": 1.63
         },
-        "warnings": ""
+        "warnings": "",
+        "support_sections": 0
       },
       "Back cover": {
         "plate": 2,
-        "hours": 5.48,
+        "hours": 5.51,
         "grams_by_filament": {
-          "1": 166.17
+          "1": 167.38
         },
-        "warnings": ""
+        "warnings": "",
+        "support_sections": 24
       },
       "Grey parts": {
         "plate": 3,
-        "hours": 3.96,
+        "hours": 3.87,
         "grams_by_filament": {
-          "2": 129.84,
+          "2": 127.83,
           "5": 0.92
         },
-        "warnings": ""
+        "warnings": "",
+        "support_sections": 0
       },
       "TPU feet": {
         "plate": 4,
@@ -292,10 +303,41 @@
         "grams_by_filament": {
           "4": 12.55
         },
-        "warnings": ""
+        "warnings": "",
+        "support_sections": 0
       }
     },
     "own_infill_parts": 2,
-    "sha256": "a242c48a78a9656ce774e2549efa3c9277fb0ed6397ca5a2540c9f62ebb4fe18"
+    "local_supports": {
+      "back": {
+        "object_id": "6",
+        "painted_faces": 8,
+        "area_mm2": 148.1898,
+        "bounds_mm": [
+          [
+            189.5,
+            116.6,
+            6.99
+          ],
+          [
+            212.5,
+            133.4,
+            7.01
+          ]
+        ],
+        "settings": {
+          "enable_support": "1",
+          "support_type": "normal(manual)",
+          "support_style": "snug",
+          "support_on_build_plate_only": "1",
+          "support_top_z_distance": "0.2",
+          "support_interface_top_layers": "3",
+          "support_interface_spacing": "0.2",
+          "support_base_pattern_spacing": "2.5",
+          "support_object_xy_distance": "0.35"
+        }
+      }
+    },
+    "sha256": "0ee567abf98ac4440a1be0357ea3ccfb225cc95f359c165e1899738cedab0aa2"
   }
 }
