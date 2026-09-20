@@ -4,19 +4,19 @@ Small battery fan for a child's room, styled like the outdoor unit of a split ai
 
 Designed for a Bambu Lab H2S with AMS in Bambu PETG HF white and grey plus TPU. **Status:** first parts printed; USB-C socket fit confirmed. Remaining fit and functional checks are pending.
 
-![Assembly](img/01_assembly.png?v=f881d04c87ee)
+![Assembly](img/01_assembly.png?v=2d49cf8cd9e7)
 
 | Back | Exploded |
 |:---:|:---:|
-| ![Back](img/02_back.png?v=f43cab6f172e) | ![Exploded](img/03_exploded.png?v=ddfbb4a8c7b7) |
+| ![Back](img/02_back.png?v=bc21ad2693e0) | ![Exploded](img/03_exploded.png?v=507fdc6111bb) |
 | **Logo and grooves** | **Air duct from behind** |
-| ![Logo](img/04_front_right.png?v=2dcb511ba375) | ![Air duct](img/05_duct.png?v=d6198c7a2d99) |
+| ![Logo](img/04_front_right.png?v=e090feb60c84) | ![Air duct](img/05_duct.png?v=0eb99a195301) |
 | **Knob and service cover** | **Underside with M5 thread and TPU feet** |
-| ![Knob](img/06_knob.png?v=37221ffa2267) | ![Underside](img/07_underside.png?v=505205d86d3a) |
+| ![Knob](img/06_knob.png?v=c9b338273e37) | ![Underside](img/07_underside.png?v=c496d4dfe4f1) |
 | **Charge module in the air stream** | **LED pocket behind the O** |
 | ![Charge module](img/08_charge_module.png?v=2ef05f89a581) | ![LED pocket](img/09_led.png?v=e16ed4530b5b) |
-| **Folding bail, raised** | **Back cover bosses** |
-| ![Folding bail](img/11_bail.png?v=ae90bd120434) | ![Back cover bosses](img/12_back_bosses.png?v=0522356d0333) |
+| **Folding bail, carrying position** | **Back cover bosses** |
+| ![Folding bail](img/11_bail.png?v=6a4194ee41ce) | ![Back cover bosses](img/12_back_bosses.png?v=97aa872bc3f8) |
 | **TPU foot mount** | **USB-C socket** |
 | ![TPU foot mount](img/13_foot_mount.png?v=0d16075905f5) | ![USB-C socket](img/14_usb_c.png?v=a320c0740188) |
 | **Power switch well** | **Battery saddles** |
@@ -31,10 +31,10 @@ Designed for a Bambu Lab H2S with AMS in Bambu PETG HF white and grey plus TPU. 
 | `grille` fan grille | 1 | PETG grey | Ø 136 × 7 | front on the bed |
 | `cover` service cover | 1 | PETG grey | 74.4 × 46 × 11.8 | outside on the bed; half-round notch around the knob, glued into a groove of the side wall |
 | `knob` speed knob | 1 | PETG white + grey (pointer) | Ø 28 × 16.5 | top on the bed, pointer as inlay in the first 0.6 mm |
-| `bail` folding bail | 1 | PETG grey | 224 × 59.5 × 12 | flat on the bed; its arms lie in the steps of the top side edges |
+| `bail` folding bail | 1 | PETG grey | 224 × 61.5 × 58.5 | back faces of the lower legs and the grip on the bed, upper legs upright |
 | `foot` foot | 2 | TPU | 16 × 62 × 5.5 | ground face on the bed, 100 % infill |
 
-All parts are in the Bambu Studio project [`stl/leo_ac1_all_parts.3mf`](stl/leo_ac1_all_parts.3mf): plate 1 housing, plate 2 back cover, plate 3 grey parts (grille, service cover, bail, knob), plate 4 TPU feet. Filaments: 1 PETG white, 2 PETG grey, 3 grey for logo and dedication (same spool as 2), 4 TPU, 5 white for the knob pointer (same spool as 1). All parts print without supports. Bambu Studio estimates about **0.68 kg and 19 hours** in total. Single-colour STLs are in `stl/`, the colour pieces in `stl/multicolour/`.
+All parts are in the Bambu Studio project [`stl/leo_ac1_all_parts.3mf`](stl/leo_ac1_all_parts.3mf): plate 1 housing, plate 2 back cover, plate 3 grey parts (grille, service cover, bail, knob), plate 4 TPU feet. Filaments: 1 PETG white, 2 PETG grey, 3 grey for logo and dedication (same spool as 2), 4 TPU, 5 white for the knob pointer (same spool as 1). All parts print without supports. Bambu Studio estimates about **0.69 kg and 19 hours** in total. Single-colour STLs are in `stl/`, the colour pieces in `stl/multicolour/`.
 
 Print profile: 0.20 mm layers, 6 walls, 5 top/bottom layers, 30 % gyroid (feet 100 %).
 
@@ -97,13 +97,13 @@ battery (JST-PH, built-in BMS) ──► (PTC) ──► power switch ──► 
 6. Slide the battery in from behind, cable end up, protection board towards the partition; a strip of foam tape above and below keeps it from rattling.
 7. Screw the TPU feet on with M3 × 8 from below; tighten only until the TPU starts to compress.
 8. Solder about 15 cm of wire to the USB-C module and push it into its channel in the back cover; snap the switch into its well. Route the wires through the lower notch of the partition, leaving slack to lay the back cover aside. Put on the back cover and screw it on with M3 × 8.
-9. Lay the bail arms into the steps along the top side edges, push a sleeve through each eye and screw it on from the side with M4 × 12; the screw clamps the sleeve, the bail swings freely. Swing it up before taking off the back cover.
+9. Lay the bail arms into the steps along the top side edges, push a sleeve through each eye and screw it on from the side with M4 × 12; the screw clamps the sleeve, the bail swings freely. To carry, swing it forward until the legs rest on the ramps at the front of the steps; swing it up before taking off the back cover.
 
 ## Design notes
 
 - Walls and front 3.2 mm, back cover 4 mm, corner radius 6 mm, recessed screw heads.
 - The battery sits in three closed rings: ribs in the housing and saddles on the back cover, stiffened by fillets and a rib.
-- Folding bail (concept from the leoino case): its arms lie in steps along both top side edges and turn on M4 pivots at mid-depth, so the fan hangs level with about 34 mm room for the fingers; folded back, the bar rests behind the back cover. The eyes turn on sleeves, not on the screw threads.
+- L-shaped folding bail (concept from the leoino case): the upper legs lie in steps along both top side edges and turn on M4 pivots at mid-depth, the lower legs run down behind the back cover to the grip below the power switch. To carry, it rests on ramps at the front of the steps with the grip right above the pivots, so the fan hangs level with about 55 mm room for the hand. The eyes turn on sleeves, not on the screw threads.
 - Grille openings are below 6 mm.
 - The TPU feet are screwed and keyed into pockets of the bottom wall.
 - An M5 heat-set insert in the underside takes a tripod or wall mount.

@@ -31,8 +31,8 @@ ASSEMBLY = {
     "back": "back();",
     "cover": "cover();",
     "bail": "bail();",
-    "bail_half": "bail(45);",   # the swing, sampled half and fully raised: checked against the housing
-    "bail_up": "bail(90);",
+    "bail_half": "bail(bail_carry / 2);",   # the swing, sampled half way and at the carrying angle: checked against the housing
+    "bail_up": "bail(bail_carry);",
     "feet": "place_feet();",
     "knob": "knob();",
     "pot": "pot_env(nut = false);",
@@ -97,8 +97,8 @@ def checks(ctx):
     assert m["mount_insert"] == [6.4, 9.5, 2.6] and m["mount_floor"] >= 2, "Ruthex M5x9.5: hole 6.4, length 9.5, wall 2.6; 2 mm floor"
     assert m["grille_gap"] <= 6, "Grille openings above 6 mm let children's fingers through"
     assert m["knob_shaft_engagement"] >= 8 and m["knob_top_skin"] >= 2 and m["knob_protrusion"] <= 8, "Knob: on the shaft, at most 8 mm in front of the cover"
-    # bail pivots at mid-depth (user: level carrying); folded behind the back cover, so the arms are not limited by the depth
-    assert m["bail_clearance"] >= 30 and m["bail_grip"] >= 90, "Bail: 30 mm finger clearance, 90 mm hand breadth"
+    # L bail (user): pivots at mid-depth, carried with the bar above the pivot so the fan hangs level
+    assert m["bail_clearance"] >= 45 and m["bail_grip"] >= 90 and 90 < m["bail_carry"] < 160, "Bail: 45 mm hand room, 90 mm hand breadth, carrying angle past vertical"
     assert m["bail_insert"][0] == 5.6, "Ruthex M4 insert: hole 5.6 mm"
     assert m["foot_clearance"] >= 0.2 and m["foot_lift"] >= 3, "TPU feet: clearance 0.2 mm in the pockets, housing at least 3 mm above the ground"
     # dedication: the lines must stay apart (descenders!); letters of the grey inlay in print orientation, merged by their y spans
@@ -151,16 +151,16 @@ def checks(ctx):
     assert duct["wall_fill"] > 0.999 and duct["gap_mm3"] < 0.01 and duct["on_fan_frame"] > 0.999, f"Air duct {duct}"
     ctx.summary.append("air duct")
 
-    # Assembly paths in a realistic removal order
+    # Assembly paths in a realistic removal order; the bail is swung up (bail_up) before the back cover comes off
     others = lambda *names: [n for n in ctx.solids if n not in names]
     # PWM board with the potentiometer: after knob, cover and nut, away from the wall until the shaft is clear, then out the back
     clear_x = m["pot_shaft_len"] + m["wall"] + 1
     paths = ctx.paths([
             ("grille_front", ["grille", "screws_grille"], ["body", "fan", "screws_fan"], [0, -1, 0], 12, 0.25),
             ("back_off", ["back", "screws_back", "usb_trigger", "switch"], others("back", "screws_back", "usb_trigger", "switch", "bail"), [0, 1, 0], 12, 0.25),   # bail swung up first
-            ("battery_out", ["battery"], others("battery", "back", "screws_back", "usb_trigger", "switch"), [0, 1, 0], 90, 1),
-            ("chg_module_out", ["chg_module"], others("chg_module", "back", "screws_back", "usb_trigger", "switch"), [0, 1, 0], 45, 1),
-            ("fan_out", ["fan", "screws_fan"], others("fan", "screws_fan", "battery", "chg_module", "back", "screws_back", "usb_trigger", "switch"), [0, 1, 0], 90, 1),
+            ("battery_out", ["battery"], others("battery", "back", "screws_back", "usb_trigger", "switch", "bail"), [0, 1, 0], 90, 1),
+            ("chg_module_out", ["chg_module"], others("chg_module", "back", "screws_back", "usb_trigger", "switch", "bail"), [0, 1, 0], 45, 1),
+            ("fan_out", ["fan", "screws_fan"], others("fan", "screws_fan", "battery", "chg_module", "back", "screws_back", "usb_trigger", "switch", "bail"), [0, 1, 0], 90, 1),
             ("knob_off", ["knob"], others("knob"), [1, 0, 0], 25, 0.5),
             ("cover_off", ["cover"], ["body", "pot", "pot_nut", "pwm_board", "knob"], [1, 0, 0], 30, 0.5),   # glued in; the knob can stay on
             ("bail_up", ["bail"], ["body"], [0, 0, 1], 15, 0.5),   # after its pivot screws
@@ -168,7 +168,7 @@ def checks(ctx):
             # the USB-C module comes off with the back cover (back_off), then out of its channel
             ("usb_trigger_from_back", ["usb_trigger"], ["back"], [0, -1, 0], 16, 0.5),
             ("switch_out", ["switch"], ["back"], [0, 1, 0], 25, 0.5),
-            ("pwm_board_out", ["pot", "pwm_board"], others("pot", "pot_nut", "pwm_board", "knob", "cover", "back", "screws_back", "usb_trigger", "switch"),
+            ("pwm_board_out", ["pot", "pwm_board"], others("pot", "pot_nut", "pwm_board", "knob", "cover", "back", "screws_back", "usb_trigger", "switch", "bail"),
              [([-1, 0, 0], clear_x, 0.5), ([0, 0, 1], m["pwm_lift"], 0.5), ([0, 1, 0], 90, 1)])])   # lift the solder pins over the back pads
     ctx.summary.append(f"{len(paths)} paths")
 
@@ -189,7 +189,7 @@ def checks(ctx):
 
 VIEWER = dict(
     title="LEO-AC1", page_title="LEO-AC1 fan", eyebrow="Assembly · installed position",
-    dims=[("Width", "239.8"), ("Depth", "97.5"), ("Height", "159.5")],
+    dims=[("Width", "239.8"), ("Depth", "96.5"), ("Height", "159.5")],
     groups=[("white", "Printed · PETG white"), ("grey", "Printed · PETG grey"),
             ("tpu", "Printed · TPU"), ("screws", "Screws M3"), ("bought", "Bought parts")],
     hidden_groups=["bought"],
@@ -252,8 +252,8 @@ VIEWS = {"01_assembly": ("assembly();", "-160,-330,230,112,40,70"),
          # LED pocket behind the O, cut through the LED axis and seen from behind: 0.8 mm white skin in front of the LED
          "09_led": ("intersection() { union() { color(\"#f2f2ee\") body(); color(\"#9fd3ff\") led_env(); } translate([led_xz[0] - 9, -1, led_xz[1] - 8]) cube([18, 10, 8]); }",
                     "232,40,178,207,3,131"),
-         # folding bail raised: arms in the side steps of the top edge, pivots at mid-depth
-         "11_bail": ("assembly(bail_angle = 90);", "-150,-300,330,112,40,90"),
+         # L bail at the carrying angle: upper legs on the step ramps, bar above the pivots
+         "11_bail": ("assembly(bail_angle = bail_carry);", "-150,-300,330,112,40,90"),
          # back cover insert boss in the top left corner from behind and below, back cover off: column and cone into the corner
          "12_back_bosses": ('color("#f2f2ee") intersection() { body(); translate([-1, 30, 105]) cube([45, body_d, 60]); }',
                             "110,190,60,12,62,142"),
