@@ -61,6 +61,8 @@ gusset = 20;         // cone below the back bosses into the wall corner (print o
 slot_w = 1.6;        // intake slots, back and left side
 slot_pitch = 3.2;
 back_bar_x = fan_cx; // extra vertical bar through the back intake slots
+back_slot_rows = 5;  // back intake slots: rows of equal height between z 14 and body_h - 14
+back_slot_bar = 3;   // horizontal bar between the rows
 
 /* [Battery, 3.2 V 6000 mAh LiFePO4 pack] */
 bat_d = 32.5;        // measured cell body, excluding the separate protection board, 2026-09-15
@@ -519,7 +521,8 @@ module back_boss(b) {
 }
 
 module intake_slots_back() {
-    bars = [[14, 44], [47, 76], [79, 108], [111, 140], [143, body_h - 14]];
+    h = (body_h - 28 - (back_slot_rows - 1) * back_slot_bar) / back_slot_rows;
+    bars = [for (i = [0:back_slot_rows - 1]) let (z = 14 + i * (h + back_slot_bar)) [z, z + h]];
     for (x = [14.8:slot_pitch:part_x - 4], z = bars) if (abs(x - back_bar_x) > slot_w / 2 + 1.5) slot2d([x, z[0] + slot_w / 2], [x, z[1] - slot_w / 2], slot_w);
 }
 

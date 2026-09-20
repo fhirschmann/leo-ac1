@@ -8,7 +8,7 @@ Designed for a Bambu Lab H2S with AMS in Bambu PETG HF white and grey plus TPU. 
 
 | Back | Exploded |
 |:---:|:---:|
-| ![Back](img/02_back.png?v=d15003424212) | ![Exploded](img/03_exploded.png?v=a3b70341f774) |
+| ![Back](img/02_back.png?v=8c70744b208b) | ![Exploded](img/03_exploded.png?v=a3b70341f774) |
 | **Logo and grooves** | **Air duct from behind** |
 | ![Logo](img/04_front_right.png?v=3eae1ab786b8) | ![Air duct](img/05_duct.png?v=64063b1695b3) |
 | **Knob and service cover** | **Underside with M5 thread and TPU feet** |

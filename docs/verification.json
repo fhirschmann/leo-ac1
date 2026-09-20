@@ -1,5 +1,5 @@
 {
-  "source_sha256": "e2e4498eab146b09ac1c5a0208ecdf79da902433027b481b22f4a3b5ef3ae632",
+  "source_sha256": "0fb97243ba9b88a6ffc68d5b52f271918d41a2d3a7de568258defef80ac8463d",
   "software": {
     "numpy": "2.5.3",
     "trimesh": "5.1.0",
@@ -36,10 +36,10 @@
       "degenerate_faces": 0,
       "components": 1,
       "backend": "CGAL",
-      "sha256": "6998c7bdf75d78c606517eabd7aebded8fb1874ae1cb1fb06fcf15906a3a461a",
+      "sha256": "91c29e96e72cb474d6a4413cc11da779a20a7ecef8727a0d6c41f6a60927ac14",
       "quantity": 1,
       "material": "PETG-white",
-      "committed_sha256": "6998c7bdf75d78c606517eabd7aebded8fb1874ae1cb1fb06fcf15906a3a461a"
+      "committed_sha256": "91c29e96e72cb474d6a4413cc11da779a20a7ecef8727a0d6c41f6a60927ac14"
     },
     "back": {
       "size_mm": [
@@ -59,17 +59,17 @@
           45.75
         ]
       ],
-      "volume_mm3": 162647.8848,
+      "volume_mm3": 162647.8873,
       "triangles": 13054,
       "watertight": true,
       "consistent_winding": true,
       "degenerate_faces": 0,
       "components": 1,
       "backend": "Manifold",
-      "sha256": "08045fbb725fcde9ff1fdf34647407bcc9af2120c9ae67f60db521ebd2b72409",
+      "sha256": "d2bc5b1f25315583486117ab6941426e8b7bddcea726df5f60479cb00e269da1",
       "quantity": 1,
       "material": "PETG-white",
-      "committed_sha256": "08045fbb725fcde9ff1fdf34647407bcc9af2120c9ae67f60db521ebd2b72409"
+      "committed_sha256": "d2bc5b1f25315583486117ab6941426e8b7bddcea726df5f60479cb00e269da1"
     },
     "cover": {
       "size_mm": [
@@ -96,10 +96,10 @@
       "degenerate_faces": 0,
       "components": 1,
       "backend": "CGAL",
-      "sha256": "0b5aa0286b09d1d8fda61720beec1e6371983c9072c682449f5a22ed6bf17df7",
+      "sha256": "2c7cf42468e0166b5103c579d0d67402f6f811066a97e0d0f7398353bd48f38e",
       "quantity": 1,
       "material": "PETG-grey",
-      "committed_sha256": "0b5aa0286b09d1d8fda61720beec1e6371983c9072c682449f5a22ed6bf17df7"
+      "committed_sha256": "2c7cf42468e0166b5103c579d0d67402f6f811066a97e0d0f7398353bd48f38e"
     },
     "bail": {
       "size_mm": [
@@ -246,10 +246,10 @@
       "degenerate_faces": 0,
       "components": 1,
       "backend": "Manifold",
-      "sha256": "1635d1890b9aa3823136de14a2c58d16cfcd866b613ee75df1f8704df915d19f",
+      "sha256": "17f68cc4b5578d0588fa56863048e8d2578223a798cb28cdbf793810e7ccc6db",
       "quantity": 0,
       "material": "PETG-white",
-      "committed_sha256": "1635d1890b9aa3823136de14a2c58d16cfcd866b613ee75df1f8704df915d19f"
+      "committed_sha256": "17f68cc4b5578d0588fa56863048e8d2578223a798cb28cdbf793810e7ccc6db"
     }
   },
   "color_meshes": {
@@ -359,7 +359,7 @@
       "degenerate_faces": 0,
       "components": 1,
       "backend": "CGAL",
-      "sha256": "e6bb1e2d0d7535288f63cd647cd20cfc1e95ba20fe4874890ab220543ce98956"
+      "sha256": "4818b5e76dec0308e738135f4037fa843863efc0bb07a9146055a82b6461ebc7"
     },
     "back_base": {
       "size_mm": [
@@ -379,14 +379,14 @@
           45.75
         ]
       ],
-      "volume_mm3": 162365.2771,
+      "volume_mm3": 162365.2796,
       "triangles": 15400,
       "watertight": true,
       "consistent_winding": true,
       "degenerate_faces": 0,
       "components": 1,
       "backend": "Manifold",
-      "sha256": "62b044c48cd650d3735dffdcce780b40b2e50ada8e8e7216f4a83d56136b2571"
+      "sha256": "99d8056981591b2c0d451878d6ebb91b59dfa592910e168c56468c2e201a8a41"
     },
     "back_qr": {
       "size_mm": [
@@ -413,7 +413,7 @@
       "degenerate_faces": 0,
       "components": 13,
       "backend": "Manifold",
-      "sha256": "92bcb1474a9934e40079de6c09bd498e47e232a3979d79fc7aa68b91177bc45a"
+      "sha256": "a68f86daf085a3bbf7033ed0b3871475c20af74fce713e4bb456f4e77d81682c"
     },
     "knob_base": {
       "size_mm": [
