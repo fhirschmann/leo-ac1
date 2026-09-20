@@ -168,14 +168,19 @@ chg_ledge = [2, 0.3];          // ledge under the lower board edge: height, set 
 // castellations and the B wires from 13 on, IC centre 27.3 (both faces read off photos with a mm grid, about +-0.3)
 chg_sock = [0.2, 1.6, 0.3];    // sockets over the housing pads (user: female over the printed male pads, fully enclosed, CA gel): clearance per side, wall, rim to the partition
 chg_holder = [2, 2, 4];        // plate thickness, lip under the lower board edge (z), lip and web width (y, between the OUT pads)
-chg_clip = [3, 11, 2, 0.4, 0.2, [0.6, 2.6]];   // snap hooks at both long edges: from / to (from the OUT end), jaw thickness, overlap on the part side,
+chg_lip_l = [3, 1.6, 0.3];     // the lip runs on in front of the board and turns up as an L (user): leg height above the board end, thickness,
+                               // clearance in front of the parts (board with parts 3.6-3.7 high at the OUT end); the OUT end drops into it from above
+chg_clip = [3, 11, 1.6, 0.9, 0.2, [0.6, 2.6]];   // snap hooks at both long edges: from / to (from the OUT end), jaw thickness, overlap on the part side
+                               // (0.9 by the user on the real board, 2026-09-19; the photo put the SS34 0.7 from the edge), 1.6 jaws keep the clip-in strain near 3 %,
                                // edge clearance, back stop under the edge from / to (0.8 mm slot to the jaw so the slicer cannot close it; jumpers from 3.4)
 chg_rear_sink = [14, 14, 6, 1, 1];     // user's heatsink: length (along the board), width, height, insulating silicone pad over its whole face, gap to the holder plate
 chg_sink_end = 9.5;            // lower heatsink end from the IN end: 0.7 mm past the BAT pads; it overhangs the IN end by 4.5 mm
 chg_web_gap = 1.5;             // the web from lip to plate stays this far behind the board (OUT pads, jumper solder)
+chg_web_touch = [9, 18];       // ... except between these (from the OUT end), where it bears on the board back so the tie cannot tip it
+                               // over (user): above the solder jumpers, 3.8 below the metal pad
 chg_tie = [2.5, 1.2, 0.3, 12.5, 2];   // cable tie round board and web just above the hooks (user: the board fell out in a drop): width, thickness,
                                // tunnel clearance, centre from the OUT end (over the ends of inductor and diode, no MLCC under it), web skin in front of the tunnel
-fan_side_shift = 11;           // the glued holder stays in the fan's way out: unscrewed fan 1 mm back off the duct ring, this far left, then out the back
+fan_side_shift = 13.5;         // the glued holder stays in the fan's way out: unscrewed fan 1 mm back off the duct ring, this far left (13-14 fit), then out the back
 
 /* [Folding bail on top, like the leoino case: steps along both top side edges over the full depth, pivots at mid-depth] */
 bail_arm = [15, 12];        // legs: width (x; leoino 11, 3 mm wider outwards for the sunk screw heads, 1 mm for the 12 mm shoulder, user), thickness = eye diameter; the upper legs lie in the side steps
@@ -417,9 +422,11 @@ assert(chg_fan_gap >= 5 && chg_gap - chg_tape >= 3
        && chg_z - chg_pcb[0] / 2 - chg_ledge[0] > cable_notch_z[0] + cable_notch[1] / 2 + 2
        && cable_notch_z[0] - cable_notch[1] / 2 > cradle_z[1] + cradle_t + 1 && cable_notch_z[0] + cable_notch[1] / 2 < cradle_z[2] - 1,
        "Charge module reaches the fan frame, the back or the cable notch");
+assert(chg_web_touch[0] >= 8.2 + 0.6 && chg_web_touch[1] <= 21.8 - 3.5 && chg_web_touch[1] >= chg_tie[3] + chg_tie[0] / 2 + chg_tie[2] + 1.5,
+       "Charge module holder: web contact on the solder jumpers, too close to the metal pad under the IC, or not above the tie tunnel");
 assert(chg_tie[3] - chg_tie[0] / 2 >= chg_clip[1] + 0.2 && chg_tie[3] + chg_tie[0] / 2 <= 14 && chg_tie[4] >= 2,
        "Charge module tie: over the hooks, past the inductor into the B wires, or too little web in front of its tunnel");
-assert(chg_clip[0] >= 3 && chg_clip[1] <= 12.5 && chg_clip[3] + chg_clip[4] <= 0.7 && chg_clip[5][0] + chg_clip[4] >= 0.8 && chg_clip[5][1] <= 3 && chg_sink_z0 > chg_bz0 + chg_clip[1] + 5 && chg_sink_end >= 9.5
+assert(chg_clip[0] >= 3 && chg_clip[1] <= 12.5 && chg_clip[3] + chg_clip[4] <= 1.2 && 3 * chg_clip[2] * (chg_clip[3] + chg_clip[4]) / (2 * pow(chg_hx1 - chg_holder[0] - chg_bx0 + chg_clip[3] + chg_clip[4], 2)) <= 0.03 && chg_clip[5][0] + chg_clip[4] >= 0.8 && chg_clip[5][1] <= 3 && chg_sink_z0 > chg_bz0 + chg_clip[1] + 5 && chg_sink_end >= 9.5
        && chg_sink_z0 + chg_rear_sink[0] < cable_notch_z[1] - cable_notch[1] / 2 - 2
        && chg_hz0 + chg_pads[1][0] + chg_pads[1][1] < chg_sink_z0 + chg_rear_sink[0],
        "Charge module holder: hooks on the OUT pads or beside the inductor, heatsink too close to the clip or off the metal pad, or it reaches the fan cable notch");
@@ -1050,8 +1057,12 @@ module chg_holder_solid() let (xs = chg_hx1 - chg_holder[0], w = chg_pcb[1], c =
         }
         chg_pad_env(chg_sock[0], part_x + 1);   // floors on the pad faces, clearance on the other sides
     }
-    translate([chg_bx0 + chg_ledge[1], yl, chg_hz0]) cube([xs - chg_bx0 - chg_ledge[1] + 1, chg_holder[2], chg_holder[1]]);   // lip
-    translate([chg_bx0 + chg_pcb[2] + chg_web_gap, yl, chg_hz0]) cube([xs - chg_bx0 - chg_pcb[2] - chg_web_gap + 1, chg_holder[2], chg_bz0 + chg_tie[3] + chg_tie[0] / 2 + chg_tie[2] + 1.5 - chg_hz0]);   // web, up past the tie tunnel
+    let (xl = chg_bx0 - chg_comp_h - chg_lip_l[2] - chg_lip_l[1]) {   // L: lip under the board end, leg up in front of its parts
+        translate([xl, yl, chg_hz0]) cube([xs - xl + 1, chg_holder[2], chg_holder[1]]);
+        translate([xl, yl, chg_hz0]) cube([chg_lip_l[1], chg_holder[2], chg_holder[1] + chg_lip_l[0]]);
+    }
+    translate([chg_bx0 + chg_pcb[2] + chg_web_gap, yl, chg_hz0]) cube([xs - chg_bx0 - chg_pcb[2] - chg_web_gap + 1, chg_holder[2], chg_bz0 + chg_web_touch[1] - chg_hz0]);   // web, up past the tie tunnel
+    translate([chg_bx0 + chg_pcb[2], yl, chg_bz0 + chg_web_touch[0]]) cube([chg_web_gap + 1, chg_holder[2], chg_web_touch[1] - chg_web_touch[0]]);   // bearing face on the board back
     for (sd = [0, 1]) let (yj = sd ? chg_y0 + w + c[4] : chg_y0 - c[4] - c[2], yh = sd ? chg_y0 + w - c[3] : yj,
                            yb = sd ? chg_y0 + w - c[5][1] : chg_y0 + c[5][0]) {   // one jaw per long edge (no mirror: its float noise left slivers)
         translate([chg_bx0 + chg_pcb[2], yb, z0]) cube([xs - chg_bx0 - chg_pcb[2] + 1, c[5][1] - c[5][0], dz]);   // back stop under the edge

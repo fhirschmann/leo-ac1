@@ -171,7 +171,8 @@ def checks(ctx):
             ("back_off", ["back", "screws_back", "usb_trigger", "switch"], others("back", "screws_back", "usb_trigger", "switch", "bail"), [0, 1, 0], 12, 0.25),   # bail swung up first
             ("battery_out", ["battery"], others("battery", "back", "screws_back", "usb_trigger", "switch", "bail"), [0, 1, 0], 90, 1),
             # the snap hooks spring open (not a rigid path): off the back stops towards the fan section, against everything but the holder
-            ("chg_module_unclip", ["chg_module", "chg_sink"], others("chg_module", "chg_sink", "chg_tie", "chg_holder", "back", "screws_back", "usb_trigger", "switch", "bail"), [-1, 0, 0], 4, 0.25),
+            ("chg_module_unclip", ["chg_module", "chg_sink"], others("chg_module", "chg_sink", "chg_tie", "chg_holder", "back", "screws_back", "usb_trigger", "switch", "bail"),
+             [([0, 0, 1], 3.5, 0.25), ([-1, 0, 0], 4, 0.25)]),   # hooks spread: up out of the L, then off the back stops
             ("chg_holder_off", ["chg_holder"], ["body"], [-1, 0, 0], 6, 0.25),   # the sockets slide off the pads (before gluing)
             ("screws_fan_out", ["screws_fan"], others("screws_fan", "fan", "back", "screws_back", "usb_trigger", "switch", "bail"), [0, 1, 0], 40, 1),
             # the charge module holder is glued in and stays: off the duct ring, sideways past the holder, then out the back
@@ -188,7 +189,7 @@ def checks(ctx):
              [([-1, 0, 0], clear_x, 0.5), ([0, 0, 1], m["pwm_lift"], 0.5), ([0, 1, 0], 90, 1)])])   # lift the solder pins over the back pads
     # then out the back past the glued holder, from the unclipped position
     fixed = others("chg_module", "chg_sink", "chg_tie", "back", "screws_back", "usb_trigger", "switch", "bail")
-    ctx.solids["chg_module_unclipped"] = (ctx.solids["chg_module"] + ctx.solids["chg_sink"]).translate([-4, 0, 0])
+    ctx.solids["chg_module_unclipped"] = (ctx.solids["chg_module"] + ctx.solids["chg_sink"]).translate([-4, 0, 3.5])
     paths += ctx.paths([("chg_module_out", ["chg_module_unclipped"], fixed, [0, 1, 0], 45, 1)])
     del ctx.solids["chg_module_unclipped"]
     ctx.summary.append(f"{len(paths)} paths")
