@@ -17,6 +17,7 @@ PARTS = {
     "bail": (1, "PETG-grey", 1),
     "knob": (1, "PETG-grey", 1),
     "foot": (2, "TPU", 1),
+    "chg_holder": (1, "PETG-grey", 1),   # charge module holder, taped onto the pads of the already printed housing
     # fit test: right section of housing and back cover, cut from the real parts
     "test_right": (0, "PETG-white", 1),
     "test_right_back": (0, "PETG-white", 1),
@@ -39,6 +40,8 @@ ASSEMBLY = {
     "pwm_board": "pwm_board_env();",
     "led": "led_env();",
     "chg_module": "chg_module_env();",
+    "chg_holder": "chg_holder();",
+    "chg_sink": "chg_rear_sink_env();",
     "usb_trigger": "usbc_env();",
     "switch": "sw_env();",
     "fan": "fan_env();",
@@ -68,7 +71,7 @@ FILAMENTS = [dict(material="PETG-white", profile="Bambu PETG HF @BBL H2S", colou
              dict(material="PETG-grey", profile="Bambu PETG HF @BBL H2S", inlay=("label", "dedication", "grille", "qr"), colour="#8E9294"),
              dict(material="TPU", profile="Generic TPU @BBL H2S", colour="#222326"),
              dict(material="PETG-white", profile="Bambu PETG HF @BBL H2S", inlay=("pointer",), colour="#FFFFFF")]
-PLATES = [("Housing", ["body"]), ("Back cover", ["back"]), ("Grey parts", ["cover", "bail", "knob"]), ("TPU feet", ["foot"])]
+PLATES = [("Housing", ["body"]), ("Back cover", ["back"]), ("Grey parts", ["cover", "bail", "knob", "chg_holder"]), ("TPU feet", ["foot"])]
 CENTRE_PLATES = ("Housing", "Back cover")   # housing and back cover in the middle of the bed (user), prime tower behind them
 PROJECT_3MF = "stl/leo_ac1_all_parts.3mf"
 # fit test before the full build: right section of housing and back cover with a knob, as little material as possible
@@ -128,7 +131,9 @@ def checks(ctx):
     contacts = ctx.contacts([("fan", "body", [0, -1, 0]), ("back", "body", [0, -1, 0]),
                              ("cover", "body", [-1, 0, 0]), ("battery", "body", [0, 0, -1]), ("bail", "body", [0, 0, -1]),
                              ("bail_up", "body", [0, -math.sin(math.radians(m["bail_carry"])), math.cos(math.radians(m["bail_carry"]))]),   # stop at the carrying angle
-                             ("pot", "body", [1, 0, 0]), ("pot_nut", "body", [-1, 0, 0]), ("chg_module", "body", [1, 0, -1]),
+                             ("pot", "body", [1, 0, 0]), ("pot_nut", "body", [-1, 0, 0]),
+                             ("chg_holder", "body", [0, 0, -1]), ("chg_module", "chg_holder", [1, 0, -1]),
+                             ("chg_sink", "chg_module", [-1, 0, 0]),
                              ("led", "body", [0, -1, 0]), ("feet", "body", [0, 0, 1]), ("usb_trigger", "back", [0, 1, 0]),
                              ("switch", "back", [0, -1, 0])])
 
@@ -136,10 +141,11 @@ def checks(ctx):
     stops = ctx.stops([("battery_back", "battery", "back", [0, 1, 0], 1.5),
                        ("battery_up", "battery", "body", [0, 0, 1], m["shelf_gap"] + 0.5),
                        ("battery_side", "battery", "body", [1, 0, 0], 1.0),
-                       ("usb_trigger_push", "usb_trigger", "body", [0, -1, 0], 1.0)])
+                       ("usb_trigger_push", "usb_trigger", "body", [0, -1, 0], 1.0),
+                       ("chg_module_hooks", "chg_module", "chg_holder", [-1, 0, 0], 0.5)])   # the snap hooks hold the board
 
     # Running clearance of the turning knob; charge module kept away from the fan for the air stream
-    clearances = ctx.clearances([("knob", ["body", "cover"], 0.4), ("chg_module", "fan", 5.0)])
+    clearances = ctx.clearances([("knob", ["body", "cover"], 0.4), ("chg_module", "fan", 5.0), ("chg_holder", "fan", 1.5), ("chg_sink", ["fan", "chg_holder"], 0.9)])
 
     # Round air duct: wall closed all around, small gap to the fan, end ring completely on the fan frame face
     (ax, az), fy, (r0, r1), gap = m["fan_axis"], m["fan_y"], m["shroud_r"], m["shroud_gap"]
@@ -163,8 +169,12 @@ def checks(ctx):
     paths = ctx.paths([
             ("back_off", ["back", "screws_back", "usb_trigger", "switch"], others("back", "screws_back", "usb_trigger", "switch", "bail"), [0, 1, 0], 12, 0.25),   # bail swung up first
             ("battery_out", ["battery"], others("battery", "back", "screws_back", "usb_trigger", "switch", "bail"), [0, 1, 0], 90, 1),
-            ("chg_module_out", ["chg_module"], others("chg_module", "back", "screws_back", "usb_trigger", "switch", "bail"), [0, 1, 0], 45, 1),
-            ("fan_out", ["fan", "screws_fan"], others("fan", "screws_fan", "battery", "chg_module", "back", "screws_back", "usb_trigger", "switch", "bail"), [0, 1, 0], 90, 1),
+            # the snap hooks spring open (not a rigid path): off the back stops towards the fan section, against everything but the holder
+            ("chg_module_unclip", ["chg_module", "chg_sink"], others("chg_module", "chg_sink", "chg_holder", "back", "screws_back", "usb_trigger", "switch", "bail"), [-1, 0, 0], 4, 0.25),
+            ("screws_fan_out", ["screws_fan"], others("screws_fan", "fan", "back", "screws_back", "usb_trigger", "switch", "bail"), [0, 1, 0], 40, 1),
+            # the charge module holder is glued in and stays: off the duct ring, sideways past the holder, then out the back
+            ("fan_out", ["fan"], others("fan", "screws_fan", "battery", "chg_module", "chg_sink", "back", "screws_back", "usb_trigger", "switch", "bail"),
+             [([0, 1, 0], 1, 0.5), ([-1, 0, 0], m["fan_side_shift"], 0.5), ([0, 1, 0], 90, 1)]),
             ("knob_off", ["knob"], others("knob"), [1, 0, 0], 25, 0.5),
             ("cover_off", ["cover"], ["body", "pot", "pot_nut", "pwm_board", "knob"], [1, 0, 0], 30, 0.5),   # glued in; the knob can stay on
             ("bail_up", ["bail"], ["body"], [0, 0, 1], 15, 0.5),   # after its pivot screws
@@ -174,6 +184,11 @@ def checks(ctx):
             ("switch_out", ["switch"], ["back"], [0, 1, 0], 25, 0.5),
             ("pwm_board_out", ["pot", "pwm_board"], others("pot", "pot_nut", "pwm_board", "knob", "cover", "back", "screws_back", "usb_trigger", "switch", "bail"),
              [([-1, 0, 0], clear_x, 0.5), ([0, 0, 1], m["pwm_lift"], 0.5), ([0, 1, 0], 90, 1)])])   # lift the solder pins over the back pads
+    # then out the back past the glued holder, from the unclipped position
+    fixed = others("chg_module", "chg_sink", "back", "screws_back", "usb_trigger", "switch", "bail")
+    ctx.solids["chg_module_unclipped"] = (ctx.solids["chg_module"] + ctx.solids["chg_sink"]).translate([-4, 0, 0])
+    paths += ctx.paths([("chg_module_out", ["chg_module_unclipped"], fixed, [0, 1, 0], 45, 1)])
+    del ctx.solids["chg_module_unclipped"]
     ctx.summary.append(f"{len(paths)} paths")
 
     # Insert pockets: core open, datasheet wall around it and the floor ring below it material
@@ -211,7 +226,9 @@ VIEWER = dict(
            ("fan_visual", "Fan 140 mm · placeholder (e.g. Noctua NF-A14 PWM)", "bought", "#303236", "1x", [0, 0.8, 0]),
            ("battery", "Battery LiFePO4 3.2 V 6000 mAh", "bought", "#3f7fbf", "1x", [0, 0.5, 0]),
            ("pot", "Potentiometer · housing in the wall pocket, washer and nut outside", "bought", "#3a3d41", "1x", [-0.5, 0, 0]),
-           ("chg_module", "Charge/boost module · 2 planned heatsink envelopes", "bought", "#c9c9c9", "1x", [0, 0.8, 0]),
+           ("chg_holder", "Charge module holder · taped onto the housing pads", "grey", "#8f9396", "1x", [0, 0.8, 0]),
+           ("chg_module", "Charge/boost module · IN end up, 2 planned heatsink envelopes in front", "bought", "#c9c9c9", "1x", [0, 0.8, 0]),
+           ("chg_sink", "Heatsink 14 × 14 × 6 behind the charger IC", "bought", "#b8bcc2", "1x", [0, 0.8, 0]),
            ("led", "USB power indicator LED 3 mm, behind the O", "bought", "#9fd3ff", "1x", [0, 1, 0]),
            ("usb_trigger", "USB-C PD trigger, 5 V (Type A)", "bought", "#4b2a7a", "1x", [0, 1.5, 0]),
            ("switch", "Power switch KCD11 · rocker about 2 mm proud of the back face", "bought", "#1b1b1b", "1x", [0, 1.8, 0]),
@@ -253,8 +270,8 @@ VIEWS = {"01_assembly": ("assembly();", "-160,-330,230,112,40,70"),
          # service cover with the speed knob, from the right
          "06_knob": ("intersection() { assembly(); translate([165, 0, 20]) cube([100, 80, 140]); }",
                      "420,-120,200,230,40,90"),
-         # charge/boost module on the partition in the air stream, from the back with the back cover removed
-         "08_charge_module": ("intersection() { union() { color(\"#f2f2ee\") body(dedication = false); color(\"#c9c9c9\") chg_module_env(); } translate([part_x - 38, 14, 30]) cube([44, body_d - 14, 115]); }", "40,250,170,148,50,85"),
+         # charge/boost module in its clip holder on the partition, from behind and the fan side with the back cover removed
+         "08_charge_module": ("intersection() { union() { color(\"#f2f2ee\") body(dedication = false); color(\"#8f9396\") chg_holder(); color(\"#2e6b3f\") chg_module_env(); color(\"#d9dcdf\") chg_rear_sink_env(); } translate([part_x - 30, 30, 55]) cube([36, 34, 65]); }", "95,5,130,155,48,86", {"light": "left"}),
          # LED pocket behind the O, cut through the LED axis and seen from behind: 0.8 mm white skin in front of the LED
          "09_led": ("intersection() { union() { color(\"#f2f2ee\") body(dedication = false); color(\"#9fd3ff\") led_env(); } translate([led_xz[0] - 9, -1, led_xz[1] - 8]) cube([18, 10, 8]); }",
                     "232,40,178,207,3,131"),

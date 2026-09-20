@@ -13,8 +13,8 @@ Designed for a Bambu Lab H2S with AMS in Bambu PETG HF white and grey plus TPU. 
 | ![Logo](img/04_front_right.png?v=3eae1ab786b8) | ![Air duct](img/05_duct.png?v=64063b1695b3) |
 | **Knob and service cover** | **Underside with M5 thread and TPU feet** |
 | ![Knob](img/06_knob.png?v=fa5f1665c26d) | ![Underside](img/07_underside.png?v=a6c2b16a2c13) |
-| **Charge module in the air stream** | **LED pocket behind the O** |
-| ![Charge module](img/08_charge_module.png?v=e1b5e0f3e6d9) | ![LED pocket](img/09_led.png?v=5c52239f3472) |
+| **Charge module in its clip holder, heatsink behind the IC** | **LED pocket behind the O** |
+| ![Charge module](img/08_charge_module.png?v=56e16e593f17) | ![LED pocket](img/09_led.png?v=5c52239f3472) |
 | **Folding bail, carrying position** | **Back cover bosses** |
 | ![Folding bail](img/11_bail.png?v=eaf88b2a6829) | ![Back cover bosses](img/12_back_bosses.png?v=c757832413ae) |
 | **TPU foot mount** | **USB-C socket** |
@@ -32,8 +32,9 @@ Designed for a Bambu Lab H2S with AMS in Bambu PETG HF white and grey plus TPU. 
 | `knob` speed knob | 1 | PETG grey + white (pointer) | Ø 28 × 16.5 | top on the bed, pointer as inlay in the first 0.6 mm |
 | `bail` folding bail | 1 | PETG grey | 234 × 44.5 × 53.5 | back faces of the lower legs and the grip on the bed, upper legs upright |
 | `foot` foot | 2 | TPU | 16 × 52 × 5.5 | ground face on the bed, 100 % infill |
+| `chg_holder` charge module holder | 1 | PETG grey | 29.2 × 15.4 × 11.6 | pad face on the bed; glued onto the two pads on the partition, grips only the cool OUT end of the charge module with two snap hooks |
 
-All parts are in the Bambu Studio project [`stl/leo_ac1_all_parts.3mf`](stl/leo_ac1_all_parts.3mf): plate 1 housing, plate 2 back cover, plate 3 grey parts (service cover, bail, knob), plate 4 TPU feet. Filaments: 1 PETG white, 2 PETG grey, 3 grey for logo, dedication, fan grille and QR code (same spool as 2), 4 TPU, 5 white for the knob pointer (same spool as 1). All parts print without supports. Bambu Studio estimates about **0.63 kg and 18 hours** in total. Single-colour STLs are in `stl/`, the colour pieces in `stl/multicolour/`.
+All parts are in the Bambu Studio project [`stl/leo_ac1_all_parts.3mf`](stl/leo_ac1_all_parts.3mf): plate 1 housing, plate 2 back cover, plate 3 grey parts (service cover, bail, knob, charge module holder), plate 4 TPU feet. Filaments: 1 PETG white, 2 PETG grey, 3 grey for logo, dedication, fan grille and QR code (same spool as 2), 4 TPU, 5 white for the knob pointer (same spool as 1). All parts print without supports. Bambu Studio estimates about **0.63 kg and 18 hours** in total. Single-colour STLs are in `stl/`, the colour pieces in `stl/multicolour/`.
 
 Print profile: 0.20 mm layers, 5 walls, 4 top/bottom layers, 15 % gyroid (feet 100 %).
 
@@ -49,7 +50,8 @@ Check with the real parts: the PWM controller lies flat on its pads, the potenti
 |---|---|---|---|
 | Fan Noctua NF-A14 PWM | 1 | [noctua.at](https://noctua.at/en/nf-a14-pwm) | 140 × 25 mm (141 × 141 × 27 with its anti-vibration pads), 12 V, 1.19 W typical, holes 124.5 mm apart; mounted from behind with M3 × 32, tighten by hand only |
 | Battery 3.2 V 6000 mAh LiFePO4 pack with protection board (BMS), JST-PH 2.0 | 1 | [eremit.de](https://www.eremit.de/p/3-2v-6000mah-pack-mit-schutz-arduino-aio-jst-ph-2-0-stecker) | cell Ø 32.5 × 71.6 mm; charge only with a LiFePO4 charger (3.65 V), **no** TP4056 |
-| Charge/boost module "2-in-1 3.2 V LiFePO4", **12 V variant** | 1 | [AliExpress](https://de.aliexpress.com/item/1005008094801881.html) | 32.2 × 11 × 3.7 mm; IN± 5 V charging, B± battery, O± 12 V; taped upright onto the partition behind the fan |
+| Charge/boost module "2-in-1 3.2 V LiFePO4", **12 V variant** | 1 | [AliExpress](https://de.aliexpress.com/item/1005008094801881.html) | eletechsup LFUPSMA, board 32.2 × 11 × 1.0 mm (3.7 mm with parts); IN± 5 V charging, B± battery, O± 12 V; clipped IN end up into the printed holder on the partition behind the fan |
+| Aluminium heatsink 14 × 14 × 6 mm with an insulating silicone thermal pad, about 1 mm | 1 | – | on the metal pad on the back of the charge module, behind the charger IC; the pad must cover the whole heatsink face, because the heatsink overhangs the board edges and the IN end |
 | PWM fan controller CNY-FA5-PRO, DC 8–24 V, with potentiometer and switch | 1 | [AliExpress](https://de.aliexpress.com/item/1005010113177510.html) | 41 × 32 × 15 mm; rests on pads under its pin-free long edges, potentiometer housing in a pocket on the inside of the right wall, washer and nut outside under the knob |
 | USB-C PD trigger module, Type A (default 5 V) | 1 | [AliExpress](https://de.aliexpress.com/item/1005010610660644.html) | charging socket in the back cover. **Leave pads 1–4 open** (they select 9/12/15/20 V); the charge module only takes 4–6 V, check 5 V with a multimeter before connecting |
 | ON-OFF rocker switch, snap-in, 21 × 15 mm (cut-out 19.2 × 12.2 mm) | 1 | [AliExpress](https://de.aliexpress.com/item/1005008871215158.html) | power switch in a shallow well low on the back cover; the rocker stands about 2 mm out. The printed hole is 0.2 mm wider per side than the datasheet cut-out, because PETG holes come out undersize |
@@ -61,8 +63,7 @@ Check with the real parts: the PWM controller lies flat on its pads, the potenti
 | Heat-set insert Ruthex RX-M5x9.5 | 1 | [ruthex.de](https://www.ruthex.de) | M5 mounting thread in the underside, pressed in from outside; not a tripod thread |
 | M3 × 32, ISO 7380 Torx | 4 | – | fan; 30 mm would leave only 3 mm of thread in the insert |
 | M3 × 8, ISO 7380 Torx | 10 | – | back cover (6), feet (4) |
-| Double-sided, heat-resistant tape, ≤ 1.1 mm | – | – | charge module, e.g. 3M VHB; no hot glue |
-| 2K epoxy or CA gel | – | – | service cover, LED |
+| 2K epoxy or CA gel | – | – | service cover, LED, charge module holder (CA gel) |
 | JST-PH 2.0 cable, 2-pin, mating the battery plug | 1 | – | battery to the switch and B+ / B− |
 | Small cable ties, 2.5–3.6 mm wide | 2 | – | strain relief for the USB-C and switch wires on the inside of the back cover |
 | Silicone wire 24 AWG, red and black | about 1 m | – | USB-C module, switch, LED, 12 V to the PWM controller |
@@ -84,14 +85,15 @@ battery (JST-PH, built-in BMS) ──► (PTC) ──► power switch ──► 
 - With the switch in the battery line, off really disconnects the battery, and the battery only charges with the switch on. To charge without the fan running, turn the knob down until it clicks. Alternatively the switch can go between O+ and the PWM controller; then charging always works, but the boost converter draws its idle current from the battery.
 - The LED shows that the charging cable is plugged in, not the charge state.
 - Runtime is not measured yet. The NF-A14 PWM draws 1.19 W typical and 1.56 W at most (Noctua); with the converter losses a rough estimate is around 10 h at full speed and much longer at low speed.
-- The charge module may get warm while charging without fan air flow; check its temperature in the closed housing. The listing mentions a lower charge current via a resistor change; do not modify the board before its schematic is confirmed.
+- The charger on the module is a CN3058E, a linear charger: at 1 A from 5 V it turns about 1.7 W into heat and gets too hot to touch. Its charge current is 1218 V / R_ISET; the fitted resistor next to IN is marked 122 (1.2 kΩ, 1.0 A). A 2.4 kΩ resistor (0805, marked 242) halves the current to 0.5 A and the heat to about 0.85 W; a full charge then takes about 12–13 hours. Before swapping it, check that it is the ISET resistor: about 1.2 kΩ between pins 2 (ISET) and 3 (GND) of the IC with the board unpowered.
+- The heatsink on the back and the holder, which only touches the cool OUT end, keep that heat away from the housing. Check the IC temperature in the closed housing while charging.
 
 ## Assembly
 
 1. Press in the heat-set inserts: 4 fan bosses inside the front, 6 on the back edge of the housing, 2 M4 inserts for the bail pivots into the inner walls of the top side steps; the M5 insert and 4 M3 inserts for the feet from below.
 2. Glue the LED into the pocket behind the O and solder resistor and wires.
 3. Slide the PWM controller in from behind onto the pads of its ribs and push the potentiometer housing into its pocket in the right wall; put washer and nut on the thread outside and tighten gently. Put a drop of CA gel in the knob bore and push the knob onto the shaft, it covers washer and nut; stop about 0.5 mm short of the wall (a folded sheet of paper as a spacer) so it turns freely — pressed home it rubs. Glue the service cover in below it (thin bead in the groove).
-4. Screw the fan on from behind with M3 × 32 (blowing forward) and route its cable through the upper notch of the partition. Tape the charge module upright onto the two pads on the partition, lower edge on the ledge. It overlaps the fan sideways, so to take the fan out again the module has to come off the partition first.
+4. Screw the fan on from behind with M3 × 32 (blowing forward) and route its cable through the upper notch of the partition. Glue the grey charge module holder onto the two pads on the partition with CA gel, its foot on the ledge below. Stick the heatsink with its insulating pad onto the metal pad on the back of the charge module, then clip the module IN end up into the holder from the fan side: OUT end on the lip, both long edges under the hooks. To take the fan out later, spread the hooks and pull the module out, unscrew the fan, pull it 1 mm back off the air duct, slide it about 11 mm to the left past the holder and take it out towards the back.
 5. Slide the battery in from behind, cable end up, protection board towards the partition; a strip of foam tape above and below keeps it from rattling.
 6. Screw the TPU feet on with M3 × 8 from below; tighten only until the TPU starts to compress.
 7. Solder about 15 cm of wire to the USB-C module and push it into its channel in the back cover; snap the switch into its well. Fix the USB-C wires and the switch wires each with a small cable tie through the loop beside them on the inside of the back cover (strain relief), then route the USB-C wires through the middle notch of the partition and the switch wires through the lower notch, leaving slack to lay the back cover aside. Put on the back cover and screw it on with M3 × 8.

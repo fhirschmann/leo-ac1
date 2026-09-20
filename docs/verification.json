@@ -1,5 +1,5 @@
 {
-  "source_sha256": "0fb97243ba9b88a6ffc68d5b52f271918d41a2d3a7de568258defef80ac8463d",
+  "source_sha256": "00a04eebf38f13a7b4264f58ba249f2e90d2bc362dc4bef965b800d588f116ed",
   "software": {
     "numpy": "2.5.3",
     "trimesh": "5.1.0",
@@ -8,8 +8,8 @@
     "rtree": "1.4.1",
     "networkx": "3.6.1"
   },
-  "print_parts": 8,
-  "print_quantity": 7,
+  "print_parts": 9,
+  "print_quantity": 8,
   "print_meshes": {
     "body": {
       "size_mm": [
@@ -36,10 +36,10 @@
       "degenerate_faces": 0,
       "components": 1,
       "backend": "CGAL",
-      "sha256": "91c29e96e72cb474d6a4413cc11da779a20a7ecef8727a0d6c41f6a60927ac14",
+      "sha256": "3af3324de4e51eb6932ff5f8d952967745762099ee83f2198ebf298df2360271",
       "quantity": 1,
       "material": "PETG-white",
-      "committed_sha256": "91c29e96e72cb474d6a4413cc11da779a20a7ecef8727a0d6c41f6a60927ac14"
+      "committed_sha256": "3af3324de4e51eb6932ff5f8d952967745762099ee83f2198ebf298df2360271"
     },
     "back": {
       "size_mm": [
@@ -96,10 +96,10 @@
       "degenerate_faces": 0,
       "components": 1,
       "backend": "CGAL",
-      "sha256": "2c7cf42468e0166b5103c579d0d67402f6f811066a97e0d0f7398353bd48f38e",
+      "sha256": "9fc34e2293788f7fba4c87b1b3e143e9ac326e521c820e7b02922b58c587da43",
       "quantity": 1,
       "material": "PETG-grey",
-      "committed_sha256": "2c7cf42468e0166b5103c579d0d67402f6f811066a97e0d0f7398353bd48f38e"
+      "committed_sha256": "9fc34e2293788f7fba4c87b1b3e143e9ac326e521c820e7b02922b58c587da43"
     },
     "bail": {
       "size_mm": [
@@ -190,6 +190,36 @@
       "quantity": 2,
       "material": "TPU",
       "committed_sha256": "d9c2a39e6f60f3c9734941246aeaa436ef580545afdcc899905345686588c578"
+    },
+    "chg_holder": {
+      "size_mm": [
+        29.2,
+        15.4,
+        11.6
+      ],
+      "bounds_mm": [
+        [
+          0.0,
+          0.0,
+          0.0
+        ],
+        [
+          29.2,
+          15.4,
+          11.6
+        ]
+      ],
+      "volume_mm3": 1679.44,
+      "triangles": 172,
+      "watertight": true,
+      "consistent_winding": true,
+      "degenerate_faces": 0,
+      "components": 1,
+      "backend": "Manifold",
+      "sha256": "27409d6f10a3fc3661cb68440d9866f9c41612782b43e9131380dc689079b83c",
+      "quantity": 1,
+      "material": "PETG-grey",
+      "committed_sha256": "27409d6f10a3fc3661cb68440d9866f9c41612782b43e9131380dc689079b83c"
     },
     "test_right": {
       "size_mm": [
@@ -359,7 +389,7 @@
       "degenerate_faces": 0,
       "components": 1,
       "backend": "CGAL",
-      "sha256": "4818b5e76dec0308e738135f4037fa843863efc0bb07a9146055a82b6461ebc7"
+      "sha256": "0805d10d9f7ec36ffe0935289f3d9418dcdb4e1f4d11087a63a111ecdddc9670"
     },
     "back_base": {
       "size_mm": [
@@ -529,8 +559,8 @@
       }
     }
   },
-  "assembly_bodies": 21,
-  "assembly_pairs": 210,
+  "assembly_bodies": 23,
+  "assembly_pairs": 253,
   "metrics": {
     "wall": 3.2,
     "front_t": 3.2,
@@ -624,9 +654,10 @@
     "chg_pcb_mm": [
       32.2,
       11,
-      1.6
+      1
     ],
     "chg_total_h": 3.7,
+    "fan_side_shift": 11,
     "insert_hole_d": 4,
     "insert_w_min": 1.6,
     "mount_insert": [
@@ -1011,7 +1042,9 @@
     "bail_up@body": 0.5419,
     "pot@body": 6.1452,
     "pot_nut@body": 2.6742,
-    "chg_module@body": 4.8873,
+    "chg_holder@body": 1.24,
+    "chg_module@chg_holder": 1.2448,
+    "chg_sink@chg_module": 5.5,
     "led@body": 0.1647,
     "feet@body": 77.6041,
     "usb_trigger@back": 0.7675,
@@ -1037,6 +1070,11 @@
       "name": "usb_trigger_push",
       "first_contact_mm": 0.25,
       "limit_mm": 1.0
+    },
+    {
+      "name": "chg_module_hooks",
+      "first_contact_mm": 0.25,
+      "limit_mm": 0.5
     }
   ],
   "clearances": [
@@ -1056,6 +1094,23 @@
       "gap_mm": 6.0,
       "min_mm": 5.0,
       "capped": true
+    },
+    {
+      "a": "chg_holder",
+      "b": "fan",
+      "gap_mm": 2.5,
+      "min_mm": 1.5,
+      "capped": true
+    },
+    {
+      "a": "chg_sink",
+      "b": [
+        "fan",
+        "chg_holder"
+      ],
+      "gap_mm": 1.0,
+      "min_mm": 0.9,
+      "capped": false
     }
   ],
   "sampled_paths": [
@@ -1074,15 +1129,22 @@
       "max_volume_mm3": 0.0
     },
     {
-      "name": "chg_module_out",
-      "length_mm": 45.0,
+      "name": "chg_module_unclip",
+      "length_mm": 4.0,
+      "collisions": 0,
+      "first_mm": null,
+      "max_volume_mm3": 0.0
+    },
+    {
+      "name": "screws_fan_out",
+      "length_mm": 40.0,
       "collisions": 0,
       "first_mm": null,
       "max_volume_mm3": 0.0
     },
     {
       "name": "fan_out",
-      "length_mm": 90.0,
+      "length_mm": 102.0,
       "collisions": 0,
       "first_mm": null,
       "max_volume_mm3": 0.0
@@ -1132,6 +1194,13 @@
     {
       "name": "pwm_board_out",
       "length_mm": 110.9,
+      "collisions": 0,
+      "first_mm": null,
+      "max_volume_mm3": 0.0
+    },
+    {
+      "name": "chg_module_out",
+      "length_mm": 45.0,
       "collisions": 0,
       "first_mm": null,
       "max_volume_mm3": 0.0
@@ -1338,6 +1407,7 @@
     "bail": 0.0,
     "knob": 0.0,
     "foot": 0.0,
+    "chg_holder": 0.0,
     "test_right": 0.0,
     "test_right_back": 0.0,
     "multicolour/body_base": 0.0,
