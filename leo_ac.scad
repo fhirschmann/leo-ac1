@@ -125,7 +125,8 @@ pwm_pin_cl = 0.5;         // clearance below the pins
 pwm_rib = 3;              // support ribs on the shelf: thickness (the left one stays beside the battery cable slot)
 pwm_rib_hole = [16, 7, 2];   // cable passage through the left rib under the board (user; none in the rib at the wall): length (y), height (z), web below it; pointed at 45 degrees towards the back (printable)
 knob_d = 28;              // dial on the side wall, sits in the half-round notch of the service cover
-knob_gap = 0.5;           // underside to the wall face
+knob_gap = 1.5;           // underside to the wall face; 1 mm shorter at the underside than the printed 0.5 (user, 2026-09-18: pressed home it rubbed on the housing)
+knob_bore_over = 0.3;     // bore beyond the shaft end: pushed home, the shaft bottoms before the sleeve reaches the bushing, knob_gap - knob_bore_over off the wall
 knob_niche = 3;           // radial gap to the notch of the service cover: room for fingertips
 knob_skin = 2;            // closed top above the round shaft bore (at least)
 knob_proud = 6;           // knob top at least this far beyond the service cover face, for grip
@@ -309,7 +310,7 @@ function cover_groove_gap(r, t) = let (gd = cover_glue[0] + cover_glue[2], r0 = 
 pot_yz = [cover_y, wall + bat_l + shelf_gap + shelf_t + pwm_standoff + pwm_pcb[2] + pot_axis_h];   // knob axis above the battery, centred in the depth
 mount_top = mount_insert[1] + 1 + mount_floor;        // boss top inside; blind hole L + 1 from the underside
 knob_sleeve_z = pot_bush[1] - pot_mount_t + knob_stem_cl - knob_gap; // sleeve end above bushing, relative to knob underside
-knob_bore_top = pot_shaft_tip + 1 - knob_gap;                 // 1 mm beyond the shaft end
+knob_bore_top = pot_shaft_tip + knob_bore_over - knob_gap;    // beyond the shaft end
 knob_len = max(knob_bore_top + knob_skin, cover_out + knob_proud - knob_gap);   // top face
 cover_notch_r = knob_d / 2 + knob_niche;                       // half-round notch of the service cover around the knob
 cover_hgt = pot_yz[1] - cover_z0;                              // upper edge at the knob axis
@@ -470,7 +471,7 @@ assert(pwm_pad < pwm_edge_free && pwm_standoff > pwm_pins + pwm_pin_cl + 3 && pw
        && pwm_rib_x()[0] + pwm_rib <= bat_cx + 10 - cable_slot_w / 2 - 0.2 && pwm_rib_x()[1] + pwm_rib <= body_w - wall,
        "PWM supports: pads wider than the pin-free edges, cable passage leaving less than 2 mm under the pin notch or longer than the notch, no rib left under the pin clearance, rib too thin, left rib over the battery cable slot, or right rib in the wall");
 assert(pot_shaft_tip - knob_gap - knob_sleeve_z >= 8 && knob_skin >= 2 && knob_cavity_d > pot_nut[0] + 1 && knob_gap + knob_sleeve_z > pot_washer[1] + pot_nut[1] + 0.3   // recess over washer and nut on the outer face
-       && knob_sleeve_z + knob_slit[1] < knob_len - knob_skin - 2 && knob_gap + knob_len - cover_out <= 8,
+       && knob_sleeve_z + knob_slit[1] < knob_len - knob_skin - 2 && knob_gap + knob_len - cover_out <= 8 && knob_gap - knob_bore_over >= 0.4 && knob_bore_over < knob_stem_cl,
        "Knob: shaft engagement, top skin, nut recess, slit length or protrusion");
 assert((bail_arm[1] - bail_bush[0]) / 2 >= 2.2 && bail_band - bail_screw[3] - bail_screw[1] >= bail_x[0] + 0.3 && bail_band - bail_screw[3] + bail_bush[2] <= bail_eye_x[0]
        && bail_band - bail_screw[3] + bail_bush[3] <= bail_eye_x[1] && bail_screw[0] / 2 + 0.5 <= bail_arm[1] / 2 + 0.5 && bail_bush[1] / 2 < bail_arm[1] / 2 + 0.5

@@ -12,7 +12,7 @@ Designed for a Bambu Lab H2S with AMS in Bambu PETG HF white and grey plus TPU. 
 | **Logo and grooves** | **Air duct from behind** |
 | ![Logo](img/04_front_right.png?v=3eae1ab786b8) | ![Air duct](img/05_duct.png?v=64063b1695b3) |
 | **Knob and service cover** | **Underside with M5 thread and TPU feet** |
-| ![Knob](img/06_knob.png?v=fa5f1665c26d) | ![Underside](img/07_underside.png?v=a6c2b16a2c13) |
+| ![Knob](img/06_knob.png?v=14403785c51f) | ![Underside](img/07_underside.png?v=a6c2b16a2c13) |
 | **Charge module in its clip holder, heatsink behind the IC** | **LED pocket behind the O** |
 | ![Charge module](img/08_charge_module.png?v=56e16e593f17) | ![LED pocket](img/09_led.png?v=5c52239f3472) |
 | **Folding bail, carrying position** | **Back cover bosses** |
@@ -29,7 +29,7 @@ Designed for a Bambu Lab H2S with AMS in Bambu PETG HF white and grey plus TPU. 
 | `body` housing | 1 | PETG white + grey (logo, dedication, fan grille) | 235 × 172 × 66 | front on the bed; logo as inlay in the first 0.6 mm, fake grooves open towards the bed; a dedication is raised in grey on the inside of the front plate |
 | `back` back cover | 1 | PETG white + grey (QR code) | 235 × 172 × 45.8 | outside on the bed; QR code to this project as inlay in the first 0.6 mm; battery saddles and hold-down plate stand upright |
 | `cover` service cover | 1 | PETG grey | 74.4 × 46 × 11.8 | outside on the bed; half-round notch around the knob, glued into a groove of the side wall |
-| `knob` speed knob | 1 | PETG grey + white (pointer) | Ø 28 × 16.5 | top on the bed, pointer as inlay in the first 0.6 mm |
+| `knob` speed knob | 1 | PETG grey + white (pointer) | Ø 28 × 15.5 | top on the bed, pointer as inlay in the first 0.6 mm |
 | `bail` folding bail | 1 | PETG grey | 234 × 44.5 × 53.5 | back faces of the lower legs and the grip on the bed, upper legs upright |
 | `foot` foot | 2 | TPU | 16 × 52 × 5.5 | ground face on the bed, 100 % infill |
 | `chg_holder` charge module holder | 1 | PETG grey | 29.2 × 15.4 × 11.6 | pad face on the bed; glued onto the two pads on the partition, grips only the cool OUT end of the charge module with two snap hooks |
@@ -92,7 +92,7 @@ battery (JST-PH, built-in BMS) ──► (PTC) ──► power switch ──► 
 
 1. Press in the heat-set inserts: 4 fan bosses inside the front, 6 on the back edge of the housing, 2 M4 inserts for the bail pivots into the inner walls of the top side steps; the M5 insert and 4 M3 inserts for the feet from below.
 2. Glue the LED into the pocket behind the O and solder resistor and wires.
-3. Slide the PWM controller in from behind onto the pads of its ribs and push the potentiometer housing into its pocket in the right wall; put washer and nut on the thread outside and tighten gently. Put a drop of CA gel in the knob bore and push the knob onto the shaft, it covers washer and nut; stop about 0.5 mm short of the wall (a folded sheet of paper as a spacer) so it turns freely — pressed home it rubs. Glue the service cover in below it (thin bead in the groove).
+3. Slide the PWM controller in from behind onto the pads of its ribs and push the potentiometer housing into its pocket in the right wall; put washer and nut on the thread outside and tighten gently. Put a drop of CA gel in the knob bore and push the knob onto the shaft, it covers washer and nut; push it home until the shaft end bottoms in the bore; the knob then stops 1.2 mm off the wall and turns freely. Glue the service cover in below it (thin bead in the groove).
 4. Screw the fan on from behind with M3 × 32 (blowing forward) and route its cable through the upper notch of the partition. Glue the grey charge module holder onto the two pads on the partition with CA gel, its foot on the ledge below. Stick the heatsink with its insulating pad onto the metal pad on the back of the charge module, then clip the module IN end up into the holder from the fan side: OUT end on the lip, both long edges under the hooks. To take the fan out later, spread the hooks and pull the module out, unscrew the fan, pull it 1 mm back off the air duct, slide it about 11 mm to the left past the holder and take it out towards the back.
 5. Slide the battery in from behind, cable end up, protection board towards the partition; a strip of foam tape above and below keeps it from rattling.
 6. Screw the TPU feet on with M3 × 8 from below; tighten only until the TPU starts to compress.
