@@ -6,12 +6,12 @@
       "quantity": 1,
       "material": "PETG-white",
       "passed": true,
-      "source_sha256": "6b8e60461ae815e9406edfe71c65114986692505ceb2952534c238787886dd46",
+      "source_sha256": "77b3934d7fa7ced0fb7a1f3878720199915488c8cbeb67d9bc6b77dc0f34d3a6",
       "exit_code": 0,
       "result_code": 0,
       "warnings": "",
-      "hours": 9.041,
-      "grams": 385.288,
+      "hours": 9.03,
+      "grams": 385.241,
       "wall_loops": 6,
       "infill_percent": 30.0,
       "layer_height": 0.20000000298023224,
@@ -75,7 +75,7 @@
       "quantity": 1,
       "material": "PETG-grey",
       "passed": true,
-      "source_sha256": "5d30dc689e07442ce31bfa050c8408c615127e94f297057f83b61513940d9dd3",
+      "source_sha256": "29f1a2a20ce4bc5eacb34543a5bff8db2d801d550e0c3d0960529b5740200037",
       "exit_code": 0,
       "result_code": 0,
       "warnings": "",
@@ -167,12 +167,12 @@
       "quantity": 0,
       "material": "PETG-white",
       "passed": true,
-      "source_sha256": "273753d77797222c319c354b438df18d315b8d0c298e523742449ddacc48baec",
+      "source_sha256": "a82b38ed854bbdac982e222b6429da14076b63015ea8da5ad8f1c67b07751fdd",
       "exit_code": 0,
       "result_code": 0,
       "warnings": "",
-      "hours": 2.362,
-      "grams": 102.754,
+      "hours": 2.351,
+      "grams": 102.629,
       "wall_loops": 6,
       "infill_percent": 30.0,
       "layer_height": 0.20000000298023224,
@@ -291,7 +291,7 @@
         "plate": 1,
         "hours": 9.33,
         "grams_by_filament": {
-          "1": 385.73,
+          "1": 385.72,
           "3": 1.6
         },
         "warnings": ""
@@ -312,7 +312,7 @@
         "plate": 1,
         "hours": 9.33,
         "grams_by_filament": {
-          "1": 385.73,
+          "1": 385.72,
           "3": 1.6
         },
         "warnings": ""
@@ -344,7 +344,7 @@
       }
     },
     "own_infill_parts": 2,
-    "sha256": "73eb84f41d8348313381974d35d7449b139afd5f2a3944317578944923895c3f"
+    "sha256": "9f29bf8ccbf5904b64d8f85930b5b911094487fe491d9c5c5d0d8765fed6424c"
   },
   "test_3mf": {
     "file": "stl/leo_ac1_fit_tests.3mf",
@@ -406,7 +406,7 @@
       }
     },
     "own_infill_parts": 0,
-    "sha256": "64d3f813e643ae0c056fbe758febb31ad971051c06b87392bbcaefcc8a804731",
+    "sha256": "26aaf71fdf898cf4e78053fb6c26d9b05dab327ccafaf6411813c7b1b8319a32",
     "process": {
       "wall_loops": 2,
       "top_shell_layers": 3,

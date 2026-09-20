@@ -325,7 +325,8 @@ bail_reach = [bail_leg_y[0] + bail_arm[1] / 2 - bail_y, bail_z - bail_drop];   /
 bail_carry = 180 - atan(bail_reach[0] / bail_reach[1]);   // carrying angle: bar above the pivot, the fan hangs level; the step ramp stops it
 function bail_room() = bail_reach[0] * sin(bail_carry) - bail_reach[1] * cos(bail_carry) - bail_bar / 2 - (body_h - bail_z);   // hand room above the top
 // ramp at the front end of a side step, taken 1 mm above the top face: the raised upper leg rests against it at bail_carry
-function bail_ramp_y() = let (r = bail_arm[1] / 2 + bail_cl, n = [-sin(bail_carry), cos(bail_carry)], p = [bail_y + r * n[0], bail_z + r * n[1]])
+function bail_ramp_y() = let (r = bail_arm[1] / 2 - 0.1,   // the upper leg face rests on the chamfered ramp at bail_carry (with bail_cl it swung 3 degrees further)
+     n = [-sin(bail_carry), cos(bail_carry)], p = [bail_y + r * n[0], bail_z + r * n[1]])
     p[0] + (body_h + 1 - p[1]) / sin(bail_carry) * cos(bail_carry);
 boss_top_x = bail_band + wall + back_boss_d / 2 + 1;   // top back-cover bosses moved inwards beside the steps
 usbc_y0 = body_d - usbc[0];                             // inner end of the module, in the bay

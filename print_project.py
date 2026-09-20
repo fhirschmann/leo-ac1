@@ -3,6 +3,7 @@
 Everything project-specific lives here, the scripts stay identical to the skill copies
 (python3 ~/.claude/skills/openscad-print-project/scripts/skill_sync.py status).
 """
+import math
 SOURCE = "leo_ac.scad"
 METRICS_TAG = "PROJECT_METRICS"       # part="metrics" echoes this tag with [key, value] pairs
 
@@ -123,6 +124,7 @@ def checks(ctx):
     # Contact, not just freedom from overlap: moved 0.05 mm towards its support, a body must intersect it
     contacts = ctx.contacts([("grille", "body", [0, 1, 0]), ("fan", "body", [0, -1, 0]), ("back", "body", [0, -1, 0]),
                              ("cover", "body", [-1, 0, 0]), ("battery", "body", [0, 0, -1]), ("bail", "body", [0, 0, -1]),
+                             ("bail_up", "body", [0, -math.sin(math.radians(m["bail_carry"])), math.cos(math.radians(m["bail_carry"]))]),   # stop at the carrying angle
                              ("pot", "body", [1, 0, 0]), ("pot_nut", "body", [-1, 0, 0]), ("chg_module", "body", [1, 0, -1]),
                              ("led", "body", [0, -1, 0]), ("feet", "body", [0, 0, 1]), ("usb_trigger", "back", [0, 1, 0]),
                              ("switch", "back", [0, -1, 0])])

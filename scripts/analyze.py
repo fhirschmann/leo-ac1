@@ -85,10 +85,10 @@ def thin(section, width, ignore_area, min_area):
     return found
 
 
-def thickness(mesh, min_width, density, min_area, edge_angle=30):
+def thickness(mesh, min_width, density, min_area, min_span=2.0, edge_angle=30):
     """Distance from a surface point along the inward normal to the next face turned away from the ray.
     The single minimum is often a tessellation sliver, so percentiles and connected thin regions are reported.
-    Points closer than min_width to a sharp convex edge are skipped: next to a ridge crest, chamfer tip or letter
+    Points closer than min_span to a convex edge sharper than edge_angle (degrees) are skipped (min_span 0 skips none): next to a ridge crest, chamfer tip or letter
     edge the depth runs to zero without being a wall (ridges and inlays cover those)."""
     from scipy.sparse import coo_matrix
     from scipy.sparse.csgraph import connected_components
@@ -108,13 +108,13 @@ def thickness(mesh, min_width, density, min_area, edge_angle=30):
                  **{key: round(float(np.percentile(measured, q)), 3) for key, q in (("p01", 1), ("p05", 5), ("median", 50))})
     thin = np.nonzero(depth < min_width - 0.01)[0]          # a wall of exactly the minimum passes
     sharp = mesh.face_adjacency_edges[(mesh.face_adjacency_angles > np.radians(edge_angle)) & mesh.face_adjacency_convex]
-    if len(thin) and len(sharp):
+    if len(thin) and len(sharp) and min_span > 0:
         a, b = mesh.vertices[sharp[:, 0]], mesh.vertices[sharp[:, 1]]
-        steps = np.maximum(1, np.ceil(np.linalg.norm(b - a, axis=1) / (min_width / 4))).astype(int)
+        steps = np.maximum(1, np.ceil(np.linalg.norm(b - a, axis=1) / (min(min_width, min_span) / 4))).astype(int)
         index = np.repeat(np.arange(len(sharp)), steps + 1)
         t = np.concatenate([np.linspace(0, 1, n + 1) for n in steps])
         edge_points = a[index] + (b - a)[index] * t[:, None]
-        thin = thin[cKDTree(edge_points).query(points[thin])[0] > min_width]
+        thin = thin[cKDTree(edge_points).query(points[thin])[0] > min_span]
     found = []
     if len(thin):
         pairs = cKDTree(points[thin]).query_pairs(3 * spacing, output_type="ndarray")
@@ -162,7 +162,7 @@ def main():
             found = [dict(z_mm=z, **item) for z in args.z
                      for item in thin(solid.slice(z), args.min_width or 1.1, args.ignore_area, args.min_area or 0.1)]
         elif args.command == "thickness":
-            stats, found = thickness(mesh, args.min_width or 1.2, args.density, args.min_area or 2.0, args.min_span)
+            stats, found = thickness(mesh, args.min_width or 1.2, args.density, args.min_area or 2.0, min_span=args.min_span)
             print(f"{name}: wall thickness p01 {stats['p01']} / p05 {stats['p05']} / median {stats['median']} mm "
                   f"({stats['measured']} of {stats['samples']} points)")
         else:
