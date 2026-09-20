@@ -90,11 +90,11 @@ shelf_d = 54;        // shelf depth from the front plate, carries the PWM board
 cover_y = body_d / 2; // centre, in the middle of the side depth
 cover_z0 = 30;       // lower edge; the upper edge is at the knob axis, with a half-round notch around the knob
 cover_w = 46;        // along y, wide enough for solid corners beside the notch
-cover_out = 11;      // protrusion
+cover_out = 8;       // protrusion (11 before 2026-09-19: the knob stood only 6 mm clear and the cover got in the way of the fingers, user)
 cover_t = 2.4;
 cover_r = 4;
 cover_glue = [0.8, 1.2, 0.2];  // glued in: rim depth into the groove, rim width (inner part of the cover wall), clearance per side and at the floor
-cover_notch_c = 3;           // 45 degree chamfer along the notch at the outer face (finger room)
+cover_notch_c = 5;           // 45 degree finger scoop round the notch from the outer face (user: more room to turn the knob)
 
 /* [Speed knob, potentiometer of the PWM fan controller] */
 pot_shaft_d = 5.8;        // measured outside the knurling; round split shaft, not a D shaft
@@ -313,7 +313,8 @@ pot_yz = [cover_y, wall + bat_l + shelf_gap + shelf_t + pwm_standoff + pwm_pcb[2
 mount_top = mount_insert[1] + 1 + mount_floor;        // boss top inside; blind hole L + 1 from the underside
 knob_sleeve_z = pot_bush[1] - pot_mount_t + knob_stem_cl - knob_gap; // sleeve end above bushing, relative to knob underside
 knob_bore_top = pot_shaft_tip + knob_bore_over - knob_gap;    // beyond the shaft end
-knob_len = max(knob_bore_top + knob_skin, cover_out + knob_proud - knob_gap);   // top face
+knob_top_out = 17;        // knob top from the side wall as printed (was cover_out + knob_proud with the 11 mm cover): the lower cover leaves the knob as it is
+knob_len = max(knob_bore_top + knob_skin, knob_top_out - knob_gap, cover_out + knob_proud - knob_gap);   // top face
 cover_notch_r = knob_d / 2 + knob_niche;                       // half-round notch of the service cover around the knob
 cover_hgt = pot_yz[1] - cover_z0;                              // upper edge at the knob axis
 cover_z = cover_z0 + cover_hgt / 2;
@@ -458,7 +459,7 @@ assert(bail_room() >= 38 && body_w - 2 * bail_x[1] >= 90 && bail_ramp_y() > fron
        && bail_bar_z[0] > sw_xz[1] + sw_bezel[1] / 2 + sw_well[1] + sw_well[0] + 1,
        "Bail: too little room for the hand, step ramp too far forward, or the folded grip bar covers the power switch");
 assert(cover_w / 2 - cover_notch_r >= 6 && wall - cover_glue[0] - cover_glue[2] >= 1.8 && cover_glue[1] + cover_glue[2] < cover_t
-       && cover_t - cover_glue[1] - cover_glue[2] >= cover_glue[0] + cover_glue[2] && cover_notch_c < 2 * cover_t,
+       && cover_t - cover_glue[1] - cover_glue[2] >= cover_glue[0] + cover_glue[2] && cover_notch_c <= cover_out - cover_t,
        "Service cover: corners beside the notch too narrow, or the glue groove too deep for the wall or too wide for the cover rim");
 assert(pot_yz[0] - pwm_pcb[1] / 2 > front_t + inner_c && pot_yz[0] + pwm_pcb[1] / 2 < front_t + shelf_d
        && body_w - wall - pwm_wall_gap - pwm_pcb[0] - (pot_shaft_tip + wall + 1) > bay_x0 + 0.5
@@ -476,7 +477,7 @@ assert(pwm_pad < pwm_edge_free && pwm_standoff > pwm_pins + pwm_pin_cl + 3 && pw
        && pwm_rib_x()[0] + pwm_rib <= bat_cx + 10 - cable_slot_w / 2 - 0.2 && pwm_rib_x()[1] + pwm_rib <= body_w - wall,
        "PWM supports: pads wider than the pin-free edges, cable passage leaving less than 2 mm under the pin notch or longer than the notch, no rib left under the pin clearance, rib too thin, left rib over the battery cable slot, or right rib in the wall");
 assert(pot_shaft_tip - knob_gap - knob_sleeve_z >= 8 && knob_skin >= 2 && knob_cavity_d > pot_nut[0] + 1 && knob_gap + knob_sleeve_z > pot_washer[1] + pot_nut[1] + 0.3   // recess over washer and nut on the outer face
-       && knob_sleeve_z + knob_slit[1] < knob_len - knob_skin - 2 && knob_gap + knob_len - cover_out <= 8 && knob_gap - knob_bore_over >= 0.4 && knob_bore_over < knob_stem_cl,
+       && knob_sleeve_z + knob_slit[1] < knob_len - knob_skin - 2 && knob_gap + knob_len - cover_out <= 9 && knob_gap - knob_bore_over >= 0.4 && knob_bore_over < knob_stem_cl,
        "Knob: shaft engagement, top skin, nut recess, slit length or protrusion");
 assert((bail_arm[1] - bail_bush[0]) / 2 >= 2.2 && bail_band - bail_screw[3] - bail_screw[1] >= bail_x[0] + 0.3 && bail_band - bail_screw[3] + bail_bush[2] <= bail_eye_x[0]
        && bail_band - bail_screw[3] + bail_bush[3] <= bail_eye_x[1] && bail_screw[0] / 2 + 0.5 <= bail_arm[1] / 2 + 0.5 && bail_bush[1] / 2 < bail_arm[1] / 2 + 0.5
@@ -922,8 +923,14 @@ module cover() {   // glued in: the outer part of its wall rests on the side wal
                 }
                 along_x(x0 - 1, x1 + 1) cover_2d();
             }
-            along_x(x0 - 1, x1 - cover_t) cover_2d(cover_t);
-            translate([x1 - cover_notch_c, cover_y, pot_yz[1]]) rotate([0, 90, 0])   // 45 degree chamfer along the notch at the outer face
+            difference() {   // hollow inside, but a cover_t wall (normal to the 45 degree face) stays behind the scoop
+                along_x(x0 - 1, x1 - cover_t) cover_2d(cover_t);
+                let (rw = cover_t * sqrt(2)) translate([0, cover_y, pot_yz[1]]) hull() {
+                    translate([x0 - 2, 0, 0]) rotate([0, 90, 0]) cylinder(r = cover_notch_r + rw, h = x1 - cover_notch_c - x0 + 2);
+                    translate([x1, 0, 0]) rotate([0, 90, 0]) cylinder(r = cover_notch_r + cover_notch_c + rw, h = eps);
+                }
+            }
+            translate([x1 - cover_notch_c, cover_y, pot_yz[1]]) rotate([0, 90, 0])   // 45 degree finger scoop round the notch
                 cylinder(r1 = cover_notch_r, r2 = cover_notch_r + cover_notch_c + eps, h = cover_notch_c + eps);
         }
         along_x(x0 - cover_glue[0], x0) difference() {   // shared face at x0 avoids sliver triangles at the interrupted rim

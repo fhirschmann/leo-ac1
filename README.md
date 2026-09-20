@@ -12,7 +12,7 @@ Designed for a Bambu Lab H2S with AMS in Bambu PETG HF white and grey plus TPU. 
 | **Logo and grooves** | **Air duct from behind** |
 | ![Logo](img/04_front_right.png?v=3eae1ab786b8) | ![Air duct](img/05_duct.png?v=64063b1695b3) |
 | **Knob and service cover** | **Underside with M5 thread and TPU feet** |
-| ![Knob](img/06_knob.png?v=14403785c51f) | ![Underside](img/07_underside.png?v=a6c2b16a2c13) |
+| ![Knob](img/06_knob.png?v=8b8176a9594e) | ![Underside](img/07_underside.png?v=a6c2b16a2c13) |
 | **Charge module in its clip holder, heatsink behind the IC** | **LED pocket behind the O** |
 | ![Charge module](img/08_charge_module.png?v=919b469a0363) | ![LED pocket](img/09_led.png?v=5c52239f3472) |
 | **Folding bail, carrying position** | **Back cover bosses** |
@@ -28,7 +28,7 @@ Designed for a Bambu Lab H2S with AMS in Bambu PETG HF white and grey plus TPU. 
 |---|---|---|---|---|
 | `body` housing | 1 | PETG white + grey (logo, dedication, fan grille) | 235 × 172 × 66 | front on the bed; logo as inlay in the first 0.6 mm, fake grooves open towards the bed; a dedication is raised in grey on the inside of the front plate |
 | `back` back cover | 1 | PETG white + grey (QR code) | 235 × 172 × 45.8 | outside on the bed; QR code to this project as inlay in the first 0.6 mm; battery saddles and hold-down plate stand upright |
-| `cover` service cover | 1 | PETG grey | 74.4 × 46 × 11.8 | outside on the bed; half-round notch around the knob, glued into a groove of the side wall |
+| `cover` service cover | 1 | PETG grey | 74.4 × 46 × 8.8 | outside on the bed; half-round notch with a 45° finger scoop around the knob, glued into a groove of the side wall |
 | `knob` speed knob | 1 | PETG grey + white (pointer) | Ø 28 × 15.5 | top on the bed, pointer as inlay in the first 0.6 mm |
 | `bail` folding bail | 1 | PETG grey | 234 × 44.5 × 53.5 | back faces of the lower legs and the grip on the bed, upper legs upright |
 | `foot` foot | 2 | TPU | 16 × 52 × 5.5 | ground face on the bed, 100 % infill |

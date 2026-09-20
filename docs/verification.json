@@ -1,5 +1,5 @@
 {
-  "source_sha256": "ba6069ee9e8d4dedc31cc2cb11616e22c5f8b2865b5eb84edb64330fbea317e5",
+  "source_sha256": "39e948995923b6dd6f4efc453a3013b5fa89938a993f22a0bc5ab467864d63e4",
   "software": {
     "numpy": "2.5.3",
     "trimesh": "5.1.0",
@@ -36,10 +36,10 @@
       "degenerate_faces": 0,
       "components": 1,
       "backend": "CGAL",
-      "sha256": "cde11d81e40b013aacd8cf84b16d9579232eb8f1bf1a0a21ac65f652bd44ce44",
+      "sha256": "7fdcf8c4a35c6789e8c8d014ff21731c984cc509a53988ec90b13b6693484275",
       "quantity": 1,
       "material": "PETG-white",
-      "committed_sha256": "cde11d81e40b013aacd8cf84b16d9579232eb8f1bf1a0a21ac65f652bd44ce44"
+      "committed_sha256": "7fdcf8c4a35c6789e8c8d014ff21731c984cc509a53988ec90b13b6693484275"
     },
     "back": {
       "size_mm": [
@@ -75,7 +75,7 @@
       "size_mm": [
         74.4,
         46.0,
-        11.8
+        8.8
       ],
       "bounds_mm": [
         [
@@ -86,20 +86,20 @@
         [
           104.4,
           58.0,
-          11.8
+          8.8
         ]
       ],
-      "volume_mm3": 11905.7766,
-      "triangles": 2664,
+      "volume_mm3": 10725.6269,
+      "triangles": 3090,
       "watertight": true,
       "consistent_winding": true,
       "degenerate_faces": 0,
       "components": 1,
       "backend": "CGAL",
-      "sha256": "c2bc1713ce5339264d03022438875f13d168eabfffd69da7d387c41701d3619d",
+      "sha256": "c39616799b69b5adbeb133c17c493bf62e52b4fc0b4b0670225e3333c27254d9",
       "quantity": 1,
       "material": "PETG-grey",
-      "committed_sha256": "c2bc1713ce5339264d03022438875f13d168eabfffd69da7d387c41701d3619d"
+      "committed_sha256": "c39616799b69b5adbeb133c17c493bf62e52b4fc0b4b0670225e3333c27254d9"
     },
     "bail": {
       "size_mm": [
@@ -389,7 +389,7 @@
       "degenerate_faces": 0,
       "components": 1,
       "backend": "CGAL",
-      "sha256": "90052319650756928551832a044572a26c3139a63bc85bc0381981f14917e013"
+      "sha256": "07dfd3bca652d757df620b92181726f3a6e37e39acdff35161eefe9be2c9933d"
     },
     "back_base": {
       "size_mm": [
@@ -596,7 +596,7 @@
     "pwm_lift": 4,
     "knob_shaft_engagement": 9,
     "knob_top_skin": 4,
-    "knob_protrusion": 6,
+    "knob_protrusion": 9,
     "bail_clearance": 38.2947,
     "bail_carry": 127.635,
     "bail_grip": 204,
@@ -1036,7 +1036,7 @@
   "contact_volumes_mm3": {
     "fan@body": 10.2112,
     "back@body": 143.9674,
-    "cover@body": 2.5265,
+    "cover@body": 5.089,
     "battery@body": 46.5649,
     "bail@body": 34.9224,
     "bail_up@body": 0.5419,

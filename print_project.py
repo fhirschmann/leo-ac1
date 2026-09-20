@@ -104,7 +104,7 @@ def checks(ctx):
     assert m["insert_depth"] >= m["insert_len"] + 1 and m["insert_w_min"] >= 1.6, "Ruthex M3: hole depth L + 1 mm, wall 1.6 mm"
     assert m["mount_insert"] == [6.4, 9.5, 2.6] and m["mount_floor"] >= 2, "Ruthex M5x9.5: hole 6.4, length 9.5, wall 2.6; 2 mm floor"
     assert m["grille_gap"] <= 6, "Grille openings above 6 mm let children's fingers through"
-    assert m["knob_shaft_engagement"] >= 8 and m["knob_top_skin"] >= 2 and m["knob_protrusion"] <= 8, "Knob: on the shaft, at most 8 mm in front of the cover"
+    assert m["knob_shaft_engagement"] >= 8 and m["knob_top_skin"] >= 2 and m["knob_protrusion"] <= 9, "Knob: on the shaft, at most 9 mm in front of the cover"
     # L bail (user): pivots at mid-depth, carried with the bar above the pivot so the fan hangs level
     assert m["bail_clearance"] >= 38 and m["bail_grip"] >= 90 and 90 < m["bail_carry"] < 160, "Bail: 38 mm hand room, 90 mm hand breadth, carrying angle past vertical"
     assert m["bail_insert"][0] == 5.6, "Ruthex M4 insert: hole 5.6 mm"
