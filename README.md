@@ -40,7 +40,7 @@ Print profile: 0.20 mm layers, 6 walls, 5 top/bottom layers, 30 % gyroid (feet 1
 
 ### Fit tests before the full print
 
-Small slices of the real housing and back cover, in the same print orientation, so the bought parts can be tried before the 20-hour print. Print them in PETG white together with one knob and one TPU foot; they are not in the project 3MF, import the STLs onto one plate. The six slices take about 39 g and 3 hours.
+Small slices of the real housing and back cover, in the same print orientation, so the bought parts can be tried before the 20-hour print. They are ready in the Bambu Studio project [`stl/leo_ac1_fit_tests.3mf`](stl/leo_ac1_fit_tests.3mf): plate 1 the six slices in PETG white with one knob (white pointer), plate 2 one TPU foot. Both plates take about 86 g and 4.6 hours, prime tower included.
 
 | STL | Slice of | Check with |
 |---|---|---|

@@ -6,6 +6,8 @@
 2. Builds PROJECT_3MF: every part of the full build on the fixed PLATES, each plate centred; multicolour
    parts as one object per copy with their inlay filaments, parts at the left edge and the prime tower
    to their right. Every plate is sliced (layout, instances, effective settings); multicolour plates also prove the inlays print.
+3. Optional TEST_PLATES (e.g. fit tests; entries are part names or (name, count), one copy by default) become TEST_3MF
+   the same way.
 
 Generated G-code and 3MF files under build/ are diagnostics, NOT print releases.
 Writes build/slicer-diagnostic/summary.json and SLICER_SUMMARY (default docs/slicer-summary.json).
@@ -48,6 +50,9 @@ PLATES = getattr(P, "PLATES", None) or [(name, [name]) for name in PARTS if PART
 # A pause stops its whole plate, so give such parts their own plate.
 PAUSES = getattr(P, "PAUSES", {})
 PROJECT_3MF = ROOT / getattr(P, "PROJECT_3MF", f"{STL_DIR.relative_to(ROOT).as_posix()}/{ROOT.name}_all_parts.3mf")
+# Test prints (fit tests, samples) as their own project: plates of part names or (name, count), one copy by default
+TEST_PLATES = getattr(P, "TEST_PLATES", [])
+TEST_3MF = ROOT / getattr(P, "TEST_3MF", f"{STL_DIR.relative_to(ROOT).as_posix()}/{ROOT.name}_test_prints.3mf")
 SUMMARY = ROOT / getattr(P, "SLICER_SUMMARY", "docs/slicer-summary.json")
 INLAY_FILAMENT = {inlay: i for i, f in enumerate(FILAMENTS, 1)
                   for inlay in ((f["inlay"],) if isinstance(f.get("inlay"), str) else f.get("inlay", ()))}
@@ -161,18 +166,28 @@ def attribute(tag, key):
     return match.group(1) if match else None
 
 
-def build_project_3mf():
-    """Every part of the full build (no test prints) as one Bambu Studio project on the fixed PLATES."""
-    folder = out / "project-3mf"
+def plate_counts(group, full_build):
+    """Plate entries are part names or (name, count); names take the PARTS quantity in the full build, else one copy."""
+    return dict((entry, PARTS[entry][0] if full_build else 1) if isinstance(entry, str) else tuple(entry) for entry in group)
+
+
+def build_project_3mf(plate_list=None, target=None, folder_name="project-3mf", full_build=True):
+    """Every part of the full build (no test prints) as one Bambu Studio project on the fixed PLATES; with
+    full_build=False any plate list (test prints) into its own target file."""
+    target = target or PROJECT_3MF
+    folder = out / folder_name
     folder.mkdir(exist_ok=True)
-    listed = [name for _, group in PLATES for name in group]
-    wanted = [name for name in PARTS if PARTS[name][0] > 0]
-    assert sorted(listed) == sorted(wanted), f"PLATES does not match PARTS: {sorted(set(listed) ^ set(wanted))}"
+    resolved = [(title, plate_counts(group, full_build)) for title, group in (PLATES if plate_list is None else plate_list)]
+    listed = [name for _, group in resolved for name in group]
+    assert set(listed) <= set(PARTS), f"Plates name unknown parts: {sorted(set(listed) - set(PARTS))}"
+    if full_build:
+        wanted = [name for name in PARTS if PARTS[name][0] > 0]
+        assert sorted(listed) == sorted(wanted), f"PLATES does not match PARTS: {sorted(set(listed) ^ set(wanted))}"
     plates, assembled = [], 0
-    for title, group in PLATES:
+    for title, group in resolved:
         objects = []
-        for name in group:
-            quantity, material, _ = PARTS[name]
+        for name, quantity in group.items():
+            material = PARTS[name][1]
             if name in COLOR_PARTS:
                 # Base and inlays as one object with several parts: all parts of one copy share one assemble_index,
                 # each copy gets its own (a shared index merges every copy into one object)
@@ -247,7 +262,7 @@ def build_project_3mf():
         # assembled objects are called assemble_N; give them the part name
         settings = re.sub(r'(<object id="(\d+)">\s*<metadata key="name" value=")assemble_\d+(")',
                           lambda m: m.group(1) + names[m.group(2)] + m.group(3), settings)
-        assert len(plate_ids) == len(PLATES), f"Project 3MF has {len(plate_ids)} plates, expected {len(PLATES)}"
+        assert len(plate_ids) == len(resolved), f"{target.name} has {len(plate_ids)} plates, expected {len(resolved)}"
         # Plate grid like Bambu Studio: columns from the square root of the plate count, 20 % gap
         width = max(float(p.split("x")[0]) for p in machine["printable_area"])
         depth = max(float(p.split("x")[1]) for p in machine["printable_area"])
@@ -258,9 +273,9 @@ def build_project_3mf():
         tower_brim = float(project_settings["prime_tower_brim_width"])
         towers = {}
         shift, layout = {}, []
-        for index, ((title, group), ids) in enumerate(zip(PLATES, plate_ids)):
+        for index, ((title, group), ids) in enumerate(zip(resolved, plate_ids)):
             got = sorted(names[i] for i in ids)
-            assert got == sorted(n for n in group for _ in range(PARTS[n][0])), f"Plate {title} holds {got}"
+            assert got == sorted(n for n in group for _ in range(group[n])), f"Plate {title} holds {got}"
             origin = ((index % columns) * width * 1.2, -(index // columns) * depth * 1.2)
             boxes = [bounds(i) for i in ids]
             low = [min(b[0][r] for b in boxes) - origin[r] for r in range(2)]
@@ -305,7 +320,7 @@ def build_project_3mf():
         pause_gcode = machine.get("machine_pause_gcode", "M400 U1")
         pause_gcode = (pause_gcode[0] if isinstance(pause_gcode, list) else pause_gcode).strip()
         pause_plates = {index: sorted({z for part in group for z in PAUSES.get(part, [])})
-                        for index, (_, group) in enumerate(PLATES) if any(part in PAUSES for part in group)}
+                        for index, (_, group) in enumerate(resolved) if any(part in PAUSES for part in group)}
         custom_name = "Metadata/custom_gcode_per_layer.xml"
         # written next to the diagnostics first; published to PROJECT_3MF only after every plate sliced
         candidate = folder / "project.3mf"
@@ -322,12 +337,12 @@ def build_project_3mf():
                 project.writestr(custom_name, custom_gcode_xml(pause_plates, pause_gcode))
     placed = sum(len(ids) for ids in plate_ids)
     own_infill = len([v for v in re.findall(r'sparse_infill_density" value="(\d+)%"', settings) if int(v) != DEFAULT_INFILL])
-    expected_own = sum(PARTS[n][0] for n in PARTS if infill(n, PARTS[n][1]) != DEFAULT_INFILL)
-    assert placed == sum(PARTS[n][0] for n in listed), f"Project 3MF places {placed} parts"
-    assert own_infill == expected_own, f"Project 3MF: {own_infill} parts with own infill, expected {expected_own}"
-    print(f"Project 3MF: {placed} parts on {len(plate_ids)} plates, slicing every plate before publishing", flush=True)
+    expected_own = sum(count for _, group in resolved for n, count in group.items() if infill(n, PARTS[n][1]) != DEFAULT_INFILL)
+    assert placed == sum(count for _, group in resolved for count in group.values()), f"{target.name} places {placed} parts"
+    assert own_infill == expected_own, f"{target.name}: {own_infill} parts with own infill, expected {expected_own}"
+    print(f"{target.name}: {placed} parts on {len(plate_ids)} plates, slicing every plate before publishing", flush=True)
     multicolour, pauses, plate_slices = {}, {}, {}
-    for index, (title, group) in enumerate(PLATES, 1):
+    for index, (title, group) in enumerate(resolved, 1):
         coloured = set(group) & set(COLOR_PARTS)
         plate_dir = folder / f"slice-plate-{index}"
         plate_dir.mkdir(exist_ok=True)
@@ -364,14 +379,14 @@ def build_project_3mf():
         multicolour[title] = dict(plate=index, hours=round(plate.get("total_predication", 0) / 3600, 2),
                                   grams_by_filament=grams, warnings=plate.get("warning_message"))
         print(f"Slice multicolour plate {title}: PASS, filament use {grams} g", flush=True)
-    PROJECT_3MF.parent.mkdir(parents=True, exist_ok=True)
-    shutil.copy2(candidate, PROJECT_3MF)
-    print(f"Project 3MF published -> {PROJECT_3MF.relative_to(ROOT)}", flush=True)
-    return dict(file=str(PROJECT_3MF.relative_to(ROOT)), parts=placed, plates=len(plate_ids), layout=layout,
+    target.parent.mkdir(parents=True, exist_ok=True)
+    shutil.copy2(candidate, target)
+    print(f"Project 3MF published -> {target.relative_to(ROOT)}", flush=True)
+    return dict(file=str(target.relative_to(ROOT)), parts=placed, plates=len(plate_ids), layout=layout,
                 total_hours_plates=round(sum(s["hours"] for s in plate_slices.values()), 1),
                 total_grams_plates=round(sum(sum(s["grams_by_filament"].values()) for s in plate_slices.values()), 1),
                 multicolour_parts=COLOR_PARTS, multicolour_slices=multicolour, pause_slices=pauses, plate_slices=plate_slices,
-                own_infill_parts=own_infill, sha256=hashlib.sha256(PROJECT_3MF.read_bytes()).hexdigest())
+                own_infill_parts=own_infill, sha256=hashlib.sha256(target.read_bytes()).hexdigest())
 
 
 def custom_gcode_xml(pause_plates, gcode):
@@ -421,8 +436,12 @@ assert all(r["infill_percent"] == infill(r["part"], r["material"]) for r in resu
 assert all(r["effective_settings"]["sparse_infill_pattern"] == pattern(infill(r["part"], r["material"])) for r in results)
 assert all(r["effective_settings"]["enable_support"] == "0" for r in results)
 summary["project_3mf"] = build_project_3mf()
+if TEST_PLATES:
+    summary["test_3mf"] = build_project_3mf(TEST_PLATES, TEST_3MF, "test-3mf", full_build=False)
 write_summary(summary)
+test = summary.get("test_3mf")
 print(f"PASS: {len(results)} slices; {summary['total_parts']} parts; "
       f"{summary['total_grams_individual_plates']} g; {summary['total_hours_individual_plates']} h; "
       f"project 3MF with {summary['project_3mf']['plates']} plates: {summary['project_3mf']['total_grams_plates']} g; "
-      f"{summary['project_3mf']['total_hours_plates']} h as plates")
+      f"{summary['project_3mf']['total_hours_plates']} h as plates"
+      + (f"; test 3MF with {test['plates']} plates: {test['total_grams_plates']} g; {test['total_hours_plates']} h" if test else ""))

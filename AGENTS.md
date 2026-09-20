@@ -54,7 +54,7 @@ Internal notes for coding agents (Claude, Codex). The README is public and stays
 ## Open items
 
 - Measure: battery cable exit; PWM underside parts; switch body depth behind the panel; USB-C shell height/centring with a plugged cable; tape thickness; heatsinks if added.
-- Fit tests before the full print: `test_*` parts (quantity 0, not in the project 3MF) are slices of the real body/back cover made with `slice_box()` — pot counterbore with washer/nut, USB-C channel with plugged cable, switch well with clips, battery ring with BMS, horizontal M3 foot insert and M5 mount insert — plus one knob on the real shaft and one TPU foot. Adjust parameters after the user's results.
+- Fit tests before the full print: `test_*` parts (quantity 0, not in the full project 3MF; `TEST_PLATES` puts them with a knob and one foot into `stl/leo_ac1_fit_tests.3mf`) are slices of the real body/back cover made with `slice_box()` — pot counterbore with washer/nut, USB-C channel with plugged cable, switch well with clips, battery ring with BMS, horizontal M3 foot insert and M5 mount insert — plus one knob on the real shaft and one TPU foot. Adjust parameters after the user's results.
 - Wiring: stow the 400 mm fan cable, keep wires out of the fan, saddles and back lip; leave slack at the back-cover modules.
 - Measure the boost converter idle current, then decide the switch position (battery line vs. O+). Check charge-module temperature in the closed housing, also charging with the fan off.
 - Air duct vs. real fan frame: the duct check uses the fan envelope; the real Noctua frame has chamfers, some back-flow is possible (a foam ring could help).

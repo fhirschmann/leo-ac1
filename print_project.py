@@ -69,6 +69,10 @@ FILAMENTS = [dict(material="PETG-white", profile="Bambu PETG HF @BBL H2S", colou
              dict(material="PETG-white", profile="Bambu PETG HF @BBL H2S", inlay=("pointer",), colour="#FFFFFF")]
 PLATES = [("Housing", ["body"]), ("Back cover", ["back"]), ("Grey parts", ["grille", "cover", "handle", "knob"]), ("TPU feet", ["foot"])]
 PROJECT_3MF = "stl/leo_ac1_all_parts.3mf"
+# fit tests before the full build: PETG slices with a knob (white pointer), one TPU foot on its own plate
+TEST_PLATES = [("Fit tests", ["test_pot", "test_usbc", "test_switch", "test_ring", "test_foot", "test_mount", "knob"]),
+               ("Fit test TPU foot", ["foot"])]
+TEST_3MF = "stl/leo_ac1_fit_tests.3mf"
 SLICER_SUMMARY = "docs/slicer-summary.json"
 
 LIMITATIONS = ["Bought parts as envelopes (fan block, battery cylinder), no vendor CAD",

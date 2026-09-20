@@ -436,6 +436,91 @@
       }
     },
     "own_infill_parts": 2,
-    "sha256": "d7ad81eff07ef4283bcf4104fd6991eae05d20d8ec144f03d473a36444156c96"
+    "sha256": "4b1f76ac36e60eeee6faf783eb6e0c6b91ef5c09e0bef023e79232c3ea2b71a6"
+  },
+  "test_3mf": {
+    "file": "stl/leo_ac1_fit_tests.3mf",
+    "parts": 8,
+    "plates": 2,
+    "layout": [
+      {
+        "plate": 1,
+        "name": "Fit tests",
+        "parts": [
+          "knob",
+          "test_foot",
+          "test_mount",
+          "test_pot",
+          "test_ring",
+          "test_switch",
+          "test_usbc"
+        ],
+        "size_mm": [
+          106.8,
+          119.7
+        ],
+        "prime_tower_xy": [
+          134.8,
+          130.0
+        ]
+      },
+      {
+        "plate": 2,
+        "name": "Fit test TPU foot",
+        "parts": [
+          "foot"
+        ],
+        "size_mm": [
+          62.0,
+          16.0
+        ]
+      }
+    ],
+    "total_hours_plates": 4.6,
+    "total_grams_plates": 85.6,
+    "multicolour_parts": {
+      "body": [
+        "label",
+        "dedication"
+      ],
+      "knob": [
+        "pointer"
+      ]
+    },
+    "multicolour_slices": {
+      "Fit tests": {
+        "plate": 1,
+        "hours": 4.03,
+        "grams_by_filament": {
+          "1": 59.62,
+          "2": 19.05,
+          "5": 0.62
+        },
+        "warnings": ""
+      }
+    },
+    "pause_slices": {},
+    "plate_slices": {
+      "Fit tests": {
+        "plate": 1,
+        "hours": 4.03,
+        "grams_by_filament": {
+          "1": 59.62,
+          "2": 19.05,
+          "5": 0.62
+        },
+        "warnings": ""
+      },
+      "Fit test TPU foot": {
+        "plate": 2,
+        "hours": 0.58,
+        "grams_by_filament": {
+          "4": 6.3
+        },
+        "warnings": ""
+      }
+    },
+    "own_infill_parts": 1,
+    "sha256": "59763d5960113f6192a762f47840fb5c918fde51f2f66ab91b96de5cd2988cbe"
   }
 }
