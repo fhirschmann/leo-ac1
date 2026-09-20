@@ -36,10 +36,10 @@
       "degenerate_faces": 0,
       "components": 1,
       "backend": "CGAL",
-      "sha256": "3df0c73eba4702b6c30a7c4b74d604fe53f505acd14a0167e49c1b652c2cf6e3",
+      "sha256": "6e779fb88c66c56b0a71077731b59d509746a73fe3bc7558bed5e34ed3d088c2",
       "quantity": 1,
       "material": "PETG-white",
-      "committed_sha256": "3df0c73eba4702b6c30a7c4b74d604fe53f505acd14a0167e49c1b652c2cf6e3"
+      "committed_sha256": "6e779fb88c66c56b0a71077731b59d509746a73fe3bc7558bed5e34ed3d088c2"
     },
     "back": {
       "size_mm": [
@@ -126,10 +126,10 @@
       "degenerate_faces": 0,
       "components": 1,
       "backend": "CGAL",
-      "sha256": "45cb1b41256e28f95e6845fab5ed8fb4881167053be9b0e3d69616b459083662",
+      "sha256": "942f21ad5a7768beda0ba981eda44b100fdebde5a5a9d9de580320cad6a121f8",
       "quantity": 1,
       "material": "PETG-grey",
-      "committed_sha256": "45cb1b41256e28f95e6845fab5ed8fb4881167053be9b0e3d69616b459083662"
+      "committed_sha256": "942f21ad5a7768beda0ba981eda44b100fdebde5a5a9d9de580320cad6a121f8"
     },
     "handle": {
       "size_mm": [
@@ -248,7 +248,7 @@
       "degenerate_faces": 0,
       "components": 1,
       "backend": "CGAL",
-      "sha256": "d0ae8b386feb856b1cbfca6c2e5225fab46fc59615fb9ed8525d9032b26e7336"
+      "sha256": "84b1afb8e02bb7cabccafe54b595713177342eb612fc75cd50402f3fc80edd94"
     },
     "body_label": {
       "size_mm": [
@@ -903,6 +903,39 @@
     ]
   },
   "intersections": [],
+  "alignment": {
+    "features": 150,
+    "coaxial_pairs": {
+      "back|battery": 3,
+      "back|body": 15,
+      "back|screws_back": 24,
+      "battery|body": 3,
+      "body|cover": 2,
+      "body|feet": 4,
+      "body|grille": 37,
+      "body|handle": 4,
+      "body|knob": 4,
+      "body|led": 2,
+      "body|pot": 2,
+      "body|pot_nut": 2,
+      "body|screws_back": 12,
+      "body|screws_fan": 4,
+      "body|screws_feet": 4,
+      "body|screws_grille": 12,
+      "body|screws_handle": 8,
+      "cover|knob": 6,
+      "cover|pot": 2,
+      "cover|pot_nut": 3,
+      "feet|screws_feet": 16,
+      "grille|screws_grille": 16,
+      "handle|screws_handle": 4,
+      "knob|pot": 4,
+      "knob|pot_nut": 6,
+      "pot|pot_nut": 2
+    },
+    "misaligned": [],
+    "allowed_misaligned": 0
+  },
   "dedication_line_gaps_mm": [
     1.39,
     1.49
@@ -935,19 +968,19 @@
     }
   },
   "contact_volumes_mm3": {
-    "grille@body": 177.726,
-    "fan@body": 10.211,
-    "back@body": 133.41,
-    "cover@body": 2.527,
-    "battery@body": 46.565,
-    "handle@body": 12.376,
-    "pot@body": 26.813,
-    "pot_nut@body": 2.755,
-    "chg_module@body": 6.906,
-    "led@body": 0.165,
-    "feet@body": 93.604,
-    "usb_trigger@back": 0.768,
-    "switch@back": 3.649
+    "grille@body": 177.7264,
+    "fan@body": 10.2112,
+    "back@body": 133.4096,
+    "cover@body": 2.5265,
+    "battery@body": 46.5649,
+    "handle@body": 12.3758,
+    "pot@body": 26.8127,
+    "pot_nut@body": 2.7551,
+    "chg_module@body": 4.8873,
+    "led@body": 0.1647,
+    "feet@body": 93.6041,
+    "usb_trigger@back": 0.7675,
+    "switch@back": 3.6495
   },
   "stops": [
     {
@@ -971,78 +1004,109 @@
       "limit_mm": 1.0
     }
   ],
+  "clearances": [
+    {
+      "a": "knob",
+      "b": [
+        "body",
+        "cover"
+      ],
+      "gap_mm": 0.5,
+      "min_mm": 0.4,
+      "capped": false
+    },
+    {
+      "a": "chg_module",
+      "b": "fan",
+      "gap_mm": 6.0,
+      "min_mm": 5.0,
+      "capped": true
+    }
+  ],
   "sampled_paths": [
     {
       "name": "grille_front",
+      "length_mm": 12.0,
       "collisions": 0,
       "first_mm": null,
-      "max_volume_mm3": 0
+      "max_volume_mm3": 0.0
     },
     {
       "name": "back_off",
+      "length_mm": 12.0,
       "collisions": 0,
       "first_mm": null,
-      "max_volume_mm3": 0
+      "max_volume_mm3": 0.0
     },
     {
       "name": "battery_out",
+      "length_mm": 90.0,
       "collisions": 0,
       "first_mm": null,
-      "max_volume_mm3": 0
+      "max_volume_mm3": 0.0
     },
     {
       "name": "chg_module_out",
+      "length_mm": 45.0,
       "collisions": 0,
       "first_mm": null,
-      "max_volume_mm3": 0
+      "max_volume_mm3": 0.0
     },
     {
       "name": "fan_out",
+      "length_mm": 90.0,
       "collisions": 0,
       "first_mm": null,
-      "max_volume_mm3": 0
+      "max_volume_mm3": 0.0
     },
     {
       "name": "knob_off",
+      "length_mm": 25.0,
       "collisions": 0,
       "first_mm": null,
-      "max_volume_mm3": 0
+      "max_volume_mm3": 0.0
     },
     {
       "name": "cover_off",
+      "length_mm": 30.0,
       "collisions": 0,
       "first_mm": null,
-      "max_volume_mm3": 0
+      "max_volume_mm3": 0.0
     },
     {
       "name": "handle_up",
+      "length_mm": 15.0,
       "collisions": 0,
       "first_mm": null,
-      "max_volume_mm3": 0
+      "max_volume_mm3": 0.0
     },
     {
       "name": "feet_down",
+      "length_mm": 6.0,
       "collisions": 0,
       "first_mm": null,
-      "max_volume_mm3": 0
+      "max_volume_mm3": 0.0
     },
     {
       "name": "usb_trigger_from_back",
+      "length_mm": 16.0,
       "collisions": 0,
       "first_mm": null,
-      "max_volume_mm3": 0
+      "max_volume_mm3": 0.0
     },
     {
       "name": "switch_out",
+      "length_mm": 25.0,
       "collisions": 0,
       "first_mm": null,
-      "max_volume_mm3": 0
+      "max_volume_mm3": 0.0
     },
     {
       "name": "pwm_board_out",
+      "length_mm": 104.1,
       "collisions": 0,
       "first_mm": null,
-      "max_volume_mm3": 0
+      "max_volume_mm3": 0.0
     }
   ],
   "insert_probes": [
@@ -1095,7 +1159,7 @@
       "at": [
         31.5,
         10.2,
-        25
+        25.0
       ],
       "empty_mm3": 0.0,
       "ring_fill": 1.0,
@@ -1106,7 +1170,7 @@
       "at": [
         31.5,
         10.2,
-        130
+        130.0
       ],
       "empty_mm3": 0.0,
       "ring_fill": 1.0,
@@ -1117,7 +1181,7 @@
       "at": [
         136.5,
         10.2,
-        25
+        25.0
       ],
       "empty_mm3": 0.0,
       "ring_fill": 1.0,
@@ -1128,7 +1192,7 @@
       "at": [
         136.5,
         10.2,
-        130
+        130.0
       ],
       "empty_mm3": 0.0,
       "ring_fill": 1.0,
@@ -1138,7 +1202,7 @@
       "body": "body",
       "at": [
         6.5,
-        76,
+        76.0,
         6.5
       ],
       "empty_mm3": 0.0,
@@ -1149,7 +1213,7 @@
       "body": "body",
       "at": [
         6.5,
-        76,
+        76.0,
         148.5
       ],
       "empty_mm3": 0.0,
@@ -1160,7 +1224,7 @@
       "body": "body",
       "at": [
         218.5,
-        76,
+        76.0,
         6.5
       ],
       "empty_mm3": 0.0,
@@ -1171,7 +1235,7 @@
       "body": "body",
       "at": [
         218.5,
-        76,
+        76.0,
         148.5
       ],
       "empty_mm3": 0.0,
@@ -1182,7 +1246,7 @@
       "body": "body",
       "at": [
         151.2,
-        76,
+        76.0,
         6.5
       ],
       "empty_mm3": 0.0,
@@ -1193,7 +1257,7 @@
       "body": "body",
       "at": [
         151.2,
-        76,
+        76.0,
         148.5
       ],
       "empty_mm3": 0.0,
@@ -1204,7 +1268,7 @@
       "body": "handle",
       "at": [
         50.5,
-        40,
+        40.0,
         153.8
       ],
       "empty_mm3": 0.0,
@@ -1215,7 +1279,7 @@
       "body": "handle",
       "at": [
         35.5,
-        40,
+        40.0,
         153.8
       ],
       "empty_mm3": 0.0,
@@ -1226,7 +1290,7 @@
       "body": "handle",
       "at": [
         174.5,
-        40,
+        40.0,
         153.8
       ],
       "empty_mm3": 0.0,
@@ -1237,7 +1301,7 @@
       "body": "handle",
       "at": [
         189.5,
-        40,
+        40.0,
         153.8
       ],
       "empty_mm3": 0.0,
@@ -1247,9 +1311,9 @@
     {
       "body": "body",
       "at": [
-        17,
-        17,
-        1
+        17.0,
+        17.0,
+        1.0
       ],
       "empty_mm3": 0.0,
       "ring_fill": 1.0,
@@ -1258,9 +1322,9 @@
     {
       "body": "body",
       "at": [
-        17,
-        61,
-        1
+        17.0,
+        61.0,
+        1.0
       ],
       "empty_mm3": 0.0,
       "ring_fill": 1.0,
@@ -1269,9 +1333,9 @@
     {
       "body": "body",
       "at": [
-        208,
-        17,
-        1
+        208.0,
+        17.0,
+        1.0
       ],
       "empty_mm3": 0.0,
       "ring_fill": 1.0,
@@ -1280,9 +1344,9 @@
     {
       "body": "body",
       "at": [
-        208,
-        61,
-        1
+        208.0,
+        61.0,
+        1.0
       ],
       "empty_mm3": 0.0,
       "ring_fill": 1.0,
@@ -1291,9 +1355,9 @@
     {
       "body": "body",
       "at": [
-        121,
-        36,
-        0
+        121.0,
+        36.0,
+        0.0
       ],
       "empty_mm3": 0.0,
       "ring_fill": 1.0,

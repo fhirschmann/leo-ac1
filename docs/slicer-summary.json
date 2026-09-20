@@ -6,11 +6,11 @@
       "quantity": 1,
       "material": "PETG-white",
       "passed": true,
-      "source_sha256": "3df0c73eba4702b6c30a7c4b74d604fe53f505acd14a0167e49c1b652c2cf6e3",
+      "source_sha256": "6e779fb88c66c56b0a71077731b59d509746a73fe3bc7558bed5e34ed3d088c2",
       "exit_code": 0,
       "result_code": 0,
       "warnings": "",
-      "hours": 10.324,
+      "hours": 10.332,
       "grams": 401.089,
       "wall_loops": 6,
       "infill_percent": 30.0,
@@ -75,7 +75,7 @@
       "quantity": 1,
       "material": "PETG-grey",
       "passed": true,
-      "source_sha256": "45cb1b41256e28f95e6845fab5ed8fb4881167053be9b0e3d69616b459083662",
+      "source_sha256": "942f21ad5a7768beda0ba981eda44b100fdebde5a5a9d9de580320cad6a121f8",
       "exit_code": 0,
       "result_code": 0,
       "warnings": "",
@@ -243,7 +243,7 @@
     "multicolour_slices": {
       "Housing": {
         "plate": 1,
-        "hours": 10.64,
+        "hours": 10.62,
         "grams_by_filament": {
           "1": 401.5,
           "3": 1.56
@@ -264,7 +264,7 @@
     "plate_slices": {
       "Housing": {
         "plate": 1,
-        "hours": 10.64,
+        "hours": 10.62,
         "grams_by_filament": {
           "1": 401.5,
           "3": 1.56
@@ -298,6 +298,6 @@
       }
     },
     "own_infill_parts": 2,
-    "sha256": "895ec4658e9352901d8815607f0054e4102197551560869371b4deecd77699b8"
+    "sha256": "e4c54975f95bdf858def2a25d117989319257451d634465bef3ab5ce0edcd3d1"
   }
 }

@@ -3,9 +3,6 @@
 Everything project-specific lives here, the scripts stay identical to the skill copies
 (python3 ~/.claude/skills/openscad-print-project/scripts/skill_sync.py status).
 """
-import manifold3d as md
-import numpy as np
-
 SOURCE = "leo_ac.scad"
 METRICS_TAG = "PROJECT_METRICS"       # part="metrics" echoes this tag with [key, value] pairs
 
@@ -72,19 +69,10 @@ LIMITATIONS = ["Bought parts as envelopes (fan block, battery cylinder), no vend
                "Sampled motion, no continuous swept-volume proof",
                "No flexible deformation, physical fit, strength, airflow or thermal validation"]
 
-ROTATION = {(0, 0, 1): (0, 0, 0), (0, 0, -1): (180, 0, 0), (0, 1, 0): (-90, 0, 0),
-            (0, -1, 0): (90, 0, 0), (1, 0, 0): (0, 90, 0), (-1, 0, 0): (0, -90, 0)}
-
-
-def axis_cylinder(start, direction, length, radius):
-    """Cylinder from start along an axis-aligned direction."""
-    rotation = ROTATION[tuple(int(round(v)) for v in direction)]
-    return md.Manifold.cylinder(length, radius, radius, 48).rotate(rotation).translate(list(map(float, start)))
 
 
 def checks(ctx):
-    """Project-specific checks after export; ctx has metrics, meshes and solids (assembly bodies),
-    sweep(moving, fixed, direction, length, step), union(names), save(name, data), summary, open_items.
+    """Project-specific checks after export; ctx helpers are described in the skill template (print_project.py).
     Assert failures abort the run; the returned dict goes into the report."""
     m = ctx.metrics
     assert min(m["wall"], m["front_t"]) >= 3.2 and m["back_t"] >= 3 and m["corner_r"] >= 5, "Drop resistance: walls and corner radius"
@@ -121,29 +109,26 @@ def checks(ctx):
         # at least 1 x d in the brass inserts; the fan screws sit on 1 mm silicone pads
         assert info["engagement_mm"] >= 3 and info["tip_margin_mm"] >= 0.3, f"Screw {name}: {info}"
 
-    # Contact, not just freedom from overlap: pushed 0.05 mm into its support, a body must intersect it
-    contacts = {}
-    for name, base, shift in (("grille", "body", [0, 0.05, 0]), ("fan", "body", [0, -0.05, 0]),
-                              ("back", "body", [0, -0.05, 0]), ("cover", "body", [-0.05, 0, 0]), ("battery", "body", [0, 0, -0.05]),
-                              ("handle", "body", [0, 0, -0.05]), ("pot", "body", [0.05, 0, 0]), ("pot_nut", "body", [-0.05, 0, 0]), ("chg_module", "body", [0.05, 0, -0.05]), ("led", "body", [0, -0.05, 0]), ("feet", "body", [0, 0, 0.05]), ("usb_trigger", "back", [0, 0.05, 0]), ("switch", "back", [0, -0.05, 0])):
-        volume = (ctx.solids[name].translate(shift) ^ ctx.solids[base]).volume()
-        assert volume > 0.1, f"{name} does not rest on {base}"
-        contacts[f"{name}@{base}"] = round(volume, 3)
+    # Contact, not just freedom from overlap: moved 0.05 mm towards its support, a body must intersect it
+    contacts = ctx.contacts([("grille", "body", [0, 1, 0]), ("fan", "body", [0, -1, 0]), ("back", "body", [0, -1, 0]),
+                             ("cover", "body", [-1, 0, 0]), ("battery", "body", [0, 0, -1]), ("handle", "body", [0, 0, -1]),
+                             ("pot", "body", [1, 0, 0]), ("pot_nut", "body", [-1, 0, 0]), ("chg_module", "body", [1, 0, -1]),
+                             ("led", "body", [0, -1, 0]), ("feet", "body", [0, 0, 1]), ("usb_trigger", "back", [0, 1, 0]),
+                             ("switch", "back", [0, -1, 0])])
 
     # Stops: the battery may move only a little before the back cover or the shelf holds it
-    stops = []
-    for name, moving, fixed, direction, limit in (("battery_back", ["battery"], ["back"], [0, 1, 0], 1.5),
-                                                  ("battery_up", ["battery"], ["body"], [0, 0, 1], m["shelf_gap"] + 0.5),
-                                                  ("battery_side", ["battery"], ["body"], [1, 0, 0], 1.0),
-                                                  ("usb_trigger_push", ["usb_trigger"], ["body"], [0, -1, 0], 1.0)):
-        count, first, _ = ctx.sweep(moving, fixed, direction, limit, 0.25)
-        stops.append(dict(name=name, first_contact_mm=first, limit_mm=limit))
-        assert count > 0, f"Stop {name}: no contact within {limit} mm"
+    stops = ctx.stops([("battery_back", "battery", "back", [0, 1, 0], 1.5),
+                       ("battery_up", "battery", "body", [0, 0, 1], m["shelf_gap"] + 0.5),
+                       ("battery_side", "battery", "body", [1, 0, 0], 1.0),
+                       ("usb_trigger_push", "usb_trigger", "body", [0, -1, 0], 1.0)])
+
+    # Running clearance of the turning knob; charge module kept away from the fan for the air stream
+    clearances = ctx.clearances([("knob", ["body", "cover"], 0.4), ("chg_module", "fan", 5.0)])
 
     # Round air duct: wall closed all around, small gap to the fan, end ring completely on the fan frame face
     (ax, az), fy, (r0, r1), gap = m["fan_axis"], m["fan_y"], m["shroud_r"], m["shroud_gap"]
-    ring = lambda y, length, ra, rb: (axis_cylinder([ax, y, az], (0, 1, 0), length, rb)
-                                      - axis_cylinder([ax, y, az], (0, 1, 0), length, ra))
+    ring = lambda y, length, ra, rb: (ctx.cylinder([ax, y, az], (0, 1, 0), length, rb)
+                                      - ctx.cylinder([ax, y, az], (0, 1, 0), length, ra))
     # inner 2 mm of the wall: closed all around (the grille insert pockets may reach into the outer part of a thick wall)
     wall_probe = ring(fy - gap - 1.2, 0.8, r0 + 0.2, min(r1 - 0.2, r0 + 2))
     gap_probe = ring(fy - gap + 0.02, gap - 0.04, r0 + 0.2, r1 - 0.2)
@@ -157,8 +142,9 @@ def checks(ctx):
 
     # Assembly paths in a realistic removal order
     others = lambda *names: [n for n in ctx.solids if n not in names]
-    paths = []
-    for name, moving, fixed, direction, length, step in (
+    # PWM board with the potentiometer: after knob, cover and nut, away from the wall until the shaft is clear, then out the back
+    clear_x = m["pot_shaft_len"] + m["wall"] + 1
+    paths = ctx.paths([
             ("grille_front", ["grille", "screws_grille"], ["body", "fan", "screws_fan"], [0, -1, 0], 12, 0.25),
             ("back_off", ["back", "screws_back", "usb_trigger", "switch"], others("back", "screws_back", "usb_trigger", "switch"), [0, 1, 0], 12, 0.25),
             ("battery_out", ["battery"], others("battery", "back", "screws_back", "usb_trigger", "switch"), [0, 1, 0], 90, 1),
@@ -170,37 +156,13 @@ def checks(ctx):
             ("feet_down", ["feet"], ["body"], [0, 0, -1], 6, 0.5),
             # the USB-C module comes off with the back cover (back_off), then out of its channel
             ("usb_trigger_from_back", ["usb_trigger"], ["back"], [0, -1, 0], 16, 0.5),
-            ("switch_out", ["switch"], ["back"], [0, 1, 0], 25, 0.5)):
-        count, first, maximum = ctx.sweep(moving, fixed, direction, length, step)
-        paths.append(dict(name=name, collisions=count, first_mm=first, max_volume_mm3=round(maximum, 4)))
-        assert count == 0, f"Path {name} obstructed at {first} mm"
-    # PWM board with the potentiometer: after knob, cover and nut, away from the wall until the shaft is clear, then out the back
-    fixed = ctx.union(others("pot", "pot_nut", "pwm_board", "knob", "cover", "back", "screws_back", "usb_trigger", "switch"))
-    moving = ctx.union(["pot", "pwm_board"])
-    clear_x = m["pot_shaft_len"] + m["wall"] + 1          # shaft end clear of the inner wall face
-    blocked = [("away", float(d)) for d in np.arange(0, clear_x + 0.01, 0.5) if (moving.translate([-d, 0, 0]) ^ fixed).volume() > 0.01]
-    blocked += [("back", float(d)) for d in np.arange(0, 90.01, 1) if (moving.translate([-clear_x, d, 0]) ^ fixed).volume() > 0.01]
-    paths.append(dict(name="pwm_board_out", collisions=len(blocked), first_mm=blocked[0] if blocked else None, max_volume_mm3=0))
-    assert not blocked, f"Path pwm_board_out obstructed at {blocked[:3]}"
+            ("switch_out", ["switch"], ["back"], [0, 1, 0], 25, 0.5),
+            ("pwm_board_out", ["pot", "pwm_board"], others("pot", "pot_nut", "pwm_board", "knob", "cover", "back", "screws_back", "usb_trigger", "switch"),
+             [([-1, 0, 0], clear_x, 0.5), ([0, 1, 0], 90, 1)])])
     ctx.summary.append(f"{len(paths)} paths")
 
-    # Insert pockets: axis empty, ring around it and floor below it filled
-    inserts = []
-    for body, start, direction, depth, hole, wall in m["inserts"]:
-        solid, d, s = ctx.solids[body], np.array(direction, float), np.array(start, float)
-        length = depth - 0.5
-        core = axis_cylinder(s + d * 0.2, d, length, 0.375 * hole)
-        # the full datasheet wall around the hole must be material
-        ring = axis_cylinder(s + d * 0.2, d, length, hole / 2 + wall) - axis_cylinder(s + d * 0.2, d, length, hole / 2 + 0.3)
-        # ring, not disc: screws pass through the pocket floor
-        floor = (axis_cylinder(s + d * (depth + 0.2), d, 0.4, hole / 2 + wall)
-                 - axis_cylinder(s + d * (depth + 0.2), d, 0.4, 0.45 * hole))
-        empty = (core ^ solid).volume()
-        filled = (ring ^ solid).volume() / ring.volume()
-        bottom = (floor ^ solid).volume() / floor.volume()
-        inserts.append(dict(body=body, at=[round(v, 2) for v in start], empty_mm3=round(empty, 4),
-                            ring_fill=round(filled, 3), floor_fill=round(bottom, 3)))
-        assert empty < 0.01 and filled > 0.95 and bottom > 0.95, f"Insert pocket {inserts[-1]}"
+    # Insert pockets: core open, datasheet wall around it and the floor ring below it material
+    inserts = ctx.insert_probes(m["inserts"])
     ctx.summary.append(f"{len(inserts)} inserts")
 
     ctx.open_items.append("Battery cell measured Ø32.5 × 71.6 mm on 2026-09-15; verify protection-board envelope and cable exit separately")
@@ -210,8 +172,8 @@ def checks(ctx):
     ctx.open_items.append("USB-C module and shell measured 2026-09-15 (shell bottom approximately 1.1 mm above module underside); verify fit with a plugged cable and soldered wires, and check 5 V at + / - before connecting")
     ctx.open_items.append("Switch measured 20.9 × 14.7 × 23 mm including contacts, cutout 19.2 × 12.2, panel about 1.5; verify depth split before/behind mounting flange and snap fit")
     ctx.open_items.append("Charge PCB measured 32.2 × 11 × 3.7 mm, back clear; heatsinks not yet available, displayed heatsinks are planned clearance envelopes")
-    return dict(dedication_line_gaps_mm=gaps, standard_screws=screws, contact_volumes_mm3=contacts, stops=stops, sampled_paths=paths,
-                insert_probes=inserts, air_duct=duct)
+    return dict(dedication_line_gaps_mm=gaps, standard_screws=screws, contact_volumes_mm3=contacts, stops=stops, clearances=clearances,
+                sampled_paths=paths, insert_probes=inserts, air_duct=duct)
 
 
 VIEWER = dict(

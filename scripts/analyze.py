@@ -9,6 +9,9 @@
   overhangs  areas of a layer steeper than 45 degrees over the layer below (bridges, rebates and grooves in the
            bed face, cantilevers), larger than --min-area (default 100 mm2) and wider than --min-span (default
            2 mm, narrower strips are short bridges over grooves); --max-z limits the height
+  thickness  wall thickness along the inward normal at random surface points (one per --density mm2): percentiles
+           per part and regions thinner than --min-width (default 1.2 mm, three perimeters) larger than --min-area
+           (default 2 mm2) and wider than --min-span (default 2 mm; narrower strips are edges and chamfer tips)
 
 Without names all print parts (islands, ridges) or all multicolour pieces (inlays) are analysed.
 Reads build/print and build/color (run print_tools.py build first); --committed reads the STL folders.
@@ -82,19 +85,67 @@ def thin(section, width, ignore_area, min_area):
     return found
 
 
+def thickness(mesh, min_width, density, min_area, edge_angle=30):
+    """Distance from a surface point along the inward normal to the next face turned away from the ray.
+    The single minimum is often a tessellation sliver, so percentiles and connected thin regions are reported.
+    Points closer than min_width to a sharp convex edge are skipped: next to a ridge crest, chamfer tip or letter
+    edge the depth runs to zero without being a wall (ridges and inlays cover those)."""
+    from scipy.sparse import coo_matrix
+    from scipy.sparse.csgraph import connected_components
+    from scipy.spatial import cKDTree
+    count = int(np.clip(mesh.area / density, 2000, 100000))
+    spacing = np.sqrt(mesh.area / count)
+    points, faces = trimesh.sample.sample_surface(mesh, count, seed=1)
+    inward = -mesh.face_normals[faces]
+    origins = points + inward * 1e-4
+    tri, ray, hits = mesh.ray.intersects_id(origins, inward, multiple_hits=True, return_locations=True)
+    along = np.einsum("ij,ij->i", hits - origins[ray], inward[ray])
+    exits = (np.einsum("ij,ij->i", mesh.face_normals[tri], inward[ray]) > 0) & (along > 0)
+    depth = np.full(count, np.inf)
+    np.minimum.at(depth, ray[exits], along[exits] + 1e-4)
+    measured = depth[np.isfinite(depth)]
+    stats = dict(samples=count, measured=len(measured), mm2_per_sample=round(float(mesh.area / count), 3),
+                 **{key: round(float(np.percentile(measured, q)), 3) for key, q in (("p01", 1), ("p05", 5), ("median", 50))})
+    thin = np.nonzero(depth < min_width - 0.01)[0]          # a wall of exactly the minimum passes
+    sharp = mesh.face_adjacency_edges[(mesh.face_adjacency_angles > np.radians(edge_angle)) & mesh.face_adjacency_convex]
+    if len(thin) and len(sharp):
+        a, b = mesh.vertices[sharp[:, 0]], mesh.vertices[sharp[:, 1]]
+        steps = np.maximum(1, np.ceil(np.linalg.norm(b - a, axis=1) / (min_width / 4))).astype(int)
+        index = np.repeat(np.arange(len(sharp)), steps + 1)
+        t = np.concatenate([np.linspace(0, 1, n + 1) for n in steps])
+        edge_points = a[index] + (b - a)[index] * t[:, None]
+        thin = thin[cKDTree(edge_points).query(points[thin])[0] > min_width]
+    found = []
+    if len(thin):
+        pairs = cKDTree(points[thin]).query_pairs(3 * spacing, output_type="ndarray")
+        graph = coo_matrix((np.ones(len(pairs)), (pairs[:, 0], pairs[:, 1])), shape=(len(thin), len(thin)))
+        labels = connected_components(graph, directed=False)[1]
+        for label in np.unique(labels):
+            members = thin[labels == label]
+            area = float(len(members) * mesh.area / count)
+            if area >= min_area:
+                found.append(dict(area_mm2=round(area, 1), min_mm=round(float(depth[members].min()), 2),
+                                  median_mm=round(float(np.median(depth[members])), 2),
+                                  bounds=np.vstack([points[members].min(axis=0), points[members].max(axis=0)]).round(1).tolist()))
+    found.sort(key=lambda item: -item["area_mm2"])
+    return stats, found
+
+
 def main():
     parser = argparse.ArgumentParser(description=__doc__, formatter_class=argparse.RawDescriptionHelpFormatter)
-    parser.add_argument("command", choices=("islands", "ridges", "inlays", "overhangs"))
+    parser.add_argument("command", choices=("islands", "ridges", "inlays", "overhangs", "thickness"))
     parser.add_argument("names", nargs="*")
     parser.add_argument("--committed", action="store_true", help="analyse the committed STL folders instead of build/")
     parser.add_argument("--layer", type=float, default=0.2, help="islands, overhangs: layer height")
     parser.add_argument("--max-z", type=float, help="overhangs: only up to this height")
     parser.add_argument("--min-span", type=float, default=2.0,
-                        help="overhangs: ignore unsupported strips narrower than this (bridges over grooves), 0 = report all")
+                        help="overhangs: ignore unsupported strips narrower than this (bridges over grooves); "
+                             "thickness: ignore thin strips narrower than this (edges); 0 = report all")
     parser.add_argument("--min-area", type=float, default=None,
-                        help="smallest finding in mm2 (islands 0.05, ridges/inlays 0.1, overhangs 100)")
+                        help="smallest finding in mm2 (islands 0.05, ridges/inlays 0.1, overhangs 100, thickness 2)")
     parser.add_argument("--z", type=float, nargs="+", default=[0.4], help="ridges: section heights")
-    parser.add_argument("--min-width", type=float, default=None, help="ridges 1.1 mm, inlays 0.8 mm")
+    parser.add_argument("--min-width", type=float, default=None, help="ridges 1.1 mm, inlays 0.8 mm, thickness 1.2 mm")
+    parser.add_argument("--density", type=float, default=2.0, help="thickness: surface mm2 per sample point (2000-100000 points)")
     parser.add_argument("--ignore-area", type=float, default=5.0, help="ridges: skip components smaller than this (mm2)")
     args = parser.parse_args()
     names = args.names or (COLOR_PIECES if args.command == "inlays" else list(PARTS))
@@ -110,6 +161,10 @@ def main():
         elif args.command == "ridges":
             found = [dict(z_mm=z, **item) for z in args.z
                      for item in thin(solid.slice(z), args.min_width or 1.1, args.ignore_area, args.min_area or 0.1)]
+        elif args.command == "thickness":
+            stats, found = thickness(mesh, args.min_width or 1.2, args.density, args.min_area or 2.0, args.min_span)
+            print(f"{name}: wall thickness p01 {stats['p01']} / p05 {stats['p05']} / median {stats['median']} mm "
+                  f"({stats['measured']} of {stats['samples']} points)")
         else:
             z0 = float(mesh.bounds[0, 2])   # first layer of the inlay itself
             section = solid.slice(z0 + 0.1)
@@ -117,7 +172,7 @@ def main():
             found = thin(section, args.min_width or 0.8, 0, args.min_area or 0.1)
             print(f"{name}: {len(pieces)} bodies on its first layer (z {z0:.2f}), {section.area():.1f} mm2, "
                   f"smallest {min((p.area() for p in pieces), default=0):.2f} mm2")
-        report[name] = found
+        report[name] = dict(stats, regions=found) if args.command == "thickness" else found
         total += len(found)
         print(f"{args.command} {name}: {len(found)} found", flush=True)
         for item in found[:12]:

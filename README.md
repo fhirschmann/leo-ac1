@@ -95,6 +95,7 @@ python3 -m venv .venv
 .venv/bin/python -m pip install -r scripts/requirements.txt
 .venv/bin/python scripts/print_tools.py export     # export and check stl/, asm/, docs/verification.json
 .venv/bin/python scripts/analyze.py islands        # floating regions
+.venv/bin/python scripts/analyze.py thickness      # walls thinner than 1.2 mm
 .venv/bin/python scripts/slice_check.py            # Bambu Studio CLI, project 3MF
 .venv/bin/python scripts/build_viewer.py           # build/viewer.html
 .venv/bin/python scripts/render_views.py           # img/

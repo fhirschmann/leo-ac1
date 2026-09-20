@@ -28,6 +28,8 @@ import manifold3d as md
 import numpy as np
 import trimesh
 
+import holes
+
 
 def find_root():
     for base in (Path(__file__).resolve().parents[1], Path.cwd()):
@@ -56,6 +58,9 @@ ASM_DIR = ROOT / getattr(P, "ASM_DIR", "asm")
 REPORT = ROOT / getattr(P, "REPORT", "docs/verification.json")
 ENVELOPE = getattr(P, "PRINTER", {}).get("envelope_mm", (256, 256, 256))
 INLAY_MAX_DEPTH = getattr(P, "INLAY_MAX_DEPTH", 1.0)
+# round features of two bodies that share an axis within tolerance_mm are coaxial, up to near_miss_mm off axis a failure;
+# allowed: body pairs with intentional offsets (e.g. a shaft resting eccentrically in a larger bore)
+ALIGNMENT = dict(dict(tolerance_mm=0.2, near_miss_mm=2.0, allowed=()), **getattr(P, "ALIGNMENT", {}))
 OVERLAP_MM3 = 0.01
 
 
@@ -124,6 +129,9 @@ def export_one(job):
         raise ValueError(f"Invalid export {name}: {info}")
     info["backend"] = backend
     info["sha256"] = hashlib.sha256(path.read_bytes()).hexdigest()
+    if group == "assembly":
+        # evaluated tree before booleans: holes are still cylinders with a diameter (check_alignment)
+        scad(["-D", 'part="none"', "-o", str(folder / f"{name}.csg"), str(src)])
     if group == "print":
         qty, material, components = PARTS[name]
         assert info["components"] == components, (name, "Wrong body count", info)
@@ -193,21 +201,133 @@ def check_collisions(solids):
     return collisions
 
 
+def check_alignment():
+    """Round features (cylinders from the CSG dumps) of different bodies, one of them a hole, nearly sharing an axis."""
+    bodies = {name: holes.load(BUILD / "assembly" / f"{name}.csg") for name in ASSEMBLY}
+    result = holes.align(bodies, ALIGNMENT["tolerance_mm"], ALIGNMENT["near_miss_mm"], ALIGNMENT["allowed"])
+    save("alignment.json", dict(result, features=bodies))
+    assert not result["misaligned"], \
+        f"Round features off axis by {ALIGNMENT['tolerance_mm']}-{ALIGNMENT['near_miss_mm']} mm: {result['misaligned'][:5]}"
+    return result, bodies
+
+
 def union(solids, names):
     return md.Manifold.batch_boolean([solids[n] for n in names], md.OpType.Add)
 
 
+def solid(solids, names):
+    """One body by name or the union of a list of names."""
+    return solids[names] if isinstance(names, str) else union(solids, names)
+
+
+def names_list(names):
+    return [names] if isinstance(names, str) else list(names)
+
+
+def cylinder(start, axis, length, radius, segments=48):
+    """Manifold cylinder from `start` along any `axis` direction."""
+    axis = np.asarray(axis, float) / np.linalg.norm(axis)
+    helper = np.array([1.0, 0, 0]) if abs(axis[0]) < 0.9 else np.array([0, 1.0, 0])
+    u = np.cross(helper, axis)
+    u /= np.linalg.norm(u)
+    frame = np.column_stack([u, np.cross(axis, u), axis, np.asarray(start, float)])
+    return md.Manifold.cylinder(length, radius, radius, segments).transform(frame)
+
+
 def sweep(solids, moving, fixed, direction, length, step):
     """Move the union of `moving` along `direction` in steps; returns (colliding steps, first distance, max volume)."""
-    moving, fixed = union(solids, moving), union(solids, fixed)
+    moving, fixed = solid(solids, moving), solid(solids, fixed)
+    unit = np.asarray(direction, float) / np.linalg.norm(direction)
     maximum, first, count = 0, None, 0
     for distance in np.arange(0, length + step / 2, step):
-        volume = (moving.translate((np.array(direction) * distance).tolist()) ^ fixed).volume()
+        volume = (moving.translate((unit * distance).tolist()) ^ fixed).volume()
         if volume > OVERLAP_MM3:
             count += 1
             first = float(distance) if first is None else first
             maximum = max(maximum, volume)
     return count, first, maximum
+
+
+def contacts(solids, items, probe=0.05, min_mm3=0.1):
+    """(body, support, direction): moved `probe` mm towards its support, the body must intersect it (it rests, not floats)."""
+    rows = {}
+    for body, support, direction in items:
+        unit = np.asarray(direction, float) / np.linalg.norm(direction)
+        volume = (solid(solids, body).translate((unit * probe).tolist()) ^ solid(solids, support)).volume()
+        key = f"{body}@{support}"
+        key = key if key not in rows else f"{key}{list(np.round(unit, 3))}"
+        rows[key] = round(volume, 4)
+    failed = {key: volume for key, volume in rows.items() if volume <= min_mm3}
+    assert not failed, f"Bodies do not rest on their support ({probe} mm probe, volume <= {min_mm3} mm3): {failed}"
+    return rows
+
+
+def stops(solids, items, step=0.25):
+    """(name, moving, fixed, direction, limit): the moving bodies must hit the fixed ones within `limit` mm."""
+    rows = []
+    for name, moving, fixed, direction, limit in items:
+        _, first, _ = sweep(solids, names_list(moving), names_list(fixed), direction, limit, step)
+        rows.append(dict(name=name, first_contact_mm=first, limit_mm=limit))
+    failed = [row for row in rows if row["first_contact_mm"] is None]
+    assert not failed, f"No stop within the limit: {failed}"
+    return rows
+
+
+def paths(solids, items):
+    """(name, moving, fixed, direction, length, step) or (name, moving, fixed, [(direction, length, step), ...]):
+    the moving bodies travel the segments one after another without intersecting the fixed ones."""
+    rows = []
+    for name, moving, fixed, *spec in items:
+        segments = spec[0] if len(spec) == 1 else [tuple(spec)]
+        mover, still = solid(solids, moving), solid(solids, fixed)
+        offset, travelled, blocked, maximum = np.zeros(3), 0.0, [], 0.0
+        for direction, length, step in segments:
+            unit = np.asarray(direction, float) / np.linalg.norm(direction)
+            for distance in np.arange(0, length + step / 2, step):
+                volume = (mover.translate((offset + unit * distance).tolist()) ^ still).volume()
+                if volume > OVERLAP_MM3:
+                    blocked.append(round(travelled + float(distance), 3))
+                    maximum = max(maximum, volume)
+            offset, travelled = offset + unit * length, travelled + length
+        rows.append(dict(name=name, length_mm=travelled, collisions=len(blocked),
+                         first_mm=blocked[0] if blocked else None, max_volume_mm3=round(maximum, 4)))
+    failed = [row for row in rows if row["collisions"]]
+    assert not failed, f"Assembly path obstructed: {failed}"
+    return rows
+
+
+def insert_probes(solids, items):
+    """(body, entry, axis, depth, hole_d, wall[, floor]): pocket from `entry` along `axis` into the material -
+    core open, the datasheet wall around it and (unless floor=False) a ring below the pocket floor are material."""
+    rows = []
+    for body, entry, axis, depth, hole, wall, *floor in items:
+        target, axis, entry = solids[body], np.asarray(axis, float) / np.linalg.norm(axis), np.asarray(entry, float)
+        start, length = entry + axis * 0.2, depth - 0.5
+        core = cylinder(start, axis, length, 0.375 * hole)
+        ring = cylinder(start, axis, length, hole / 2 + wall) - cylinder(start, axis, length, hole / 2 + 0.3)
+        row = dict(body=body, at=entry.round(2).tolist(), empty_mm3=round((core ^ target).volume(), 4),
+                   ring_fill=round((ring ^ target).volume() / ring.volume(), 3))
+        if not floor or floor[0]:
+            # a ring, not a disc: screws may pass through the pocket floor
+            base = entry + axis * (depth + 0.2)
+            bottom = cylinder(base, axis, 0.4, hole / 2 + wall) - cylinder(base, axis, 0.4, 0.45 * hole)
+            row["floor_fill"] = round((bottom ^ target).volume() / bottom.volume(), 3)
+        rows.append(row)
+    failed = [row for row in rows if row["empty_mm3"] >= 0.01 or row["ring_fill"] <= 0.95 or row.get("floor_fill", 1) <= 0.95]
+    assert not failed, f"Insert pocket closed, without wall or without floor: {failed}"
+    return rows
+
+
+def clearances(solids, items):
+    """(a, b, min_mm): the smallest distance between the bodies (names or name lists) is at least min_mm."""
+    rows = []
+    for a, b, minimum in items:
+        search = minimum + 1.0
+        gap = solid(solids, a).min_gap(solid(solids, b), search)
+        rows.append(dict(a=a, b=b, gap_mm=round(gap, 3), min_mm=minimum, capped=gap >= search))
+    failed = [row for row in rows if row["gap_mm"] < row["min_mm"] - 1e-6]
+    assert not failed, f"Clearance too small: {failed}"
+    return rows
 
 
 def check_color_parts():
@@ -303,9 +423,13 @@ def main():
     solids = {n: manifold(mesh) for n, mesh in meshes.items()}
     metrics = get_metrics()
     collisions = check_collisions(solids)
-    ctx = SimpleNamespace(root=ROOT, build=BUILD, metrics=metrics, meshes=meshes, solids=solids,
-                          save=save, manifold=manifold, union=lambda names: union(solids, names),
-                          sweep=lambda *a: sweep(solids, *a), summary=[], open_items=[])
+    alignment, features = check_alignment()
+    bound = lambda function: lambda *args, **kwargs: function(solids, *args, **kwargs)
+    ctx = SimpleNamespace(root=ROOT, build=BUILD, metrics=metrics, meshes=meshes, solids=solids, holes=features,
+                          save=save, manifold=manifold, union=lambda names: union(solids, names), cylinder=cylinder,
+                          sweep=bound(sweep), contacts=bound(contacts), stops=bound(stops), paths=bound(paths),
+                          insert_probes=bound(insert_probes), clearances=bound(clearances),
+                          summary=[f"{sum(alignment['coaxial_pairs'].values())} coaxial feature pairs"], open_items=[])
     project = P.checks(ctx) if hasattr(P, "checks") else {}
     colors = check_color_parts()
     if args.command == "export":
@@ -322,6 +446,7 @@ def main():
                   print_parts=len(PARTS), print_quantity=sum(q for q, _, _ in PARTS.values()),
                   print_meshes=results["print"], color_meshes=results["color"], color_parts=colors,
                   assembly_bodies=len(solids), assembly_pairs=pairs, metrics=metrics, intersections=collisions,
+                  alignment=alignment,
                   **project, stl_difference_mm3=consistency, open_measurements=ctx.open_items,
                   limitations=getattr(P, "LIMITATIONS", ["Hardware envelopes, not detailed vendor CAD",
                                                          "Sampled motion, no continuous swept-volume proof",

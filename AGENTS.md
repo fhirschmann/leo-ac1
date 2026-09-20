@@ -5,7 +5,7 @@ Internal notes for coding agents (Claude, Codex). The README is public and stays
 ## Working rules
 
 - Talk to the user in German. README, AGENTS.md, code comments, viewer labels, slicer plate/material names and check messages are English.
-- The project follows the skill `openscad-print-project` (`~/.claude/skills/openscad-print-project`). After every model change run the full loop: `print_tools.py export` → `analyze.py islands/overhangs/inlays` → `slice_check.py` → update README numbers → `build_viewer.py` and republish the viewer artifact → commit.
+- The project follows the skill `openscad-print-project` (`~/.claude/skills/openscad-print-project`). After every model change run the full loop: `print_tools.py export` → `analyze.py islands/overhangs/inlays/thickness` → `slice_check.py` → update README numbers → `build_viewer.py` and republish the viewer artifact → commit.
 - `scripts/` must stay identical to the skill (`python3 ~/.claude/skills/openscad-print-project/scripts/skill_sync.py status -C .`). Improve tools in the skill and adopt/install them; no project-local forks.
 - No painted or scripted local supports. Design geometry so every part prints without supports (45° flanks, short ledges); the user relies on Bambu Studio's own supports if ever needed.
 - Viewer artifact (republish from `build/viewer.html`, keep the URL): a private Claude viewer artifact
@@ -59,7 +59,8 @@ Internal notes for coding agents (Claude, Codex). The README is public and stays
 
 ## Verification and known limits
 
-- `print_tools.py export` checks meshes, bed placement, 210 assembly pairs, contacts, stops, 12 removal paths, 23 insert probes, screw engagement, colour pieces and project checks in `print_project.py` (knob, handle, feet, dedication line gaps). Reports: `docs/verification.json`, `docs/slicer-summary.json`.
+- `print_tools.py export` checks meshes, bed placement, 210 assembly pairs, alignment of round features from the CSG dumps (201 coaxial pairs, none 0.2–2 mm off axis), contacts, stops, clearances (knob ≥ 0.4 running clearance, charge module ≥ 5 mm from the fan), 12 removal paths, 23 insert probes, screw engagement, colour pieces and project checks in `print_project.py` (knob, handle, feet, dedication line gaps). Reports: `docs/verification.json`, `docs/slicer-summary.json`.
+- `analyze.py thickness` finds three walls under 1.2 mm, all from the design: the 1.0 mm clamped ring at the pot (body, right wall), the 0.8 mm skin in front of the LED, and the 45° flanks of the switch well in the back cover (1.5 mm vertical = 1.06 mm across the flank). The switch-well flanks are thinner than intended; not yet decided with the user.
 - Bought parts are envelopes; no strength, airflow, thermal or physical fit validation. Nothing has been printed.
 - Accepted small overhangs: groove ends, screw-head pocket rings, knob flutes, connector openings, switch-floor ledge.
 - Freshly exported CGAL STLs (body, cover) are not byte-identical to committed ones; compare geometry, re-slice after export.
