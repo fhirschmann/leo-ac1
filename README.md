@@ -1,6 +1,6 @@
 # LEO-AC1 — a fan that looks like an air conditioner
 
-### ▶ [Open the interactive 3D viewer](https://hirschmann.blog/leo-ac1/)
+[![Open the interactive 3D viewer](img/viewer_button.svg?v=439a39590538)](https://hirschmann.blog/leo-ac1/)
 
 Every part in the browser — exploded view, section plane, the bail in its carrying position and the removal paths.
 
