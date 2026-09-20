@@ -4,19 +4,19 @@ Small battery fan for a child's room, styled like the outdoor unit of a split ai
 
 Designed for a Bambu Lab H2S with AMS in Bambu PETG HF white and grey plus TPU. **Status:** first parts printed; USB-C socket fit confirmed. Remaining fit and functional checks are pending.
 
-![Assembly](img/01_assembly.png?v=b706ec788fbf)
+![Assembly](img/01_assembly.png?v=29237d0a9efc)
 
 | Back | Exploded |
 |:---:|:---:|
-| ![Back](img/02_back.png?v=452b3cb142c6) | ![Exploded](img/03_exploded.png?v=f9fd393acd4b) |
+| ![Back](img/02_back.png?v=6e9ee6d9588b) | ![Exploded](img/03_exploded.png?v=7d1d6e07e766) |
 | **Logo and grooves** | **Air duct from behind** |
 | ![Logo](img/04_front_right.png?v=951aa9a35efe) | ![Air duct](img/05_duct.png?v=07dbbbd7671f) |
 | **Knob and service cover** | **Underside with M5 thread and TPU feet** |
-| ![Knob](img/06_knob.png?v=84b59c1ebfec) | ![Underside](img/07_underside.png?v=d24e83e607be) |
+| ![Knob](img/06_knob.png?v=8d9d053216db) | ![Underside](img/07_underside.png?v=c329c541d937) |
 | **Charge module in the air stream** | **LED pocket behind the O** |
 | ![Charge module](img/08_charge_module.png?v=2ef05f89a581) | ![LED pocket](img/09_led.png?v=e16ed4530b5b) |
 | **Folding bail, carrying position** | **Back cover bosses** |
-| ![Folding bail](img/11_bail.png?v=3881b6c601b1) | ![Back cover bosses](img/12_back_bosses.png?v=2ef1b2dddcc2) |
+| ![Folding bail](img/11_bail.png?v=e508d3a0daa6) | ![Back cover bosses](img/12_back_bosses.png?v=17657335b803) |
 | **TPU foot mount** | **USB-C socket** |
 | ![TPU foot mount](img/13_foot_mount.png?v=6cbfac0ba65b) | ![USB-C socket](img/14_usb_c.png?v=a320c0740188) |
 | **Power switch well** | **Battery saddles** |

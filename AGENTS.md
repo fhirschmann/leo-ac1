@@ -11,7 +11,7 @@ Internal notes for coding agents (Claude, Codex). The README is public and stays
 - Viewer artifact (republish from `build/viewer.html`, keep the URL): a private Claude viewer artifact
 - README images (`img/`, `VIEWS`) are public: transparent renders for dark pages, every body coloured, no image of the dedication (`body(dedication = false)` in views that see the inside of the front plate). Two-column image table in the README.
 - After rendering README images, set each image link's `?v=` query to the first 12 hex digits of that PNG's SHA-256. Forgejo's branch image URLs can retain older cached PNGs even after a page reload.
-- Commits: English message, one change per commit, ending with the co-author line.
+- Commits: English message, one change per commit, ending with the co-author line; push to Forgejo right after every commit (user), no force push without an explicit request.
 - Forgejo remote: `the user's private Forgejo remote`.
 
 ## User constraints and preferences

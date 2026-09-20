@@ -640,7 +640,11 @@ module body(dedication = true) difference() {   // dedication = false for public
             translate([-1, bail_ramp_y(), body_h + 1]) cube([bail_band + 1, 0.2, 1]);
         }
         cyl_x([bail_y, bail_z], bail_band - eps, bail_band + m4_insert[1] + 1, m4_insert[0] / 2);
-        bail_step_chamfers(bail_y, top = false);
+        // side face edge of the whole step outline (ramp, arc round the eye, floor) chamfered as one hull
+        hull() {
+            along_x(-1, -1 + tip) bail_step_profile_2d(bail_c + 1);
+            along_x(bail_c, bail_c + tip) bail_step_profile_2d(0);
+        }
         // top edges of the step (ramp and inner wall) chamfered as one hull, so both chamfers meet in a clean corner:
         // a slab of the step outline 1 mm below the top face and one grown by 2 mm 1 mm above it
         let (k = -cos(bail_carry) / sin(bail_carry), y1 = bail_ramp_y() + k, c = bail_c) hull() {
@@ -942,6 +946,12 @@ module pwm_board_env() {             // board on the rib pads: parts above, sold
 // upper legs rest on the step ramps. Swing it up before removing the back cover.
 module bail_sides() { children(); translate([body_w, 0, 0]) mirror([1, 0, 0]) children(); }
 // 45 degree chamfers along a left side step from y0 to the back: top edge of the inner wall, side face to step floor
+// outline of a side step in (y, z): arc round the eye, ramp, floor to the back; grow = outward offset
+module bail_step_profile_2d(grow = 0) offset(delta = grow) hull() {
+    translate([bail_y, bail_z]) circle(r = bail_arm[1] / 2 + bail_cl);
+    translate([bail_ramp_y(), body_h + 1]) square([0.2, 1]);
+    translate([bail_y, bail_floor]) square([body_d + 2 - bail_y, bail_arm[1] + 1]);
+}
 module bail_step_chamfers(y0, top = true) {
     if (top) along_y(y0, body_d + 1) polygon([[bail_band - 1, body_h - bail_c - 1], [bail_band + bail_c + 1, body_h + 1], [bail_band - 1, body_h + 1]]);
     along_y(max(y0, bail_y), body_d + 1) polygon([[-1, bail_floor - bail_c - 1], [bail_c + 1, bail_floor + 1], [-1, bail_floor + 1]]);
