@@ -63,6 +63,7 @@ Internal notes for coding agents (Claude, Codex). The README is public and stays
 - Bail: pinch check of the 0.5 mm gaps between arm, step wall and back cover on the print. M4 inserts: the user uses Ruthex everywhere (2026-09-17), the leoino hole Ø 5.6 × 8.1 works with them.
 - Wiring: stow the 400 mm fan cable, keep wires out of the fan, saddles and back lip; leave slack at the back-cover modules.
 - The PWM controller draws 0.00 W when switched off (user, 2026-09-17; where it was measured is not stated). Still open: idle draw of the charge/boost module itself, which decides the switch position (battery line: no drain, but charging only with the switch on; O+: charging while off, but the boost converter idles). Check charge-module temperature in the closed housing, also charging with the fan off.
+- Unverified README claims: charging while running, 2.6 V cutoff and R3 = 2.4 kΩ for 0.5 A of the charge module (no board documentation saved), the 10 h / 20 h runtimes (estimates without measured losses). Not yet tested at all: drop and pinch safety, airflow, bushing retention and axial play on the print.
 - Air duct vs. real fan frame: the duct check uses the fan envelope; the real Noctua frame has chamfers, some back-flow is possible (a foam ring could help).
 
 ## Verification and known limits
