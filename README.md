@@ -6,13 +6,21 @@ Designed for a Bambu Lab H2S in PETG Basic white and grey plus TPU. **Status:** 
 
 ![Assembly](img/01_assembly.png)
 
-| Back | Exploded | Logo and grooves | Air duct from behind | Knob and service cover | Underside with M5 thread and TPU feet | Charge module in the air stream | LED pocket behind the O |
-|---|---|---|---|---|---|---|---|
-| ![Back](img/02_back.png) | ![Exploded](img/03_exploded.png) | ![Logo](img/04_front_right.png) | ![Air duct](img/05_duct.png) | ![Knob](img/06_knob.png) | ![Underside](img/07_underside.png) | ![Charge module](img/08_charge_module.png) | ![LED pocket](img/09_led.png) |
-
-| Dedication inside the front | Handle mount | Back cover bosses | TPU foot mount | USB-C socket | Power switch well | Battery saddles |
-|---|---|---|---|---|---|---|
-| ![Dedication](img/10_dedication.png) | ![Handle mount](img/11_handle_mount.png) | ![Back cover bosses](img/12_back_bosses.png) | ![TPU foot mount](img/13_foot_mount.png) | ![USB-C socket](img/14_usb_c.png) | ![Power switch](img/15_switch.png) | ![Battery saddles](img/16_saddles.png) |
+| Back | Exploded |
+|:---:|:---:|
+| ![Back](img/02_back.png) | ![Exploded](img/03_exploded.png) |
+| **Logo and grooves** | **Air duct from behind** |
+| ![Logo](img/04_front_right.png) | ![Air duct](img/05_duct.png) |
+| **Knob and service cover** | **Underside with M5 thread and TPU feet** |
+| ![Knob](img/06_knob.png) | ![Underside](img/07_underside.png) |
+| **Charge module in the air stream** | **LED pocket behind the O** |
+| ![Charge module](img/08_charge_module.png) | ![LED pocket](img/09_led.png) |
+| **Handle mount** | **Back cover bosses** |
+| ![Handle mount](img/11_handle_mount.png) | ![Back cover bosses](img/12_back_bosses.png) |
+| **TPU foot mount** | **USB-C socket** |
+| ![TPU foot mount](img/13_foot_mount.png) | ![USB-C socket](img/14_usb_c.png) |
+| **Power switch well** | **Battery saddles** |
+| ![Power switch](img/15_switch.png) | ![Battery saddles](img/16_saddles.png) |
 
 ## Printed parts
 
@@ -29,6 +37,19 @@ Designed for a Bambu Lab H2S in PETG Basic white and grey plus TPU. **Status:** 
 All parts are in the Bambu Studio project [`stl/leo_ac1_all_parts.3mf`](stl/leo_ac1_all_parts.3mf): plate 1 housing, plate 2 back cover, plate 3 grey parts (grille, service cover, handle, knob), plate 4 TPU feet. Filaments: 1 PETG white, 2 PETG grey, 3 grey for logo and dedication (same spool as 2), 4 TPU, 5 white for the knob pointer (same spool as 1). All parts print without supports. Bambu Studio estimates about **0.71 kg and 21 hours** in total. Single-colour STLs are in `stl/`, the colour pieces in `stl/multicolour/`.
 
 Print profile: 0.20 mm layers, 6 walls, 5 top/bottom layers, 30 % gyroid (feet 100 %).
+
+### Fit tests before the full print
+
+Small slices of the real housing and back cover, in the same print orientation, so the bought parts can be tried before the 21-hour print. Print them in PETG white together with one knob and one TPU foot; they are not in the project 3MF, import the STLs onto one plate. The six slices take about 38 g and 3.5 hours.
+
+| STL | Slice of | Check with |
+|---|---|---|
+| `stl/test_pot.stl` | right wall with potentiometer bore, counterbore and service cover groove | PWM controller: thread through the wall, washer and nut in the counterbore, wrench room; then the knob on the shaft |
+| `stl/test_usbc.stl` | USB-C channel in the back cover | USB-C module with soldered wires slides in, receptacle flush, a cable plugs in fully |
+| `stl/test_switch.stl` | switch well in the back cover | rocker switch snaps in and holds, rocker stays below the back face |
+| `stl/test_ring.stl` | lowest battery ring, housing half and back cover half | battery with its protection board slides through both halves |
+| `stl/test_foot.stl` | foot pocket with M3 insert hole | insert presses in straight, foot fits the pocket, M3 × 8 holds |
+| `stl/test_mount.stl` | M5 mount insert in the underside | M5 insert presses in straight, tripod screw holds |
 
 ## Bought parts
 
@@ -49,7 +70,10 @@ Print profile: 0.20 mm layers, 6 walls, 5 top/bottom layers, 30 % gyroid (feet 1
 | M3 × 30, ISO 7380 Torx | 4 | – | fan |
 | M3 × 8, ISO 7380 Torx | 10 | – | back cover (6), feet (4) |
 | Double-sided, heat-resistant tape, ≤ 1.1 mm | – | – | charge module, e.g. 3M VHB; no hot glue |
-| 2K epoxy or CA gel | – | – | service cover |
+| 2K epoxy or CA gel | – | – | service cover, LED |
+| JST-PH 2.0 cable, 2-pin, mating the battery plug | 1 | – | battery to the switch and B+ / B− |
+| Silicone wire 24 AWG, red and black | about 1 m | – | USB-C module, switch, LED, 12 V to the PWM controller |
+| Heat-shrink tubing 2–3 mm | – | – | every solder joint |
 
 ## Wiring
 
@@ -98,5 +122,9 @@ python3 -m venv .venv
 .venv/bin/python scripts/analyze.py thickness      # walls thinner than 1.2 mm
 .venv/bin/python scripts/slice_check.py            # Bambu Studio CLI, project 3MF
 .venv/bin/python scripts/build_viewer.py           # build/viewer.html
-.venv/bin/python scripts/render_views.py           # img/
+.venv/bin/python scripts/render_views.py           # img/, transparent PNGs (needs Pillow or ffmpeg)
 ```
+
+## Licence
+
+Model, printable files, images and documentation: [CC BY-NC-SA 4.0](LICENSE). Scripts in `scripts/`: [MIT](LICENSE-MIT).
