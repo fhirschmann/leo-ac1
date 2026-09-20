@@ -6,11 +6,11 @@
       "quantity": 1,
       "material": "PETG-white",
       "passed": true,
-      "source_sha256": "10734674e61052f3e7cb030289660b31ab2428e51e677f9e28c4f3c6d1c4b186",
+      "source_sha256": "7bf76b1b933afa24d4f3a1878756329b97791f8bcd2819daa517f7f3317fb22e",
       "exit_code": 0,
       "result_code": 0,
       "warnings": "",
-      "hours": 9.341,
+      "hours": 9.345,
       "grams": 391.769,
       "wall_loops": 5,
       "infill_percent": 15.0,
@@ -52,7 +52,7 @@
       "quantity": 1,
       "material": "PETG-grey",
       "passed": true,
-      "source_sha256": "1bc2577eac6c09f8e376b905a114ea35d1b78e23641766afcc76a825835e2341",
+      "source_sha256": "9e2d3cb5220fa04d8034ea52f2443fe83f97abc3d2eab9b2afd6254270716f90",
       "exit_code": 0,
       "result_code": 0,
       "warnings": "",
@@ -163,6 +163,29 @@
       "start_gcode_diagnostic": true
     },
     {
+      "part": "tie_clip",
+      "quantity": 6,
+      "material": "PETG-grey",
+      "passed": true,
+      "source_sha256": "59d2e5f6d075bfa7852785f8f23fd586ad100bc4622710a748a746ca3a8efa7b",
+      "exit_code": 0,
+      "result_code": 0,
+      "warnings": "",
+      "hours": 0.137,
+      "grams": 0.458,
+      "wall_loops": 5,
+      "infill_percent": 15.0,
+      "layer_height": 0.20000000298023224,
+      "effective_settings": {
+        "sparse_infill_pattern": "gyroid",
+        "enable_support": "0",
+        "curr_bed_type": "Textured PEI Plate",
+        "top_shell_layers": "4",
+        "bottom_shell_layers": "4"
+      },
+      "start_gcode_diagnostic": true
+    },
+    {
       "part": "test_right",
       "quantity": 0,
       "material": "PETG-white",
@@ -209,13 +232,13 @@
       "start_gcode_diagnostic": true
     }
   ],
-  "total_parts": 8,
-  "total_grams_individual_plates": 625.1,
-  "total_hours_individual_plates": 18.1,
+  "total_parts": 14,
+  "total_grams_individual_plates": 627.8,
+  "total_hours_individual_plates": 18.9,
   "production_gcode": false,
   "project_3mf": {
     "file": "stl/leo_ac1_all_parts.3mf",
-    "parts": 8,
+    "parts": 14,
     "plates": 4,
     "layout": [
       {
@@ -255,11 +278,17 @@
           "bail",
           "chg_holder",
           "cover",
-          "knob"
+          "knob",
+          "tie_clip",
+          "tie_clip",
+          "tie_clip",
+          "tie_clip",
+          "tie_clip",
+          "tie_clip"
         ],
         "size_mm": [
           234.0,
-          93.9
+          106.9
         ],
         "prime_tower_xy": [
           262.0,
@@ -279,8 +308,8 @@
         ]
       }
     ],
-    "total_hours_plates": 18.4,
-    "total_grams_plates": 633.6,
+    "total_hours_plates": 18.5,
+    "total_grams_plates": 636.0,
     "multicolour_parts": {
       "body": [
         "label",
@@ -315,9 +344,9 @@
       },
       "Grey parts": {
         "plate": 3,
-        "hours": 2.15,
+        "hours": 2.25,
         "grams_by_filament": {
-          "2": 62.15,
+          "2": 64.53,
           "5": 0.94
         },
         "warnings": ""
@@ -345,9 +374,9 @@
       },
       "Grey parts": {
         "plate": 3,
-        "hours": 2.15,
+        "hours": 2.25,
         "grams_by_filament": {
-          "2": 62.15,
+          "2": 64.53,
           "5": 0.94
         },
         "warnings": ""
@@ -362,7 +391,7 @@
       }
     },
     "own_infill_parts": 2,
-    "sha256": "cb7e55eb123bd99c909cf045be484677c63333a6116882b784fb41ea8c4ef181"
+    "sha256": "9231b1f4d1d07f9bab3a713e50e8dec39b2966a03383e7bf5cd7f252955a17f5"
   },
   "test_3mf": {
     "file": "stl/leo_ac1_fit_tests.3mf",
@@ -403,7 +432,7 @@
     "plate_slices": {
       "Right section fit test": {
         "plate": 1,
-        "hours": 2.39,
+        "hours": 2.38,
         "grams_by_filament": {
           "1": 88.64
         },
@@ -411,7 +440,7 @@
       }
     },
     "own_infill_parts": 0,
-    "sha256": "0a6cac9215bd72646fdbb9ce4018ff939e477de8651b05ddad985a588815a909",
+    "sha256": "b49807b46a7b1243d0234c97af3a1ec8b0b62627c3c0d7e7eee606b0ab1ec2f5",
     "process": {
       "wall_loops": 2,
       "top_shell_layers": 3,

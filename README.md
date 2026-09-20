@@ -32,9 +32,10 @@ Designed for a Bambu Lab H2S with AMS in Bambu PETG HF white and grey plus TPU. 
 | `knob` speed knob | 1 | PETG grey + white (pointer) | Ø 28 × 15.5 | top on the bed, pointer as inlay in the first 0.6 mm |
 | `bail` folding bail | 1 | PETG grey | 234 × 44.5 × 53.5 | back faces of the lower legs and the grip on the bed, upper legs upright |
 | `foot` foot | 2 | TPU | 16 × 52 × 5.5 | ground face on the bed, 100 % infill |
+| `tie_clip` cable tie clip | 6 | PETG grey | 14 × 11 × 5 | pad face on the bed; loose clips, glued into the housing wherever the wiring needs them, tunnel for ties up to 3.6 × 1.6 mm |
 | `chg_holder` charge module holder | 1 | PETG grey | 30 × 17.4 × 18.7 | socket rims on the bed; its two sockets enclose the two pads on the partition and are glued over them, it grips only the cool OUT end of the charge module: L-shaped end stop, two snap hooks and a cable tie through its web |
 
-All parts are in the Bambu Studio project [`stl/leo_ac1_all_parts.3mf`](stl/leo_ac1_all_parts.3mf): plate 1 housing, plate 2 back cover, plate 3 grey parts (service cover, bail, knob, charge module holder), plate 4 TPU feet. Filaments: 1 PETG white, 2 PETG grey, 3 grey for logo, dedication, fan grille and QR code (same spool as 2), 4 TPU, 5 white for the knob pointer (same spool as 1). All parts print without supports. Bambu Studio estimates about **0.63 kg and 18 hours** in total. Single-colour STLs are in `stl/`, the colour pieces in `stl/multicolour/`.
+All parts are in the Bambu Studio project [`stl/leo_ac1_all_parts.3mf`](stl/leo_ac1_all_parts.3mf): plate 1 housing, plate 2 back cover, plate 3 grey parts (service cover, bail, knob, charge module holder, six cable tie clips), plate 4 TPU feet. Filaments: 1 PETG white, 2 PETG grey, 3 grey for logo, dedication, fan grille and QR code (same spool as 2), 4 TPU, 5 white for the knob pointer (same spool as 1). All parts print without supports. Bambu Studio estimates about **0.64 kg and 19 hours** in total. Single-colour STLs are in `stl/`, the colour pieces in `stl/multicolour/`.
 
 Print profile: 0.20 mm layers, 5 walls, 4 top/bottom layers, 15 % gyroid (feet 100 %).
 
@@ -65,7 +66,7 @@ Check with the real parts: the PWM controller lies flat on its pads, the potenti
 | M3 × 8, ISO 7380 Torx | 10 | – | back cover (6), feet (4) |
 | 2K epoxy or CA gel | – | – | service cover, LED, charge module holder (CA gel) |
 | JST-PH 2.0 cable, 2-pin, mating the battery plug | 1 | – | battery to the switch and B+ / B− |
-| Small cable ties, 2.5–3.6 mm wide | 3 | – | strain relief for the USB-C and switch wires on the inside of the back cover; one 2.5 mm tie (at most 1.2 mm thick) holds the charge module in its holder |
+| Small cable ties, 2.5–3.6 mm wide | 9 | – | strain relief for the USB-C and switch wires on the inside of the back cover; one 2.5 mm tie (at most 1.2 mm thick) holds the charge module in its holder; six more for the glue-in clips |
 | Silicone wire 24 AWG, red and black | about 1 m | – | USB-C module, switch, LED, 12 V to the PWM controller |
 | Heat-shrink tubing 2–3 mm | – | – | every solder joint |
 | M4 shoulder screw, head Ø 8.8 × 3 mm, shoulder Ø 5 × 12 mm, thread 8 mm | 2 | – | bail pivots; the shoulder bottoms on the face of the brass insert, so press those two inserts in flush |

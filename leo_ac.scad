@@ -182,6 +182,13 @@ chg_tie = [2.5, 1.2, 0.3, 12.5, 2];   // cable tie round board and web just abov
                                // tunnel clearance, centre from the OUT end (over the ends of inductor and diode, no MLCC under it), web skin in front of the tunnel
 fan_side_shift = 13.5;         // the glued holder stays in the fan's way out: unscrewed fan 1 mm back off the duct ring, this far left (13-14 fit), then out the back
 
+/* [Glue-in cable tie clips: loose parts for the wiring inside the housing (user)] */
+tie_clip_base = [14, 11, 1.6];   // glue pad: length (tie direction), width, thickness
+tie_clip_slot = [4, 1.8];        // tunnel for a cable tie up to 3.6 x 1.6: clear width, height above the pad
+tie_clip_wall = 1.6;             // side walls and roof of the bridge
+tie_clip_bridge = 6;             // bridge length along the pad, glue wings left free at both ends
+tie_clip_c = 0.6;                // chamfers, no sharp edges (toy)
+
 /* [Folding bail on top, like the leoino case: steps along both top side edges over the full depth, pivots at mid-depth] */
 bail_arm = [15, 12];        // legs: width (x; leoino 11, 3 mm wider outwards for the sunk screw heads, 1 mm for the 12 mm shoulder, user), thickness = eye diameter; the upper legs lie in the side steps
 bail_bar = 13;              // grip bar height when folded (as thick as the legs)
@@ -1084,6 +1091,25 @@ module pwm_board_env() {             // board on the rib pads: parts above, sold
     }
 }
 
+// ---------- glue-in cable tie clips (loose parts, glued into the housing with CA gel) ----------
+// pad face on the bed, bridge over it: the tie runs along the pad under the bridge, its roof is a 4 mm bridge in print
+module tie_clip() let (b = tie_clip_base, sl = tie_clip_slot, w = tie_clip_wall, c = tie_clip_c,
+                       hb = sl[0] + 2 * w, hh = b[2] + sl[1] + w) {
+    difference() {
+        union() {
+            hull() {   // pad with chamfered top edges
+                linear_extrude(b[2] - c) rrect([b[0], b[1]], 2);
+                translate([0, 0, b[2] - eps]) linear_extrude(eps) rrect([b[0] - 2 * c, b[1] - 2 * c], 2);
+            }
+            hull() {   // bridge across the pad
+                translate([0, 0, b[2] - eps]) linear_extrude(hh - b[2] - c + eps) rrect([tie_clip_bridge, hb], 1);
+                translate([0, 0, hh - eps]) linear_extrude(eps) rrect([tie_clip_bridge - 2 * c, hb - 2 * c], 1);
+            }
+        }
+        translate([0, 0, b[2]]) linear_extrude(sl[1]) square([tie_clip_bridge + 2, sl[0]], center = true);   // tie tunnel
+    }
+}
+
 // ---------- folding bail (concept of the leoino case) ----------
 // L-shaped U bail: its upper legs lie in the side steps and turn on sleeves at mid-depth, the lower legs run down behind the back
 // cover to the grip bar below the power switch. Folded = angle 0; carried at bail_carry, where the bar is above the pivot and the
@@ -1287,5 +1313,6 @@ else if (part == "knob_base") knob_piece("base");
 else if (part == "knob_pointer") knob_piece("pointer");
 else if (part == "foot") foot_print_pose() foot();
 else if (part == "chg_holder") chg_holder_print_pose() chg_holder();
+else if (part == "tie_clip") tie_clip();
 else if (part == "test_right") test_right();
 else if (part == "test_right_back") test_right_back();

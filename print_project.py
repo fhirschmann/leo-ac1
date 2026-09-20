@@ -18,6 +18,7 @@ PARTS = {
     "knob": (1, "PETG-grey", 1),
     "foot": (2, "TPU", 1),
     "chg_holder": (1, "PETG-grey", 1),   # charge module holder, taped onto the pads of the already printed housing
+    "tie_clip": (6, "PETG-grey", 1),     # loose glue-in cable tie clips for the wiring (user)
     # fit test: right section of housing and back cover, cut from the real parts
     "test_right": (0, "PETG-white", 1),
     "test_right_back": (0, "PETG-white", 1),
@@ -72,7 +73,7 @@ FILAMENTS = [dict(material="PETG-white", profile="Bambu PETG HF @BBL H2S", colou
              dict(material="PETG-grey", profile="Bambu PETG HF @BBL H2S", inlay=("label", "dedication", "grille", "qr"), colour="#8E9294"),
              dict(material="TPU", profile="Generic TPU @BBL H2S", colour="#222326"),
              dict(material="PETG-white", profile="Bambu PETG HF @BBL H2S", inlay=("pointer",), colour="#FFFFFF")]
-PLATES = [("Housing", ["body"]), ("Back cover", ["back"]), ("Grey parts", ["cover", "bail", "knob", "chg_holder"]), ("TPU feet", ["foot"])]
+PLATES = [("Housing", ["body"]), ("Back cover", ["back"]), ("Grey parts", ["cover", "bail", "knob", "chg_holder", "tie_clip"]), ("TPU feet", ["foot"])]
 CENTRE_PLATES = ("Housing", "Back cover")   # housing and back cover in the middle of the bed (user), prime tower behind them
 PROJECT_3MF = "stl/leo_ac1_all_parts.3mf"
 # fit test before the full build: right section of housing and back cover with a knob, as little material as possible
