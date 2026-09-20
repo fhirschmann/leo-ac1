@@ -157,7 +157,7 @@ chg_ledge = [2, 0.3];          // ledge under the lower board edge: height, set 
 /* [Folding bail on top, like the leoino case: steps along both top side edges over the full depth, pivots at mid-depth] */
 bail_arm = [14, 12];        // legs: width (x; leoino 11, 3 mm wider outwards so the screw heads sink into the arms, user), thickness = eye diameter; the upper legs lie in the side steps
 bail_bar = 13;              // grip bar height when folded (as thick as the legs)
-bail_drop = 125;            // folded: centre height of the grip bar behind the back cover, above the power switch (user: L bail, grip not too low)
+bail_drop = 108;            // folded: centre height of the grip bar, sunk into the back cover (user: lower grip keeps the hand room of the sunk L bail)
 bail_cl = 0.5;              // clearance of the bail in the steps and behind the back cover
 bail_y = body_d / 2;        // pivot axis at mid-depth: the fan hangs level (user)
 bail_screw = [8.8, 3, 5, 11, 8];   // M4 shoulder screw (user): head diameter, head height, shoulder diameter, shoulder length, thread length
@@ -319,13 +319,17 @@ bail_z = body_h - bail_arm[1] / 2;                     // pivot axis height
 bail_floor = body_h - bail_arm[1];                     // floor of the side steps
 bail_x = [(bail_band - bail_arm[0]) / 2, (bail_band + bail_arm[0]) / 2];   // left arm: outer and inner face (right arm mirrored)
 bail_eye_x = [bail_x[1] - bail_eye_w, bail_x[1]];   // eye faces; the shoulder screw head sits in the cut-back outer part of the arm
-bail_leg_y = [body_d + bail_cl, body_d + bail_cl + bail_arm[1]];     // folded: lower legs and bar behind the back cover
+bail_leg_y = [body_d - bail_cl - bail_arm[1], body_d - bail_cl];     // folded: lower legs and bar sunk into the back cover, 0.5 mm below its face (user)
+bail_lx0 = wall + bail_cl;                                         // outer face of the lower legs: the recess keeps a side wall
+bail_rec_y = bail_leg_y[0] - bail_cl;                              // front face of the recess for the lower legs and the bar
+bail_rec_x = [wall, bail_x[1] + bail_cl];                          // recess for the left lower leg (right one mirrored)
 bail_bar_z = [bail_drop - bail_bar / 2, bail_drop + bail_bar / 2];
+bail_rec_z = [bail_bar_z[0] - bail_cl, bail_bar_z[1] + bail_cl];   // recess for the bar
 bail_reach = [bail_leg_y[0] + bail_arm[1] / 2 - bail_y, bail_z - bail_drop];   // pivot to bar centre along the upper and the lower leg
 bail_carry = 180 - atan(bail_reach[0] / bail_reach[1]);   // carrying angle: bar above the pivot, the fan hangs level; the step ramp stops it
 function bail_room() = bail_reach[0] * sin(bail_carry) - bail_reach[1] * cos(bail_carry) - bail_bar / 2 - (body_h - bail_z);   // hand room above the top
 // ramp at the front end of a side step, taken 1 mm above the top face: the raised upper leg rests against it at bail_carry
-function bail_ramp_y() = let (r = bail_arm[1] / 2 - 0.1,   // the upper leg face rests on the chamfered ramp at bail_carry (with bail_cl it swung 3 degrees further)
+function bail_ramp_y() = let (r = bail_arm[1] / 2 - 0.08,   // the upper leg face rests on the chamfered ramp at bail_carry (with bail_cl it swung 3 degrees further)
      n = [-sin(bail_carry), cos(bail_carry)], p = [bail_y + r * n[0], bail_z + r * n[1]])
     p[0] + (body_h + 1 - p[1]) / sin(bail_carry) * cos(bail_carry);
 boss_top_x = bail_band + wall + back_boss_d / 2 + 1;   // top back-cover bosses moved inwards beside the steps
@@ -407,6 +411,9 @@ assert(body_w - foot_inset - max(foot_doubler_hw, foot_boss_d / 2) > bat_cx + ba
 assert((back_boss_d - insert_hole_d) / 2 >= 3 && back_boss_len >= insert_depth + 6 && boss_inset + back_boss_d / 2 + 1 < 14,
        "Back bosses: wall around the insert, column length, or reaching the back cover slots");
 // hand under the raised bail: child hand breadth about 55-70 mm, adult 80-90 mm; comfortable finger clearance 30-35 mm
+assert(bail_rec_z[0] - wall - lip_cl > shelf_z + shelf_t + shelf_hold[2] + shelf_hold[1] + 1 && bail_rec_z[1] + wall + lip_cl < cable_notch_z[1] - cable_notch[1] / 2
+       && bail_rec_y - wall - lip_cl > max(pot_yz[0] + pwm_pcb[1] / 2, chg_y0 + chg_pcb[1]) + 2,
+       "Bail recess in the back cover: hits the shelf hold-down plate, the fan cable notch, the PWM board or the charge module");
 assert(bail_room() >= 38 && body_w - 2 * bail_x[1] >= 90 && bail_ramp_y() > front_t + inner_c + wall
        && bail_bar_z[0] > sw_xz[1] + sw_bezel[1] / 2 + sw_well[1] + sw_well[0] + 1,
        "Bail: too little room for the hand, step ramp too far forward, or the folded grip bar covers the power switch");
@@ -494,12 +501,14 @@ module back_boss(b) {
 }
 
 module intake_slots_back() {
-    bars = [[14, 44], [47, 76], [79, 108], [111, 141]];
-    for (x = [14.8:slot_pitch:146], z = bars) if (abs(x - back_bar_x) > slot_w / 2 + 1.5) slot2d([x, z[0] + slot_w / 2], [x, z[1] - slot_w / 2], slot_w);
+    gap = [bail_rec_z[0] - wall - 1.5, bail_rec_z[1] + wall + 1.5];   // no slots through the walls of the sunk bail recess
+    bars = [[14, 44], [47, 76], [79, min(108, gap[0])], [max(111, gap[1]), 141]];
+    for (x = [bail_rec_x[1] + wall + 1.5 + slot_w / 2:slot_pitch:146], z = bars) if (abs(x - back_bar_x) > slot_w / 2 + 1.5 && z[1] - z[0] > 8)
+        slot2d([x, z[0] + slot_w / 2], [x, z[1] - slot_w / 2], slot_w);
 }
 
 module intake_slots_side() {
-    for (z = [18:slot_pitch:137], y = [[12, 37.5], [40.5, 66]]) slot2d([y[0] + slot_w / 2, z], [y[1] - slot_w / 2, z], slot_w);
+    for (z = [18:slot_pitch:137], y = [[12, 37.5], [40.5, 61]]) slot2d([y[0] + slot_w / 2, z], [y[1] - slot_w / 2, z], slot_w);
 }
 
 module body(dedication = true) difference() {   // dedication = false for public images
@@ -635,6 +644,8 @@ module body(dedication = true) difference() {   // dedication = false for public
     cyl_x(pot_yz, body_w - wall - 1, body_w - pot_mount_t, pot_recess_r);
     translate([body_w - wall - 1, pot_yz[0] - pwm_pcb[1] / 2 - pot_pcb_cl, pot_yz[1] - pot_axis_h - pwm_pcb[2] - pot_pcb_cl])
         cube([1 + pwm_pcb_slot, pwm_pcb[1] + 2 * pot_pcb_cl, pwm_pcb[2] + 2 * pot_pcb_cl]);
+    // room for the recess of the back cover that takes the folded lower legs and bar (side walls and partition cut back)
+    bail_recess(lip_cl, 1);
     // folding bail: steps along both top side edges from the pivot to the back (the bail only folds backwards, the side wall stays
     // full height in front); a ramp in front of the eye stops the bail at the carrying angle; M4 insert holes in the inner walls
     bail_sides() let (r = bail_arm[1] / 2 + bail_cl) {
@@ -787,8 +798,10 @@ module back() difference() {
             body_inner(lip_cl);
             body_inner(lip_cl + lip_t);
             for (b = back_bosses()) offset(r = 0.8) boss_footprint(b);
-            bail_sides() translate([-1, bail_floor - wall - lip_cl]) square([bail_band + wall + lip_cl + 1, body_h]);   // clear of the step walls
+            bail_sides() translate([-1, bail_rec_z[0] - wall - lip_cl]) square([bail_rec_x[1] + wall + lip_cl + 1, body_h]);   // clear of the steps and the leg recesses
         }
+        // recess for the folded lower legs and bar, reaching into the housing (bridges over the openings print on the back face)
+        bail_recess(0, 0);
         // hold-down plate over the free back edge of the battery shelf
         translate([bay_x0 + shelf_fillet + 0.5, front_t + shelf_d - shelf_hold[0], shelf_z + shelf_t + shelf_hold[2]])
             cube([bay_x1 - bay_x0 - 2 * shelf_fillet - 1, y1 - (front_t + shelf_d - shelf_hold[0]) + eps, shelf_hold[1]]);
@@ -822,7 +835,13 @@ module back() difference() {
         }
     }
     along_y(y1 - 1, body_d + 1) intake_slots_back();
-    bail_sides() { translate([-1, lip_y0 - 1, bail_floor]) cube([bail_band + 1, body_d - lip_y0 + 2, bail_arm[1] + 1]); bail_step_chamfers(lip_y0 - 1); }   // the bail steps run through
+    bail_sides() { translate([-1, lip_y0 - 1, bail_floor]) cube([bail_band + 1, body_d - lip_y0 + 2, bail_arm[1] + 1]); bail_step_chamfers(bail_rec_y - wall - 1); }   // the bail steps run through
+    // opening of the leg and bar recess with chamfered edges on the back face
+    for (r = [[[bail_rec_x[0], bail_rec_z[0]], [body_w - bail_rec_x[0], bail_rec_z[1]]], [[bail_rec_x[0], bail_rec_z[0]], [bail_rec_x[1], bail_floor + 1]],
+              [[body_w - bail_rec_x[1], bail_rec_z[0]], [body_w - bail_rec_x[0], bail_floor + 1]]]) hull() {
+        translate([r[0][0], bail_rec_y, r[0][1]]) cube([r[1][0] - r[0][0], body_d - bail_c - bail_rec_y, r[1][1] - r[0][1]]);
+        translate([r[0][0] - bail_c - 1, body_d + 1, r[0][1] - bail_c - 1]) cube([r[1][0] - r[0][0] + 2 * bail_c + 2, tip, r[1][1] - r[0][1] + 2 * bail_c + 2]);
+    }
     // power switch: well from outside with 45 degree walls (printable on the back face), hole in its thin floor
     sw_funnel(body_d - sw_well[0], body_d + 1, 0);
     translate([sw_xz[0] - sw_cut[0] / 2, body_d - sw_well[0] - sw_panel - 1, sw_xz[1] - sw_cut[1] / 2]) cube([sw_cut[0], sw_panel + 2, sw_cut[1]]);
@@ -974,10 +993,10 @@ module chamfered_box(a, b, c) let (s = b - a) translate(a) hull() {
 }
 module bail(angle = 0) translate([0, bail_y, bail_z]) rotate([angle, 0, 0]) translate([0, -bail_y, -bail_z]) difference() {
     union() {   // every piece with all edges chamfered, so the outer corners of the joints are chamfered too
-        chamfered_box([bail_x[0], bail_leg_y[0], bail_bar_z[0]], [body_w - bail_x[0], bail_leg_y[1], bail_bar_z[1]], bail_c);   // grip bar
+        chamfered_box([bail_lx0, bail_leg_y[0], bail_bar_z[0]], [body_w - bail_lx0, bail_leg_y[1], bail_bar_z[1]], bail_c);   // grip bar
         bail_sides() {
             chamfered_box([bail_x[0], bail_y, bail_floor], [bail_x[1], bail_leg_y[1], body_h], bail_c);        // upper leg
-            chamfered_box([bail_x[0], bail_leg_y[0], bail_bar_z[0]], [bail_x[1], bail_leg_y[1], body_h], bail_c);   // lower leg
+            chamfered_box([bail_lx0, bail_leg_y[0], bail_bar_z[0]], [bail_x[1], bail_leg_y[1], body_h], bail_c);   // lower leg, narrower than the upper one (side wall of the recess)
             hull() {   // eye with chamfered faces
                 cyl_x([bail_y, bail_z], bail_x[0] + bail_c, bail_x[1] - bail_c, bail_arm[1] / 2);
                 cyl_x([bail_y, bail_z], bail_x[0], bail_x[1], bail_arm[1] / 2 - bail_c);
@@ -988,6 +1007,11 @@ module bail(angle = 0) translate([0, bail_y, bail_z]) rotate([angle, 0, 0]) tran
         cyl_x([bail_y, bail_z], bail_x[0] - 1, bail_x[1] + 1, bail_bush[0] / 2);                 // bore for the pressed-in bushing
         cyl_x([bail_y, bail_z], bail_x[0] - 1, bail_eye_x[0], bail_arm[1] / 2 + 0.5);            // recess round the eye for flange and screw head
     }
+}
+// shell of the back cover around the recess for the folded lower legs and bar (grow > 0: room cut into the housing)
+module bail_recess(grow, over) let (y0 = bail_rec_y - wall - grow, z0 = bail_rec_z[0] - wall - grow) {
+    translate([-over, y0, z0]) cube([body_w + 2 * over, body_d - back_t + eps + over - y0, bail_rec_z[1] - bail_rec_z[0] + 2 * (wall + grow)]);
+    bail_sides() translate([-over, y0, z0]) cube([bail_rec_x[1] + wall + grow + over, body_d - back_t + eps + over - y0, bail_floor - z0]);
 }
 module bail_print_pose() translate([0, 0, bail_leg_y[1]]) rotate([-90, 0, 0]) children();   // back faces of lower legs and bar on the bed
 
@@ -1044,7 +1068,7 @@ module screws_bail(socket = false) bail_sides() let (xh = bail_band - bail_screw
     cyl_x([bail_y, bail_z], xh - eps, bail_band, bail_screw[2] / 2);                         // shoulder, clamped against the step wall
     cyl_x([bail_y, bail_z], bail_band - eps, bail_band + bail_screw[4], 2);                  // thread in the insert
     cyl_x([bail_y, bail_z], xh, xh + bail_bush[2], bail_bush[1] / 2);                        // bushing flange
-    cyl_x([bail_y, bail_z], xh + bail_bush[2] - eps, xh + bail_bush[3], bail_bush[0] / 2 - 0.01);   // bushing, pressed into the eye
+    cyl_x([bail_y, bail_z], xh + bail_bush[2] - eps, xh + bail_bush[3], bail_bush[0] / 2 - 0.1);    // bushing, pressed into the eye (0.1 under the bore: facets of the rotated swing samples)
 }
 
 module assembly(explode = 0, bail_angle = 0) {
