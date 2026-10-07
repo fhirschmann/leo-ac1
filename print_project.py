@@ -1,7 +1,6 @@
-"""Project settings for the openscad-print-project tools in scripts/.
+"""Project settings for the openscad-print-project tools (opp, pinned in requirements.txt).
 
-Everything project-specific lives here, the scripts stay identical to the skill copies
-(python3 ~/.claude/skills/openscad-print-project/scripts/skill_sync.py status).
+Everything project-specific lives here; the tools stay generic (opp --help).
 """
 import math
 SOURCE = "leo_ac.scad"
@@ -298,3 +297,12 @@ VIEWS = {"01_assembly": ("assembly();", "-160,-330,230,112,40,70"),
          "16_saddles": ('color("#e6e6e1") intersection() { back(); translate([part_x, 20, 0]) cube([body_w + 1 - part_x, body_d, 90]); }', "124,-60,120,190,50,40"),
          # underside with the M5 mount insert
          "07_underside": ('color("#f2f2ee") body(dedication = false); color("#222326") place_feet(); color("#26282b") screws_feet(true);', "40,-160,-260,112,40,40")}
+
+
+# opp all: analyses after every export (entries: command or (command, *options))
+ANALYZE = ['islands', 'overhangs', 'thickness', 'fins', 'inlays']
+# AGENTS.md: the 0.8 mm skin in front of the LED is intended (also in the right-side fit test)
+ANALYZE_ACCEPTED = {"thickness": {"body": 1, "test_right": 1}}
+
+# opp viewer / opp all also write the viewer page for GitHub Pages
+VIEWER["copy_to"] = "docs/index.html"

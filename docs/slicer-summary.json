@@ -1,11 +1,21 @@
 {
   "profile": "Bambu Lab H2S 0.4 nozzle / 0.20mm Standard @BBL H2S, 5 walls, 4/4 top/bottom, no supports; 15 % gyroid, 100 % zig-zag: foot",
+  "process_overrides": {
+    "only_one_wall_first_layer": "1",
+    "enable_support": "0",
+    "infill_direction": 0
+  },
+  "part_infill": {},
   "parts": [
     {
       "part": "body",
       "quantity": 1,
       "material": "PETG-white",
+      "filament_slot": 1,
       "passed": true,
+      "positioning": {
+        "mode": "automatic"
+      },
       "source_sha256": "7bf76b1b933afa24d4f3a1878756329b97791f8bcd2819daa517f7f3317fb22e",
       "exit_code": 0,
       "result_code": 0,
@@ -20,7 +30,9 @@
         "enable_support": "0",
         "curr_bed_type": "Textured PEI Plate",
         "top_shell_layers": "4",
-        "bottom_shell_layers": "4"
+        "bottom_shell_layers": "4",
+        "only_one_wall_first_layer": "1",
+        "infill_direction": "0"
       },
       "start_gcode_diagnostic": true
     },
@@ -28,7 +40,11 @@
       "part": "back",
       "quantity": 1,
       "material": "PETG-white",
+      "filament_slot": 1,
       "passed": true,
+      "positioning": {
+        "mode": "automatic"
+      },
       "source_sha256": "d2bc5b1f25315583486117ab6941426e8b7bddcea726df5f60479cb00e269da1",
       "exit_code": 0,
       "result_code": 0,
@@ -43,7 +59,9 @@
         "enable_support": "0",
         "curr_bed_type": "Textured PEI Plate",
         "top_shell_layers": "4",
-        "bottom_shell_layers": "4"
+        "bottom_shell_layers": "4",
+        "only_one_wall_first_layer": "1",
+        "infill_direction": "0"
       },
       "start_gcode_diagnostic": true
     },
@@ -51,7 +69,11 @@
       "part": "cover",
       "quantity": 1,
       "material": "PETG-grey",
+      "filament_slot": 2,
       "passed": true,
+      "positioning": {
+        "mode": "automatic"
+      },
       "source_sha256": "9e2d3cb5220fa04d8034ea52f2443fe83f97abc3d2eab9b2afd6254270716f90",
       "exit_code": 0,
       "result_code": 0,
@@ -66,7 +88,9 @@
         "enable_support": "0",
         "curr_bed_type": "Textured PEI Plate",
         "top_shell_layers": "4",
-        "bottom_shell_layers": "4"
+        "bottom_shell_layers": "4",
+        "only_one_wall_first_layer": "1",
+        "infill_direction": "0"
       },
       "start_gcode_diagnostic": true
     },
@@ -74,7 +98,11 @@
       "part": "bail",
       "quantity": 1,
       "material": "PETG-grey",
+      "filament_slot": 2,
       "passed": true,
+      "positioning": {
+        "mode": "automatic"
+      },
       "source_sha256": "467dea0dad005ca71ef89d26290434365567f20c784e5031ca00d4542af9aaaf",
       "exit_code": 0,
       "result_code": 0,
@@ -89,7 +117,9 @@
         "enable_support": "0",
         "curr_bed_type": "Textured PEI Plate",
         "top_shell_layers": "4",
-        "bottom_shell_layers": "4"
+        "bottom_shell_layers": "4",
+        "only_one_wall_first_layer": "1",
+        "infill_direction": "0"
       },
       "start_gcode_diagnostic": true
     },
@@ -97,7 +127,11 @@
       "part": "knob",
       "quantity": 1,
       "material": "PETG-grey",
+      "filament_slot": 2,
       "passed": true,
+      "positioning": {
+        "mode": "automatic"
+      },
       "source_sha256": "e4ac8b4a9bd5383e8156ce0dc6fe60bf8f44f64af06a1a5bfe10934f48010f59",
       "exit_code": 0,
       "result_code": 0,
@@ -112,7 +146,9 @@
         "enable_support": "0",
         "curr_bed_type": "Textured PEI Plate",
         "top_shell_layers": "4",
-        "bottom_shell_layers": "4"
+        "bottom_shell_layers": "4",
+        "only_one_wall_first_layer": "1",
+        "infill_direction": "0"
       },
       "start_gcode_diagnostic": true
     },
@@ -120,7 +156,11 @@
       "part": "foot",
       "quantity": 2,
       "material": "TPU",
+      "filament_slot": 4,
       "passed": true,
+      "positioning": {
+        "mode": "automatic"
+      },
       "source_sha256": "d9c2a39e6f60f3c9734941246aeaa436ef580545afdcc899905345686588c578",
       "exit_code": 0,
       "result_code": 0,
@@ -135,7 +175,9 @@
         "enable_support": "0",
         "curr_bed_type": "Textured PEI Plate",
         "top_shell_layers": "4",
-        "bottom_shell_layers": "4"
+        "bottom_shell_layers": "4",
+        "only_one_wall_first_layer": "1",
+        "infill_direction": "0"
       },
       "start_gcode_diagnostic": true
     },
@@ -143,7 +185,11 @@
       "part": "chg_holder",
       "quantity": 1,
       "material": "PETG-grey",
+      "filament_slot": 2,
       "passed": true,
+      "positioning": {
+        "mode": "automatic"
+      },
       "source_sha256": "b7645f1ad72b5d5cef7bac22f6995dbd84976ba97e1dce0206a020e46becf099",
       "exit_code": 0,
       "result_code": 0,
@@ -158,7 +204,9 @@
         "enable_support": "0",
         "curr_bed_type": "Textured PEI Plate",
         "top_shell_layers": "4",
-        "bottom_shell_layers": "4"
+        "bottom_shell_layers": "4",
+        "only_one_wall_first_layer": "1",
+        "infill_direction": "0"
       },
       "start_gcode_diagnostic": true
     },
@@ -166,7 +214,11 @@
       "part": "tie_clip",
       "quantity": 6,
       "material": "PETG-grey",
+      "filament_slot": 2,
       "passed": true,
+      "positioning": {
+        "mode": "automatic"
+      },
       "source_sha256": "59d2e5f6d075bfa7852785f8f23fd586ad100bc4622710a748a746ca3a8efa7b",
       "exit_code": 0,
       "result_code": 0,
@@ -181,7 +233,9 @@
         "enable_support": "0",
         "curr_bed_type": "Textured PEI Plate",
         "top_shell_layers": "4",
-        "bottom_shell_layers": "4"
+        "bottom_shell_layers": "4",
+        "only_one_wall_first_layer": "1",
+        "infill_direction": "0"
       },
       "start_gcode_diagnostic": true
     },
@@ -189,7 +243,11 @@
       "part": "test_right",
       "quantity": 0,
       "material": "PETG-white",
+      "filament_slot": 1,
       "passed": true,
+      "positioning": {
+        "mode": "automatic"
+      },
       "source_sha256": "9d354192a079894b86fb843d285a966f9fd199aa317e4bb9e2f92e9b1d1c7a3d",
       "exit_code": 0,
       "result_code": 0,
@@ -204,7 +262,9 @@
         "enable_support": "0",
         "curr_bed_type": "Textured PEI Plate",
         "top_shell_layers": "4",
-        "bottom_shell_layers": "4"
+        "bottom_shell_layers": "4",
+        "only_one_wall_first_layer": "1",
+        "infill_direction": "0"
       },
       "start_gcode_diagnostic": true
     },
@@ -212,7 +272,11 @@
       "part": "test_right_back",
       "quantity": 0,
       "material": "PETG-white",
+      "filament_slot": 1,
       "passed": true,
+      "positioning": {
+        "mode": "automatic"
+      },
       "source_sha256": "17f68cc4b5578d0588fa56863048e8d2578223a798cb28cdbf793810e7ccc6db",
       "exit_code": 0,
       "result_code": 0,
@@ -227,7 +291,9 @@
         "enable_support": "0",
         "curr_bed_type": "Textured PEI Plate",
         "top_shell_layers": "4",
-        "bottom_shell_layers": "4"
+        "bottom_shell_layers": "4",
+        "only_one_wall_first_layer": "1",
+        "infill_direction": "0"
       },
       "start_gcode_diagnostic": true
     }
@@ -254,6 +320,16 @@
         "prime_tower_xy": [
           140.0,
           257.0
+        ],
+        "object_bounds_mm": [
+          [
+            52.5,
+            74.0
+          ],
+          [
+            287.5,
+            246.0
+          ]
         ]
       },
       {
@@ -269,6 +345,16 @@
         "prime_tower_xy": [
           140.0,
           257.0
+        ],
+        "object_bounds_mm": [
+          [
+            52.5,
+            74.0
+          ],
+          [
+            287.5,
+            246.0
+          ]
         ]
       },
       {
@@ -293,6 +379,16 @@
         "prime_tower_xy": [
           262.0,
           130.0
+        ],
+        "object_bounds_mm": [
+          [
+            10.0,
+            106.5338
+          ],
+          [
+            244.0,
+            213.4662
+          ]
         ]
       },
       {
@@ -305,9 +401,21 @@
         "size_mm": [
           34.0,
           52.0
+        ],
+        "object_bounds_mm": [
+          [
+            153.0,
+            134.0
+          ],
+          [
+            187.0,
+            186.0
+          ]
         ]
       }
     ],
+    "bed_type": "Textured PEI Plate",
+    "bed_reuse": null,
     "total_hours_plates": 18.5,
     "total_grams_plates": 636.0,
     "multicolour_parts": {
@@ -361,7 +469,32 @@
           "1": 375.44,
           "3": 22.92
         },
-        "warnings": ""
+        "warnings": "",
+        "process_overrides": {
+          "enable_support": "0",
+          "infill_direction": "0",
+          "only_one_wall_first_layer": "1",
+          "wall_loops": "5"
+        },
+        "object_infill": {
+          "body": {
+            "instances": 1,
+            "sparse_infill_density": "15%",
+            "sparse_infill_pattern": "gyroid"
+          }
+        },
+        "expected_filament_slots": [
+          1,
+          3
+        ],
+        "object_filaments": {
+          "body": {
+            "body_base": 1,
+            "body_label": 3,
+            "body_dedication": 3,
+            "body_grille": 3
+          }
+        }
       },
       "Back cover": {
         "plate": 2,
@@ -370,7 +503,30 @@
           "1": 160.92,
           "3": 0.82
         },
-        "warnings": ""
+        "warnings": "",
+        "process_overrides": {
+          "enable_support": "0",
+          "infill_direction": "0",
+          "only_one_wall_first_layer": "1",
+          "wall_loops": "5"
+        },
+        "object_infill": {
+          "back": {
+            "instances": 1,
+            "sparse_infill_density": "15%",
+            "sparse_infill_pattern": "gyroid"
+          }
+        },
+        "expected_filament_slots": [
+          1,
+          3
+        ],
+        "object_filaments": {
+          "back": {
+            "back_base": 1,
+            "back_qr": 3
+          }
+        }
       },
       "Grey parts": {
         "plate": 3,
@@ -379,7 +535,62 @@
           "2": 64.53,
           "5": 0.94
         },
-        "warnings": ""
+        "warnings": "",
+        "process_overrides": {
+          "enable_support": "0",
+          "infill_direction": "0",
+          "only_one_wall_first_layer": "1",
+          "wall_loops": "5"
+        },
+        "object_infill": {
+          "cover": {
+            "instances": 1,
+            "sparse_infill_density": "15%",
+            "sparse_infill_pattern": "gyroid"
+          },
+          "bail": {
+            "instances": 1,
+            "sparse_infill_density": "15%",
+            "sparse_infill_pattern": "gyroid"
+          },
+          "knob": {
+            "instances": 1,
+            "sparse_infill_density": "15%",
+            "sparse_infill_pattern": "gyroid"
+          },
+          "chg_holder": {
+            "instances": 1,
+            "sparse_infill_density": "15%",
+            "sparse_infill_pattern": "gyroid"
+          },
+          "tie_clip": {
+            "instances": 6,
+            "sparse_infill_density": "15%",
+            "sparse_infill_pattern": "gyroid"
+          }
+        },
+        "expected_filament_slots": [
+          2,
+          5
+        ],
+        "object_filaments": {
+          "cover": {
+            "cover": 2
+          },
+          "bail": {
+            "bail": 2
+          },
+          "knob": {
+            "knob_base": 2,
+            "knob_pointer": 5
+          },
+          "chg_holder": {
+            "chg_holder": 2
+          },
+          "tie_clip": {
+            "tie_clip": 2
+          }
+        }
       },
       "TPU feet": {
         "plate": 4,
@@ -387,11 +598,105 @@
         "grams_by_filament": {
           "4": 10.44
         },
-        "warnings": ""
+        "warnings": "",
+        "process_overrides": {
+          "enable_support": "0",
+          "infill_direction": "0",
+          "only_one_wall_first_layer": "1",
+          "wall_loops": "5"
+        },
+        "object_infill": {
+          "foot": {
+            "instances": 2,
+            "sparse_infill_density": "100%",
+            "sparse_infill_pattern": "zig-zag"
+          }
+        },
+        "expected_filament_slots": [
+          4
+        ],
+        "object_filaments": {
+          "foot": {
+            "foot": 4
+          }
+        }
+      }
+    },
+    "object_filaments": {
+      "knob": {
+        "knob_base": 2,
+        "knob_pointer": 5
+      },
+      "chg_holder": {
+        "chg_holder": 2
+      },
+      "tie_clip": {
+        "tie_clip": 2
+      },
+      "foot": {
+        "foot": 4
+      },
+      "body": {
+        "body_base": 1,
+        "body_label": 3,
+        "body_dedication": 3,
+        "body_grille": 3
+      },
+      "back": {
+        "back_base": 1,
+        "back_qr": 3
+      },
+      "cover": {
+        "cover": 2
+      },
+      "bail": {
+        "bail": 2
+      }
+    },
+    "object_infill": {
+      "knob": {
+        "instances": 1,
+        "sparse_infill_density": "15%",
+        "sparse_infill_pattern": "gyroid"
+      },
+      "chg_holder": {
+        "instances": 1,
+        "sparse_infill_density": "15%",
+        "sparse_infill_pattern": "gyroid"
+      },
+      "tie_clip": {
+        "instances": 6,
+        "sparse_infill_density": "15%",
+        "sparse_infill_pattern": "gyroid"
+      },
+      "foot": {
+        "instances": 2,
+        "sparse_infill_density": "100%",
+        "sparse_infill_pattern": "zig-zag"
+      },
+      "body": {
+        "instances": 1,
+        "sparse_infill_density": "15%",
+        "sparse_infill_pattern": "gyroid"
+      },
+      "back": {
+        "instances": 1,
+        "sparse_infill_density": "15%",
+        "sparse_infill_pattern": "gyroid"
+      },
+      "cover": {
+        "instances": 1,
+        "sparse_infill_density": "15%",
+        "sparse_infill_pattern": "gyroid"
+      },
+      "bail": {
+        "instances": 1,
+        "sparse_infill_density": "15%",
+        "sparse_infill_pattern": "gyroid"
       }
     },
     "own_infill_parts": 2,
-    "sha256": "9231b1f4d1d07f9bab3a713e50e8dec39b2966a03383e7bf5cd7f252955a17f5"
+    "sha256": "4921feb9cf25826d57907273d82f38329aece4299b6a99af0b365ac7737382ee"
   },
   "test_3mf": {
     "file": "stl/leo_ac1_fit_tests.3mf",
@@ -409,9 +714,21 @@
         "size_mm": [
           144.0,
           124.2
+        ],
+        "object_bounds_mm": [
+          [
+            98.0,
+            97.9016
+          ],
+          [
+            242.0,
+            222.0984
+          ]
         ]
       }
     ],
+    "bed_type": "Textured PEI Plate",
+    "bed_reuse": null,
     "total_hours_plates": 2.4,
     "total_grams_plates": 88.6,
     "multicolour_parts": {
@@ -432,20 +749,90 @@
     "plate_slices": {
       "Right section fit test": {
         "plate": 1,
-        "hours": 2.38,
+        "hours": 2.39,
         "grams_by_filament": {
           "1": 88.64
         },
-        "warnings": ""
+        "warnings": "",
+        "process_overrides": {
+          "enable_support": "0",
+          "infill_direction": "0",
+          "only_one_wall_first_layer": "1",
+          "wall_loops": "2"
+        },
+        "object_infill": {
+          "test_right": {
+            "instances": 1,
+            "sparse_infill_density": "10%",
+            "sparse_infill_pattern": "gyroid"
+          },
+          "test_right_back": {
+            "instances": 1,
+            "sparse_infill_density": "10%",
+            "sparse_infill_pattern": "gyroid"
+          },
+          "knob": {
+            "instances": 1,
+            "sparse_infill_density": "10%",
+            "sparse_infill_pattern": "gyroid"
+          }
+        },
+        "expected_filament_slots": [
+          1
+        ],
+        "object_filaments": {
+          "test_right": {
+            "test_right": 1
+          },
+          "test_right_back": {
+            "test_right_back": 1
+          },
+          "knob": {
+            "knob": 1
+          }
+        }
+      }
+    },
+    "object_filaments": {
+      "test_right": {
+        "test_right": 1
+      },
+      "test_right_back": {
+        "test_right_back": 1
+      },
+      "knob": {
+        "knob": 1
+      }
+    },
+    "object_infill": {
+      "test_right": {
+        "instances": 1,
+        "sparse_infill_density": "10%",
+        "sparse_infill_pattern": "gyroid"
+      },
+      "test_right_back": {
+        "instances": 1,
+        "sparse_infill_density": "10%",
+        "sparse_infill_pattern": "gyroid"
+      },
+      "knob": {
+        "instances": 1,
+        "sparse_infill_density": "10%",
+        "sparse_infill_pattern": "gyroid"
       }
     },
     "own_infill_parts": 0,
-    "sha256": "b49807b46a7b1243d0234c97af3a1ec8b0b62627c3c0d7e7eee606b0ab1ec2f5",
+    "sha256": "b93c95d6df321cd1e4ad15ed04e1251c2d288b68f87ff269acf9da081a4f83f0",
     "process": {
       "wall_loops": 2,
       "top_shell_layers": 3,
       "bottom_shell_layers": 3,
       "infill": 10
+    },
+    "process_overrides": {
+      "only_one_wall_first_layer": "1",
+      "enable_support": "0",
+      "infill_direction": 0
     }
   }
 }
