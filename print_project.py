@@ -198,13 +198,6 @@ def checks(ctx):
     inserts = ctx.insert_probes(m["inserts"])
     ctx.summary.append(f"{len(inserts)} inserts")
 
-    ctx.open_items.append("Battery cell measured Ø32.5 × 71.6 mm on 2026-09-15; verify protection-board envelope and cable exit separately")
-    ctx.open_items.append("PWM potentiometer measured: round split/knurled Ø5.8 shaft, free length 9.5, bushing Ø6.73 with 5 mm thread, nut 10 across flats, nut and washer 3 mm together (measured); housing in an inside wall pocket (12 mm pot assumed); verify knob push-fit and clamp")
-    ctx.open_items.append("Battery BMS board approx. 20 × 4 mm over the full length (measured); cable exit still to be checked")
-    ctx.open_items.append("PWM module measured 41.05 × 32 × 15 mm, PCB 1.6 mm, 56.30 mm to shaft tip, axis about 6 mm above PCB (6.3 modelled: supports 0.3 lower after the fit test), solder pins 2-3 mm below except 1.5 mm strips along the long edges; modelled 18 mm high with plugged fan connector (estimate); verify underside datum")
-    ctx.open_items.append("USB-C module and shell measured 2026-09-15 (shell bottom approximately 1.1 mm above module underside); verify fit with a plugged cable and soldered wires, and check 5 V at + / - before connecting")
-    ctx.open_items.append("Switch measured 20.9 × 14.7 × 23 mm including contacts, cutout 19.2 × 12.2, panel about 1.5, bezel 2 + rocker 5 above the panel; body depth behind the panel assumed; verify snap fit in the 5 mm well")
-    ctx.open_items.append("Charge PCB measured 32.2 × 11 × 3.7 mm, back clear; heatsinks not yet available, displayed heatsinks are planned clearance envelopes")
     return dict(dedication_line_gaps_mm=gaps, standard_screws=screws, contact_volumes_mm3=contacts, stops=stops, clearances=clearances,
                 sampled_paths=paths, insert_probes=inserts, air_duct=duct)
 
