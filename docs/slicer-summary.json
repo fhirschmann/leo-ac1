@@ -6,6 +6,7 @@
     "infill_direction": 0
   },
   "part_infill": {},
+  "supported_parts": [],
   "parts": [
     {
       "part": "body",
@@ -28,12 +29,15 @@
       "effective_settings": {
         "sparse_infill_pattern": "gyroid",
         "enable_support": "0",
+        "support_type": "tree(auto)",
+        "support_on_build_plate_only": "0",
         "curr_bed_type": "Textured PEI Plate",
         "top_shell_layers": "4",
         "bottom_shell_layers": "4",
         "only_one_wall_first_layer": "1",
         "infill_direction": "0"
       },
+      "support_toolpaths": false,
       "start_gcode_diagnostic": true
     },
     {
@@ -57,12 +61,15 @@
       "effective_settings": {
         "sparse_infill_pattern": "gyroid",
         "enable_support": "0",
+        "support_type": "tree(auto)",
+        "support_on_build_plate_only": "0",
         "curr_bed_type": "Textured PEI Plate",
         "top_shell_layers": "4",
         "bottom_shell_layers": "4",
         "only_one_wall_first_layer": "1",
         "infill_direction": "0"
       },
+      "support_toolpaths": false,
       "start_gcode_diagnostic": true
     },
     {
@@ -86,12 +93,15 @@
       "effective_settings": {
         "sparse_infill_pattern": "gyroid",
         "enable_support": "0",
+        "support_type": "tree(auto)",
+        "support_on_build_plate_only": "0",
         "curr_bed_type": "Textured PEI Plate",
         "top_shell_layers": "4",
         "bottom_shell_layers": "4",
         "only_one_wall_first_layer": "1",
         "infill_direction": "0"
       },
+      "support_toolpaths": false,
       "start_gcode_diagnostic": true
     },
     {
@@ -115,12 +125,15 @@
       "effective_settings": {
         "sparse_infill_pattern": "gyroid",
         "enable_support": "0",
+        "support_type": "tree(auto)",
+        "support_on_build_plate_only": "0",
         "curr_bed_type": "Textured PEI Plate",
         "top_shell_layers": "4",
         "bottom_shell_layers": "4",
         "only_one_wall_first_layer": "1",
         "infill_direction": "0"
       },
+      "support_toolpaths": false,
       "start_gcode_diagnostic": true
     },
     {
@@ -144,12 +157,15 @@
       "effective_settings": {
         "sparse_infill_pattern": "gyroid",
         "enable_support": "0",
+        "support_type": "tree(auto)",
+        "support_on_build_plate_only": "0",
         "curr_bed_type": "Textured PEI Plate",
         "top_shell_layers": "4",
         "bottom_shell_layers": "4",
         "only_one_wall_first_layer": "1",
         "infill_direction": "0"
       },
+      "support_toolpaths": false,
       "start_gcode_diagnostic": true
     },
     {
@@ -173,12 +189,15 @@
       "effective_settings": {
         "sparse_infill_pattern": "zig-zag",
         "enable_support": "0",
+        "support_type": "tree(auto)",
+        "support_on_build_plate_only": "0",
         "curr_bed_type": "Textured PEI Plate",
         "top_shell_layers": "4",
         "bottom_shell_layers": "4",
         "only_one_wall_first_layer": "1",
         "infill_direction": "0"
       },
+      "support_toolpaths": false,
       "start_gcode_diagnostic": true
     },
     {
@@ -202,12 +221,15 @@
       "effective_settings": {
         "sparse_infill_pattern": "gyroid",
         "enable_support": "0",
+        "support_type": "tree(auto)",
+        "support_on_build_plate_only": "0",
         "curr_bed_type": "Textured PEI Plate",
         "top_shell_layers": "4",
         "bottom_shell_layers": "4",
         "only_one_wall_first_layer": "1",
         "infill_direction": "0"
       },
+      "support_toolpaths": false,
       "start_gcode_diagnostic": true
     },
     {
@@ -231,12 +253,15 @@
       "effective_settings": {
         "sparse_infill_pattern": "gyroid",
         "enable_support": "0",
+        "support_type": "tree(auto)",
+        "support_on_build_plate_only": "0",
         "curr_bed_type": "Textured PEI Plate",
         "top_shell_layers": "4",
         "bottom_shell_layers": "4",
         "only_one_wall_first_layer": "1",
         "infill_direction": "0"
       },
+      "support_toolpaths": false,
       "start_gcode_diagnostic": true
     },
     {
@@ -260,12 +285,15 @@
       "effective_settings": {
         "sparse_infill_pattern": "gyroid",
         "enable_support": "0",
+        "support_type": "tree(auto)",
+        "support_on_build_plate_only": "0",
         "curr_bed_type": "Textured PEI Plate",
         "top_shell_layers": "4",
         "bottom_shell_layers": "4",
         "only_one_wall_first_layer": "1",
         "infill_direction": "0"
       },
+      "support_toolpaths": false,
       "start_gcode_diagnostic": true
     },
     {
@@ -289,12 +317,15 @@
       "effective_settings": {
         "sparse_infill_pattern": "gyroid",
         "enable_support": "0",
+        "support_type": "tree(auto)",
+        "support_on_build_plate_only": "0",
         "curr_bed_type": "Textured PEI Plate",
         "top_shell_layers": "4",
         "bottom_shell_layers": "4",
         "only_one_wall_first_layer": "1",
         "infill_direction": "0"
       },
+      "support_toolpaths": false,
       "start_gcode_diagnostic": true
     }
   ],
@@ -483,6 +514,15 @@
             "sparse_infill_pattern": "gyroid"
           }
         },
+        "object_support": {
+          "body": {
+            "instances": 1,
+            "enable_support": "0",
+            "support_type": "tree(auto)",
+            "support_on_build_plate_only": "0"
+          }
+        },
+        "support_toolpaths": false,
         "expected_filament_slots": [
           1,
           3
@@ -517,6 +557,15 @@
             "sparse_infill_pattern": "gyroid"
           }
         },
+        "object_support": {
+          "back": {
+            "instances": 1,
+            "enable_support": "0",
+            "support_type": "tree(auto)",
+            "support_on_build_plate_only": "0"
+          }
+        },
+        "support_toolpaths": false,
         "expected_filament_slots": [
           1,
           3
@@ -543,6 +592,11 @@
           "wall_loops": "5"
         },
         "object_infill": {
+          "tie_clip": {
+            "instances": 6,
+            "sparse_infill_density": "15%",
+            "sparse_infill_pattern": "gyroid"
+          },
           "cover": {
             "instances": 1,
             "sparse_infill_density": "15%",
@@ -562,18 +616,49 @@
             "instances": 1,
             "sparse_infill_density": "15%",
             "sparse_infill_pattern": "gyroid"
+          }
+        },
+        "object_support": {
+          "cover": {
+            "instances": 1,
+            "enable_support": "0",
+            "support_type": "tree(auto)",
+            "support_on_build_plate_only": "0"
+          },
+          "bail": {
+            "instances": 1,
+            "enable_support": "0",
+            "support_type": "tree(auto)",
+            "support_on_build_plate_only": "0"
+          },
+          "knob": {
+            "instances": 1,
+            "enable_support": "0",
+            "support_type": "tree(auto)",
+            "support_on_build_plate_only": "0"
+          },
+          "chg_holder": {
+            "instances": 1,
+            "enable_support": "0",
+            "support_type": "tree(auto)",
+            "support_on_build_plate_only": "0"
           },
           "tie_clip": {
             "instances": 6,
-            "sparse_infill_density": "15%",
-            "sparse_infill_pattern": "gyroid"
+            "enable_support": "0",
+            "support_type": "tree(auto)",
+            "support_on_build_plate_only": "0"
           }
         },
+        "support_toolpaths": false,
         "expected_filament_slots": [
           2,
           5
         ],
         "object_filaments": {
+          "tie_clip": {
+            "tie_clip": 2
+          },
           "cover": {
             "cover": 2
           },
@@ -586,9 +671,6 @@
           },
           "chg_holder": {
             "chg_holder": 2
-          },
-          "tie_clip": {
-            "tie_clip": 2
           }
         }
       },
@@ -612,6 +694,15 @@
             "sparse_infill_pattern": "zig-zag"
           }
         },
+        "object_support": {
+          "foot": {
+            "instances": 2,
+            "enable_support": "0",
+            "support_type": "tree(auto)",
+            "support_on_build_plate_only": "0"
+          }
+        },
+        "support_toolpaths": false,
         "expected_filament_slots": [
           4
         ],
@@ -623,25 +714,6 @@
       }
     },
     "object_filaments": {
-      "knob": {
-        "knob_base": 2,
-        "knob_pointer": 5
-      },
-      "chg_holder": {
-        "chg_holder": 2
-      },
-      "tie_clip": {
-        "tie_clip": 2
-      },
-      "foot": {
-        "foot": 4
-      },
-      "body": {
-        "body_base": 1,
-        "body_label": 3,
-        "body_dedication": 3,
-        "body_grille": 3
-      },
       "back": {
         "back_base": 1,
         "back_qr": 3
@@ -649,17 +721,56 @@
       "cover": {
         "cover": 2
       },
+      "knob": {
+        "knob_base": 2,
+        "knob_pointer": 5
+      },
+      "chg_holder": {
+        "chg_holder": 2
+      },
+      "body": {
+        "body_base": 1,
+        "body_label": 3,
+        "body_dedication": 3,
+        "body_grille": 3
+      },
       "bail": {
         "bail": 2
+      },
+      "tie_clip": {
+        "tie_clip": 2
+      },
+      "foot": {
+        "foot": 4
       }
     },
     "object_infill": {
+      "back": {
+        "instances": 1,
+        "sparse_infill_density": "15%",
+        "sparse_infill_pattern": "gyroid"
+      },
+      "cover": {
+        "instances": 1,
+        "sparse_infill_density": "15%",
+        "sparse_infill_pattern": "gyroid"
+      },
       "knob": {
         "instances": 1,
         "sparse_infill_density": "15%",
         "sparse_infill_pattern": "gyroid"
       },
       "chg_holder": {
+        "instances": 1,
+        "sparse_infill_density": "15%",
+        "sparse_infill_pattern": "gyroid"
+      },
+      "body": {
+        "instances": 1,
+        "sparse_infill_density": "15%",
+        "sparse_infill_pattern": "gyroid"
+      },
+      "bail": {
         "instances": 1,
         "sparse_infill_density": "15%",
         "sparse_infill_pattern": "gyroid"
@@ -673,30 +784,60 @@
         "instances": 2,
         "sparse_infill_density": "100%",
         "sparse_infill_pattern": "zig-zag"
-      },
-      "body": {
-        "instances": 1,
-        "sparse_infill_density": "15%",
-        "sparse_infill_pattern": "gyroid"
-      },
+      }
+    },
+    "object_support": {
       "back": {
         "instances": 1,
-        "sparse_infill_density": "15%",
-        "sparse_infill_pattern": "gyroid"
+        "enable_support": "0",
+        "support_type": "tree(auto)",
+        "support_on_build_plate_only": "0"
       },
       "cover": {
         "instances": 1,
-        "sparse_infill_density": "15%",
-        "sparse_infill_pattern": "gyroid"
+        "enable_support": "0",
+        "support_type": "tree(auto)",
+        "support_on_build_plate_only": "0"
+      },
+      "knob": {
+        "instances": 1,
+        "enable_support": "0",
+        "support_type": "tree(auto)",
+        "support_on_build_plate_only": "0"
+      },
+      "chg_holder": {
+        "instances": 1,
+        "enable_support": "0",
+        "support_type": "tree(auto)",
+        "support_on_build_plate_only": "0"
+      },
+      "body": {
+        "instances": 1,
+        "enable_support": "0",
+        "support_type": "tree(auto)",
+        "support_on_build_plate_only": "0"
       },
       "bail": {
         "instances": 1,
-        "sparse_infill_density": "15%",
-        "sparse_infill_pattern": "gyroid"
+        "enable_support": "0",
+        "support_type": "tree(auto)",
+        "support_on_build_plate_only": "0"
+      },
+      "tie_clip": {
+        "instances": 6,
+        "enable_support": "0",
+        "support_type": "tree(auto)",
+        "support_on_build_plate_only": "0"
+      },
+      "foot": {
+        "instances": 2,
+        "enable_support": "0",
+        "support_type": "tree(auto)",
+        "support_on_build_plate_only": "0"
       }
     },
     "own_infill_parts": 2,
-    "sha256": "4921feb9cf25826d57907273d82f38329aece4299b6a99af0b365ac7737382ee"
+    "sha256": "2365a5560ba71953956a9661824dd2ce6e23f46aed91c816857f933b322c40c7"
   },
   "test_3mf": {
     "file": "stl/leo_ac1_fit_tests.3mf",
@@ -777,6 +918,27 @@
             "sparse_infill_pattern": "gyroid"
           }
         },
+        "object_support": {
+          "test_right": {
+            "instances": 1,
+            "enable_support": "0",
+            "support_type": "tree(auto)",
+            "support_on_build_plate_only": "0"
+          },
+          "test_right_back": {
+            "instances": 1,
+            "enable_support": "0",
+            "support_type": "tree(auto)",
+            "support_on_build_plate_only": "0"
+          },
+          "knob": {
+            "instances": 1,
+            "enable_support": "0",
+            "support_type": "tree(auto)",
+            "support_on_build_plate_only": "0"
+          }
+        },
+        "support_toolpaths": false,
         "expected_filament_slots": [
           1
         ],
@@ -794,22 +956,17 @@
       }
     },
     "object_filaments": {
-      "test_right": {
-        "test_right": 1
-      },
       "test_right_back": {
         "test_right_back": 1
       },
       "knob": {
         "knob": 1
+      },
+      "test_right": {
+        "test_right": 1
       }
     },
     "object_infill": {
-      "test_right": {
-        "instances": 1,
-        "sparse_infill_density": "10%",
-        "sparse_infill_pattern": "gyroid"
-      },
       "test_right_back": {
         "instances": 1,
         "sparse_infill_density": "10%",
@@ -819,10 +976,35 @@
         "instances": 1,
         "sparse_infill_density": "10%",
         "sparse_infill_pattern": "gyroid"
+      },
+      "test_right": {
+        "instances": 1,
+        "sparse_infill_density": "10%",
+        "sparse_infill_pattern": "gyroid"
+      }
+    },
+    "object_support": {
+      "test_right_back": {
+        "instances": 1,
+        "enable_support": "0",
+        "support_type": "tree(auto)",
+        "support_on_build_plate_only": "0"
+      },
+      "knob": {
+        "instances": 1,
+        "enable_support": "0",
+        "support_type": "tree(auto)",
+        "support_on_build_plate_only": "0"
+      },
+      "test_right": {
+        "instances": 1,
+        "enable_support": "0",
+        "support_type": "tree(auto)",
+        "support_on_build_plate_only": "0"
       }
     },
     "own_infill_parts": 0,
-    "sha256": "b93c95d6df321cd1e4ad15ed04e1251c2d288b68f87ff269acf9da081a4f83f0",
+    "sha256": "9e1f9eb5d794e9a1f7b0f7db76985d7944f27c3bccf405e41e3707d6bfe148fd",
     "process": {
       "wall_loops": 2,
       "top_shell_layers": 3,
