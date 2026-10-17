@@ -120,10 +120,12 @@ battery (JST-PH, built-in BMS) ──► (PTC) ──► power switch ──► 
 Model: [`leo_ac.scad`](leo_ac.scad) (OpenSCAD, parameters at the top), project settings and checks: [`print_project.py`](print_project.py). The tools of the skill `openscad-print-project` (`opp`, version pinned in [`requirements.txt`](requirements.txt); not public, they run locally) export and check the meshes, slice with the Bambu Studio CLI and build the 3D assembly viewer, which is published from [`docs/index.html`](docs/index.html) on GitHub Pages. The fan in the model and viewer is a simple parametric placeholder; no manufacturer CAD is used or needed.
 
 ```sh
-python3 -m venv .venv
+python3.14 -m venv .venv
 .venv/bin/python -m pip install -r requirements.txt   # opp, needs access to the private tools repository
-.venv/bin/opp all      # export and check stl/, asm/, docs/verification.json; islands, overhangs, thickness,
-                       # fins, inlays; Bambu Studio CLI and project 3MF; viewer incl. docs/index.html
+.venv/bin/opp dev      # after every change: changed parts, all checks, viewer, build/preview.png (seconds)
+.venv/bin/opp all      # before printing or committing: export and check stl/, asm/, docs/verification.json;
+                       # islands, overhangs, thickness, fins, inlays; Bambu Studio CLI and project 3MF;
+                       # viewer incl. docs/index.html
 .venv/bin/opp render   # img/, transparent PNGs (needs Pillow or ffmpeg)
 ```
 

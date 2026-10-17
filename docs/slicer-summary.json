@@ -6,6 +6,7 @@
     "infill_direction": 0
   },
   "part_infill": {},
+  "part_settings": {},
   "supported_parts": [],
   "parts": [
     {
@@ -17,12 +18,12 @@
       "positioning": {
         "mode": "automatic"
       },
-      "source_sha256": "7bf76b1b933afa24d4f3a1878756329b97791f8bcd2819daa517f7f3317fb22e",
+      "source_sha256": "16d3154a7ba896b4dbadfdaa193be5a7a14269f60f345239da6bc3c6fe741235",
       "exit_code": 0,
       "result_code": 0,
       "warnings": "",
-      "hours": 9.345,
-      "grams": 391.769,
+      "hours": 9.34,
+      "grams": 391.77,
       "wall_loops": 5,
       "infill_percent": 15.0,
       "layer_height": 0.20000000298023224,
@@ -53,7 +54,7 @@
       "exit_code": 0,
       "result_code": 0,
       "warnings": "",
-      "hours": 5.245,
+      "hours": 5.246,
       "grams": 160.942,
       "wall_loops": 5,
       "infill_percent": 15.0,
@@ -81,7 +82,7 @@
       "positioning": {
         "mode": "automatic"
       },
-      "source_sha256": "9e2d3cb5220fa04d8034ea52f2443fe83f97abc3d2eab9b2afd6254270716f90",
+      "source_sha256": "dff34ecb454e72b02c1014998c676d2807434439d3f787c9f876e75e8d1a920b",
       "exit_code": 0,
       "result_code": 0,
       "warnings": "",
@@ -467,7 +468,7 @@
         "plate": 1,
         "hours": 9.93,
         "grams_by_filament": {
-          "1": 375.44,
+          "1": 375.45,
           "3": 22.92
         },
         "warnings": ""
@@ -497,7 +498,7 @@
         "plate": 1,
         "hours": 9.93,
         "grams_by_filament": {
-          "1": 375.44,
+          "1": 375.45,
           "3": 22.92
         },
         "warnings": "",
@@ -523,6 +524,7 @@
           }
         },
         "support_toolpaths": false,
+        "object_settings": {},
         "expected_filament_slots": [
           1,
           3
@@ -566,6 +568,7 @@
           }
         },
         "support_toolpaths": false,
+        "object_settings": {},
         "expected_filament_slots": [
           1,
           3
@@ -592,11 +595,6 @@
           "wall_loops": "5"
         },
         "object_infill": {
-          "tie_clip": {
-            "instances": 6,
-            "sparse_infill_density": "15%",
-            "sparse_infill_pattern": "gyroid"
-          },
           "cover": {
             "instances": 1,
             "sparse_infill_density": "15%",
@@ -614,6 +612,11 @@
           },
           "chg_holder": {
             "instances": 1,
+            "sparse_infill_density": "15%",
+            "sparse_infill_pattern": "gyroid"
+          },
+          "tie_clip": {
+            "instances": 6,
             "sparse_infill_density": "15%",
             "sparse_infill_pattern": "gyroid"
           }
@@ -651,14 +654,12 @@
           }
         },
         "support_toolpaths": false,
+        "object_settings": {},
         "expected_filament_slots": [
           2,
           5
         ],
         "object_filaments": {
-          "tie_clip": {
-            "tie_clip": 2
-          },
           "cover": {
             "cover": 2
           },
@@ -671,6 +672,9 @@
           },
           "chg_holder": {
             "chg_holder": 2
+          },
+          "tie_clip": {
+            "tie_clip": 2
           }
         }
       },
@@ -703,6 +707,7 @@
           }
         },
         "support_toolpaths": false,
+        "object_settings": {},
         "expected_filament_slots": [
           4
         ],
@@ -714,38 +719,38 @@
       }
     },
     "object_filaments": {
-      "back": {
-        "back_base": 1,
-        "back_qr": 3
-      },
-      "cover": {
-        "cover": 2
-      },
-      "knob": {
-        "knob_base": 2,
-        "knob_pointer": 5
-      },
-      "chg_holder": {
-        "chg_holder": 2
-      },
       "body": {
         "body_base": 1,
         "body_label": 3,
         "body_dedication": 3,
         "body_grille": 3
       },
+      "cover": {
+        "cover": 2
+      },
       "bail": {
         "bail": 2
+      },
+      "chg_holder": {
+        "chg_holder": 2
       },
       "tie_clip": {
         "tie_clip": 2
       },
       "foot": {
         "foot": 4
+      },
+      "back": {
+        "back_base": 1,
+        "back_qr": 3
+      },
+      "knob": {
+        "knob_base": 2,
+        "knob_pointer": 5
       }
     },
     "object_infill": {
-      "back": {
+      "body": {
         "instances": 1,
         "sparse_infill_density": "15%",
         "sparse_infill_pattern": "gyroid"
@@ -755,22 +760,12 @@
         "sparse_infill_density": "15%",
         "sparse_infill_pattern": "gyroid"
       },
-      "knob": {
+      "bail": {
         "instances": 1,
         "sparse_infill_density": "15%",
         "sparse_infill_pattern": "gyroid"
       },
       "chg_holder": {
-        "instances": 1,
-        "sparse_infill_density": "15%",
-        "sparse_infill_pattern": "gyroid"
-      },
-      "body": {
-        "instances": 1,
-        "sparse_infill_density": "15%",
-        "sparse_infill_pattern": "gyroid"
-      },
-      "bail": {
         "instances": 1,
         "sparse_infill_density": "15%",
         "sparse_infill_pattern": "gyroid"
@@ -784,10 +779,20 @@
         "instances": 2,
         "sparse_infill_density": "100%",
         "sparse_infill_pattern": "zig-zag"
+      },
+      "back": {
+        "instances": 1,
+        "sparse_infill_density": "15%",
+        "sparse_infill_pattern": "gyroid"
+      },
+      "knob": {
+        "instances": 1,
+        "sparse_infill_density": "15%",
+        "sparse_infill_pattern": "gyroid"
       }
     },
     "object_support": {
-      "back": {
+      "body": {
         "instances": 1,
         "enable_support": "0",
         "support_type": "tree(auto)",
@@ -799,25 +804,13 @@
         "support_type": "tree(auto)",
         "support_on_build_plate_only": "0"
       },
-      "knob": {
+      "bail": {
         "instances": 1,
         "enable_support": "0",
         "support_type": "tree(auto)",
         "support_on_build_plate_only": "0"
       },
       "chg_holder": {
-        "instances": 1,
-        "enable_support": "0",
-        "support_type": "tree(auto)",
-        "support_on_build_plate_only": "0"
-      },
-      "body": {
-        "instances": 1,
-        "enable_support": "0",
-        "support_type": "tree(auto)",
-        "support_on_build_plate_only": "0"
-      },
-      "bail": {
         "instances": 1,
         "enable_support": "0",
         "support_type": "tree(auto)",
@@ -834,10 +827,23 @@
         "enable_support": "0",
         "support_type": "tree(auto)",
         "support_on_build_plate_only": "0"
+      },
+      "back": {
+        "instances": 1,
+        "enable_support": "0",
+        "support_type": "tree(auto)",
+        "support_on_build_plate_only": "0"
+      },
+      "knob": {
+        "instances": 1,
+        "enable_support": "0",
+        "support_type": "tree(auto)",
+        "support_on_build_plate_only": "0"
       }
     },
+    "object_settings": {},
     "own_infill_parts": 2,
-    "sha256": "2365a5560ba71953956a9661824dd2ce6e23f46aed91c816857f933b322c40c7"
+    "sha256": "4c8886da0e76ad6fcd017a8c76b0290a24890f225835083a36871d97f62c2c07"
   },
   "test_3mf": {
     "file": "stl/leo_ac1_fit_tests.3mf",
@@ -939,6 +945,7 @@
           }
         },
         "support_toolpaths": false,
+        "object_settings": {},
         "expected_filament_slots": [
           1
         ],
@@ -1003,6 +1010,7 @@
         "support_on_build_plate_only": "0"
       }
     },
+    "object_settings": {},
     "own_infill_parts": 0,
     "sha256": "9e1f9eb5d794e9a1f7b0f7db76985d7944f27c3bccf405e41e3707d6bfe148fd",
     "process": {
